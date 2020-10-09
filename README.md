@@ -32,7 +32,7 @@ Mods should take the form of zip archives (zip extension) with the same file str
     * mods: A blank folder to put your mods into.
     * output: A folder that will contain a copy of your modded DSDBA.steam.mvgl file, incase you want/need to manually install it.
     * resources: **DO NOT EDIT THE CONTENTS OF THIS FOLDER.** It will contain a backup of the original DSDBA archive that is used as a template to build mods out of; as well as a copy of the much larger DSDB archive, incase you wish to use the game files to create mods. You can copy data *out* of this folder, but do not *change* what exists in it, because its contents are used to build the modded DSDBA archive.
-3. SimpleDSCSManager provides four core functions (well, DSCSTools provides most of them, but now you can click shiny buttons!)
+3. SimpleDSCSModManager provides four core functions (well, DSCSTools provides most of them, but now you can click shiny buttons!)
     * 'Install Mods': This button will copy the DSDBA archive from your game if it has not done so already, place any mods in your `mods\` folder into the archive, re-pack it, and install it for you. If it has not done so already, it will also create a backup of the original DSDBA archive in your game files in `resources\backups`.
     * 'Refresh Modlist': Makes the GUI check for updates in the mods folder, and displays them. This is done automatically if you click 'Install Mods', and is only useful to check if SimpleDSCSModManager has recognised your mods.
     * 'Restore Backup': Overwrites the modded DSDBA archive with that stored in `Digimon Story Cyber Sleuth Complete Edition\resources\backups`, which should be the original DSDBA archive.
