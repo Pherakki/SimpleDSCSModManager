@@ -37,7 +37,8 @@ Mods should take the form of zip archives (zip extension) with the same file str
     * 'Refresh Modlist': Makes the GUI check for updates in the mods folder, and displays them. This is done automatically if you click 'Install Mods', and is only useful to check if SimpleDSCSModManager has recognised your mods.
     * 'Restore Backup': Overwrites the modded DSDBA archive with that stored in `Digimon Story Cyber Sleuth Complete Edition\resources\backups`, which should be the original DSDBA archive.
     * 'Extract DSDB': Extracts the main game data to SimpleDSCSModManager's `resources\` directory. Only useful if you plan to make mods. This will require ~15 GiB of hard disk space available, with 12.7 GiB remaining after the operation is complete.
-    
+4. You can change your *load order* by dragging-and-dropping the names of mods in the central list. Mods at the top have the lowest priority, and those at the bottom have the highest, meaning that if two mods change the same file then the lowest mod will take precedence.
+
 ## Contact
 e-mail: pherakki@gmail.com
 
