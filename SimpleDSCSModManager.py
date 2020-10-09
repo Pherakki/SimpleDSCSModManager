@@ -17,6 +17,9 @@ plain_archive_name = 'DSDBA'
 archive_name = plain_archive_name + '.steam.mvgl'
 archive_name_decrypted = 'DSDBA_decrypted'
 archive_name_extracted = 'DSDBA'
+main_archive_name = 'DSDB.steam.mvgl'
+main_archive_name_decrypted = 'DSDB_decrypted'
+main_archive_name_extracted = 'DSDB'
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 resource_loc = os.path.join(script_loc, 'resources')
 mods_loc = os.path.join(script_loc, 'mods')
@@ -37,7 +40,9 @@ local_archive_unpacked = os.path.join(resource_loc, archive_name_extracted)
 output_archive = os.path.join(working_loc, archive_name)
 output_archive_decrypted = os.path.join(working_loc, archive_name_decrypted)
 output_archive_unpacked = os.path.join(working_loc, archive_name_extracted)
-
+local_main_archive = os.path.join(resource_loc, main_archive_name)
+local_main_archive_decrypted = os.path.join(resource_loc, main_archive_name_decrypted)
+local_main_archive_unpacked = os.path.join(resource_loc, main_archive_name_extracted)
 
 def check_config_file():
     if os.path.exists(config_file_loc):
@@ -111,6 +116,19 @@ def init_resources(num_steps):
     os.remove(local_archive_decrypted)
     shutil.move(archive_name_extracted, local_archive_unpacked)
     
+    
+def init_main_resources():
+    yesno = tk.messagebox.askquestion("Extract DSDB", "The DSDB archive is ~2.6 GiB in size, and the extracted contents are around ~ 12.7 GiB. It will take a significant amount of time to unpack. It is only worth doing this if you intend to use the contents to make mods; it is not necessary to extract this in order to use or install mods. The extracted files will be located in the resources folder. Do you wish to proceed?", icon='warning')
+    if yesno == 'yes':
+        update_progbar("Decrypting DSDB [this will probably take more than 5 minutes in total, don't panic]...", 0, 2)
+        subprocess.call([main.dscstools_dir, '--crypt', os.path.join(main.dscs_dir, main_archive_name), main_archive_name_decrypted], creationflags=subprocess.CREATE_NO_WINDOW) # cwd = resource_loc?
+        update_progbar("Extracting DSDB [this will probably take more than 5 minutes in total, don't panic]...", 1, 2)
+        subprocess.call([main.dscstools_dir, '--extract', main_archive_name_decrypted, main_archive_name_extracted], creationflags=subprocess.CREATE_NO_WINDOW)
+        os.remove(main_archive_name_decrypted)
+        update_progbar("Copying DSDB [this will probably take more than 5 minutes in total, don't panic]...", 1, 2)
+        shutil.move(main_archive_name_extracted, local_main_archive_unpacked)
+        update_progbar("DSDB copied successfully", 2, 2)
+
 
 def pack_mods(num_steps):    
     shutil.copytree(local_archive_unpacked, output_archive_unpacked)
@@ -168,6 +186,10 @@ backup_restore_button = tk.Button(button_frame, width=12, text="Restore Backup",
 backup_restore_button.grid(row=0, column=2, padx=5, pady=10)
 button_frame.grid(row=4, column=0, columnspan=3)
 
+dsdb_button = tk.Button(button_frame, width=30, text="Extract DSDB [For Mod Creators]", command=init_main_resources)
+dsdb_button.grid(row=1, column=0, pady=10, columnspan=3)
+
+
 # Progress bar
 progress_bar_label = tk.Label(main, text='')
 progress_bar_label.grid(row=5, column=0, columnspan=3, sticky='ew')
@@ -189,6 +211,7 @@ def toggle_buttons():
     full_install_button.config(state=state)
     modlist_refresh_button.config(state=state)
     backup_restore_button.config(state=state)
+    dsdb_button.config(state=state)
 
 def update_paths():
     main.overwrite_archive = os.path.join(main.dscs_dir, archive_name)
