@@ -31,13 +31,13 @@ Mods should take the form of zip archives (zip extension) with the same file str
     * config: This is where the DSCSTools and DSCS locations are remembered in a plaintext file, along with the mod load order and a debug log.
     * mods: A blank folder to put your mods into.
     * output: A folder that will contain a copy of your modded DSDBA.steam.mvgl file, incase you want/need to manually install it.
-    * resources: DO NOT EDIT THE CONTENTS OF THIS FOLDER. It will contain a backup of the original DSDBA archive that is used as a template to build mods out of; as well as a copy of the much larger DSDB archive, incase you wish to use the game files to create mods. You can copy data *out* of this folder, but do not *change* what exists in it, because its contents are used to build the modded DSDBA archive.
+    * resources: **DO NOT EDIT THE CONTENTS OF THIS FOLDER.** It will contain a backup of the original DSDBA archive that is used as a template to build mods out of; as well as a copy of the much larger DSDB archive, incase you wish to use the game files to create mods. You can copy data *out* of this folder, but do not *change* what exists in it, because its contents are used to build the modded DSDBA archive.
 3. SimpleDSCSManager provides four core functions (well, DSCSTools provides most of them, but now you can click shiny buttons!)
     * 'Install Mods': This button will copy the DSDBA archive from your game if it has not done so already, place any mods in your `mods\` folder into the archive, re-pack it, and install it for you. If it has not done so already, it will also create a backup of the original DSDBA archive in your game files in `resources\backups`.
     * 'Refresh Modlist': Makes the GUI check for updates in the mods folder, and displays them. This is done automatically if you click 'Install Mods', and is only useful to check if SimpleDSCSModManager has recognised your mods.
     * 'Restore Backup': Overwrites the modded DSDBA archive with that stored in `Digimon Story Cyber Sleuth Complete Edition\resources\backups`, which should be the original DSDBA archive.
     * 'Extract DSDB': Extracts the main game data to SimpleDSCSModManager's `resources\` directory. Only useful if you plan to make mods. This will require ~15 GiB of hard disk space available, with 12.7 GiB remaining after the operation is complete.
-4. You can change your *load order* by dragging-and-dropping the names of mods in the central list. Mods at the top have the lowest priority, and those at the bottom have the highest, meaning that if two mods change the same file then the lowest mod will take precedence.
+4. You can change your **load order** by dragging-and-dropping the names of mods in the central list. Mods at the top have the lowest priority, and those at the bottom have the highest, meaning that if two mods change the same file then the lowest mod will take precedence.
 
 ## Contact
 e-mail: pherakki@gmail.com
