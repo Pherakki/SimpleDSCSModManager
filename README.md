@@ -19,7 +19,7 @@ Mods should take the form of zip archives (zip extension) with the same file str
         |-- pc001ab01.img
 ```
 
-**Even if you do not edit all three name, skel, and geom files for a particular mod, please put all three into the mod archive.** The game will hang (presumably searching for the missing files) if you do not include all three.
+**Even if you do not edit all three name, skel, and geom files for a particular model, please put all three into the mod archive.** The game will hang (presumably searching for the missing files) if you do not include all three.
 
 **Place these zip archives into the `mods\` directory in order to let SimpleDSCSModManager know about them.**
 
