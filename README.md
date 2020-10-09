@@ -43,4 +43,5 @@ Mods should take the form of zip archives (zip extension) with the same file str
 e-mail: pherakki@gmail.com
 
 ## Acknowledgements
-[SydMontague](https://github.com/SydMontague) for creating [DSCSTools](https://github.com/SydMontague/DSCSTools), which does all the hard work - this program is just a crappy shell around it..!
+1. [SydMontague](https://github.com/SydMontague) for creating [DSCSTools](https://github.com/SydMontague/DSCSTools), which does all the hard work - this program is just a crappy shell around it..!
+2. Releases are compiled with [Pyinstaller](https://www.pyinstaller.org/).
