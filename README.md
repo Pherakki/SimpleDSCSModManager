@@ -1,5 +1,5 @@
 # SimpleDSCSModManager
-A very primitive mod manager for Digimon Story: Cyber Sleuth.
+A very basic mod manager for Digimon Story: Cyber Sleuth.
 
 This is a very quick-and-dirty GUI application that acts as a driver for [DSCSTools](https://github.com/SydMontague/DSCSTools) so that those who aren't comfortable with using the command line can easily install mods. Expect bugs. It uses the routines of DSCSTools to extract and re-build a (potentially) modded version of the DSDBA.steam.mvgl archive, which is an overwrite archive used by the game.
 
