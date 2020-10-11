@@ -5,7 +5,10 @@ import zipfile
 import os
 import shutil
 import subprocess
+import platform
 
+
+default_steam_installs = {'Windows': 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Digimon Story Cyber Sleuth Complete Edition\\resources'}
 
 main = tk.Tk()
 main.title('SimpleDSCSModManager')
@@ -62,7 +65,8 @@ def check_config_file():
     else:
         with open(config_file_loc, 'w') as F:
             pass
-        
+    if main.dscs_dir == '':
+        main.dscs_dir = default_steam_installs.get(platform.system(), '')
         
 def write_config():
     with open(config_file_loc, 'w') as F:
@@ -305,7 +309,7 @@ dscstools_location_button.grid(row=0, column=2)
 
 
 # DSCSTools location widget
-dscs_location_label=tk.Label(main, height=1, width=20, text='DSCS install directory: ')
+dscs_location_label=tk.Label(main, height=1, width=20, text='Game directory: ')
 dscs_location_label.grid(row=1, column=0)
 dscs_location_textbox=tk.Text(main, height=1, width=50, state='disabled', wrap='none')
 dscs_location_textbox.grid(row=1, column=1)
@@ -329,6 +333,11 @@ check_config_file()
 populate_modlist_box()
 update_paths()
 
-
 main.resizable(0, 0)
+if not os.path.exists(os.path.join(*os.path.split(main.dscs_dir)[:-1], "app_digister", "Digimon Story CS.exe")):
+    okcancel = messagebox.askokcancel("Digimon Story CS.exe not found", message="Digimon Story: Cyber Sleuth was not auto-detected on your computer. Please select the game location (containing the folders 'app_digister' and 'resources').")
+    if okcancel:
+        open_dscs()
+    else:
+        main.dscs_dir = ''
 main.mainloop()
