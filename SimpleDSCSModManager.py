@@ -12,7 +12,7 @@ default_steam_installs = {'Windows': 'C:\\Program Files (x86)\\Steam\\steamapps\
 
 main = tk.Tk()
 main.title('SimpleDSCSModManager')
-main.dscstools_dir = ''
+main.dscstools_dir = 'DSCSTools'
 main.dscs_dir = ''
 main.load_order = []
 
@@ -67,6 +67,8 @@ def check_config_file():
             pass
     if main.dscs_dir == '':
         main.dscs_dir = default_steam_installs.get(platform.system(), '')
+    if main.dscstools_dir == '':
+        main.dscs_dir = 'DSCSTools'
         
 def write_config():
     with open(config_file_loc, 'w') as F:
@@ -246,7 +248,7 @@ def open_dscstools():
             write_config()
             update_paths()
         if not retry:
-            main.dscstools_dir = ''
+            main.dscstools_dir = 'DSCSTools'
             
             
 def open_dscs():
@@ -340,4 +342,18 @@ if not os.path.exists(os.path.join(*os.path.split(main.dscs_dir)[:-1], "app_digi
         open_dscs()
     else:
         main.dscs_dir = ''
+        change_textbox_text(dscs_location_textbox, main.dscs_dir)
+        write_config()
+        update_paths()
+        
+print(main.dscstools_dir + ".exe")
+if not os.path.exists(main.dscstools_dir + ".exe"):
+    okcancel = messagebox.askokcancel("DSCSTools.exe not found", message="DSCSTools was not found. Please select the folder containing the DSCSTools execuable.")
+    if okcancel:
+        open_dscstools()
+    else:
+        main.dscstools_dir = ''
+        change_textbox_text(dscstools_location_textbox, 'DSCSTools')
+        write_config()
+        update_paths()
 main.mainloop()
