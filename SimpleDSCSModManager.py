@@ -16,10 +16,10 @@ main.dscstools_dir = 'DSCSTools'
 main.dscs_dir = ''
 main.load_order = []
 
-plain_archive_name = 'DSDBA'
+plain_archive_name = 'DSDBP'
 archive_name = plain_archive_name + '.steam.mvgl'
-archive_name_decrypted = 'DSDBA_decrypted'
-archive_name_extracted = 'DSDBA'
+archive_name_decrypted = 'DSDBP_decrypted'
+archive_name_extracted = 'DSDBP'
 main_archive_name = 'DSDB.steam.mvgl'
 main_archive_name_decrypted = 'DSDB_decrypted'
 main_archive_name_extracted = 'DSDB'
@@ -111,13 +111,13 @@ def populate_modlist_box():
     
             
 def init_resources(num_steps):
-    update_progbar("Copying DSDBA...", 0, num_steps)
+    update_progbar("Copying DSDBP...", 0, num_steps)
     shutil.copy2(main.overwrite_archive, local_archive)
-    update_progbar("Decrypting DSDBA...", 1, num_steps)
+    update_progbar("Decrypting DSDBP...", 1, num_steps)
     subprocess.call([main.dscstools_dir, '--crypt', local_archive, archive_name_decrypted], creationflags=subprocess.CREATE_NO_WINDOW) # cwd = resource_loc?
     os.remove(local_archive)
     shutil.move(archive_name_decrypted, local_archive_decrypted)
-    update_progbar("Extracting DSDBA...", 2, num_steps)
+    update_progbar("Extracting DSDBP...", 2, num_steps)
     subprocess.call([main.dscstools_dir, '--extract', local_archive_decrypted, archive_name_extracted], creationflags=subprocess.CREATE_NO_WINDOW)
     os.remove(local_archive_decrypted)
     shutil.move(archive_name_extracted, local_archive_unpacked)
