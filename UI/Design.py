@@ -49,6 +49,10 @@ class uiMenu:
         parentWidget.menuBar().addMenu(self.fileMenu)
         parentWidget.menuBar().addMenu(self.helpMenu)
         
+                
+        self.addModAction = QtWidgets.QAction("Add Mod...", parentWidget)
+        self.fileMenu.addAction(self.addModAction)
+        
         self.donateAction = QtWidgets.QAction("Support Digimon Game Research...", parentWidget)
         self.helpMenu.addAction(self.donateAction)
         
