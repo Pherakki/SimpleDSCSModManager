@@ -93,15 +93,15 @@ class NestedZipMod(ModFile):
             with zip_ref.open(f'{self.filename}') as zf, open(path, 'wb') as f:
                 shutil.copyfileobj(zf, f)
 
-modtypes = [LooseMod, ZipMod, NestedZipMod]
+modformats = [LooseMod, ZipMod, NestedZipMod]
 
 def check_mod_type(path):
     """
     Figures out which of the supported mod formats the input file/folder is in, if any.
     """
-    for modtype in modtypes:
-        if modtype.checkIfMatch(path):
-            return modtype(path)
+    for modformat in modformats:
+        if modformat.checkIfMatch(path):
+            return modformat(path)
     return False
 
 def install_mod_in_manager(mod_path, install_path):
@@ -123,7 +123,7 @@ def detect_mods(path):
     detected_mods = []
     for item in os.listdir(dirpath):
         itempath = os.path.join(dirpath, item)
-        for modtype in modtypes:
+        for modtype in modformats:
             if modtype.checkIfMatch(itempath):
                 detected_mods.append(modtype(itempath))
                 break
