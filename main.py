@@ -92,6 +92,7 @@ class MainWindow(QtWidgets.QMainWindow):
             success = install_mod_in_manager(mod_path, self.mods_loc)
             if success:
                 self.ui.log(f"Successfully registered {mod_name}.")
+                self.update_mods()
             else:
                 self.ui.log(f"{mod_name} is not in a recognised mod format.")
         except Exception as e:
