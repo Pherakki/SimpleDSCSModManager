@@ -25,7 +25,7 @@ class uiMainWidget:
         
     def create_shortcuts(self):
         self.profile_selector = self.main_area.mod_interaction_area.profile_interaction_widgets.profile_selector
-        self.mods_display = self.main_area.mod_interaction_area.mods_display_area.activateTab.mods_display
+        self.mods_display = self.main_area.mod_interaction_area.mods_display_area.mods_display
         self.game_location_textbox = self.main_area.action_tabs.configTab.game_location_textbox
         self.conflicts_graph = self.main_area.action_tabs.conflictsTab.conflicts_graph
 
@@ -93,6 +93,7 @@ class uiLoggingArea:
     def lay_out(self):
         self.layout.addLayout(self.logview.layout, 0, 0)
         
+        
 ###################################
 # Mod Interaction Area Containers #
 ###################################
@@ -145,38 +146,8 @@ class uiProfileInteractionWidgets:
         self.profile_selector.popupAboutToBeShown.connect(profile_handler.save_profile)
         self.profile_selector.currentIndexChanged.connect(profile_handler.apply_profile)
     
+
 class uiModsDisplay:
-    def __init__(self, parentWidget):
-        self.define(parentWidget)
-        self.lay_out()
-        
-    def define(self, parentWidget):
-        self.layout = QtWidgets.QGridLayout()
-        
-        self.actions = QtWidgets.QTabWidget()
-        self.actions.setMinimumSize(500, 300)
-        self.installTab = uiModsInstallationDisplay(parentWidget)
-        self.activateTab = uiModsActivationDisplay(parentWidget)
-        
-    def lay_out(self):
-        self.actions.addTab(self.installTab, "Install")
-        self.actions.addTab(self.activateTab, "Activate")
-        
-        self.layout.addWidget(self.actions, 0, 0)
-    
-class uiModsInstallationDisplay(QtWidgets.QWidget):
-    def __init__(self, parentWidget):
-        super().__init__()
-        self.define(parentWidget)
-        self.lay_out()
-        
-    def define(self, parentWidget):
-        self.layout = QtWidgets.QGridLayout()
-    
-    def lay_out(self):
-        self.setLayout(self.layout)
-    
-class uiModsActivationDisplay(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
         self.define(parentWidget)
@@ -191,12 +162,11 @@ class uiModsActivationDisplay(QtWidgets.QWidget):
         self.mods_display.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  
         self.mods_display.setColumnWidth(0, 200)
         self.mods_display.setColumnWidth(2, 50)
-        self.mods_display.setStyleSheet("border: 0px")
+        self.mods_display.setMinimumSize(500, 300)
         
     def lay_out(self):
         self.layout.addWidget(self.mods_display, 0, 0)
-        self.layout.setContentsMargins(0,0,0,0)
-        self.setLayout(self.layout)
+
         
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
