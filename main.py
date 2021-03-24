@@ -84,8 +84,17 @@ class MainWindow(QtWidgets.QMainWindow):
     def game_loc(self):
         return os.path.normpath(str(self.config['game_loc']))
 
-    def add_mod(self, mod_path):
-        install_mod_in_manager(mod_path, self.mods_loc)
+    def register_mod(self, mod_path):
+        mod_name = os.path.split(mod_path)[-1]
+        self.ui.log(f"Attempting to register {mod_name}...")
+        try:
+            success = install_mod_in_manager(mod_path, self.mods_loc)
+            if success:
+                self.ui.log(f"Successfully registered {mod_name}.")
+            else:
+                self.ui.log(f"{mod_name} is not in a recognised mod format.")
+        except Exception as e:
+            self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
 
     def install_mods(self):
         patch_dir = os.path.join(self.output_loc, 'patch')
