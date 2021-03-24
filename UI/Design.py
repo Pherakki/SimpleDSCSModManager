@@ -188,6 +188,7 @@ class uiModInstallationWidgets:
         
 class uiLogHistory():
     def __init__(self, parentWidget):
+        self.max_items = 500
         self.define(parentWidget)
         self.lay_out()
         
@@ -206,6 +207,9 @@ class uiLogHistory():
         time_now = datetime.now()
         adj_message = f"[{time_now.hour:02}:{time_now.minute:02}] {message}"
         self.logview.addItem(adj_message)
+        if self.logview.count() >= self.max_items:
+            for i in range(self.logview.count() - self.max_items + 1):
+                self.logview.takeItem(0)
     
         
 ##########################
