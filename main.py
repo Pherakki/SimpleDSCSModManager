@@ -66,6 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
         self.ui.hook_extract_tab(self.dscstools_dump_factory)
+        self.ui.hook_mod_registry(self.register_mod)
         
         # Init the UI data
         self.profile_handler.init_profiles()
