@@ -118,16 +118,15 @@ def install_mod_in_manager(mod_path, install_path):
         return False
 
 def detect_mods(path):
-    """Unused, legacy code that might find use again in the future"""
+    """Check for qualifying mods in the registered mods folder."""
     dirpath = os.path.join(path, "mods")
     os.makedirs(dirpath, exist_ok=True)
     
     detected_mods = []
     for item in os.listdir(dirpath):
         itempath = os.path.join(dirpath, item)
-        for modtype in modformats:
-            if modtype.checkIfMatch(itempath):
-                detected_mods.append(modtype(itempath))
-                break
+        modtype = LooseMod
+        if modtype.checkIfMatch(itempath):
+            detected_mods.append(modtype(itempath))
     return detected_mods
 
