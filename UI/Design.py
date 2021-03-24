@@ -1,4 +1,5 @@
 from PyQt5 import QtGui, QtWidgets
+from datetime import datetime
 
 from .CustomWidgets import ComboBox, DragDropTreeView
         
@@ -227,6 +228,11 @@ class uiLogHistory():
         
     def lay_out(self):
         self.layout.addWidget(self.logview, 0, 0)
+        
+    def log(self, message):
+        time_now = datetime.now()
+        adj_message = f"[{time_now.hour:02}:{time_now.minute:02}] {message}"
+        self.logview.addItem(adj_message)
     
         
 ##########################
