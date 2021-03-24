@@ -48,7 +48,7 @@ class LooseMod(ModFile):
         return False
     
     def toLoose(self, path):
-        distutils.dir_util.copy_tree(os.path.join(self.path, 'modfiles'), path)
+        distutils.dir_util.copy_tree(self.path, os.path.join(path, self.filename))
     
         
 class ZipMod(ModFile):
