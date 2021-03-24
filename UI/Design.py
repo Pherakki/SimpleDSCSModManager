@@ -35,6 +35,8 @@ class uiMainWidget:
         self.hook_config_tab = self.main_area.action_tabs.configTab.hook
         self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
         
+        self.log = self.logging_area.logview.log
+        
         
 ################################
 # High-Level Widget Containers #
