@@ -48,7 +48,7 @@ class LooseMod(ModFile):
         return False
     
     def toLoose(self, path):
-        distutils.dir_util.copy_tree(self.path, os.path.join(path, self.filename))
+        distutils.dir_util.copy_tree(self.path, path)
     
         
 class ZipMod(ModFile):
@@ -112,7 +112,7 @@ def install_mod_in_manager(mod_path, install_path):
     """
     mod = check_mod_type(mod_path)
     if mod:
-        mod.toLoose(install_path)
+        mod.toLoose(os.path.join(install_path, mod.filename))
         return True
     else:
         return False
