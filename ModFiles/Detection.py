@@ -95,7 +95,28 @@ class NestedZipMod(ModFile):
 
 modtypes = [LooseMod, ZipMod, NestedZipMod]
 
+def check_mod_type(path):
+    """
+    Figures out which of the supported mod formats the input file/folder is in, if any.
+    """
+    for modtype in modtypes:
+        if modtype.checkIfMatch(path):
+            return modtype(path)
+    return False
+
+def install_mod_in_manager(mod_path, install_path):
+    """
+    Dumps the input file/folder to the install_path if it is a supported mod format.
+    """
+    mod = check_mod_type(mod_path)
+    if mod:
+        mod.toLoose(install_path)
+        return True
+    else:
+        return False
+
 def detect_mods(path):
+    """Unused, legacy code that might find use again in the future"""
     dirpath = os.path.join(path, "mods")
     os.makedirs(dirpath, exist_ok=True)
     
