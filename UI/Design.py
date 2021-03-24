@@ -34,6 +34,7 @@ class uiMainWidget:
         self.hook_action_tabs = self.main_area.action_tabs.hook
         self.hook_config_tab = self.main_area.action_tabs.configTab.hook
         self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
+        self.hook_mod_registry = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
         
         self.log = self.logging_area.logview.log
         
