@@ -12,6 +12,7 @@ from PyQt5.QtCore import Qt
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
 from ModFiles.Detection import detect_mods
+from ModFiles.Detection import detect_mods, install_mod_in_manager
 from UI.DSCSToolsHandler import DSCSToolsHandler
 from UI.Design import uiMainWidget
 from UI.ProfileHandler import ProfileHandler
@@ -79,6 +80,9 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def game_loc(self):
         return os.path.normpath(str(self.config['game_loc']))
+
+    def add_mod(self, mod_path):
+        install_mod_in_manager(mod_path, self.mods_loc)
 
     def install_mods(self):
         patch_dir = os.path.join(self.output_loc, 'patch')
