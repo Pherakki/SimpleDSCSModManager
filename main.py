@@ -11,7 +11,6 @@ from PyQt5.QtCore import Qt
 
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
-from ModFiles.Detection import detect_mods
 from ModFiles.Detection import detect_mods, install_mod_in_manager
 from UI.DSCSToolsHandler import DSCSToolsHandler
 from UI.Design import uiMainWidget
