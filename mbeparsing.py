@@ -26,7 +26,7 @@ def overwrite(working_dir, file, path, open_mbes, graph, n):
 def overwrite_mbe_records(working_dir, file, path, open_mbes, graphs, n):
     filepath = os.path.join(working_dir, file)
     file_contents = parse_id_mbe(filepath)
-    key = '/'.join(os.path.split(file))
+    key = os.path.join(os.path.split(file))
     if key not in open_mbes:
         open_mbes[key] = {}
     for record_id, record in file_contents.items():
@@ -43,7 +43,7 @@ def overwrite_mbe_records(working_dir, file, path, open_mbes, graphs, n):
 def append_mbe_records(working_dir, file, path, open_mbes, graphs, n):
     filepath = os.path.join(working_dir, file)
     file_contents = parse_id_mbe(filepath)
-    key = '/'.join(os.path.split(file))
+    key = os.path.join(os.path.split(file))
     any_exceeded_max = False
     if key not in open_mbes:
         open_mbes[key] = {}
@@ -182,7 +182,7 @@ def generate_patched_mods(mods, output_dir):
                         key = os.path.split(filename[working_dir_length+1:])
                         if key[0] == '':
                             key = key[1:]
-                        key = '/'.join(key)
+                        key = os.path.join(*key)
                         files_used.append(key)
                         rule = mbe_rules.get(key, 'overwrite')
                         
