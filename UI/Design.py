@@ -210,6 +210,7 @@ class uiLogHistory():
         if self.logview.count() >= self.max_items:
             for i in range(self.logview.count() - self.max_items + 1):
                 self.logview.takeItem(0)
+        self.logview.scrollToBottom()
     
         
 ##########################
