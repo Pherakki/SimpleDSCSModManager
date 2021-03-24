@@ -14,8 +14,13 @@ class DragDropTreeView(QtWidgets.QTreeView):
         
         self.modid_to_order = None
         self.modorder_to_id = None
-    
         
+        self.register_mod_from_path = None
+        
+  
+    def hook_registry_function(self, func):
+        self.register_mod_from_path = func
+  
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls:
             event.accept()
@@ -55,7 +60,7 @@ class DragDropTreeView(QtWidgets.QTreeView):
         
     def addModDropEvent(self, e):
         for url in e.mimeData().urls():
-            print(url)
+            self.register_mod_from_path(url.toLocalFile())
         
     def mousePressEvent(self, e):
         if e.button() == Qt.LeftButton:
