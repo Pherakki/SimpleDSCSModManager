@@ -35,9 +35,11 @@ class ModFile:
 class LooseMod(ModFile):
     def __init__(self, path):
         super().__init__(path)
-        with open(os.path.join(path, 'METADATA.json'), 'r') as F:
-            self.init_metadata(F)
-    
+        metadata_path = os.path.join(path, 'METADATA.json')
+        if os.path.exists(metadata_path):
+            with open(metadata_path, 'r') as F:
+                self.init_metadata(F)
+        
     @staticmethod
     def checkIfMatch(itempath):
         if os.path.isdir(itempath):
