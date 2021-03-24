@@ -182,7 +182,7 @@ def generate_patched_mods(mods, output_dir):
                         key = os.path.split(filename[working_dir_length+1:])
                         if key[0] == '':
                             key = key[1:]
-                        key = os.path.join(*key)
+                        key = '/'.join(key)
                         files_used.append(key)
                         rule = mbe_rules.get(key, 'overwrite')
                         
