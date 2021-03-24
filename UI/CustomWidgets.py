@@ -16,7 +16,33 @@ class DragDropTreeView(QtWidgets.QTreeView):
         self.modorder_to_id = None
     
         
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls:
+            if len(event.mimeData().urls()) == 0:
+                event.setDropAction(QtCore.Qt.MoveAction)
+            else:
+                event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+    
     def dropEvent(self, e):
+        if e.mimeData().hasUrls:
+            if len(e.mimeData().urls()) == 0:
+                self.reorderElementsDropEvent(e)
+            else:
+                self.addModDropEvent(e)
+            e.accept()
+        else:
+            e.ignore()
+        
+    def reorderElementsDropEvent(self, e):
         index = self.indexAt(e.pos())
         parent = index.parent()
         self.model().dropMimeData(e.mimeData(), e.dropAction(), index.row()+1, 0, parent)
@@ -26,7 +52,10 @@ class DragDropTreeView(QtWidgets.QTreeView):
         else:
             add = 1
         self.display_data.insert(index.row() + add, self.display_data.pop(self.dragdrop_startrow))
-        e.accept()
+        
+    def addModDropEvent(self, e):
+        for url in e.mimeData().urls():
+            print(url)
         
     def mousePressEvent(self, e):
         if e.button() == Qt.LeftButton:
