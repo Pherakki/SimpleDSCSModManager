@@ -13,6 +13,7 @@ class DSCSToolsHandler:
     def __init__(self, game_location, dscstools_location):
         self.game_location = game_location
         self.dscstools_location = dscstools_location
+        self.dscstools_folder = os.path.join(*os.path.split(dscstools_location)[:-1])
         self.dscstools_url = r"https://github.com/SydMontague/DSCSTools/releases/latest"
         
     ####################
@@ -40,7 +41,7 @@ class DSCSToolsHandler:
         output_file = os.path.join(destination, output_transform(archive))
             
         subprocess.call([self.dscstools_location, f'--{operation}', input_file, output_file],
-                        creationflags=subprocess.CREATE_NO_WINDOW)
+                        creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
 
         if remove_input:
             os.remove(input_file)
@@ -82,12 +83,12 @@ class DSCSToolsHandler:
     def unpack_mbe(self, mbe, origin, destination):
         origin_loc = os.path.join(origin, mbe)
         destination_loc = destination
-        subprocess.call([self.dscstools_location, '--mbeextract', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW)
-    
+        subprocess.call([self.dscstools_location, '--mbeextract', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
+
     def pack_mbe(self, mbe, origin, destination):
         origin_loc = os.path.join(origin, mbe)
         destination_loc = os.path.join(destination, mbe)
-        subprocess.call([self.dscstools_location, '--mbepack', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW)
+        subprocess.call([self.dscstools_location, '--mbepack', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
         
     ################################
     # DSCSTools Download Functions #
