@@ -96,6 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.ui.log(f"{mod_name} is not in a recognised mod format.")
         except Exception as e:
+            shutil.rmtree(os.path.join(self.mods_loc, mod_name))
             self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
 
     def install_mods(self):
