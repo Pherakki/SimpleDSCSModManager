@@ -89,7 +89,7 @@ class MainWindow(QtWidgets.QMainWindow):
         mod_name = os.path.split(mod_path)[-1]
         self.ui.log(f"Attempting to register {mod_name}...")
         try:
-            success = install_mod_in_manager(mod_path, self.mods_loc)
+            success = install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe)
             if success:
                 self.ui.log(f"Successfully registered {mod_name}.")
                 self.update_mods()
