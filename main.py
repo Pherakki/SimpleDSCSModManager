@@ -358,7 +358,7 @@ class InstallModsWorkerThread(QtCore.QObject):
                 self.messageLog.emit("Base DSDBP archive not found, generating...")
                 self.dscstools_handler.dump_mvgl('DSDBP', self.game_resources_loc, self.resources_loc)
             shutil.copytree(dsdbp_resource_loc, dbdsp_dir)
-            dir_util.copy_tree(patch_dir, dbdsp_dir)
+            shutil.copytree(patch_dir, dbdsp_dir, dirs_exist_ok=True)
             self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
             self.dscstools_handler.encrypt_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=True)
             self.messageLog.emit("Installing patched archive...")
