@@ -35,6 +35,8 @@ class uiMainWidget:
         self.hook_config_tab = self.main_area.action_tabs.configTab.hook
         self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
         self.hook_mod_registry = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
+        self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
+        self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
         self.log = self.logging_area.logview.log
         
@@ -185,6 +187,12 @@ class uiModInstallationWidgets:
     def lay_out(self):
         self.layout.addWidget(self.install_mods_button, 0, 0)
         self.layout.addWidget(self.restore_backups_button, 0, 1)
+        
+    def hook_install_button(self, func):
+        self.install_mods_button.clicked.connect(func)
+        
+    def hook_backup_button(self, func):
+        self.restore_backups_button.clicked.connect(func)
         
 class uiLogHistory():
     def __init__(self, parentWidget):
