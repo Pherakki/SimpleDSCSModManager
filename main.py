@@ -3,6 +3,7 @@ import os
 import shutil
 import sys
 import webbrowser
+from distutils import dir_util
 
 from PyQt5 import QtWidgets 
 from PyQt5 import QtCore 
@@ -12,6 +13,8 @@ from PyQt5.QtCore import Qt
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
 from ModFiles.Detection import detect_mods, install_mod_in_manager
+from ModFiles.Indexing import generate_mod_index
+from ModFiles.PatchGen import generate_patch
 from UI.DSCSToolsHandler import DSCSToolsHandler
 from UI.Design import uiMainWidget
 from UI.ProfileHandler import ProfileHandler
@@ -67,6 +70,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
         self.ui.hook_extract_tab(self.dscstools_dump_factory)
         self.ui.hook_mod_registry(self.register_mod)
+        self.ui.hook_install_button(self.install_mods)
+        self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, self.ui.log)))
         
         # Init the UI data
         self.profile_handler.init_profiles()
@@ -100,27 +105,65 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
 
     def install_mods(self):
-        patch_dir = os.path.join(self.output_loc, 'patch')
-        dbdsp_dir = os.path.join(self.output_loc, 'DBDSP')
-        #####################################################
-        # Do all this shit in the patch generation state?!
-        if not os.path.exists(patch_dir):
-            self.draw_conflicts_graph()
-        if os.path.exists(dbdsp_dir):
-            shutil.rmtree(dbdsp_dir)
-        shutil.copytree(patch_dir, dbdsp_dir)
-        marked_files = parse_modfiles(dbdsp_dir)
-        loose_mbes = marked_files[modelement_is_loose_mbe]
-        for loose_mbe in loose_mbes:
-            pass
+        try:
+            self.ui.log("Preparing to patch mods together...")
+            patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
+            dbdsp_dir = os.path.relpath(os.path.join(self.output_loc, 'DSDBP'))
+            mvgl_loc = os.path.join(self.output_loc, 'DSDBP.steam.mvgl')
+            if os.path.exists(patch_dir):
+                shutil.rmtree(patch_dir)
+            if os.path.exists(dbdsp_dir):
+                shutil.rmtree(dbdsp_dir)
+            if os.path.exists(mvgl_loc):
+                os.remove(mvgl_loc)
+                
+            # Do this on mod registry...
+            self.ui.log("Indexing mods...")
+            indices = []
+            for mod in self.profile_handler.get_active_mods():
+                modfiles_path = os.path.relpath(os.path.join(mod.path, "modfiles"))
+                indices.append(generate_mod_index(modfiles_path, {}))
+            self.ui.log(f"Indexed ({len(indices)}) active mods.")
+            self.ui.log("Generating patch...")
+            generate_patch(indices, patch_dir, self.resources_loc)
+            
             # Pack each mbe
-            # Remove loose files
-        #####################################################
+            temp_path = os.path.join(patch_dir, 'temp')
+            os.mkdir(temp_path)
+            for mbe_folder in ['data', 'message', 'text']:
+                mbe_folder_path = os.path.join(patch_dir, mbe_folder)
+                if os.path.exists(mbe_folder_path):
+                    
+                    for folder in os.listdir(mbe_folder_path):
+                        # Generate the mbe inside the 'temp' directory
+                        self.dscstools_handler.pack_mbe(folder, 
+                                                        os.path.abspath(mbe_folder_path), 
+                                                        os.path.abspath(temp_path))
+                        shutil.rmtree(os.path.join(mbe_folder_path, folder))
+                        # Move the packed MBE out out 'temp' and into the correct path
+                        os.rename(os.path.join(temp_path, folder), os.path.join(mbe_folder_path, folder))
+            os.rmdir(temp_path)
+            
+            self.ui.log("Generating patched MVGL archive...")
         
-        # Now here's the important bit
-        # Pack up the DBDSP archive
-        # ensure_backed_up('DBDSP')
-        #shutil(dsdbp_dir, game_resources_dir)
+            dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
+            if not os.path.exists(dsdbp_resource_loc):
+                self.ui.log("Base DSDBP archive not found, generating...")
+                self.dscstools_handler.dump_mvgl('DSDBP', self.game_resources_loc, self.resources_loc)
+            shutil.copytree(dsdbp_resource_loc, dbdsp_dir)
+            dir_util.copy_tree(patch_dir, dbdsp_dir)
+            self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
+            self.dscstools_handler.encrypt_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=True)
+            self.ui.log("Installing patched archive...")
+            # Now here's the important bit
+            create_backups(self.game_resources_loc, self.ui.log)
+            shutil.copy2(mvgl_loc, os.path.join(self.game_resources_loc, 'DSDBP.steam.mvgl'))
+            
+            self.ui.log("Mods successfully installed.")
+            
+        except Exception as e:
+            self.ui.log(f"The following error occured when trying to install modlist: {e}")
+            raise e
     
     def read_config(self):
         config_file_loc = os.path.join(self.config_loc, "config.json")
@@ -268,6 +311,13 @@ def try_to_locate_game_exe():
         if os.path.exists(trial_path):
             return os.path.normpath(os.path.join(r"C:", *middle, "steamapps", "common", "Digimon Story Cyber Sleuth Complete Edition"))
 
+def create_backups(game_resources_loc, logfunc):
+    backup_dir = os.path.join(game_resources_loc, 'backup', 'DSDBP.steam.mvgl')
+    if not os.path.exists(backup_dir):
+        logfunc("Creating backup...")
+        os.mkdir(os.path.split(backup_dir)[0])
+        shutil.copy2(os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'), backup_dir)
+        
 
 if __name__ == '__main__': 
     app = QtWidgets.QApplication([]) 
