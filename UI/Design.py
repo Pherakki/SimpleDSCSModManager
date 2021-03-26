@@ -40,6 +40,17 @@ class uiMainWidget:
         
         self.log = self.logging_area.logview.log
         
+    def enable_gui(self):
+        self.toggle_active_gui(True)
+        
+    def disable_gui(self):
+        self.toggle_active_gui(False)
+        
+    def toggle_active_gui(self, active):
+        self.menu.toggle_active(active)
+        self.main_area.mod_interaction_area.toggle_active(active)
+        self.main_area.action_tabs.toggle_active(active)
+        
         
 ################################
 # High-Level Widget Containers #
@@ -67,6 +78,15 @@ class uiMenu:
     
     def hook(self, open_patreon):
         self.donateAction.triggered.connect(open_patreon)
+        
+    def enable(self):
+        self.toggle_active(True)
+        
+    def disable(self):
+        self.toggle_active(True)
+        
+    def toggle_active(self, active):
+        self.addModAction.setEnabled(active)
         
 class uiMainArea:
     def __init__(self, parentWidget):
@@ -116,6 +136,17 @@ class uiModInteractionArea:
         self.layout.addLayout(self.profile_interaction_widgets.layout, 0, 0)
         self.layout.addLayout(self.mods_display_area.layout, 1, 0)
         self.layout.addLayout(self.mod_installation_widgets.layout, 2, 0)
+    
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.profile_interaction_widgets.toggle_active(active)
+        self.mods_display_area.toggle_active(active)
+        self.mod_installation_widgets.toggle_active(active)
         
     
 class uiProfileInteractionWidgets:
@@ -149,6 +180,18 @@ class uiProfileInteractionWidgets:
         self.profile_selector.popupAboutToBeShown.connect(profile_handler.save_profile)
         self.profile_selector.currentIndexChanged.connect(profile_handler.apply_profile)
     
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.new_profile_button.setEnabled(active)
+        self.rename_profile_button.setEnabled(active)
+        self.delete_profile_button.setEnabled(active)
+        self.profile_selector.setEnabled(active)
+    
 
 class uiModsDisplay:
     def __init__(self, parentWidget):
@@ -169,7 +212,15 @@ class uiModsDisplay:
         
     def lay_out(self):
         self.layout.addWidget(self.mods_display, 0, 0)
-
+    
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.mods_display.setEnabled(active)
         
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
@@ -193,6 +244,16 @@ class uiModInstallationWidgets:
         
     def hook_backup_button(self, func):
         self.restore_backups_button.clicked.connect(func)
+        
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.install_mods_button.setEnabled(active)
+        self.restore_backups_button.setEnabled(active)
         
 class uiLogHistory():
     def __init__(self, parentWidget):
@@ -247,6 +308,17 @@ class uiActionTabs:
         
     def hook(self, draw_conflicts_graph):
         self.actions.currentChanged.connect(draw_conflicts_graph)
+    
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)   
+        
+    def toggle_active(self, active):
+        self.configTab.toggle_active(active)
+        self.extractTab.toggle_active(active)
+        self.conflictsTab.toggle_active(active)
         
 class uiConfigTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
@@ -285,6 +357,17 @@ class uiConfigTab(QtWidgets.QWidget):
         self.game_location_button.clicked.connect(find_gamelocation)
         self.update_dscstools_button.clicked.connect(update_dscstools)
         
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.game_location_textbox.setEnabled(active)
+        self.game_location_button.setEnabled(active)
+        self.update_dscstools_button.setEnabled(active)
+        
 class uiExtractTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         self.mvgls = ["DSDB", "DSDBA", "DSDBse", "DSDBPse", "DSDBS", "DSDBSP", "DSDBP"]
@@ -316,6 +399,16 @@ class uiExtractTab(QtWidgets.QWidget):
         for archive in self.mvgls:
             self.archive_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive))
             
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        for button in self.archive_extract_buttons.values():
+            button.setEnabled(active)
+            
 class uiConflictsTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
@@ -331,6 +424,15 @@ class uiConflictsTab(QtWidgets.QWidget):
     def lay_out(self):
         self.layout.addWidget(self.conflicts_graph, 0, 0)
         self.setLayout(self.layout)
+        
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.conflicts_graph.setEnabled(active)
 
 # class ModManagerUI:
 #     def define_ui(self): 
