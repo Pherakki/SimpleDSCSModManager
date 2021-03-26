@@ -94,13 +94,14 @@ class MainWindow(QtWidgets.QMainWindow):
             success = install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe)
             if success:
                 self.ui.log(f"Successfully registered {mod_name}.")
-                self.update_mods()
             else:
                 self.ui.log(f"{mod_name} is not in a recognised mod format.")
         except Exception as e:
             shutil.rmtree(os.path.join(self.mods_loc, mod_name))
             self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
             raise e
+        finally:
+            self.update_mods()
 
     def install_mods(self):
         self.ui.disable_gui()
