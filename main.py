@@ -196,7 +196,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.get_dscstools()
         else:
             QtWidgets.QMessageBox.question(self, 'Version OK',
-                                           rf"DSCSTools is up-to-date.", QtWidgets.QMessageBox.Ok)
+                                           r"DSCSTools is up-to-date.", QtWidgets.QMessageBox.Ok)
     
     def get_dscstools(self):
         zipped_dscstools = os.path.join(self.dscstools_loc, "DSCSTools.zip")
