@@ -318,6 +318,16 @@ def create_backups(game_resources_loc, logfunc):
         os.mkdir(os.path.split(backup_dir)[0])
         shutil.copy2(os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'), backup_dir)
         
+def restore_backups(game_resources_loc, logfunc):
+    try:
+        logfunc("Restoring backup...")
+        
+        backup_dir = os.path.join(game_resources_loc, 'backup', 'DSDBP.steam.mvgl')
+        shutil.copy2(backup_dir, os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'))
+        
+        logfunc("Backup restored.")
+    except Exception as e:
+        logfunc(f"The following error occured when trying to restore the backup: {e}")
 
 if __name__ == '__main__': 
     app = QtWidgets.QApplication([]) 
