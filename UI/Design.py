@@ -30,6 +30,7 @@ class uiMainWidget:
         self.conflicts_graph = self.main_area.action_tabs.conflictsTab.conflicts_graph
 
         self.hook_menu = self.menu.hook
+        self.hook_filemenu = self.menu.hook_filemenu
         self.hook_profle_interaction_widgets = self.main_area.mod_interaction_area.profile_interaction_widgets.hook
         self.hook_action_tabs = self.main_area.action_tabs.hook
         self.hook_config_tab = self.main_area.action_tabs.configTab.hook
@@ -78,6 +79,9 @@ class uiMenu:
     
     def hook(self, open_patreon):
         self.donateAction.triggered.connect(open_patreon)
+        
+    def hook_filemenu(self, register_mod_dialog):
+        self.addModAction.triggered.connect(register_mod_dialog)
         
     def enable(self):
         self.toggle_active(True)
