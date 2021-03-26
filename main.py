@@ -100,6 +100,7 @@ class MainWindow(QtWidgets.QMainWindow):
         except Exception as e:
             shutil.rmtree(os.path.join(self.mods_loc, mod_name))
             self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
+            raise e
 
     def install_mods(self):
         try:
