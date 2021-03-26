@@ -3,18 +3,13 @@ import os
 import shutil
 import sys
 import webbrowser
-from distutils import dir_util
 
 from PyQt5 import QtWidgets 
-from PyQt5 import QtCore 
-from PyQt5 import QtGui 
-from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
 
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
 from ModFiles.Detection import detect_mods, install_mod_in_manager
-from ModFiles.Indexing import generate_mod_index
-from ModFiles.PatchGen import generate_patch
 from UI.DSCSToolsHandler import DSCSToolsHandler
 from UI.Design import uiMainWidget
 from UI.ProfileHandler import ProfileHandler
@@ -130,8 +125,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.thread.start()      
         
         
-
-    
     def read_config(self):
         config_file_loc = os.path.join(self.config_loc, "config.json")
         if os.path.exists(config_file_loc):
