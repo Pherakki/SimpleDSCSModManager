@@ -65,6 +65,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Hook the UI
         self.ui.hook_menu(open_patreon)
+        self.ui.hook_filemenu(self.register_mod_filedialog)
         self.ui.hook_profle_interaction_widgets(self.profile_handler)
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
@@ -102,6 +103,11 @@ class MainWindow(QtWidgets.QMainWindow):
             raise e
         finally:
             self.update_mods()
+            
+    def register_mod_filedialog(self):
+        file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod")
+        self.register_mod(file[0].toLocalFile())
+
 
     def install_mods(self):
         self.profile_handler.save_profile()
