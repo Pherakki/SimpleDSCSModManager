@@ -104,6 +104,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.update_mods()
 
     def install_mods(self):
+        self.profile_handler.save_profile()
+        self.update_mods()
+        self.profile_handler.save_profile()
         self.ui.disable_gui()
         self.thread = QtCore.QThread()
 
