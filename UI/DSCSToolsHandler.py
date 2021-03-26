@@ -39,7 +39,6 @@ class DSCSToolsHandler:
             input_file = os.path.join(origin, input_transform(archive))
         
         output_file = os.path.join(destination, output_transform(archive))
-            
         subprocess.call([self.dscstools_location, f'--{operation}', input_file, output_file],
                         creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
 
