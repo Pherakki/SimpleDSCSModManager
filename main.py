@@ -253,23 +253,24 @@ class MainWindow(QtWidgets.QMainWindow):
         self.profile_handler.save_profile()
         super().closeEvent(*args, **kwargs)
         
-def prepare_graph_for_display(graph):
-    directories = {}
-    files = {}
-    for key in sorted(graph):
-        keysplit = key.split('/')
-        value = graph[key]
-        if len(keysplit) > 1:
-            if keysplit[0] not in directories:
-                directories[keysplit[0]] = {}
-            directories[keysplit[0]]['/'.join(keysplit[1:])] = value
-        else:
-            files[key] = value
+        
+# def prepare_graph_for_display(graph):
+#     directories = {}
+#     files = {}
+#     for key in sorted(graph):
+#         keysplit = key.split('/')
+#         value = graph[key]
+#         if len(keysplit) > 1:
+#             if keysplit[0] not in directories:
+#                 directories[keysplit[0]] = {}
+#             directories[keysplit[0]]['/'.join(keysplit[1:])] = value
+#         else:
+#             files[key] = value
             
-    for key, value in directories.items():
-        directories[key] = prepare_graph_for_display(value)
+#     for key, value in directories.items():
+#         directories[key] = prepare_graph_for_display(value)
             
-    return {**directories, **files}
+#     return {**directories, **files}
 
 def try_to_locate_game_exe():
     for middle in [['Program Files (x86)', 'Steam'],
