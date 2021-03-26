@@ -76,10 +76,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Init the UI data
         self.profile_handler.init_profiles()
         self.update_mods()
-        self.ui.log("Testing Init")
-        self.ui.log("Testing Init 2")
-        self.ui.log("Testing Init 3")
-        self.ui.log("Testing Init 4")
+        self.ui.log("SimpleDSCSModManager initialised.")
 
         
     @property
