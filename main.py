@@ -68,7 +68,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
-        self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, self.ui.log)))
+        self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, 
+                                                            self.backups_loc, self.ui.log)))
         
         # Init the UI data
         self.profile_handler.init_profiles()
@@ -83,6 +84,10 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def game_loc(self):
         return os.path.normpath(str(self.config['game_loc']))
+    
+    @property
+    def backups_loc(self):
+        return os.path.join(self.game_resources_loc, 'backup')
 
     def register_mod(self, mod_path):
         """
@@ -131,7 +136,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.thread = QtCore.QThread()
 
         self.worker = InstallModsWorkerThread(self.output_loc, self.resources_loc, 
-                                              self.game_resources_loc,
+                                              self.game_resources_loc, self.backups_loc,
                                               self.profile_handler, self.dscstools_handler)
         
         self.worker.moveToThread(self.thread)
@@ -235,14 +240,14 @@ def try_to_locate_game_exe():
             return os.path.normpath(os.path.join(r"C:", *middle, "steamapps", "common", "Digimon Story Cyber Sleuth Complete Edition"))
 
         
-def restore_backups(game_resources_loc, logfunc):
+def restore_backups(game_resources_loc, backup_loc, logfunc):
     try:
         logfunc("Restoring backup...")
         
-        backup_dir = os.path.join(game_resources_loc, 'backup', 'DSDBP.steam.mvgl')
+        backup_dir = os.path.join(backup_loc, 'DSDBP.steam.mvgl')
         shutil.copy2(backup_dir, os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'))
-        
         logfunc("Backup restored.")
+        
     except Exception as e:
         logfunc(f"The following error occured when trying to restore the backup: {e}")
 

@@ -12,12 +12,13 @@ class InstallModsWorkerThread(QtCore.QObject):
     messageLog = QtCore.pyqtSignal(str)
     releaseGui = QtCore.pyqtSignal()
     
-    def __init__(self, output_loc, resources_loc, game_resources_loc, 
+    def __init__(self, output_loc, resources_loc, game_resources_loc,  backups_loc,
                  profile_handler, dscstools_handler, parent=None):
         super().__init__(parent)
         self.output_loc = output_loc
         self.resources_loc = resources_loc
         self.game_resources_loc = game_resources_loc
+        self.backups_loc = backups_loc
         self.profile_handler = profile_handler
         self.dscstools_handler = dscstools_handler
         
@@ -72,7 +73,7 @@ class InstallModsWorkerThread(QtCore.QObject):
             self.dscstools_handler.encrypt_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=True)
             self.messageLog.emit("Installing patched archive...")
             # Now here's the important bit
-            create_backups(self.game_resources_loc, self.messageLog.emit)
+            create_backups(self.game_resources_loc, self.backups_loc, self.messageLog.emit)
             shutil.copy2(mvgl_loc, os.path.join(self.game_resources_loc, 'DSDBP.steam.mvgl'))
             
             self.messageLog.emit("Mods successfully installed.")
@@ -85,9 +86,9 @@ class InstallModsWorkerThread(QtCore.QObject):
             self.finished.emit()
 
 
-def create_backups(game_resources_loc, logfunc):
-    backup_dir = os.path.join(game_resources_loc, 'backup', 'DSDBP.steam.mvgl')
-    if not os.path.exists(backup_dir):
+def create_backups(game_resources_loc, backups_loc, logfunc):
+    backup_filepath = os.path.join(backups_loc, 'DSDBP.steam.mvgl')
+    if not os.path.exists(backup_filepath):
         logfunc("Creating backup...")
-        os.mkdir(os.path.split(backup_dir)[0])
-        shutil.copy2(os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'), backup_dir)
+        os.mkdir(os.path.split(backup_filepath)[0])
+        shutil.copy2(os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'), backup_filepath)
