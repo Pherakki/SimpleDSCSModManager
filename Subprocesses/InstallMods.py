@@ -43,7 +43,7 @@ class InstallModsWorkerThread(QtCore.QObject):
                 indices.append(generate_mod_index(modfiles_path, {}))
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
-                raise Exception("No mods found.")
+                raise Exception("No mods activated.")
             self.messageLog.emit("Generating patch...")
             generate_patch(indices, patch_dir, self.resources_loc)
             
