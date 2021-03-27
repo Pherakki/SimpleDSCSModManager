@@ -3,8 +3,8 @@ import shutil
 
 from PyQt5 import QtCore 
 
-from ..ModFiles.Indexing import generate_mod_index
-from ..ModFiles.PatchGen import generate_patch
+from ModFiles.Indexing import generate_mod_index
+from ModFiles.PatchGen import generate_patch
 
 
 class InstallModsWorkerThread(QtCore.QObject):
