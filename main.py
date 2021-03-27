@@ -84,6 +84,10 @@ class MainWindow(QtWidgets.QMainWindow):
         return os.path.normpath(str(self.config['game_loc']))
 
     def register_mod(self, mod_path):
+        """
+        Checks if the file/folder at mod_path is an accepted mod format, and if so,
+        copies it into the modmanager 'mods' folder and updates the mod list.
+        """
         mod_name = os.path.split(mod_path)[-1]
         self.ui.log(f"Attempting to register {mod_name}...")
         try:
@@ -103,6 +107,9 @@ class MainWindow(QtWidgets.QMainWindow):
         file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod")
         self.register_mod(file[0].toLocalFile())
 
+        """
+        Opens a file dialog and passes the path on to register_mod.
+        """
 
     def install_mods(self):
         self.profile_handler.save_profile()
