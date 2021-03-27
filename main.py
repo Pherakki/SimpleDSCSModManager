@@ -67,6 +67,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_extract_tab(self.dscstools_dump_factory)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
+        self.ui.hook_delete_mod_menu(self.unregister_mod)
         self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, self.ui.log)))
         
         # Init the UI data
@@ -162,8 +163,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.check_gamelocation():
                 self.dscstools_handler.dump_mvgl(archive, self.game_resources_loc, self.resources_loc)
         return retval
-    
-
 
     def update_mods(self):
         self.mods = detect_mods(script_loc)
