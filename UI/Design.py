@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 
 from .CustomWidgets import ComboBox, DragDropTreeView
@@ -36,6 +36,7 @@ class uiMainWidget:
         self.hook_config_tab = self.main_area.action_tabs.configTab.hook
         self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
         self.hook_mod_registry = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
+        self.hook_delete_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
         self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
         self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
@@ -214,6 +215,14 @@ class uiModsDisplay:
         self.mods_display.setColumnWidth(2, 50)
         self.mods_display.setMinimumSize(500, 300)
         
+        self.contextMenu = QtWidgets.QMenu()
+        self.deleteModAction = self.contextMenu.addAction("Delete Mod")
+        
+        self.mods_display.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.mods_display.customContextMenuRequested.connect(self.menuContextTree)
+        self.deleteModFunction = None
+        
+        
     def lay_out(self):
         self.layout.addWidget(self.mods_display, 0, 0)
     
@@ -225,6 +234,25 @@ class uiModsDisplay:
         
     def toggle_active(self, active):
         self.mods_display.setEnabled(active)
+
+    def menuContextTree(self, point):
+        try:
+            self.deleteModAction.triggered.disconnect()
+        except TypeError:
+            pass
+
+        # Infos about the node selected.
+        index = self.mods_display.indexAt(point)
+
+        if not index.isValid():
+            return
+
+        self.deleteModAction.triggered.connect(lambda: self.deleteModFunction(index.row()))
+
+        self.contextMenu.exec_(self.mods_display.mapToGlobal(point))
+        
+    def hook_delete_mod(self, func):
+        self.deleteModFunction = func
         
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
