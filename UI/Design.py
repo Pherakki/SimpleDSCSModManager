@@ -41,6 +41,7 @@ class uiMainWidget:
         self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
         self.log = self.logging_area.logview.log
+        self.updateLog = self.logging_area.logview.updateLog
         
     def enable_gui(self):
         self.toggle_active_gui(True)
@@ -312,6 +313,12 @@ class uiLogHistory():
             for i in range(self.logview.count() - self.max_items + 1):
                 self.logview.takeItem(0)
         self.logview.scrollToBottom()
+        
+    def updateLog(self, message):
+        time_now = datetime.now()
+        adj_message = f"[{time_now.hour:02}:{time_now.minute:02}] {message}"
+        self.logview.takeItem(self.logview.count() - 1)
+        self.logview.addItem(adj_message)
     
         
 ##########################
