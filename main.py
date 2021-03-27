@@ -104,12 +104,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.update_mods()
             
     def register_mod_filedialog(self):
-        file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod")
-        self.register_mod(file[0].toLocalFile())
-
         """
         Opens a file dialog and passes the path on to register_mod.
         """
+        file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod archive")
+        if file != '' and file != '.':
+            self.register_mod(file[0].toLocalFile())
 
     def install_mods(self):
         self.profile_handler.save_profile()
