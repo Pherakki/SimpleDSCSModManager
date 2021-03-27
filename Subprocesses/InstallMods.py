@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 
 from ModFiles.Indexing import generate_mod_index
 from ModFiles.PatchGen import generate_patch
+from Utils.MBE import mbe_batch_pack
 
 
 class InstallModsWorkerThread(QtCore.QObject):
@@ -50,20 +51,7 @@ class InstallModsWorkerThread(QtCore.QObject):
             generate_patch(indices, patch_dir, self.resources_loc)
             
             # Pack each mbe
-            temp_path = os.path.join(patch_dir, 'temp')
-            os.mkdir(temp_path)
-            for mbe_folder in ['data', 'message', 'text']:
-                mbe_folder_path = os.path.join(patch_dir, mbe_folder)
-                if os.path.exists(mbe_folder_path):
-                    for folder in os.listdir(mbe_folder_path):
-                        # Generate the mbe inside the 'temp' directory
-                        self.dscstools_handler.pack_mbe(folder, 
-                                                        os.path.abspath(mbe_folder_path), 
-                                                        os.path.abspath(temp_path))
-                        shutil.rmtree(os.path.join(mbe_folder_path, folder))
-                        # Move the packed MBE out out 'temp' and into the correct path
-                        os.rename(os.path.join(temp_path, folder), os.path.join(mbe_folder_path, folder))
-            os.rmdir(temp_path)
+            mbe_batch_pack(patch_dir, self.dscstools_handler, self.messageLog.emit)
             
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
         
@@ -88,8 +76,8 @@ class InstallModsWorkerThread(QtCore.QObject):
         finally:
             self.releaseGui.emit()
             self.finished.emit()
-
-
+            
+    
 def create_backups(game_resources_loc, backups_loc, logfunc):
     backup_filepath = os.path.join(backups_loc, 'DSDBP.steam.mvgl')
     if not os.path.exists(backup_filepath):
