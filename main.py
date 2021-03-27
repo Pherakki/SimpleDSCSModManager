@@ -14,6 +14,7 @@ from UI.DSCSToolsHandler import DSCSToolsHandler
 from UI.Design import uiMainWidget
 from UI.ProfileHandler import ProfileHandler
 from Subprocesses.InstallMods import InstallModsWorkerThread
+from Subprocesses.DumpArchive import DumpArchiveWorkerThread
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
@@ -166,7 +167,29 @@ class MainWindow(QtWidgets.QMainWindow):
     def dscstools_dump_factory(self, archive):
         def retval():
             if self.check_gamelocation():
-                self.dscstools_handler.dump_mvgl(archive, self.game_resources_loc, self.resources_loc)
+                result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+
+                if result == '' or result == '.':
+                    return
+                backup_filepath = os.path.join(self.backups_loc, f'{archive}.steam.mvgl')
+                if os.path.exists(backup_filepath):
+                    use_loc = self.backups_loc
+                else:
+                    use_loc = self.game_resources_loc
+                    
+                self.thread = QtCore.QThread()
+        
+                self.worker = DumpArchiveWorkerThread(archive, use_loc, result, self.dscstools_handler)
+                self.worker.moveToThread(self.thread)
+                self.thread.started.connect(self.worker.run)
+                self.worker.finished.connect(self.thread.quit)
+                self.worker.finished.connect(self.worker.deleteLater)
+                self.thread.finished.connect(self.thread.deleteLater)
+                self.worker.messageLog.connect(self.ui.log)
+                self.worker.lockGui.connect(self.ui.disable_gui)
+                self.worker.releaseGui.connect(self.ui.enable_gui)
+                self.thread.start()
+                
         return retval
 
     def update_mods(self):
