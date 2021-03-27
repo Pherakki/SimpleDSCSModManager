@@ -110,6 +110,17 @@ class MainWindow(QtWidgets.QMainWindow):
         file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod archive")
         if file != '' and file != '.':
             self.register_mod(file[0].toLocalFile())
+            
+    def unregister_mod(self, index):
+        mod_name = os.path.split(self.mods[index].path)[1]
+        try:
+            shutil.rmtree(self.mods[index].path)
+            self.ui.log(f"Removed {mod_name}.")
+        except Exception as e:
+            self.ui.log(f"The following error occured when trying to delete {mod_name}: {e}")
+        finally:
+            self.update_mods()
+    
 
     def install_mods(self):
         self.profile_handler.save_profile()
