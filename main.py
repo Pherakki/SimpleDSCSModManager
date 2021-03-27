@@ -133,7 +133,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.profile_handler.save_profile()
         self.update_mods()
         self.profile_handler.save_profile()
-        self.ui.disable_gui()
         self.thread = QtCore.QThread()
 
         self.worker = InstallModsWorkerThread(self.output_loc, self.resources_loc, 
@@ -146,6 +145,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.messageLog.connect(self.ui.log)
+        self.worker.lockGui.connect(self.ui.disable_gui)
         self.worker.releaseGui.connect(self.ui.enable_gui)
         self.thread.start()      
         

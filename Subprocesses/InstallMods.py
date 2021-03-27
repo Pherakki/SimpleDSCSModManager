@@ -10,6 +10,7 @@ from ModFiles.PatchGen import generate_patch
 class InstallModsWorkerThread(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     messageLog = QtCore.pyqtSignal(str)
+    lockGui = QtCore.pyqtSignal()
     releaseGui = QtCore.pyqtSignal()
     
     def __init__(self, output_loc, resources_loc, game_resources_loc,  backups_loc,
@@ -24,6 +25,7 @@ class InstallModsWorkerThread(QtCore.QObject):
         
     def run(self):
         try:
+            self.lockGui.emit()
             self.messageLog.emit("Preparing to patch mods together...")
             patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
             dbdsp_dir = os.path.relpath(os.path.join(self.output_loc, 'DSDBP'))
