@@ -36,7 +36,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Set up the directories we're going to need
         self.config_loc = os.path.normpath(os.path.join(script_loc, "config"))
-        self.dscstools_loc = os.path.normpath(os.path.join(script_loc, "dscstools"))
+        self.dscstools_loc = os.path.normpath(os.path.join(script_loc, "tools", "dscstools"))
         self.mods_loc = os.path.normpath(os.path.join(script_loc, "mods"))
         self.output_loc = os.path.normpath(os.path.join(script_loc, "output"))
         self.profiles_loc = os.path.normpath(os.path.join(script_loc, "profiles"))
