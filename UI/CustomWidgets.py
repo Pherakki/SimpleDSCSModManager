@@ -107,7 +107,7 @@ class DragDropTreeView(QtWidgets.QTreeView):
         return [mods[idx] for idx, state in self.get_mod_activation_states().items() if state == 2]
 
 
-class ComboBox(QtWidgets.QComboBox):
+class ClickEmitComboBox(QtWidgets.QComboBox):
     """
     Help from https://stackoverflow.com/questions/35932660/qcombobox-click-event
     """

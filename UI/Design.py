@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 
-from .CustomWidgets import ComboBox, DragDropTreeView
+from .CustomWidgets import ClickEmitComboBox, DragDropTreeView
         
 ###############################
 # Top-Level Widget Containers #
@@ -170,7 +170,7 @@ class uiProfileInteractionWidgets:
         self.delete_profile_button = QtWidgets.QPushButton("Delete Profile", parentWidget)
         self.delete_profile_button.setFixedWidth(100)
         
-        self.profile_selector = ComboBox(parentWidget)
+        self.profile_selector = ClickEmitComboBox(parentWidget)
         
         
     def lay_out(self):
