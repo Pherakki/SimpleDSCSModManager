@@ -75,6 +75,7 @@ class DragDropTreeView(QtWidgets.QTreeView):
     #########
     def set_mods(self, mods):
         self.model().removeRows(0, self.model().rowCount())
+        self.display_data = []
         for i, mod in mods:
             name_item = QtGui.QStandardItem(mod.name)
             name_item.setCheckable(True)
