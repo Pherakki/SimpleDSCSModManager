@@ -21,6 +21,9 @@ class DragDropTreeView(QtWidgets.QTreeView):
     def hook_registry_function(self, func):
         self.register_mod_from_path = func
   
+    #############
+    # UI EVENTS #
+    #############
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls:
             event.accept()
@@ -67,6 +70,9 @@ class DragDropTreeView(QtWidgets.QTreeView):
             self.dragdrop_startrow = self.indexAt(e.pos()).row()
         super().mousePressEvent(e)
         
+    #########
+    # LOGIC #
+    #########
     def set_mods(self, mods):
         self.model().removeRows(0, self.model().rowCount())
         for i, mod in mods:
