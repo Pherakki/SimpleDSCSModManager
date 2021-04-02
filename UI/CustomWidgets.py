@@ -81,6 +81,7 @@ class DragDropTreeView(QtWidgets.QTreeView):
             row = [name_item, *[QtGui.QStandardItem(elem) for elem in mod.metadata[1:]]]
             self.model().appendRow(row)
             self.display_data.append([*mod.metadata, i])
+
             
     def get_mod_activation_states(self):
         result = {}
