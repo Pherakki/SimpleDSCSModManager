@@ -2,6 +2,12 @@ import os
 import shutil
 
 def mbe_batch_pack(path, dscstools_handler, log=lambda x: x):
+def is_unpacked_mbe_table(path):
+    return path[-3:] == 'mbe' and os.path.isdir(path)
+
+def is_packed_mbe_table(path):
+    return path[-3:] == 'mbe' and os.path.isfile(path)
+
     temp_path = os.path.join(path, 'temp')
     os.mkdir(temp_path)
     for mbe_folder in ['data', 'message', 'text']:
