@@ -463,8 +463,11 @@ class uiExtractTab(QtWidgets.QWidget):
         
         self.setLayout(self.layout)
         
+    def hook(self, dscstools_dump_factory, dscstools_afs2_dump_factory):
         for archive in self.mvgls:
             self.archive_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive))
+        for archive in self.afs2s:
+            self.afs2_extract_buttons[archive].clicked.connect(dscstools_afs2_dump_factory(archive))
             
     def enable(self):
         self.toggle_active(True)   

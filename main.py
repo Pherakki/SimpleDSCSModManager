@@ -65,7 +65,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_profle_interaction_widgets(self.profile_handler)
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
-        self.ui.hook_extract_tab(self.dscstools_dump_factory)
+        self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_afs2_dump_factory)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
@@ -192,6 +192,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.worker.releaseGui.connect(self.ui.enable_gui)
                 self.thread.start()
                 
+        return retval
+    
+    def dscstools_afs2_dump_factory(self, archive):
+        def retval():
+            pass
         return retval
 
     def update_mods(self):
