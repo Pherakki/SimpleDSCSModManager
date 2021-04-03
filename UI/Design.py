@@ -410,31 +410,59 @@ class uiConfigTab(QtWidgets.QWidget):
 class uiExtractTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         self.mvgls = ["DSDB", "DSDBA", "DSDBse", "DSDBPse", "DSDBS", "DSDBSP", "DSDBP"]
+        self.afs2s = ["DSDBbgm", "DSDBPDSEbgm", "DSDBse", "DSDBPse", "DSDBvo", "DSDBPvo", "DSDBPvous"]
+        self.archive_extract_buttons = {}
+        self.afs2_extract_buttons = {}
+        
         super().__init__()
         self.define(parentWidget)
         self.lay_out()
         
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
-        self.archive_extract_buttons = {}
+        self.autoextract_layout = QtWidgets.QGridLayout()
+        self.mdb1_layout = QtWidgets.QGridLayout()
+        self.afs2_layout = QtWidgets.QGridLayout()
+        
+        self.mdb1_label = QtWidgets.QLabel("Auto-extract Data")
+        self.mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.afs2_label = QtWidgets.QLabel("Auto-extract Sounds")
+        
+        
+        self.dscstools_layout = QtWidgets.QGridLayout()
         
         for i, archive in enumerate(self.mvgls):
             button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
             button.setFixedWidth(120)
             self.archive_extract_buttons[archive] = button
+        for i, archive in enumerate(self.afs2s):
+            button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
+            button.setFixedWidth(120)
+            self.afs2_extract_buttons[archive] = button
 
         
     def lay_out(self):
-        self.layout.setRowStretch(0, 1)
+        self.mdb1_layout.setRowStretch(0, 1)
+        self.mdb1_layout.addWidget(self.mdb1_label, 1, 0)
         for i, archive in enumerate(self.mvgls):
             button = self.archive_extract_buttons[archive]
-            self.layout.addWidget(button, i+1, 0)
-            self.layout.setRowStretch(i+1, 0)
-        self.layout.setRowStretch(i+2, 1)
+            self.mdb1_layout.addWidget(button, i+2, 0)
+            self.mdb1_layout.setRowStretch(i+2, 0)
+        
+        for i, archive in enumerate(self.afs2s):
+            button = self.afs2_extract_buttons[archive]
+            self.afs2_layout.addWidget(button, i+1, 0)
+            self.afs2_layout.setRowStretch(i+1, 0)
+        self.afs2_layout.setRowStretch(i+2, 1)
+        
+        self.autoextract_layout.addLayout(self.mdb1_layout, 0, 0)
+        self.autoextract_layout.addLayout(self.afs2_layout, 1, 0)
+        self.layout.addLayout(self.autoextract_layout, 0, 0)
+        
+        self.layout.addLayout(self.dscstools_layout, 0, 1)
         
         self.setLayout(self.layout)
         
-    def hook(self, dscstools_dump_factory):
         for archive in self.mvgls:
             self.archive_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive))
             
