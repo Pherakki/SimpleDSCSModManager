@@ -11,6 +11,7 @@ from Utils.MBE import mbe_batch_pack
 class InstallModsWorkerThread(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     messageLog = QtCore.pyqtSignal(str)
+    updateMessageLog = QtCore.pyqtSignal(str)
     lockGui = QtCore.pyqtSignal()
     releaseGui = QtCore.pyqtSignal()
     
@@ -51,7 +52,7 @@ class InstallModsWorkerThread(QtCore.QObject):
             generate_patch(indices, patch_dir, self.resources_loc)
             
             # Pack each mbe
-            mbe_batch_pack(patch_dir, self.dscstools_handler, self.messageLog.emit)
+            mbe_batch_pack(patch_dir, self.dscstools_handler, self.messageLog.emit, self.updateMessageLog.emit)
             
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
         
