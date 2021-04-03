@@ -47,9 +47,21 @@ def mbe_batch_unpack(path, dscstools_handler, log=lambda x: x, updateLog=lambda 
         mbe_folder_path = os.path.join(path, mbe_folder)
         if os.path.exists(mbe_folder_path):
             log(f"Unpacking MBEs in {mbe_folder}...")
-            log("")  # <- Will be overwritten by updateLog
-            num_mbes = len(os.listdir(mbe_folder_path))
-            for i, folder in enumerate(os.listdir(mbe_folder_path)):
+            mbe_folder_contents = os.listdir(mbe_folder_path)
+            mbes_to_pack = []
+            not_mbes = []
+            for directory in mbe_folder_contents:
+                (mbes_to_pack if is_packed_mbe_table(os.path.join(mbe_folder_path, directory)) else not_mbes).append(directory)
+            
+            if len(not_mbes):
+                log(f"Found ({len(not_mbes)}) non-mbe items that will not be unpacked:")
+                for item in not_mbes:
+                    log(f"    {item}")
+            
+            num_mbes = len(mbes_to_pack)                    
+            if num_mbes:
+                log("")  # <- Will be overwritten by updateLog
+            for i, folder in enumerate(mbes_to_pack):
                 # Generate the mbe inside the 'temp' directory
                 dscstools_handler.unpack_mbe(folder, 
                                            os.path.abspath(mbe_folder_path), 
