@@ -422,6 +422,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.scrollArea = QtWidgets.QWidget()
         self.scrollArealayout = QtWidgets.QGridLayout()
         
+        self.autoextract_widget = QtWidgets.QWidget()
         self.autoextract_layout = QtWidgets.QGridLayout()
         self.mdb1_layout = QtWidgets.QGridLayout()
         self.afs2_layout = QtWidgets.QGridLayout()
@@ -460,10 +461,11 @@ class uiExtractTab(QtWidgets.QScrollArea):
         
         self.autoextract_layout.addLayout(self.mdb1_layout, 0, 0)
         self.autoextract_layout.addLayout(self.afs2_layout, 1, 0)
+        self.autoextract_widget.setLayout(self.autoextract_layout)
         
         self.scrollArealayout.setColumnStretch(0, 1)
         self.scrollArealayout.setColumnStretch(3, 1)
-        self.scrollArealayout.addLayout(self.autoextract_layout, 0, 1)
+        self.scrollArealayout.addWidget(self.autoextract_widget, 0, 1)
         self.scrollArealayout.addLayout(self.dscstools_layout, 0, 2)
         self.scrollArea.setLayout(self.scrollArealayout)
         
