@@ -407,7 +407,7 @@ class uiConfigTab(QtWidgets.QWidget):
         self.game_location_button.setEnabled(active)
         self.update_dscstools_button.setEnabled(active)
         
-class uiExtractTab(QtWidgets.QWidget):
+class uiExtractTab(QtWidgets.QScrollArea):
     def __init__(self, parentWidget):
         self.mvgls = ["DSDB", "DSDBA", "DSDBse", "DSDBPse", "DSDBS", "DSDBSP", "DSDBP"]
         self.afs2s = ["DSDBbgm", "DSDBPDSEbgm", "DSDBse", "DSDBPse", "DSDBvo", "DSDBPvo", "DSDBPvous"]
@@ -419,7 +419,10 @@ class uiExtractTab(QtWidgets.QWidget):
         self.lay_out()
         
     def define(self, parentWidget):
-        self.layout = QtWidgets.QGridLayout()
+        self.layout = QtWidgets.QVBoxLayout()
+        self.scrollArea = QtWidgets.QWidget()
+        self.scrollArealayout = QtWidgets.QGridLayout()
+        
         self.autoextract_layout = QtWidgets.QGridLayout()
         self.mdb1_layout = QtWidgets.QGridLayout()
         self.afs2_layout = QtWidgets.QGridLayout()
@@ -433,11 +436,13 @@ class uiExtractTab(QtWidgets.QWidget):
         
         for i, archive in enumerate(self.mvgls):
             button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
-            button.setFixedWidth(120)
+            button.setFixedWidth(130)
+            button.setFixedHeight(22)
             self.archive_extract_buttons[archive] = button
         for i, archive in enumerate(self.afs2s):
             button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
-            button.setFixedWidth(120)
+            button.setFixedWidth(130)
+            button.setFixedHeight(22)
             self.afs2_extract_buttons[archive] = button
 
         
@@ -457,10 +462,15 @@ class uiExtractTab(QtWidgets.QWidget):
         
         self.autoextract_layout.addLayout(self.mdb1_layout, 0, 0)
         self.autoextract_layout.addLayout(self.afs2_layout, 1, 0)
-        self.layout.addLayout(self.autoextract_layout, 0, 0)
         
-        self.layout.addLayout(self.dscstools_layout, 0, 1)
+        self.scrollArealayout.setColumnStretch(0, 1)
+        self.scrollArealayout.setColumnStretch(3, 1)
+        self.scrollArealayout.addLayout(self.autoextract_layout, 0, 1)
+        self.scrollArealayout.addLayout(self.dscstools_layout, 0, 2)
+        self.scrollArea.setLayout(self.scrollArealayout)
         
+        self.setWidget(self.scrollArea)
+        self.setWidgetResizable(True)
         self.setLayout(self.layout)
         
     def hook(self, dscstools_dump_factory, dscstools_afs2_dump_factory):
