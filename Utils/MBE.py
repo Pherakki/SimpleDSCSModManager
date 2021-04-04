@@ -42,7 +42,7 @@ def mbe_batch_pack(path, dscstools_handler, log=lambda x: x, updateLog=lambda x:
     
 def mbe_batch_unpack(path, dscstools_handler, log=lambda x: x, updateLog=lambda x: x):
     temp_path = os.path.join(path, 'temp')
-    os.mkdir(temp_path)
+    os.makedirs(temp_path, exist_ok=True)
     for mbe_folder in ['data', 'message', 'text']:
         mbe_folder_path = os.path.join(path, mbe_folder)
         if os.path.exists(mbe_folder_path):
