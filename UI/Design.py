@@ -428,7 +428,6 @@ class uiExtractTab(QtWidgets.QScrollArea):
         
         self.mdb1_label = QtWidgets.QLabel("Auto-extract Data")
         self.mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.afs2_label = QtWidgets.QLabel("Auto-extract Sounds")
         
         
         self.dscstools_layout = QtWidgets.QGridLayout()
