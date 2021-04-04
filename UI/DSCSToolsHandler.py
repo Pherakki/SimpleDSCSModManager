@@ -14,7 +14,6 @@ class DSCSToolsHandler:
         self.game_location = game_location
         self.dscstools_location = dscstools_location
         self.dscstools_folder = os.path.join(*os.path.split(dscstools_location)[:-1])
-        self.dscstools_url = r"https://github.com/SydMontague/DSCSTools/releases/latest"
         
     ####################
     # Helper Functions #
@@ -88,57 +87,6 @@ class DSCSToolsHandler:
         origin_loc = os.path.join(origin, mbe)
         destination_loc = os.path.join(destination, mbe)
         subprocess.call([self.dscstools_location, '--mbepack', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
-        
-    ################################
-    # DSCSTools Download Functions #
-    ################################
-    def get_dscstools_tag(self):
-        if self.dscstools_url[:19] != r"https://github.com/":
-            raise ValueError("Download URL is not on GitHub.")
-        url = urllib.request.urlopen(self.dscstools_url).geturl()
-        return url.split('/')[-1]
-        
-    def get_dscstools_download_url(self):
-        tag = self.get_dscstools_tag()
-        return rf"https://github.com/SydMontague/DSCSTools/releases/download/{tag}/DSCSTools_win64.zip", tag
-        
-    def deploy_dscstools(self, path):
-        containing_folder = os.path.join(*os.path.split(path)[:-1])
-        for iter_item in os.listdir(containing_folder):
-            item = os.path.join(containing_folder, iter_item)
-            if os.path.isfile(item):
-                os.remove(item)
-            elif os.path.isdir(item):
-                shutil.rmtree(item)
-            else:
-                raise Exception("Encountered neither a file nor directory:", item)
-        progdiag = ProgressDialog("Downloading DSCSTools")
-        progdiag.show()
-        try:
-            url, tag = self.get_dscstools_download_url()
-            with urllib.request.urlopen(url) as req, open(path, 'ab') as f:
-                chunk_size = 1024 * 256
-                total_size = int(req.info()['Content-Length'])
-
-                chunk = None
-                total_read = 0
-                num_packets = int(math.ceil(chunk_size / total_size))
-                packet_number = 1
-                #I think this should request 256kB packets?!
-                while chunk != b'':
-                    progdiag.update_progbar(f"Downloading packet {packet_number}/{num_packets}", chunk_size / total_size)
-                    chunk = req.read(chunk_size)
-                    f.write(chunk)
-                    total_read += len(chunk)
-                    packet_number += 1
-                    
-            with zipfile.ZipFile(path, 'r') as f:
-                progdiag.update_progbar("Extracting zip...", 1)
-                f.extractall(containing_folder)
-        finally:
-            progdiag.close()
-            
-        return tag
     
     def install_dscstools(self):
         pass
