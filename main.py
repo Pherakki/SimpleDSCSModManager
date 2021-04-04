@@ -166,6 +166,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
             
     def dscstools_dump_factory(self, archive):
+        return self.dscstools_dump_factory_base(archive, self.dscstools_handler.dump_mvgl)
+    
+    def dscstools_afs2_dump_factory(self, archive):
+        return self.dscstools_dump_factory_base(archive, self.dscstools_handler.unpack_afs2)
+    
+    def dscstools_dump_factory_base(self, archive, dump_method):
         def retval():
             if self.check_gamelocation():
                 result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
@@ -180,7 +186,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     
                 self.thread = QtCore.QThread()
         
-                self.worker = DumpArchiveWorkerThread(archive, use_loc, result, self.dscstools_handler)
+                self.worker = DumpArchiveWorkerThread(archive, use_loc, result, self.dscstools_handler, dump_method)
                 self.worker.moveToThread(self.thread)
                 self.thread.started.connect(self.worker.run)
                 self.worker.finished.connect(self.thread.quit)
@@ -194,11 +200,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 
         return retval
     
-    def dscstools_afs2_dump_factory(self, archive):
-        def retval():
-            pass
-        return retval
-
     def update_mods(self):
         self.mods = detect_mods(script_loc)
         self.modpath_to_id = {mod.path: i for i, mod in enumerate(self.mods)}
