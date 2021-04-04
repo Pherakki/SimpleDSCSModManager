@@ -410,7 +410,7 @@ class uiConfigTab(QtWidgets.QWidget):
 class uiExtractTab(QtWidgets.QScrollArea):
     def __init__(self, parentWidget):
         self.mvgls = ["DSDB", "DSDBA", "DSDBse", "DSDBPse", "DSDBS", "DSDBSP", "DSDBP"]
-        self.afs2s = ["DSDBbgm", "DSDBPDSEbgm", "DSDBse", "DSDBPse", "DSDBvo", "DSDBPvo", "DSDBPvous"]
+        self.afs2s = ["DSDBbgm", "DSDBPDSEbgm", "DSDBvo", "DSDBPvo", "DSDBPvous"]
         self.archive_extract_buttons = {}
         self.afs2_extract_buttons = {}
         
