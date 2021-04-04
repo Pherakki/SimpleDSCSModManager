@@ -427,11 +427,19 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.mdb1_layout = QtWidgets.QGridLayout()
         self.afs2_layout = QtWidgets.QGridLayout()
         
+        self.manualextract_widget = QtWidgets.QWidget()
+        self.manualextract_layout = QtWidgets.QGridLayout()
+        self.dscstools_widget = QtWidgets.QWidget()
+        self.dscstools_layout = QtWidgets.QGridLayout()
+        self.nutcracker_widget = QtWidgets.QWidget()
+        self.nutcracker_layout= QtWidgets.QGridLayout()
+        self.vgstream_widget = QtWidgets.QWidget()
+        self.vgstream_layout = QtWidgets.QGridLayout()
+        
         self.mdb1_label = QtWidgets.QLabel("Auto-Extract Data")
         self.mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
         
         
-        self.dscstools_layout = QtWidgets.QGridLayout()
         
         for i, archive in enumerate(self.mvgls):
             button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
