@@ -419,7 +419,6 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.lay_out()
         
     def define(self, parentWidget):
-        self.layout = QtWidgets.QVBoxLayout()
         self.scrollArea = QtWidgets.QWidget()
         self.scrollArealayout = QtWidgets.QGridLayout()
         
@@ -471,7 +470,6 @@ class uiExtractTab(QtWidgets.QScrollArea):
         
         self.setWidget(self.scrollArea)
         self.setWidgetResizable(True)
-        self.setLayout(self.layout)
         
     def hook(self, dscstools_dump_factory, dscstools_afs2_dump_factory):
         for archive in self.mvgls:
