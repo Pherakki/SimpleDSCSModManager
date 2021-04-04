@@ -426,7 +426,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.mdb1_layout = QtWidgets.QGridLayout()
         self.afs2_layout = QtWidgets.QGridLayout()
         
-        self.mdb1_label = QtWidgets.QLabel("Auto-extract Data")
+        self.mdb1_label = QtWidgets.QLabel("Auto-Extract Data")
         self.mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
         
         
