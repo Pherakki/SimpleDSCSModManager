@@ -14,6 +14,7 @@ from UI.DSCSToolsHandler import DSCSToolsHandler
 from UI.Design import uiMainWidget
 from UI.ProfileHandler import ProfileHandler
 from Subprocesses.InstallMods import InstallModsWorkerThread
+from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
@@ -240,7 +241,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.get_dscstools()
     
     def update_dscstools(self):
-        version = self.dscstools_handler.get_dscstools_tag()
+        version = DSCSToolsDownloader.get_dscstools_tag()
         if version != self.config['dscstools_version']:
             buttons = QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
             msgBox = QtWidgets.QMessageBox.question(self, "New DSCSTools version found", f"A new version of DSCSTools was found ({version}). Would you like to update?", buttons)
@@ -253,9 +254,27 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def get_dscstools(self):
         zipped_dscstools = os.path.join(self.dscstools_loc, "DSCSTools.zip")
-        version = self.dscstools_handler.deploy_dscstools(zipped_dscstools)
+        
+        self.thread = QtCore.QThread()
+        self.worker = DSCSToolsDownloader(zipped_dscstools)     
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.messageLog.connect(self.ui.log)
+        self.worker.updateMessageLog.connect(self.ui.updateLog)
+        self.worker.lockGui.connect(self.ui.disable_gui)
+        self.worker.releaseGui.connect(self.ui.enable_gui)
+        self.worker.emitTag.connect(self.update_dscstools_tag)
+        self.thread.start()      
+        
+    def update_dscstools_tag(self, version):
         self.config['dscstools_version'] = version
-        self.write_config()
+        try:
+            self.write_config()
+        except Exception as e:
+            self.ui.log(f"The following error occurred when attempting to save the DSCSTools version information: {e}")
     
     def closeEvent(self, *args, **kwargs):
         self.profile_handler.save_profile()
