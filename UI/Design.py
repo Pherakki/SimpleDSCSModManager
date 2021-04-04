@@ -485,6 +485,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
     def toggle_active(self, active):
         for button in self.archive_extract_buttons.values():
             button.setEnabled(active)
+        for button in self.afs2_extract_buttons.values():
+            button.setEnabled(active)
             
 class uiConflictsTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
