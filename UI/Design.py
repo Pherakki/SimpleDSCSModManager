@@ -431,8 +431,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.manualextract_layout = QtWidgets.QGridLayout()
         self.dscstools_widget = QtWidgets.QWidget()
         self.dscstools_layout = QtWidgets.QGridLayout()
-        self.nutcracker_widget = QtWidgets.QWidget()
-        self.nutcracker_layout= QtWidgets.QGridLayout()
+        self.scripts_widget = QtWidgets.QWidget()
+        self.scripts_layout= QtWidgets.QGridLayout()
         self.vgstream_widget = QtWidgets.QWidget()
         self.vgstream_layout = QtWidgets.QGridLayout()
         
