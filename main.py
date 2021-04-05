@@ -66,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_profle_interaction_widgets(self.profile_handler)
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
-        self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_afs2_dump_factory)
+        self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_handler)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
@@ -165,14 +165,8 @@ class MainWindow(QtWidgets.QMainWindow):
         with open(os.path.join(self.config_loc, "config.json"), 'w') as F:
             json.dump(self.config, F, indent=4)
 
-            
-    def dscstools_dump_factory(self, archive):
-        return self.dscstools_dump_factory_base(archive, self.dscstools_handler.dump_mvgl)
     
-    def dscstools_afs2_dump_factory(self, archive):
-        return self.dscstools_dump_factory_base(archive, self.dscstools_handler.unpack_afs2)
-    
-    def dscstools_dump_factory_base(self, archive, dump_method):
+    def dscstools_dump_factory(self, archive, dump_method):
         def retval():
             if self.check_gamelocation():
                 result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))

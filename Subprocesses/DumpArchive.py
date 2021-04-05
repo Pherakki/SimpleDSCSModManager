@@ -22,8 +22,7 @@ class DumpArchiveWorkerThread(QtCore.QObject):
         try:
             self.lockGui.emit()
             self.messageLog.emit(f"Extracting {self.dscstools_handler.base_archive_name(self.archive)} to {self.dump_folder}...")
-            self.extract_method(self.archive, self.source_folder, self.dump_folder)
-            mbe_batch_unpack(os.path.join(self.dump_folder, self.archive), self.dscstools_handler, self.messageLog.emit, self.updateMessageLog.emit)
+            self.extract_method(self.archive, self.source_folder, self.dump_folder, self.messageLog, self.updateMessageLog)
             self.messageLog.emit("Extraction successful.")
         except Exception as e:
             self.messageLog.emit(f"The following error occured when trying to extract {self.dscstools_handler.base_archive_name(self.archive)}: {e}")
