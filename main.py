@@ -97,8 +97,8 @@ class MainWindow(QtWidgets.QMainWindow):
         copies it into the modmanager 'mods' folder and updates the mod list.
         """
         mod_name = os.path.split(mod_path)[-1]
-        self.ui.log(f"Attempting to register {mod_name}...")
         try:
+            self.ui.log(f"Attempting to register {mod_name}...")
             success = install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe)
             if success:
                 self.ui.log(f"Successfully registered {mod_name}.")
@@ -115,9 +115,9 @@ class MainWindow(QtWidgets.QMainWindow):
         """
         Opens a file dialog and passes the path on to register_mod.
         """
-        file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod archive")
+        file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod archive")[0].toLocalFile()
         if file != '' and file != '.':
-            self.register_mod(file[0].toLocalFile())
+            self.register_mod(file)
             
     def unregister_mod(self, index):
         mod_name = os.path.split(self.mods[index].path)[1]
