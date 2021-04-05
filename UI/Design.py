@@ -439,8 +439,6 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.mdb1_label = QtWidgets.QLabel("Auto-Extract Data")
         self.mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
         
-        
-        
         for i, archive in enumerate(self.mvgls):
             button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
             button.setFixedWidth(130)
@@ -451,30 +449,96 @@ class uiExtractTab(QtWidgets.QScrollArea):
             button.setFixedWidth(130)
             button.setFixedHeight(22)
             self.afs2_extract_buttons[archive] = button
+            
+        self.dscstools_label = QtWidgets.QLabel("General Data Extraction")
+        self.dscstools_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.extract_mdb1_button = self.new_button("Extract MDB1", parentWidget)
+        self.extract_mdb1_button.setEnabled(False)
+        self.pack_mdb1_button = self.new_button("Pack MDB1", parentWidget)
+        self.pack_mdb1_button.setEnabled(False)
+        self.extract_afs2_button = self.new_button("Extract AFS2", parentWidget)
+        self.extract_afs2_button.setEnabled(False)
+        self.pack_afs2_button = self.new_button("Pack AFS2", parentWidget)
+        self.pack_afs2_button.setEnabled(False)
+        self.extract_mbes_button = self.new_button("Extract MBEs", parentWidget)
+        self.extract_mbes_button.setEnabled(False)
+        self.pack_mbes_button = self.new_button("Pack MBEs", parentWidget)
+        self.pack_mbes_button.setEnabled(False)
+        
+        self.scripts_label = QtWidgets.QLabel("Scripts")
+        self.scripts_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.decompile_scripts_button = self.new_button("Decompile scripts", parentWidget)
+        self.decompile_scripts_button.setEnabled(False)
+        self.compile_scripts_button = self.new_button("Compile scripts", parentWidget)
+        self.compile_scripts_button.setEnabled(False)
+        
+        self.sounds_label = QtWidgets.QLabel("Sounds")
+        self.sounds_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.hca_to_wav = self.new_button("Convert HCA to WAV", parentWidget)
+        self.hca_to_wav.setEnabled(False)
+        self.wav_to_hca = self.new_button("Convert WAV to HCA", parentWidget)
+        self.wav_to_hca.setEnabled(False)
 
         
     def lay_out(self):
-        self.mdb1_layout.setRowStretch(0, 1)
-        self.mdb1_layout.addWidget(self.mdb1_label, 1, 0)
+        # Lay out the LHS button pane
+        self.mdb1_layout.addWidget(self.mdb1_label, 0, 0)
+        self.mdb1_layout.setRowStretch(0, 0)
         for i, archive in enumerate(self.mvgls):
             button = self.archive_extract_buttons[archive]
-            self.mdb1_layout.addWidget(button, i+2, 0)
-            self.mdb1_layout.setRowStretch(i+2, 0)
+            self.mdb1_layout.addWidget(button, i+1, 0)
+            self.mdb1_layout.setRowStretch(i+1, 0)
         
         for i, archive in enumerate(self.afs2s):
             button = self.afs2_extract_buttons[archive]
-            self.afs2_layout.addWidget(button, i+1, 0)
-            self.afs2_layout.setRowStretch(i+1, 0)
-        self.afs2_layout.setRowStretch(i+2, 1)
+            self.afs2_layout.addWidget(button, i, 0)
+            self.afs2_layout.setRowStretch(i, 0)
         
-        self.autoextract_layout.addLayout(self.mdb1_layout, 0, 0)
-        self.autoextract_layout.addLayout(self.afs2_layout, 1, 0)
+        self.autoextract_layout.setRowStretch(0, 1)
+        self.autoextract_layout.addLayout(self.mdb1_layout, 1, 0)
+        self.autoextract_layout.addLayout(self.afs2_layout, 2, 0)
+        self.autoextract_layout.setRowStretch(3, 1)
         self.autoextract_widget.setLayout(self.autoextract_layout)
         
+        # Lay out the RHS button pane
+        self.dscstools_layout.addWidget(self.dscstools_label, 0, 0)
+        self.dscstools_layout.setRowStretch(0, 0)
+        for i, button in enumerate((self.extract_mdb1_button, self.pack_mdb1_button,
+                                    self.extract_afs2_button, self.pack_afs2_button,
+                                    self.extract_mbes_button, self.pack_mbes_button)): 
+            self.dscstools_layout.addWidget(button, i+1, 0)
+            self.dscstools_layout.setRowStretch(i+1, 0)
+        self.dscstools_widget.setLayout(self.dscstools_layout)
+          
+        self.scripts_layout.addWidget(self.scripts_label, 0, 0)
+        self.scripts_layout.setRowStretch(0, 0)
+        for i, button in enumerate((self.decompile_scripts_button, self.compile_scripts_button)): 
+            self.scripts_layout.addWidget(button, i+1, 0)
+            self.scripts_layout.setRowStretch(i+1, 0)
+        self.scripts_widget.setLayout(self.scripts_layout)
+        
+        self.vgstream_layout.addWidget(self.sounds_label, 0, 0)
+        self.vgstream_layout.setRowStretch(0, 0)
+        for i, button in enumerate((self.hca_to_wav, self.wav_to_hca)): 
+            self.vgstream_layout.addWidget(button, i+1, 0)
+            self.vgstream_layout.setRowStretch(i+1, 0)
+        self.vgstream_widget.setLayout(self.vgstream_layout)
+        
+        self.manualextract_layout.setRowStretch(0, 1)
+        self.manualextract_layout.addWidget(self.dscstools_widget, 1, 0)
+        self.manualextract_layout.addWidget(self.scripts_widget, 2, 0)
+        self.manualextract_layout.addWidget(self.vgstream_widget, 3, 0)
+        self.manualextract_layout.setRowStretch(4, 1)
+        self.manualextract_widget.setLayout(self.manualextract_layout)
+           
+        # Bring it all together
         self.scrollArealayout.setColumnStretch(0, 1)
-        self.scrollArealayout.setColumnStretch(3, 1)
-        self.scrollArealayout.addWidget(self.autoextract_widget, 0, 1)
-        self.scrollArealayout.addLayout(self.dscstools_layout, 0, 2)
+        self.scrollArealayout.setColumnStretch(2, 1)
+        self.scrollArealayout.setColumnStretch(4, 1)
+        self.scrollArealayout.setRowStretch(0, 1)
+        self.scrollArealayout.setRowStretch(2, 1)
+        self.scrollArealayout.addWidget(self.autoextract_widget, 1, 1)
+        self.scrollArealayout.addWidget(self.manualextract_widget, 1, 3)
         self.scrollArea.setLayout(self.scrollArealayout)
         
         self.setWidget(self.scrollArea)
@@ -530,4 +594,5 @@ class uiConflictsTab(QtWidgets.QWidget):
         
     def toggle_active(self, active):
         self.conflicts_graph.setEnabled(active)
+        
     
