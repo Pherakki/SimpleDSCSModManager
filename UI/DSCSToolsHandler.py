@@ -7,6 +7,7 @@ import zipfile
 import time
 
 from .CustomWidgets import ProgressDialog
+from Utils.MBE import mbe_batch_unpack
 
 
 class DSCSToolsHandler:
@@ -78,6 +79,13 @@ class DSCSToolsHandler:
         self.decrypt_mvgl(archive, origin, destination, remove_input=True)
         self.unpack_mvgl(archive, destination, destination, remove_input=True)
         
+    def full_dump_mdb1(self, archive, origin, destination, messageLog, updateMessageLog):
+        self.dump_mvgl(archive, origin, destination)
+        mbe_batch_unpack(os.path.join(destination, archive), self, messageLog.emit, updateMessageLog.emit)
+    
+    def full_dump_afs2(self, archive, origin, destination, messageLog, updateMessageLog):
+        self.unpack_afs2(archive, origin, destination)
+            
     def unpack_mbe(self, mbe, origin, destination):
         origin_loc = os.path.join(origin, mbe)
         destination_loc = destination
