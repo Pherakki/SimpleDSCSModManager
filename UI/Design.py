@@ -500,6 +500,12 @@ class uiExtractTab(QtWidgets.QScrollArea):
         for button in self.afs2_extract_buttons.values():
             button.setEnabled(active)
             
+    def new_button(self, text, parentWidget):
+        button = QtWidgets.QPushButton(text, parentWidget)
+        button.setFixedWidth(130)
+        button.setFixedHeight(22)
+        return button
+            
 class uiConflictsTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
