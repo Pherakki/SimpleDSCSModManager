@@ -72,7 +72,7 @@ class DragDropTreeView(QtWidgets.QTreeView):
 
     def dragMoveEvent(self, event):
         super().dragMoveEvent(event)
-        self.setDropIndicatorShown(False)
+        self.setDropIndicatorShown(True)
         if event.mimeData().hasUrls:
             index = self.indexAt(event.pos())
             item_rect = self.visualRect(index)
@@ -109,6 +109,7 @@ class DragDropTreeView(QtWidgets.QTreeView):
             add = is_in_bottom
         
         self.display_data.insert(index.row() + add, self.display_data.pop(self.dragdrop_startrow))
+
         
     def addModDropEvent(self, e):
         for url in e.mimeData().urls():
