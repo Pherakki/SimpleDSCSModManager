@@ -1,6 +1,26 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
+class DragDropTreeViewStyle(QtWidgets.QProxyStyle):
+    """
+    Assistance from https://apocalyptech.com/linux/qt/qtableview/
+    """
+    def __init__(self, key=None):
+        super().__init__(key)
+        self.top = 0
+        self.width = 0
+    
+    def drawPrimitive(self, element, option, painter, widget=None):
+        if element == self.PE_IndicatorItemViewItemDrop and not option.rect.isNull():
+            option_new = QtWidgets.QStyleOption(option)
+            option_new.rect.setLeft(0)
+            option_new.rect.setTop(self.top)
+            option_new.rect.setHeight(0)
+            option_new.rect.setRight(self.width)
+            option = option_new
+            
+        super().drawPrimitive(element, option, painter, widget)
+
 def is_in_bottom_half(point, rect):
     posy = point.y()
     item_top = rect.top()
