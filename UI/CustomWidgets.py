@@ -98,12 +98,16 @@ class DragDropTreeView(QtWidgets.QTreeView):
     def reorderElementsDropEvent(self, e):
         index = self.indexAt(e.pos())
         parent = index.parent()
-        self.model().dropMimeData(e.mimeData(), e.dropAction(), index.row()+1, 0, parent)
-        
+        is_in_bottom = is_in_bottom_half(e.pos(), self.visualRect(index))
+        self.model().dropMimeData(e.mimeData(), e.dropAction(), index.row()+is_in_bottom, 0, parent)
+
         if index.row() > self.dragdrop_startrow:
+            add = is_in_bottom - 1
+        elif index.row() == self.dragdrop_startrow:
             add = 0
         else:
-            add = 1
+            add = is_in_bottom
+        
         self.display_data.insert(index.row() + add, self.display_data.pop(self.dragdrop_startrow))
         
     def addModDropEvent(self, e):
