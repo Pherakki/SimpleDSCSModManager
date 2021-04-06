@@ -10,12 +10,12 @@ from PyQt5 import QtCore
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
 from ModFiles.Detection import detect_mods, install_mod_in_manager
-from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
-from UI.Design import uiMainWidget
-from ToolHandlers.ProfileHandler import ProfileHandler
 from Subprocesses.InstallMods import InstallModsWorkerThread
 from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread
+from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
+from ToolHandlers.ProfileHandler import ProfileHandler
+from UI.Design import uiMainWidget
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
