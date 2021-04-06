@@ -1,6 +1,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
+def is_in_bottom_half(point, rect):
+    posy = point.y()
+    item_top = rect.top()
+    item_height = rect.height()
+    adjust = 2*(posy - item_top) - item_height
+    clamped_adjust = min(max(adjust, -1), 1)
+    clamped_adjust = int((clamped_adjust + 1) / 2)
+    
+    return clamped_adjust
+
 class DragDropTreeView(QtWidgets.QTreeView):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
