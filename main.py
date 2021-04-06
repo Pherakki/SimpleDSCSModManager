@@ -15,6 +15,7 @@ from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread
 from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
 from ToolHandlers.ProfileHandler import ProfileHandler
+from ToolHandlers.ScriptHandler import ScriptHandler
 from UI.Design import uiMainWidget
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
@@ -37,14 +38,18 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Set up the directories we're going to need
         self.config_loc = os.path.normpath(os.path.join(script_loc, "config"))
+        self.compiler_loc = os.path.normpath(os.path.join(script_loc, "tools", "squirrel"))
         self.dscstools_loc = os.path.normpath(os.path.join(script_loc, "tools", "dscstools"))
+        self.nutcracker_loc = os.path.normpath(os.path.join(script_loc, "tools", "nutcracker"))
         self.mods_loc = os.path.normpath(os.path.join(script_loc, "mods"))
         self.output_loc = os.path.normpath(os.path.join(script_loc, "output"))
         self.profiles_loc = os.path.normpath(os.path.join(script_loc, "profiles"))
         self.resources_loc = os.path.normpath(os.path.join(script_loc, "resources"))
         
         os.makedirs(self.config_loc, exist_ok=True)
+        os.makedirs(self.compiler_loc, exist_ok=True)
         os.makedirs(self.dscstools_loc, exist_ok=True)
+        os.makedirs(self.nutcracker_loc, exist_ok=True)
         os.makedirs(self.mods_loc, exist_ok=True)
         os.makedirs(self.profiles_loc, exist_ok=True)
         os.makedirs(self.resources_loc, exist_ok=True)
@@ -56,6 +61,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Set up the configuration and handlers
         self.read_config()
+        self.script_handler = ScriptHandler(os.path.join(self.nutcracker_loc, 'NutCracker.exe'),
+                                            os.path.join(self.compiler_loc, 'sq.exe'))
         self.dscstools_handler = DSCSToolsHandler('', os.path.join(self.dscstools_loc, 'DSCSTools.exe'))
         self.profile_handler = ProfileHandler(self.profiles_loc, self.ui.profile_selector, self.ui.mods_display, self)
         self.check_dscstools()
