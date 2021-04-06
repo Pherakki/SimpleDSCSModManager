@@ -47,21 +47,36 @@ class DragDropTreeView(QtWidgets.QTreeView):
         
         self.register_mod_from_path = None
         
+        self.style = DragDropTreeViewStyle()
+        self.setStyle(self.style)
+        
   
     def hook_registry_function(self, func):
         self.register_mod_from_path = func
+        
+    def update_style(self, pos, item_rect, row):
+        bottom_is = is_in_bottom_half(pos, item_rect)
+        top = (row + bottom_is)*item_rect.height() - bottom_is
+        self.style.top = top
+        self.style.width = self.width()
   
     #############
     # UI EVENTS #
     #############
     def dragEnterEvent(self, event):
+        super().dragEnterEvent(event)
         if event.mimeData().hasUrls:
             event.accept()
         else:
             event.ignore()
 
     def dragMoveEvent(self, event):
+        super().dragMoveEvent(event)
+        self.setDropIndicatorShown(False)
         if event.mimeData().hasUrls:
+            index = self.indexAt(event.pos())
+            item_rect = self.visualRect(index)
+            self.update_style(event.pos(), item_rect, index.row())
             if len(event.mimeData().urls()) == 0:
                 event.setDropAction(QtCore.Qt.MoveAction)
             else:
