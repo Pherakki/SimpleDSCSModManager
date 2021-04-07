@@ -55,7 +55,6 @@ class ProfileHandler:
         if current_text == '' or self.modpath_to_id is None:
             return
         filepath = self.profile_path(current_text)
-        print(filepath)
         with open(filepath, 'r') as F:
             current_profile = json.load(F)
         actives = {}
