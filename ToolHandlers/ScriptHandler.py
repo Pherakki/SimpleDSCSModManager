@@ -12,7 +12,7 @@ class ScriptHandler:
         
     def compile_script(self, file, origin, destination):
         filename = os.path.splitext(file)[0]
-        p = subprocess.run([self.compiler_location, "-o", os.path.join(destination, file), "-c", os.path.join(origin, file)], 
+        p = subprocess.run([self.compiler_location, "-o", os.path.join(destination, filename) + '.nut', "-c", os.path.join(origin, file)], 
                              creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.compiler_directory, close_fds=True)
 
             
