@@ -12,25 +12,17 @@ class ScriptHandler:
         
     def compile_script(self, file, origin, destination):
         filename = os.path.splitext(file)[0]
-        p = subprocess.Popen([self.compiler_location, "-c", os.path.join(origin, file)], 
-                             creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.compiler_directory,
-                             shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
-        try:
-            os.rename(f"{os.path.join(self.compiler_directory, 'out.cnut')}", 
-                      f"{os.path.join(destination, filename + '.nut')}")
-        except Exception as e:
-            raise self.CompilationFailedError(e, output)
+        p = subprocess.run([self.compiler_location, "-o", os.path.join(destination, file), "-c", os.path.join(origin, file)], 
+                             creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.compiler_directory, close_fds=True)
+
             
     def decompile_script(self, file, origin, destination):
         filename = os.path.splitext(file)[0]
         out_path = os.path.join(destination, filename) + '.txt'
-        p = subprocess.Popen([self.nutcracker_location, f"{os.path.join(origin, file)} > {out_path}"], 
-                             creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.nutcracker_directory,
-                             shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
-        if not os.path.exists(out_path):
-            raise Exception(output)
-            
+        with open(out_path, "w") as out:
+            p = subprocess.run([self.nutcracker_location, f"{os.path.join(origin, file)}"], 
+                                  creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.nutcracker_directory,
+                                  stdout=out, close_fds=True)
+
     class CompilationFailedError(Exception):
         pass
