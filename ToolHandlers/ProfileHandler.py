@@ -3,7 +3,7 @@ import os
 
 from PyQt5 import QtWidgets
 
-from .CustomWidgets import OnlyOneProfileNotification
+from UI.CustomWidgets import OnlyOneProfileNotification
 
 
 profile_extension = ".profile"
@@ -55,6 +55,7 @@ class ProfileHandler:
         if current_text == '' or self.modpath_to_id is None:
             return
         filepath = self.profile_path(current_text)
+        print(filepath)
         with open(filepath, 'r') as F:
             current_profile = json.load(F)
         actives = {}

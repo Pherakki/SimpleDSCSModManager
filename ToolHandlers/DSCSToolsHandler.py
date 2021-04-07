@@ -6,7 +6,7 @@ import urllib
 import zipfile
 import time
 
-from .CustomWidgets import ProgressDialog
+from UI.CustomWidgets import ProgressDialog
 from Utils.MBE import mbe_batch_unpack
 
 
