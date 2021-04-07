@@ -13,7 +13,7 @@ from ModFiles.Detection import detect_mods, install_mod_in_manager
 from Subprocesses.InstallMods import InstallModsWorkerThread
 from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread
-from Subprocesses.ScriptDecompiler import ScriptDecompilerWorkerThread, ScriptDecompilerWorker
+from Subprocesses.ScriptWorker import ScriptWorker
 from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
 from ToolHandlers.ProfileHandler import ProfileHandler
 from ToolHandlers.ScriptHandler import ScriptHandler
@@ -213,6 +213,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if output_loc == '' or output_loc == '.':
             return
         
+        worker = ScriptWorker(input_loc, output_loc, self.script_handler.decompile_script, self.threadpool,
+                  'decompiling', 'Decompiled', self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
+        worker.run()
         
         
         ##################        
