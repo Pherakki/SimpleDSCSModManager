@@ -75,7 +75,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
         self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_handler,
-                                 self.decompile_scripts)
+                                 self.decompile_scripts, self.compile_scripts)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
@@ -218,11 +218,16 @@ class MainWindow(QtWidgets.QMainWindow):
         worker.run()
         
         
-        ##################        
-        # Multi-threaded #
-        ##################
-        worker = ScriptDecompilerWorker(input_loc, output_loc, self.script_handler.decompile_script, self.threadpool,
-                  self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
+    def compile_scripts(self):
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing scripts to be compiled:"))
+        if input_loc == '' or input_loc == '.':
+            return
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+        if output_loc == '' or output_loc == '.':
+            return
+
+        worker = ScriptWorker(input_loc, output_loc, self.script_handler.compile_script, self.threadpool,
+                  "compiling", "Compiled", self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
         worker.run()
         
     

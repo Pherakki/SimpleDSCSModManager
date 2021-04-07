@@ -469,7 +469,6 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.scripts_label.setAlignment(QtCore.Qt.AlignCenter)
         self.decompile_scripts_button = self.new_button("Decompile scripts", parentWidget)
         self.compile_scripts_button = self.new_button("Compile scripts", parentWidget)
-        self.compile_scripts_button.setEnabled(False)
         
         self.sounds_label = QtWidgets.QLabel("Sounds")
         self.sounds_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -543,7 +542,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.setWidget(self.scrollArea)
         self.setWidgetResizable(True)
         
-    def hook(self, dscstools_dump_factory, dscstools_handler, decompile_scripts):
+    def hook(self, dscstools_dump_factory, dscstools_handler, decompile_scripts, compile_scripts):
         for archive in self.mvgls:
             self.archive_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive,
                                                                   dscstools_handler.full_dump_mdb1))
@@ -551,6 +550,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
             self.afs2_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive,
                                                                dscstools_handler.full_dump_afs2))
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
+        self.compile_scripts_button.clicked.connect(compile_scripts)
                 
     def enable(self):
         self.toggle_active(True)   
@@ -564,6 +564,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         for button in self.afs2_extract_buttons.values():
             button.setEnabled(active)
         self.decompile_scripts_button.setEnabled(active)
+        self.compile_scripts_button.setEnabled(active)
             
     def new_button(self, text, parentWidget):
         button = QtWidgets.QPushButton(text, parentWidget)
