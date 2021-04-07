@@ -213,23 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if output_loc == '' or output_loc == '.':
             return
         
-        ###################        
-        # Single-threaded #
-        ###################
-        # self.thread = QtCore.QThread()
-        # self.worker = ScriptDecompilerWorkerThread(input_loc, output_loc, 
-        #                                             self.script_handler.decompile_script)
         
-        # self.worker.moveToThread(self.thread)
-        # self.thread.started.connect(self.worker.run)
-        # self.worker.finished.connect(self.thread.quit)
-        # self.worker.finished.connect(self.worker.deleteLater)
-        # self.thread.finished.connect(self.thread.deleteLater)
-        # self.worker.messageLog.connect(self.ui.log)
-        # self.worker.updateMessageLog.connect(self.ui.updateLog)
-        # self.worker.lockGui.connect(self.ui.disable_gui)
-        # self.worker.releaseGui.connect(self.ui.enable_gui)
-        # self.thread.start()    
         
         ##################        
         # Multi-threaded #
