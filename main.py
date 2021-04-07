@@ -212,25 +212,31 @@ class MainWindow(QtWidgets.QMainWindow):
         output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
         if output_loc == '' or output_loc == '.':
             return
-                
-        self.thread = QtCore.QThread()
-        self.worker = ScriptDecompilerWorkerThread(input_loc, output_loc, 
-                                                    self.script_handler.decompile_script)
         
-        self.worker.moveToThread(self.thread)
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.messageLog.connect(self.ui.log)
-        self.worker.updateMessageLog.connect(self.ui.updateLog)
-        self.worker.lockGui.connect(self.ui.disable_gui)
-        self.worker.releaseGui.connect(self.ui.enable_gui)
-        self.thread.start()    
+        ###################        
+        # Single-threaded #
+        ###################
+        # self.thread = QtCore.QThread()
+        # self.worker = ScriptDecompilerWorkerThread(input_loc, output_loc, 
+        #                                             self.script_handler.decompile_script)
         
-        # worker = ScriptDecompilerWorker(input_loc, output_loc, self.script_handler.decompile_script, self.threadpool,
-        #           self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
-        # worker.run()
+        # self.worker.moveToThread(self.thread)
+        # self.thread.started.connect(self.worker.run)
+        # self.worker.finished.connect(self.thread.quit)
+        # self.worker.finished.connect(self.worker.deleteLater)
+        # self.thread.finished.connect(self.thread.deleteLater)
+        # self.worker.messageLog.connect(self.ui.log)
+        # self.worker.updateMessageLog.connect(self.ui.updateLog)
+        # self.worker.lockGui.connect(self.ui.disable_gui)
+        # self.worker.releaseGui.connect(self.ui.enable_gui)
+        # self.thread.start()    
+        
+        ##################        
+        # Multi-threaded #
+        ##################
+        worker = ScriptDecompilerWorker(input_loc, output_loc, self.script_handler.decompile_script, self.threadpool,
+                  self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
+        worker.run()
         
     
     def update_mods(self):
