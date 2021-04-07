@@ -13,6 +13,7 @@ from ModFiles.Detection import detect_mods, install_mod_in_manager
 from Subprocesses.InstallMods import InstallModsWorkerThread
 from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread
+from Subprocesses.ScriptDecompiler import ScriptDecompilerWorkerThread, ScriptDecompilerWorker
 from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
 from ToolHandlers.ProfileHandler import ProfileHandler
 from ToolHandlers.ScriptHandler import ScriptHandler
@@ -73,7 +74,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_profle_interaction_widgets(self.profile_handler)
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
-        self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_handler)
+        self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_handler,
+                                 self.decompile_scripts)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
@@ -82,10 +84,11 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Init the UI data
         self.profile_handler.init_profiles()
+        self.threadpool = QtCore.QThreadPool()
         self.update_mods()
         self.ui.log("SimpleDSCSModManager initialised.")
 
-        
+
     @property
     def game_resources_loc(self):
         return os.path.normpath(os.path.join(self.game_loc, "resources"))
@@ -201,6 +204,34 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.thread.start()
                 
         return retval
+    
+    def decompile_scripts(self):
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing scripts to be decompiled:"))
+        if input_loc == '' or input_loc == '.':
+            return
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+        if output_loc == '' or output_loc == '.':
+            return
+                
+        self.thread = QtCore.QThread()
+        self.worker = ScriptDecompilerWorkerThread(input_loc, output_loc, 
+                                                    self.script_handler.decompile_script)
+        
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.messageLog.connect(self.ui.log)
+        self.worker.updateMessageLog.connect(self.ui.updateLog)
+        self.worker.lockGui.connect(self.ui.disable_gui)
+        self.worker.releaseGui.connect(self.ui.enable_gui)
+        self.thread.start()    
+        
+        # worker = ScriptDecompilerWorker(input_loc, output_loc, self.script_handler.decompile_script, self.threadpool,
+        #           self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
+        # worker.run()
+        
     
     def update_mods(self):
         self.mods = detect_mods(script_loc)
