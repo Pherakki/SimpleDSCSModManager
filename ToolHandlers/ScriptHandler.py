@@ -23,6 +23,3 @@ class ScriptHandler:
             p = subprocess.run([self.nutcracker_location, f"{os.path.join(origin, file)}"], 
                                   creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.nutcracker_directory,
                                   stdout=out, close_fds=True)
-
-    class CompilationFailedError(Exception):
-        pass
