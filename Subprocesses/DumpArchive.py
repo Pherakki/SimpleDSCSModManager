@@ -3,7 +3,6 @@ import os
 from PyQt5 import QtCore 
 from Utils.MBE import mbe_batch_unpack
 from tools.dscstools import DSCSTools
-import time
 
 class DumpArchiveWorkerThread(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -22,7 +21,6 @@ class DumpArchiveWorkerThread(QtCore.QObject):
         
     def run(self):
         try:
-            start = time.time()
             self.lockGui.emit()
             self.messageLog.emit(f"Extracting {self.dscstools_handler.base_archive_name(self.archive)} to {self.dump_folder}...")
             self.extract_method(self.archive, self.source_folder, self.dump_folder)
@@ -33,7 +31,6 @@ class DumpArchiveWorkerThread(QtCore.QObject):
         finally:
             self.releaseGui.emit()
             self.finished.emit()
-            print("Completed in", time.time() - start, "seconds")
 
 
 class DumpArchiveWorker:
@@ -52,15 +49,13 @@ class DumpArchiveWorker:
         self.lockGuiFunc = lockGui
         self.releaseGuiFunc = releaseGui
         self.chained_function = chained_function
-        
-        self.start = 0
+    
         
     def run(self):
         self.ncomplete = 0
         self.messageLogFunc("")
 
         try:
-            self.start = time.time()
             self.lockGuiFunc()
             # The first file is '.\x00\x00\x00\x00', which we don't want to process...
             fileinfos = DSCSTools.getArchiveInfo(os.path.join(self.origin, self.archive + ".steam.mvgl")).Files
@@ -86,7 +81,6 @@ class DumpArchiveWorker:
             self.releaseGuiFunc()
             if self.chained_function is not None:
                 self.chained_function()
-            print("Completed in", time.time() - self.start, "seconds.")
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
