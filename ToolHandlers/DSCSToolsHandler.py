@@ -96,11 +96,4 @@ class DSCSToolsHandler:
         destination_loc = os.path.join(destination, mbe)
         subprocess.call([self.dscstools_location, '--mbepack', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
     
-    def install_dscstools(self):
-        pass
     
-    def update_dscstools(self):
-        pass
-    
-    def check_for_new_dscstools_version(self):
-        pass
