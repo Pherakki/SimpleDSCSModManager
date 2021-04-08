@@ -40,7 +40,7 @@ def mbe_batch_pack(path, dscstools_handler, log=lambda x: x, updateLog=lambda x:
                 updateLog(f"Packed {i+1}/{num_mbes} [{folder}]")
     os.rmdir(temp_path)
     
-def mbe_batch_unpack(path, dscstools_handler, log=lambda x: x, updateLog=lambda x: x):
+def mbe_batch_unpack(path, dscstools_handler, log=lambda x: x, updateLog=lambda x: x, report_missing=True):
     temp_path = os.path.join(path, 'temp')
     os.makedirs(temp_path, exist_ok=True)
     for mbe_folder in ['data', 'message', 'text']:
@@ -53,7 +53,7 @@ def mbe_batch_unpack(path, dscstools_handler, log=lambda x: x, updateLog=lambda 
             for directory in mbe_folder_contents:
                 (mbes_to_pack if is_packed_mbe_table(os.path.join(mbe_folder_path, directory)) else not_mbes).append(directory)
             
-            if len(not_mbes):
+            if len(not_mbes) and report_missing:
                 log(f"Found ({len(not_mbes)}) non-mbe items that will not be unpacked:")
                 for item in not_mbes:
                     log(f"    {item}")
