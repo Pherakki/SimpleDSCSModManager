@@ -33,7 +33,6 @@ class DumpMBEWorker(QtCore.QObject):
         
     def run(self):
         self.ncomplete = 0
-        self.messageLogFunc("")
 
         try:
             self.lockGuiFunc()
@@ -45,8 +44,11 @@ class DumpMBEWorker(QtCore.QObject):
             files = [file for file in os.listdir(self.origin) if 
                      is_packed_mbe_table(os.path.join(self.origin, file))]
             self.njobs = len(files)
-            if not self.njobs:
-                self.messageLogFunc(f"No MBEs in {self.origin} to unpack.")
+            if self.njobs:
+                self.messageLogFunc("")
+            else:
+                self.releaseGuiFunc()
+                self.finished.emit()
                 return
             for file in files:
                 job = runnable(file, self.origin, self.destination,
@@ -61,7 +63,8 @@ class DumpMBEWorker(QtCore.QObject):
             
     def update_finished(self):
         if self.ncomplete == self.njobs:
-            os.rmdir(os.path.join(self.destination, 'temp'))
+            if self.replace_mode:
+                os.rmdir(os.path.join(self.destination, 'temp'))
             self.releaseGuiFunc()
             self.finished.emit()
                 

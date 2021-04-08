@@ -36,8 +36,8 @@ class ScriptWorker(QtCore.QObject):
             if len(scripts):
                 self.messageLogFunc("")
             else:
-                self.messageLogFunc(f"Zero scripts at {self.origin} to decompile.")
                 self.releaseGuiFunc()
+                self.finished.emit()
                 return
             for script in scripts:
                 job = ScriptRunnable(self.script_func,
