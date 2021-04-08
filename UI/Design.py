@@ -542,13 +542,11 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.setWidget(self.scrollArea)
         self.setWidgetResizable(True)
         
-    def hook(self, dscstools_dump_factory, dscstools_handler, decompile_scripts, compile_scripts):
+    def hook(self, mbd1_dump_factory, afs2_dump_factory, dscstools_handler, decompile_scripts, compile_scripts):
         for archive in self.mvgls:
-            self.archive_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive,
-                                                                  dscstools_handler.full_dump_mdb1))
+            self.archive_extract_buttons[archive].clicked.connect(mbd1_dump_factory(archive))
         for archive in self.afs2s:
-            self.afs2_extract_buttons[archive].clicked.connect(dscstools_dump_factory(archive,
-                                                               dscstools_handler.full_dump_afs2))
+            self.afs2_extract_buttons[archive].clicked.connect(afs2_dump_factory(archive))
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
         self.compile_scripts_button.clicked.connect(compile_scripts)
                 

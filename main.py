@@ -12,7 +12,7 @@ from PyQt5 import QtCore
 from ModFiles.Detection import detect_mods, install_mod_in_manager
 from Subprocesses.InstallMods import InstallModsWorkerThread
 from Subprocesses.Downloader import DSCSToolsDownloader
-from Subprocesses.DumpArchive import DumpArchiveWorkerThread
+from Subprocesses.DumpArchive import DumpArchiveWorkerThread, DumpArchiveWorker
 from Subprocesses.ScriptWorker import ScriptWorker
 from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
 from ToolHandlers.ProfileHandler import ProfileHandler
@@ -74,7 +74,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_profle_interaction_widgets(self.profile_handler)
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
-        self.ui.hook_extract_tab(self.dscstools_dump_factory, self.dscstools_handler,
+        self.ui.hook_extract_tab(self.mdb1_dump_factory, self.afs2_dump_factory,
+                                 self.dscstools_handler,
                                  self.decompile_scripts, self.compile_scripts)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
@@ -177,7 +178,34 @@ class MainWindow(QtWidgets.QMainWindow):
             json.dump(self.config, F, indent=4)
 
     
-    def dscstools_dump_factory(self, archive, dump_method):
+    def mdb1_dump_factory(self, archive):
+        def retval():
+            if self.check_gamelocation():
+                result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+
+                if result == '' or result == '.':
+                    return
+                backup_filepath = os.path.join(self.backups_loc, f'{archive}.steam.mvgl')
+                if os.path.exists(backup_filepath):
+                    use_loc = self.backups_loc
+                else:
+                    use_loc = self.game_resources_loc
+                
+
+                script_worker = ScriptWorker(os.path.join(result, archive, 'script64'), os.path.join(result, archive, 'script64'), self.script_handler.decompile_script, self.threadpool,
+                                             'decompiling', 'Decompiled', 
+                                             self.ui.disable_gui, self.ui.enable_gui, 
+                                             self.ui.log, self.ui.updateLog,
+                                             remove_input=True)
+                worker = DumpArchiveWorker(archive, use_loc, result, self.threadpool,
+                                            self.ui.log, self.ui.updateLog, 
+                                            self.ui.disable_gui, self.ui.enable_gui,
+                                            chained_function=script_worker.run)
+                worker.run()
+                
+        return retval
+    
+    def afs2_dump_factory(self, archive):
         def retval():
             if self.check_gamelocation():
                 result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
@@ -192,7 +220,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     
                 self.thread = QtCore.QThread()
         
-                self.worker = DumpArchiveWorkerThread(archive, use_loc, result, self.dscstools_handler, dump_method)
+                self.worker = DumpArchiveWorkerThread(archive, use_loc, result, self.dscstools_handler, self.dscstools_handler.unpack_afs2)
                 self.worker.moveToThread(self.thread)
                 self.thread.started.connect(self.worker.run)
                 self.worker.finished.connect(self.thread.quit)

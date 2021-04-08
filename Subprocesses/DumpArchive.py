@@ -22,9 +22,10 @@ class DumpArchiveWorkerThread(QtCore.QObject):
         
     def run(self):
         try:
+            start = time.time()
             self.lockGui.emit()
             self.messageLog.emit(f"Extracting {self.dscstools_handler.base_archive_name(self.archive)} to {self.dump_folder}...")
-            self.extract_method(self.archive, self.source_folder, self.dump_folder, self.messageLog, self.updateMessageLog)
+            self.extract_method(self.archive, self.source_folder, self.dump_folder)
             self.messageLog.emit("Extraction successful.")
         except Exception as e:
             self.messageLog.emit(f"The following error occured when trying to extract {self.dscstools_handler.base_archive_name(self.archive)}: {e}")
@@ -32,6 +33,9 @@ class DumpArchiveWorkerThread(QtCore.QObject):
         finally:
             self.releaseGui.emit()
             self.finished.emit()
+            print("Completed in", time.time() - start, "seconds")
+
+
 class DumpArchiveWorker:
     def __init__(self, archive, origin, destination, threadpool, 
                  messageLog, updateMessageLog, lockGui, releaseGui,
