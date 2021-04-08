@@ -5,7 +5,9 @@ import subprocess
 import urllib
 import zipfile
 import time
+import subprocess
 
+from tools.dscstools import DSCSTools
 from UI.CustomWidgets import ProgressDialog
 from Utils.MBE import mbe_batch_unpack
 
@@ -44,34 +46,51 @@ class DSCSToolsHandler:
 
         if remove_input:
             os.remove(input_file)
+            
+    def dscstools_op(self, archive, origin, destination, operation, 
+                     input_transform, output_transform, 
+                     copy_required, remove_input):
+        if copy_required:
+            original_archive = os.path.join(origin, input_transform(archive))
+            input_file = os.path.join(destination, input_transform(archive))
+            shutil.copy2(original_archive, input_file)
+        else:
+            input_file = os.path.join(origin, input_transform(archive))
+        
+        output_file = os.path.join(destination, output_transform(archive))
+        operation(input_file, output_file)
+
+        if remove_input:
+            os.remove(input_file)
         
     def decrypt_mvgl(self, archive, origin, destination, remove_input=False): 
-        self.mvgl_op(archive, origin, destination, "crypt", 
+        self.dscstools_op(archive, origin, destination, lambda inp, out: DSCSTools.crypt(inp, out), 
                      self.base_archive_name, self.decrypted_archive_name,
                      True, remove_input)
         
     def encrypt_mvgl(self, archive, origin, destination, remove_input=False):
-        self.mvgl_op(archive, origin, destination, "crypt", 
+        self.dscstools_op(archive, origin, destination, lambda inp, out: DSCSTools.crypt(inp, out),
                      self.decrypted_archive_name, self.base_archive_name,
                      False, remove_input)
         
     def unpack_mvgl(self, archive, origin, destination, remove_input=False):
-        self.mvgl_op(archive, origin, destination, "extract", 
+        self.dscstools_op(archive, origin, destination, lambda inp, out: DSCSTools.extractMDB1(inp, out),
                      self.decrypted_archive_name, lambda x: x,
                      False, remove_input)
         
     def pack_mvgl(self, archive, origin, destination, remove_input=False):
-        self.mvgl_op(archive, origin, destination, "pack", 
+        self.dscstools_op(archive, origin, destination,
+                          lambda inp, out: DSCSTools.packMDB1(inp, out, DSCSTools.CompressMode.normal, False),
                      lambda x: x, self.decrypted_archive_name,
                      False, remove_input)
         
     def unpack_afs2(self, archive, origin, destination, remove_input=False):
-        self.mvgl_op(archive, origin, destination, "afs2extract", 
+        self.dscstools_op(archive, origin, destination, lambda inp, out: DSCSTools.extractAFS2(inp, out),
                      self.base_archive_name, lambda x: x,
                      False, remove_input)
         
     def pack_afs2(self, archive, origin, destination, remove_input=False):
-        self.mvgl_op(archive, origin, destination, "afs2pack", 
+        self.dscstools_op(archive, origin, destination, lambda inp, out: DSCSTools.packAFS2(inp, out),
                      lambda x: x, self.base_archive_name, 
                      False, remove_input)
         
@@ -89,11 +108,17 @@ class DSCSToolsHandler:
     def unpack_mbe(self, mbe, origin, destination):
         origin_loc = os.path.join(origin, mbe)
         destination_loc = destination
-        subprocess.call([self.dscstools_location, '--mbeextract', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
-
+        DSCSTools.extractMBE(origin_loc, destination_loc)
+        
     def pack_mbe(self, mbe, origin, destination):
         origin_loc = os.path.join(origin, mbe)
         destination_loc = os.path.join(destination, mbe)
-        subprocess.call([self.dscstools_location, '--mbepack', origin_loc, destination_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
+        DSCSTools.packMBE(origin_loc, destination_loc)
+        
+    def get_file_from_MDB1(self, archive, origin, destination, filepath):
+        origin_loc = os.path.join(origin, archive)
+        destination_loc = os.path.join(destination, archive)
+        DSCSTools.extractMDB1File(origin_loc, destination_loc, filepath)
+        
     
-    
+        
