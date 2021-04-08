@@ -76,6 +76,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
         self.ui.hook_extract_tab(self.mdb1_dump_factory, self.afs2_dump_factory,
                                  self.dscstools_handler,
+                                 self.extract_MDB1, self.pack_MDB1,
                                  self.decompile_scripts, self.compile_scripts)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
@@ -190,11 +191,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     use_loc = self.backups_loc
                 else:
                     use_loc = self.game_resources_loc
-                
-
-
-
-
 
                 worker = DumpArchiveWorker(archive, use_loc, result, self.threadpool,
                                            self.ui.log, self.ui.updateLog, 
@@ -257,6 +253,32 @@ class MainWindow(QtWidgets.QMainWindow):
                 
         return retval
     
+    def extract_MDB1(self):
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getOpenFileName(self, "Select an MDB1 archive:")[0])
+        if input_loc == '' or input_loc == '.':
+            return
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+        if output_loc == '' or output_loc == '.':
+            return
+        
+        input_dir, archive = os.path.split(input_loc)
+        worker = DumpArchiveWorker(archive, input_dir, output_loc, self.threadpool,
+                                   self.ui.log, self.ui.updateLog, 
+                                   self.ui.disable_gui, self.ui.enable_gui)
+        worker.run()
+        
+    def pack_MDB1(self):
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select an unpacked MDB1 archive:"))
+        if input_loc == '' or input_loc == '.':
+            return
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select an folder to pack the MDB1 into:"))
+        if output_loc == '' or output_loc == '.':
+            return
+        
+        input_dir, archive = os.path.split(input_loc)
+        self.dscstools_handler.pack_mvgl(archive, input_dir, output_loc, remove_input=False)
+        
+        
     def decompile_scripts(self):
         input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing scripts to be decompiled:"))
         if input_loc == '' or input_loc == '.':
