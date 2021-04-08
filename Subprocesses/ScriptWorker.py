@@ -5,7 +5,8 @@ from PyQt5 import QtCore
     
 class ScriptWorker:
     def __init__(self, origin, destination, script_func, threadpool, func_message, func_message_past,
-                  lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc):
+                  lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
+                  remove_input=False):
         self.origin = origin
         self.destination = destination
         self.script_func = script_func
@@ -14,6 +15,7 @@ class ScriptWorker:
         self.threadpool = threadpool
         self.func_message = func_message
         self.func_message_past = func_message_past
+        self.remove_input = remove_input
         
         self.lockGuiFunc = lockGuiFunc
         self.releaseGuiFunc = releaseGuiFunc
@@ -38,7 +40,8 @@ class ScriptWorker:
                                      script, self.origin, self.destination,
                                      self.update_messagelog,
                                      self.update_finished,
-                                     self.raise_exception)
+                                     self.raise_exception,
+                                     self.remove_input)
                 job.signals.exception.connect(self.raise_exception)
                 job.signals.update_messagelog.connect(self.update_messagelog)
                 job.signals.update_finished.connect(self.update_finished)
@@ -72,12 +75,14 @@ class ScriptWorker:
 
 
 class ScriptRunnable(QtCore.QRunnable):
-    def __init__(self, decompile_script, script, origin, destination, update_messagelog, update_finished, raise_exception):
+    def __init__(self, decompile_script, script, origin, destination, update_messagelog, update_finished, raise_exception,
+                 remove_input=False):
         super().__init__()
         self.decompile_script = decompile_script
         self.script = script
         self.origin = origin
         self.destination = destination
+        self.remove_input = remove_input
         # Signals won't work for some reason unless there's a reference to the
         # functions that the signals are connected to in the runnable
         self.update_messagelog = update_messagelog
@@ -88,7 +93,7 @@ class ScriptRunnable(QtCore.QRunnable):
     @QtCore.pyqtSlot()
     def run(self):
         try:
-            self.decompile_script(self.script, self.origin, self.destination)
+            self.decompile_script(self.script, self.origin, self.destination, self.remove_input)
             # This should be a signal, but first you'll need to implement a
             # thread-safe messaging queue to prevent this overwriting the
             # error messages from the exception
