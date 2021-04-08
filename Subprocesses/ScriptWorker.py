@@ -3,10 +3,14 @@ import os
 from PyQt5 import QtCore
 
     
-class ScriptWorker:
+class ScriptWorker(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    
     def __init__(self, origin, destination, script_func, threadpool, func_message, func_message_past,
                   lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
                   remove_input=False):
+        super().__init__()
+        
         self.origin = origin
         self.destination = destination
         self.script_func = script_func
@@ -52,6 +56,7 @@ class ScriptWorker:
     def update_finished(self):
         if self.ncomplete == self.njobs:
             self.releaseGuiFunc()
+            self.finished.emit()
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
