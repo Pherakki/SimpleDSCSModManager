@@ -33,10 +33,11 @@ class DumpArchiveWorkerThread(QtCore.QObject):
             self.finished.emit()
 
 
-class DumpArchiveWorker:
+class DumpArchiveWorker(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
     def __init__(self, archive, origin, destination, threadpool, 
-                 messageLog, updateMessageLog, lockGui, releaseGui,
-                 chained_function=None):
+                 messageLog, updateMessageLog, lockGui, releaseGui):
+        super().__init__()
         self.archive = archive
         self.origin = origin
         self.destination = destination
@@ -48,7 +49,6 @@ class DumpArchiveWorker:
         self.updateMessageLogFunc = updateMessageLog
         self.lockGuiFunc = lockGui
         self.releaseGuiFunc = releaseGui
-        self.chained_function = chained_function
     
         
     def run(self):
@@ -79,8 +79,7 @@ class DumpArchiveWorker:
     def update_finished(self):
         if self.ncomplete == self.njobs:
             self.releaseGuiFunc()
-            if self.chained_function is not None:
-                self.chained_function()
+            self.finished.emit()
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
