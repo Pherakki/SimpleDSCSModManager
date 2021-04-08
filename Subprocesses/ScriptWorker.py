@@ -23,12 +23,16 @@ class ScriptWorker:
         
     def run(self):
         self.ncomplete = 0
-        self.messageLogFunc("")
-
         try:
             self.lockGuiFunc()
             scripts = os.listdir(self.origin)
             self.njobs = len(scripts)
+            if len(scripts):
+                self.messageLogFunc("")
+            else:
+                self.messageLogFunc(f"Zero scripts at {self.origin} to decompile.")
+                self.releaseGuiFunc()
+                return
             for script in scripts:
                 job = ScriptRunnable(self.script_func,
                                      script, self.origin, self.destination,
