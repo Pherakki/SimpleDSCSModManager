@@ -13,6 +13,7 @@ from ModFiles.Detection import detect_mods, install_mod_in_manager
 from Subprocesses.InstallMods import InstallModsWorkerThread
 from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread, DumpArchiveWorker
+from Subprocesses.DumpMBE import DumpMBEWorker
 from Subprocesses.ScriptWorker import ScriptWorker
 from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
 from ToolHandlers.ProfileHandler import ProfileHandler
@@ -192,18 +193,41 @@ class MainWindow(QtWidgets.QMainWindow):
                     use_loc = self.game_resources_loc
                 
 
+
+
+
+
+                worker = DumpArchiveWorker(archive, use_loc, result, self.threadpool,
+                                           self.ui.log, self.ui.updateLog, 
+                                           self.ui.disable_gui, self.ui.enable_gui)
+                datmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'data'), os.path.join(result, archive, 'data'), 
+                              self.dscstools_handler.unpack_mbe, 
+                              self.threadpool,
+                              self.ui.log, self.ui.updateLog, 
+                              self.ui.disable_gui, self.ui.enable_gui)
+                msgmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'message'), os.path.join(result, archive, 'message'), 
+                                              self.dscstools_handler.unpack_mbe, 
+                                              self.threadpool,
+                                              self.ui.log, self.ui.updateLog, 
+                                              self.ui.disable_gui, self.ui.enable_gui)
+                texmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'text'), os.path.join(result, archive, 'text'), self.dscstools_handler.unpack_mbe, self.threadpool,
+                                              self.ui.log, self.ui.updateLog, 
+                                              self.ui.disable_gui, self.ui.enable_gui)
                 script_worker = ScriptWorker(os.path.join(result, archive, 'script64'), os.path.join(result, archive, 'script64'), self.script_handler.decompile_script, self.threadpool,
                                              'decompiling', 'Decompiled', 
                                              self.ui.disable_gui, self.ui.enable_gui, 
                                              self.ui.log, self.ui.updateLog,
                                              remove_input=True)
-                worker = DumpArchiveWorker(archive, use_loc, result, self.threadpool,
-                                            self.ui.log, self.ui.updateLog, 
-                                            self.ui.disable_gui, self.ui.enable_gui,
-                                            chained_function=script_worker.run)
+                worker.finished.connect(lambda: datmbe_worker.run())
+                datmbe_worker.finished.connect(lambda: msgmbe_worker.run())
+                msgmbe_worker.finished.connect(lambda: texmbe_worker.run())
+                texmbe_worker.finished.connect(lambda: script_worker.run())
+                script_worker.finished.connect(lambda: self.ui.log(f"Finished extracting {archive}."))
+
                 worker.run()
                 
         return retval
+
     
     def afs2_dump_factory(self, archive):
         def retval():
