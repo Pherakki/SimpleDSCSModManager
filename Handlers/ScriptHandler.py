@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+from .ScriptWorker import ScriptWorker
 
 
 class ScriptHandler:
@@ -26,3 +27,18 @@ class ScriptHandler:
                                   stdout=out, close_fds=True)
             if remove_input:
                 os.remove(os.path.join(origin, file))
+
+    def generate_script_compiler(self, origin, destination, threadpool,
+                                 lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
+                                 remove_input=False):
+        return ScriptWorker(origin, destination, self.compile_script, threadpool, "compiling", "Compiled",
+                  lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
+                  remove_input=origin==destination)
+    
+    def generate_script_decompiler(self, origin, destination, threadpool,
+                                 lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
+                                 remove_input=False):
+        return ScriptWorker(origin, destination, self.decompile_script, threadpool, "decompiling", "Decompiled",
+                  lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
+                  remove_input=origin==destination)
+    

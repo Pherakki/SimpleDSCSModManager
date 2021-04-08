@@ -80,10 +80,10 @@ class ScriptWorker(QtCore.QObject):
 
 
 class ScriptRunnable(QtCore.QRunnable):
-    def __init__(self, decompile_script, script, origin, destination, update_messagelog, update_finished, raise_exception,
+    def __init__(self, script_func, script, origin, destination, update_messagelog, update_finished, raise_exception,
                  remove_input=False):
         super().__init__()
-        self.decompile_script = decompile_script
+        self.script_func = script_func
         self.script = script
         self.origin = origin
         self.destination = destination
@@ -98,7 +98,7 @@ class ScriptRunnable(QtCore.QRunnable):
     @QtCore.pyqtSlot()
     def run(self):
         try:
-            self.decompile_script(self.script, self.origin, self.destination, self.remove_input)
+            self.script_func(self.script, self.origin, self.destination, self.remove_input)
             # This should be a signal, but first you'll need to implement a
             # thread-safe messaging queue to prevent this overwriting the
             # error messages from the exception

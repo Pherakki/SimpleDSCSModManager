@@ -14,10 +14,9 @@ from Subprocesses.InstallMods import InstallModsWorkerThread
 from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.DumpArchive import DumpArchiveWorkerThread, DumpArchiveWorker
 from Subprocesses.DumpMBE import DumpMBEWorker
-from Subprocesses.ScriptWorker import ScriptWorker
 from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
 from ToolHandlers.ProfileHandler import ProfileHandler
-from ToolHandlers.ScriptHandler import ScriptHandler
+from Handlers.ScriptHandler import ScriptHandler
 from UI.Design import uiMainWidget
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
@@ -213,11 +212,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 texmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'text'), os.path.join(result, archive, 'text'), self.dscstools_handler.unpack_mbe, self.threadpool,
                                               self.ui.log, self.ui.updateLog, 
                                               self.ui.disable_gui, self.ui.enable_gui)
-                script_worker = ScriptWorker(os.path.join(result, archive, 'script64'), os.path.join(result, archive, 'script64'), self.script_handler.decompile_script, self.threadpool,
-                                             'decompiling', 'Decompiled', 
-                                             self.ui.disable_gui, self.ui.enable_gui, 
-                                             self.ui.log, self.ui.updateLog,
-                                             remove_input=True)
+                gsd = self.script_handler.generate_script_decompiler
+                script_worker = gsd(os.path.join(result, archive, 'script64'), 
+                                    os.path.join(result, archive, 'script64'), 
+                                    self.threadpool, self.ui.disable_gui, self.ui.enable_gui,                   
+                                    self.ui.log, self.ui.updateLog, remove_input=True)
                 worker.finished.connect(lambda: datmbe_worker.run())
                 datmbe_worker.finished.connect(lambda: msgmbe_worker.run())
                 msgmbe_worker.finished.connect(lambda: texmbe_worker.run())
@@ -265,9 +264,9 @@ class MainWindow(QtWidgets.QMainWindow):
         output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
         if output_loc == '' or output_loc == '.':
             return
-        
-        worker = ScriptWorker(input_loc, output_loc, self.script_handler.decompile_script, self.threadpool,
-                  'decompiling', 'Decompiled', self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
+        gsd = self.script_handler.generate_script_decompiler
+        worker = gsd(input_loc, output_loc, self.threadpool,
+                  self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
         worker.run()
         
         
@@ -279,8 +278,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if output_loc == '' or output_loc == '.':
             return
 
-        worker = ScriptWorker(input_loc, output_loc, self.script_handler.compile_script, self.threadpool,
-                  "compiling", "Compiled", self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
+        gsc = self.script_handler.generate_script_compiler
+        worker = gsc(input_loc, output_loc, self.threadpool,
+                  self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
         worker.run()
         
     
