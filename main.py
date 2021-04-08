@@ -148,7 +148,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.worker = InstallModsWorkerThread(self.output_loc, self.resources_loc, 
                                               self.game_resources_loc, self.backups_loc,
-                                              self.profile_handler, self.dscstools_handler)
+                                              self.profile_handler, self.dscstools_handler,
+                                              self.script_handler)
         
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)

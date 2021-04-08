@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 
@@ -5,7 +6,7 @@ from PyQt5 import QtCore
 
 from ModFiles.Indexing import generate_mod_index
 from ModFiles.PatchGen import generate_patch
-from Utils.MBE import mbe_batch_pack
+from Utils.MBE import mbe_batch_pack, mbe_batch_unpack
 
 
 class InstallModsWorkerThread(QtCore.QObject):
@@ -16,7 +17,7 @@ class InstallModsWorkerThread(QtCore.QObject):
     releaseGui = QtCore.pyqtSignal()
     
     def __init__(self, output_loc, resources_loc, game_resources_loc,  backups_loc,
-                 profile_handler, dscstools_handler, parent=None):
+                 profile_handler, dscstools_handler, script_handler, parent=None):
         super().__init__(parent)
         self.output_loc = output_loc
         self.resources_loc = resources_loc
@@ -24,6 +25,7 @@ class InstallModsWorkerThread(QtCore.QObject):
         self.backups_loc = backups_loc
         self.profile_handler = profile_handler
         self.dscstools_handler = dscstools_handler
+        self.script_handler = script_handler
         
     def run(self):
         try:
@@ -48,6 +50,14 @@ class InstallModsWorkerThread(QtCore.QObject):
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
                 raise Exception("No mods activated.")
+            bootstrap_resources(self.game_resources_loc, self.resources_loc, 
+                                'mbe_resources', 'base_mbes',
+                                self.dscstools_handler, 
+                                self.messageLog.emit, self.updateMessageLog.emit)
+            # bootstrap_script_resources(self.game_resources_loc, self.resources_loc, 
+            #                     'script_resources', 'base_scripts',
+            #                     self.dscstools_handler, self.script_handler,
+            #                     self.messageLog.emit, self.updateMessageLog.emit)
             self.messageLog.emit("Generating patch...")
             generate_patch(indices, patch_dir, self.resources_loc)
             
@@ -85,3 +95,62 @@ def create_backups(game_resources_loc, backups_loc, logfunc):
         logfunc("Creating backup...")
         os.mkdir(os.path.split(backup_filepath)[0])
         shutil.copy2(os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'), backup_filepath)
+        
+def bootstrap_resources(game_resources_loc, resources_loc, file, directory, 
+                        dscstools_handler, messageLog, updateMessageLog):
+    with open(f".\\config\\{file}.json", 'r') as F:
+        resource_bootstrap = json.load(F)
+    to_fetch = []
+    for resource in resource_bootstrap:
+        if not os.path.exists(os.path.join(resources_loc, directory, resource)):
+            to_fetch.append(resource)
+            
+    n_to_fetch = len(to_fetch)
+    if n_to_fetch:
+        messageLog(f"Fetching {n_to_fetch} missing resources...")
+        messageLog("")
+        unpack_location = os.path.join(resources_loc, directory)
+        for i, resource in enumerate(to_fetch):
+            updateMessageLog(f"Unpacking resource {i+1}/{n_to_fetch} [{resource}]")
+            dscstools_handler.get_file_from_MDB1(f"{resource_bootstrap[resource]}.steam.mvgl",
+                                                 game_resources_loc,
+                                                 unpack_location,
+                                                 resource)
+        for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']:
+            unpacked_data = os.path.join(resources_loc, directory, f"{archive}.steam.mvgl")
+            if os.path.exists(unpacked_data):
+                shutil.copytree(unpacked_data, unpack_location, dirs_exist_ok=True)
+                shutil.rmtree(unpacked_data)
+        mbe_batch_unpack(os.path.join(resources_loc, directory), dscstools_handler,
+                         messageLog, updateMessageLog, report_missing=False)
+        
+def bootstrap_script_resources(game_resources_loc, resources_loc, file, directory, 
+                        dscstools_handler, script_handler, messageLog, updateMessageLog):
+    with open(f".\\config\\{file}.json", 'r') as F:
+        resource_bootstrap = json.load(F)
+    to_fetch = []
+    for resource in resource_bootstrap:
+        if not os.path.exists(os.path.join(resources_loc, directory, resource)):
+            to_fetch.append(resource)
+            
+    n_to_fetch = len(to_fetch)
+    if n_to_fetch:
+        messageLog(f"Fetching {n_to_fetch} missing resources...")
+        messageLog("")
+        unpack_location = os.path.join(resources_loc, directory)
+        for i, resource in enumerate(to_fetch):
+            updateMessageLog(f"Unpacking resource {i+1}/{n_to_fetch} [{resource}]")
+            dscstools_handler.get_file_from_MDB1(f"{resource_bootstrap[resource]}.steam.mvgl",
+                                                 game_resources_loc,
+                                                 unpack_location,
+                                                 resource)
+            resource_path, resource_name = os.path.split(resource)
+            os.makedirs(os.path.join(resources_loc, directory, resource_path), exist_ok=True)
+            script_handler.decompile_script(resource_name,
+                                            os.path.join(resources_loc, directory, f"{resource_bootstrap[resource]}.steam.mvgl", resource_path),
+                                            os.path.join(resources_loc, directory, resource_path))
+        for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']:
+            unpacked_data = os.path.join(resources_loc, directory, f"{archive}.steam.mvgl")
+            if os.path.exists(unpacked_data):
+                shutil.rmtree(unpacked_data)
+                
