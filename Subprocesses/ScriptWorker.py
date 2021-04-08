@@ -47,12 +47,12 @@ class ScriptWorker:
             self.raise_exception(e)
             
     def update_finished(self):
-        self.ncomplete += 1
-        if self.ncomplete+1 == self.njobs:
+        if self.ncomplete == self.njobs:
             self.releaseGuiFunc()
                 
     def update_messagelog(self, message):
-        self.updateMessageLogFunc(f"{self.func_message_past} script {self.ncomplete+1}/{self.njobs} [{message}]")
+        self.ncomplete += 1
+        self.updateMessageLogFunc(f"{self.func_message_past} script {self.ncomplete}/{self.njobs} [{message}]")
         
     def raise_exception(self, exception):
         try:
@@ -93,7 +93,7 @@ class ScriptRunnable(QtCore.QRunnable):
             # thread-safe messaging queue to prevent this overwriting the
             # error messages from the exception
             self.update_messagelog(self.script)
-            self.signals.update_finished.emit()
+            self.update_finished()
         except Exception as e:
             self.signals.exception.emit(ScriptHandlerError(e, self.script))
 
