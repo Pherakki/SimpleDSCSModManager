@@ -88,6 +88,175 @@ class InstallModsWorkerThread(QtCore.QObject):
             self.releaseGui.emit()
             self.finished.emit()
             
+            
+class InstallModsWorker(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    messageLog = QtCore.pyqtSignal(str)
+    updateMessageLog = QtCore.pyqtSignal(str)
+    lockGui = QtCore.pyqtSignal()
+    releaseGui = QtCore.pyqtSignal()
+    
+    def __init__(self, output_loc, resources_loc, game_resources_loc,  backups_loc,
+                 profile_handler, dscstools_handler, script_handler, threadpool, parent=None):
+        super().__init__(parent)
+        self.output_loc = output_loc
+        self.resources_loc = resources_loc
+        self.game_resources_loc = game_resources_loc
+        self.backups_loc = backups_loc
+        self.profile_handler = profile_handler
+        self.dscstools_handler = dscstools_handler
+        self.script_handler = script_handler
+        self.threadpool = threadpool
+        
+        self.lockGuiFunc = None
+        self.releaseGuiFunc = None
+        self.messageLogFunc = None
+        self.updateMessageLogFunc = None
+        
+        self.worker = None
+        self.thread = QtCore.QThread()
+        
+    def run(self):
+        try:
+            self.lockGuiFunc()
+            self.messageLog.emit("Preparing to patch mods together...")
+            patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
+            dbdsp_dir = os.path.relpath(os.path.join(self.output_loc, 'DSDBP'))
+            mvgl_loc = os.path.join(self.output_loc, 'DSDBP.steam.mvgl')
+            if os.path.exists(patch_dir):
+                shutil.rmtree(patch_dir)
+            if os.path.exists(dbdsp_dir):
+                shutil.rmtree(dbdsp_dir)
+            if os.path.exists(mvgl_loc):
+                os.remove(mvgl_loc)
+                
+  
+            
+            # Pack the resources              
+            gme = self.dscstools_handler.generate_mbe_extractor
+            datmbe_worker = gme(os.path.join(patch_dir, 'data'), 
+                                os.path.join(patch_dir, 'data'),
+                                self.threadpool,
+                                self.messageLog.emit, self.updateMessageLog.emit, 
+                                self.lockGui.emit, self.releaseGui.emit)
+            msgmbe_worker = gme(os.path.join(patch_dir, 'message'), 
+                                os.path.join(patch_dir, 'message'), 
+                                self.threadpool,
+                                self.messageLog.emit, self.updateMessageLog.emit, 
+                                self.lockGui.emit, self.releaseGui.emit)
+            texmbe_worker = gme(os.path.join(patch_dir, 'text'), 
+                                os.path.join(patch_dir, 'text'),
+                                self.threadpool,
+                                self.messageLog.emit, self.updateMessageLog.emit, 
+                                self.lockGui.emit, self.releaseGui.emit)
+            gsc = self.script_handler.generate_script_compiler
+            script_worker = gsc(os.path.join(patch_dir, 'script64'), 
+                                os.path.join(patch_dir, 'script64'),
+                                self.threadpool,
+                                self.lockGui.emit, self.releaseGui.emit,
+                                self.messageLog.emit, self.updateMessageLog.emit,
+                                remove_input=True)
+            
+            datmbe_worker.finished.connect(lambda: msgmbe_worker.run())
+            msgmbe_worker.finished.connect(lambda: texmbe_worker.run())
+            texmbe_worker.finished.connect(lambda: script_worker.run())
+            script_worker.finished.connect(lambda: self.finalise_installation(dbdsp_dir, patch_dir, mvgl_loc))
+            
+            self.worker = PatchGenerator(patch_dir, self.output_loc, self.game_resources_loc, 
+                                         self.resources_loc, self.backups_loc, 
+                                         self.dscstools_handler, self.script_handler, self.profile_handler)
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.run)
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.worker.continue_execution.connect(datmbe_worker.run)
+            self.worker.messageLog.connect(self.messageLogFunc)
+            self.worker.updateMessageLog.connect(self.updateMessageLogFunc)
+            self.worker.lockGui.connect(self.lockGuiFunc)
+            self.worker.releaseGui.connect(self.releaseGuiFunc)
+            self.thread.start()    
+            
+
+        except Exception as e:
+            self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")
+            raise e
+        finally:
+            self.releaseGui.emit()
+            self.finished.emit()
+            
+    def finalise_installation(self, dbdsp_dir, patch_dir, mvgl_loc):
+        try:
+            self.lockGui.emit()
+            self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
+        
+            dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
+            if not os.path.exists(dsdbp_resource_loc):
+                self.messageLog.emit("Base DSDBP archive not found, generating...")
+                self.dscstools_handler.dump_mvgl('DSDBP', self.game_resources_loc, self.resources_loc)
+            
+            shutil.copytree(dsdbp_resource_loc, dbdsp_dir)
+            shutil.copytree(patch_dir, dbdsp_dir, dirs_exist_ok=True)
+            self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
+            os.rename(os.path.join(self.output_loc, self.dscstools_handler.decrypted_archive_name('DSDBP')),
+                      os.path.join(self.output_loc, self.dscstools_handler.base_archive_name('DSDBP')))
+            
+            self.messageLog.emit("Installing patched archive...")
+            # Now here's the important bit
+            create_backups(self.game_resources_loc, self.backups_loc, self.messageLog.emit)
+            shutil.copy2(mvgl_loc, os.path.join(self.game_resources_loc, 'DSDBP.steam.mvgl'))
+            
+            self.messageLog.emit("Mods successfully installed.")
+        except Exception as e:
+            self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")
+            raise e
+        finally:
+            self.releaseGui.emit()
+            self.finished.emit()
+        
+class PatchGenerator(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    continue_execution = QtCore.pyqtSignal()
+    messageLog = QtCore.pyqtSignal(str)
+    updateMessageLog = QtCore.pyqtSignal(str)
+    lockGui = QtCore.pyqtSignal()
+    releaseGui = QtCore.pyqtSignal()
+    
+    def __init__(self, patch_loc, output_loc, game_resources_loc, resources_loc,
+                 backups_loc, dscstools_handler, script_handler, profile_handler):
+        super().__init__()
+        self.patch_dir = patch_loc
+        self.output_loc = output_loc
+        self.game_resources_loc = game_resources_loc
+        self.resources_loc = resources_loc
+        self.backups_loc = backups_loc
+        self.dscstools_handler = dscstools_handler
+        self.script_handler = script_handler
+        self.profile_handler = profile_handler
+    
+    def run(self):
+        try:
+            # Do this on mod registry...
+            self.messageLog.emit("Indexing mods...")
+            indices = []
+            for mod in self.profile_handler.get_active_mods():
+                modfiles_path = os.path.relpath(os.path.join(mod.path, "modfiles"))
+                indices.append(generate_mod_index(modfiles_path, {}))
+            self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
+            if len(indices) == 0:
+                raise Exception("No mods activated.")
+    
+            bootstrap_index_resources(indices, self.game_resources_loc, self.resources_loc, 
+                                      self.backups_loc,
+                                      self.dscstools_handler, self.script_handler,
+                                      self.messageLog.emit, self.updateMessageLog.emit)
+            self.messageLog.emit("Generating patch...")
+            generate_patch(indices, self.patch_dir, self.resources_loc)
+            self.continue_execution.emit()
+        except Exception as e:
+            raise e
+        finally:
+            self.finished.emit()
     
 def create_backups(game_resources_loc, backups_loc, logfunc):
     backup_filepath = os.path.join(backups_loc, 'DSDBP.steam.mvgl')
