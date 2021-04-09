@@ -565,6 +565,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
             button.setEnabled(active)
         for button in self.afs2_extract_buttons.values():
             button.setEnabled(active)
+        self.extract_mdb1_button.setEnabled(active)
+        self.pack_mdb1_button.setEnabled(active)
         self.extract_mbes_button.setEnabled(active)
         self.pack_mbes_button.setEnabled(active)
         self.decompile_scripts_button.setEnabled(active)
