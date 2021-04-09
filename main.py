@@ -78,6 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_extract_tab(self.mdb1_dump_factory, self.afs2_dump_factory,
                                  self.dscstools_handler,
                                  self.extract_MDB1, self.pack_MDB1,
+                                 self.extract_MBEs, self.pack_MBEs,
                                  self.decompile_scripts, self.compile_scripts)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
