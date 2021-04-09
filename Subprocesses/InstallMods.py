@@ -233,6 +233,7 @@ class PatchGenerator(QtCore.QObject):
     updateMessageLog = QtCore.pyqtSignal(str)
     lockGui = QtCore.pyqtSignal()
     releaseGui = QtCore.pyqtSignal()
+    emitIndices = QtCore.pyqtSignal(list)
     
     def __init__(self, patch_loc, output_loc, game_resources_loc, resources_loc,
                  backups_loc, dscstools_handler, script_handler, profile_handler):
@@ -262,12 +263,18 @@ class PatchGenerator(QtCore.QObject):
                                       self.backups_loc,
                                       self.dscstools_handler, self.script_handler,
                                       self.messageLog.emit, self.updateMessageLog.emit)
+            self.emitIndices.emit(indices)
+            time.sleep(1)
             self.messageLog.emit("Generating patch...")
             generate_patch(indices, self.patch_dir, self.resources_loc)
             self.continue_execution.emit()
         except Exception as e:
             raise e
         finally:
+            self.releaseGui.emit()
+            self.finished.emit()
+
+
 class FinaliseInstallation(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     messageLog = QtCore.pyqtSignal(str)
