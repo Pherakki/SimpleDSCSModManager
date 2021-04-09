@@ -307,11 +307,11 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
         gme = self.dscstools_handler.generate_mbe_extractor
-        datmbe_worker = gme(input_loc,
-                            output_loc,
-                            self.threadpool,
-                            self.ui.log, self.ui.updateLog, 
-                            self.ui.disable_gui, self.ui.enable_gui)
+        mbe_worker = gme(input_loc,
+                         output_loc,
+                         self.threadpool,
+                         self.ui.log, self.ui.updateLog, 
+                         self.ui.disable_gui, self.ui.enable_gui)
         
         
     def pack_MBEs(self):
@@ -324,12 +324,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
         gmp = self.dscstools_handler.generate_mbe_packer
-        datmbe_worker = gmp(input_loc,
-                            output_loc,
-                            self.threadpool,
-                            self.ui.log, self.ui.updateLog, 
-                            self.ui.disable_gui, self.ui.enable_gui)
         
+        mbe_worker = gmp(input_loc,
+                         output_loc,
+                         self.threadpool,
+                         self.ui.log, self.ui.updateLog, 
+                         self.ui.disable_gui, self.ui.enable_gui)
 
     def decompile_scripts(self):
         input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing scripts to be decompiled:"))
