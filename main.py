@@ -298,7 +298,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
     
     def extract_MBEs(self):
-        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to unpack:")[0])
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to unpack:"))
         if input_loc == '' or input_loc == '.':
             return
         output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
@@ -316,7 +316,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
     def pack_MBEs(self):
-        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to pack:")[0])
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to pack:"))
         if input_loc == '' or input_loc == '.':
             return
         output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
