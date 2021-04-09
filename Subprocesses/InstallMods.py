@@ -176,6 +176,7 @@ class InstallModsWorker(QtCore.QObject):
                                                               self.threadpool,
                                                               self.messageLogFunc, self.updateMessageLogFunc,
                                                               self.lockGuiFunc, self.releaseGuiFunc)
+             
             self.worker3 = PatchGenerator2(patch_dir, self.output_loc, self.game_resources_loc,
                                          self.resources_loc, self.backups_loc,
                                          self.dscstools_handler, self.script_handler, self.profile_handler)
@@ -233,13 +234,15 @@ class InstallModsWorker(QtCore.QObject):
             self.worker2.lockGui.connect(self.lockGuiFunc)
             self.worker2.releaseGui.connect(self.releaseGuiFunc)
 
-            self.worker.continue_execution.connect(self.datmbe_worker.run)
+            self.worker.continue_execution.connect(self.br.run)
+            self.br.finished.connect(self.thread3.start)
+            self.worker3.finished.connect(lambda: self.datmbe_worker.run())
             # self.worker.continue_execution.connect(self.patchgen_worker.run)
             # self.patchgen_worker.finished.connect(lambda: datmbe_worker.run())
-            self.datmbe_worker.finished.connect(lambda: msgmbe_worker.run())
-            msgmbe_worker.finished.connect(lambda: texmbe_worker.run())
-            texmbe_worker.finished.connect(lambda: script_worker.run())
-            script_worker.finished.connect(lambda: self.thread2.start())
+            self.datmbe_worker.finished.connect(lambda: self.msgmbe_worker.run())
+            self.msgmbe_worker.finished.connect(lambda: self.texmbe_worker.run())
+            self.texmbe_worker.finished.connect(lambda: self.script_worker.run())
+            self.script_worker.finished.connect(lambda: self.thread2.start())
             
             self.worker2.finished.connect(self.finished.emit)
 
@@ -414,7 +417,6 @@ def bootstrap_index_resources(indices, game_resources_loc, resources_loc, backup
         for script in index['script_src'].keys():
             internal_path = os.path.join(*splitpath(script)[3:])
             if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
-                print(os.path.join(resources_loc, 'base_scripts', internal_path))
                 missing_scripts.append(internal_path)
         for mbe in index['mbe'].keys():
             internal_path = os.path.join(*splitpath(mbe)[3:])
