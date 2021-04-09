@@ -162,6 +162,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.lockGui.connect(self.ui.disable_gui)
         self.worker.releaseGui.connect(self.ui.enable_gui)
         self.thread.start()      
+
         
         
     def read_config(self):
