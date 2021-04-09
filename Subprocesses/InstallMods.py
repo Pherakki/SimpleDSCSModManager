@@ -435,3 +435,114 @@ def bootstrap_index_resources(indices, game_resources_loc, resources_loc, backup
             # Can move this out and do a multithreaded decompile...
             script_handler.decompile_script(script, original_resource_datapath, resource_datapath, remove_input=True)
             
+class multithreaded_bootstrap_index_resources(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    
+    def __init__(self, indices, game_resources_loc, resources_loc, backups_loc,
+                 dscstools_handler, script_handler, threadpool,
+                 messageLog, updateMessageLog,
+                 lockGui, releaseGui):
+        super().__init__()
+        
+        self.indices = indices
+        self.game_resources_loc = game_resources_loc
+        self.resources_loc = resources_loc
+        self.backups_loc = backups_loc
+        self.dscstools_handler = dscstools_handler
+        self.script_handler = script_handler
+        self.threadpool = threadpool
+        self.messageLog = messageLog
+        self.updateMessageLog = updateMessageLog
+        self.lockGui = lockGui
+        self.releaseGui = releaseGui
+        
+        self.mbe_dump = None
+        self.script_dump = None
+        
+    def run(self):
+        print("RUNNING BOOTSTRAP")
+        indices = self.indices
+        game_resources_loc = self.game_resources_loc
+        resources_loc = self.resources_loc
+        backups_loc = self.backups_loc
+        dscstools_handler = self.dscstools_handler
+        script_handler = self.script_handler
+        threadpool = self.threadpool
+        messageLog = self.messageLog
+        updateMessageLog = self.updateMessageLog
+        lockGui = self.lockGui
+        releaseGui = self.releaseGui
+        
+        gfd = dscstools_handler.generate_file_dumper
+            
+        missing_scripts = []
+        missing_mbes = []
+        for index in indices:
+            for script in index['script_src'].keys():
+                internal_path = os.path.join(*splitpath(script)[3:])
+                if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
+                    print(os.path.join(resources_loc, 'base_scripts', internal_path))
+                    missing_scripts.append(internal_path)
+            for mbe in index['mbe'].keys():
+                internal_path = os.path.join(*splitpath(mbe)[3:])
+                if not os.path.exists(os.path.join(resources_loc, 'base_mbes', internal_path)):
+                    missing_mbes.append(internal_path)
+                
+        with open(os.path.join("config", "filelist.json"), 'r') as F:
+            filelist = json.load(F)
+            
+        archive_origins = {archive: backup_ifdef(archive, game_resources_loc, backups_loc)
+                           for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']}
+        # Strip out the individual tables and get the packed MBE archives they belong to
+        missing_mbes = sorted(list(set([os.path.split(mbe_path)[0] for mbe_path in missing_mbes])))
+        nmbes = len(missing_mbes)
+        if nmbes:
+            messageLog(f"Fetching {nmbes} missing mbes...")
+            missing_mbe_paths = {mbe_path: os.path.join(archive_origins[filelist[mbe_path]], filelist[mbe_path] + '.steam.mvgl') for mbe_path in missing_mbes}
+            os.makedirs(os.path.join(resources_loc, 'base_mbes', 'data'), exist_ok=True)
+            os.makedirs(os.path.join(resources_loc, 'base_mbes', 'message'), exist_ok=True)
+            os.makedirs(os.path.join(resources_loc, 'base_mbes', 'text'), exist_ok=True)
+            self.mbe_dump = gfd(missing_mbe_paths, os.path.join(resources_loc, 'base_mbes'), 
+                                threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
+        
+        nscripts = len(missing_scripts)
+        if nscripts:
+            messageLog(f"Fetching {nscripts} missing scripts...")
+            missing_scripts = [script[:-3] + 'nut' for script in missing_scripts]
+            missing_script_paths = {script_path: os.path.join(archive_origins[filelist[script_path]], filelist[script_path] + '.steam.mvgl') for script_path in missing_scripts}
+            os.makedirs(os.path.join(resources_loc, 'base_scripts', 'script64'), exist_ok=True)
+            self.script_dump = gfd(missing_script_paths, os.path.join(resources_loc, 'base_scripts'), 
+                                   threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
+
+        gme = self.dscstools_handler.generate_mbe_extractor
+        self.mbe_ex_data = gme(os.path.join(resources_loc, 'base_mbes', 'data'), os.path.join(resources_loc, 'base_mbes', 'data'), 
+                     threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
+        self.mbe_ex_msg = gme(os.path.join(resources_loc, 'base_mbes', 'message'), os.path.join(resources_loc, 'base_mbes', 'message'), 
+                     threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
+        self.mbe_ex_txt = gme(os.path.join(resources_loc, 'base_mbes', 'text'), os.path.join(resources_loc, 'base_mbes', 'text'), 
+                     threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
+        gsd = self.script_handler.generate_script_decompiler
+        self.scr_ex = gsd(os.path.join(resources_loc, 'base_scripts', 'script64'), os.path.join(resources_loc, 'base_scripts', 'script64'), 
+                     threadpool, lockGui, releaseGui, messageLog, updateMessageLog,
+                     remove_input=True)      
+        
+        if self.mbe_dump is not None:
+            self.mbe_dump.finished.connect(self.mbe_ex_data.run)
+            if self.script_dump is not None:
+                self.mbe_ex_data.finished.connect(self.mbe_ex_msg.run)
+                self.mbe_ex_msg.finished.connect(self.mbe_ex_txt.run)
+                self.mbe_ex_txt.finished.connect(self.script_dump.run)
+                self.script_dump.finished.connect(self.scr_ex.run)
+                self.scr_ex.finished.connect(self.finished.emit)
+            else:
+                self.mbe_ex_data.finished.connect(self.mbe_ex_msg.run)
+                self.mbe_ex_msg.finished.connect(self.mbe_ex_txt.run)
+                self.mbe_ex_txt.finished.connect(self.finished.emit)
+            self.mbe_dump.run()
+        elif self.script_dump is not None:
+            self.script_dump.finished.connect(self.scr_ex.run)
+            self.scr_ex.finished.connect(self.finished.emit)
+            self.script_dump.run()
+        else:
+            self.finished.emit()
+        
