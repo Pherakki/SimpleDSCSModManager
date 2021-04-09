@@ -214,7 +214,7 @@ class InstallModsWorker(QtCore.QObject):
                                      self.messageLogFunc, self.updateMessageLogFunc, 
                                      self.lockGuiFunc, self.releaseGuiFunc)
             gsc = self.script_handler.generate_script_compiler
-            script_worker = gsc(os.path.abspath(os.path.join(patch_dir, 'script64')), 
+            self.script_worker = gsc(os.path.abspath(os.path.join(patch_dir, 'script64')), 
                                 os.path.abspath(os.path.join(patch_dir, 'script64')),
                                 self.threadpool,
                                 self.lockGuiFunc, self.releaseGuiFunc,
