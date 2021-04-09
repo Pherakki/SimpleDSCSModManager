@@ -68,7 +68,6 @@ class uiMenu:
         self.helpMenu = QtWidgets.QMenu("&Help", parentWidget)
         parentWidget.menuBar().addMenu(self.fileMenu)
         parentWidget.menuBar().addMenu(self.helpMenu)
-        
                 
         self.addModAction = QtWidgets.QAction("Add Mod...", parentWidget)
         self.fileMenu.addAction(self.addModAction)
@@ -93,7 +92,8 @@ class uiMenu:
         
     def toggle_active(self, active):
         self.addModAction.setEnabled(active)
-        
+
+
 class uiMainArea:
     def __init__(self, parentWidget):
         self.define(parentWidget)
@@ -358,7 +358,8 @@ class uiActionTabs:
         self.configTab.toggle_active(active)
         self.extractTab.toggle_active(active)
         self.conflictsTab.toggle_active(active)
-        
+
+
 class uiConfigTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
@@ -406,7 +407,8 @@ class uiConfigTab(QtWidgets.QWidget):
         self.game_location_textbox.setEnabled(active)
         self.game_location_button.setEnabled(active)
         self.update_dscstools_button.setEnabled(active)
-        
+
+
 class uiExtractTab(QtWidgets.QScrollArea):
     def __init__(self, parentWidget):
         self.mvgls = ["DSDB", "DSDBA", "DSDBS", "DSDBSP", "DSDBP", "DSDBse", "DSDBPse"]
