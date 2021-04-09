@@ -197,22 +197,22 @@ class InstallModsWorker(QtCore.QObject):
              
                 
             # Pack the resources              
-            gme = self.dscstools_handler.generate_mbe_extractor
-            self.datmbe_worker = gme(os.path.join(patch_dir, 'data'), 
-                                os.path.join(patch_dir, 'data'),
-                                self.threadpool,
-                                self.messageLogFunc, self.updateMessageLogFunc, 
-                                self.lockGuiFunc, self.releaseGuiFunc)
-            msgmbe_worker = gme(os.path.join(patch_dir, 'message'), 
-                                os.path.join(patch_dir, 'message'), 
-                                self.threadpool,
-                                self.messageLogFunc, self.updateMessageLogFunc, 
-                                self.lockGuiFunc, self.releaseGuiFunc)
-            texmbe_worker = gme(os.path.join(patch_dir, 'text'), 
-                                os.path.join(patch_dir, 'text'),
-                                self.threadpool,
-                                self.messageLogFunc, self.updateMessageLogFunc, 
-                                self.lockGuiFunc, self.releaseGuiFunc)
+            gmp = self.dscstools_handler.generate_mbe_packer
+            self.datmbe_worker = gmp(os.path.join(patch_dir, 'data'), 
+                                     os.path.join(patch_dir, 'data'),
+                                     self.threadpool,
+                                     self.messageLogFunc, self.updateMessageLogFunc, 
+                                     self.lockGuiFunc, self.releaseGuiFunc)
+            self.msgmbe_worker = gmp(os.path.join(patch_dir, 'message'), 
+                                     os.path.join(patch_dir, 'message'), 
+                                     self.threadpool,
+                                     self.messageLogFunc, self.updateMessageLogFunc, 
+                                     self.lockGuiFunc, self.releaseGuiFunc)
+            self.texmbe_worker = gmp(os.path.join(patch_dir, 'text'), 
+                                     os.path.join(patch_dir, 'text'),
+                                     self.threadpool,
+                                     self.messageLogFunc, self.updateMessageLogFunc, 
+                                     self.lockGuiFunc, self.releaseGuiFunc)
             gsc = self.script_handler.generate_script_compiler
             script_worker = gsc(os.path.abspath(os.path.join(patch_dir, 'script64')), 
                                 os.path.abspath(os.path.join(patch_dir, 'script64')),
