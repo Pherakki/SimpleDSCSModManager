@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 class ScriptWorker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     
-    def __init__(self, origin, destination, script_func, threadpool, func_message, func_message_past,
+    def __init__(self, origin, destination, script_func, test, threadpool, func_message, func_message_past,
                   lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc,
                   remove_input=False):
         super().__init__()
@@ -14,6 +14,7 @@ class ScriptWorker(QtCore.QObject):
         self.origin = origin
         self.destination = destination
         self.script_func = script_func
+        self.test = test
         self.ncomplete = 0
         self.njobs = 0
         self.threadpool = threadpool
@@ -31,7 +32,7 @@ class ScriptWorker(QtCore.QObject):
         self.ncomplete = 0
         try:
             self.lockGuiFunc()
-            scripts = os.listdir(self.origin)
+            scripts = [file for file in os.listdir(self.origin) if self.test(file)]
             self.njobs = len(scripts)
             if len(scripts):
                 self.messageLogFunc("")
