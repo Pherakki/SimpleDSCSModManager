@@ -476,7 +476,6 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.hca_to_wav.setEnabled(False)
         self.wav_to_hca = self.new_button("Convert WAV to HCA", parentWidget)
         self.wav_to_hca.setEnabled(False)
-
         
     def lay_out(self):
         # Lay out the LHS button pane
@@ -576,7 +575,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
         button.setFixedWidth(130)
         button.setFixedHeight(22)
         return button
-            
+
+
 class uiConflictsTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
