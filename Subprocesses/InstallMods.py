@@ -322,4 +322,71 @@ def bootstrap_script_resources(game_resources_loc, resources_loc, file, director
             unpacked_data = os.path.join(resources_loc, directory, f"{archive}.steam.mvgl")
             if os.path.exists(unpacked_data):
                 shutil.rmtree(unpacked_data)
-                
+                      
+def backup_ifdef(archive, game_resources_loc, backups_loc):
+    backup_filepath = os.path.join(backups_loc, f'{archive}.steam.mvgl')
+    if not os.path.exists(backup_filepath):
+        return game_resources_loc
+    else:
+        return backups_loc
+                            
+                            
+def bootstrap_index_resources(indices, game_resources_loc, resources_loc, backups_loc,
+                              dscstools_handler, script_handler,
+                              messageLog, updateMessageLog):
+    missing_scripts = []
+    missing_mbes = []
+    for index in indices:
+        for script in index['script_src'].keys():
+            internal_path = os.path.join(*splitpath(script)[3:])
+            if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
+                print(os.path.join(resources_loc, 'base_scripts', internal_path))
+                missing_scripts.append(internal_path)
+        for mbe in index['mbe'].keys():
+            internal_path = os.path.join(*splitpath(mbe)[3:])
+            if not os.path.exists(os.path.join(resources_loc, 'base_mbes', internal_path)):
+                missing_mbes.append(internal_path)
+            
+    with open(os.path.join("config", "filelist.json"), 'r') as F:
+        filelist = json.load(F)
+        
+    archive_origins = {archive: backup_ifdef(archive, game_resources_loc, backups_loc)
+                       for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']}
+        
+    nmbes = len(missing_mbes)
+    if nmbes:
+        messageLog(f"Fetching {nmbes} missing mbes...")
+        messageLog("")
+        os.makedirs(os.path.join(resources_loc, 'base_mbes', 'data'), exist_ok=True)
+        os.makedirs(os.path.join(resources_loc, 'base_mbes', 'message'), exist_ok=True)
+        os.makedirs(os.path.join(resources_loc, 'base_mbes', 'text'), exist_ok=True)
+        temp_resource_datapath = os.path.join(resources_loc, 'base_mbes', 'temp')
+        for i, internal_path in enumerate(missing_mbes):
+            updateMessageLog(f"Unpacking MBE {i+1}/{nmbes} [{internal_path}]")
+            archive = filelist[internal_path]
+            dscstools_handler.get_file_from_MDB1(archive + '.steam.mvgl', archive_origins[archive], os.path.join(resources_loc, 'base_mbes'), internal_path)
+            
+            internal_datapath, mbe = os.path.split(internal_path)
+            original_resource_datapath = os.path.join(resources_loc, 'base_mbes', archive + '.steam.mvgl', internal_datapath)
+            resource_datapath = os.path.join(resources_loc, 'base_mbes', internal_datapath)
+            # Can move this out and do a multithreaded decompile...
+            dscstools_handler.extract_mbe(mbe, original_resource_datapath, resource_datapath)
+            os.remove(os.path.join(original_resource_datapath, mbe))
+    nscripts = len(missing_scripts)
+    
+    if nscripts:
+        messageLog(f"Fetching {nscripts} missing scripts...")
+        messageLog("")
+        os.makedirs(os.path.join(resources_loc, 'base_scripts', 'script64'), exist_ok=True)
+        for i, internal_path in enumerate(missing_scripts):
+            internal_path = internal_path[:-3] + 'nut'
+            updateMessageLog(f"Unpacking script {i+1}/{nscripts} [{internal_path}]")
+            archive = filelist[internal_path]
+            dscstools_handler.get_file_from_MDB1(archive + '.steam.mvgl', archive_origins[archive], os.path.join(resources_loc, 'base_scripts'), internal_path)
+            
+            internal_datapath, script = os.path.split(internal_path)
+            original_resource_datapath = os.path.join(resources_loc, 'base_scripts', archive + '.steam.mvgl', internal_datapath)
+            resource_datapath = os.path.join(resources_loc, 'base_scripts', internal_datapath)
+            # Can move this out and do a multithreaded decompile...
+            script_handler.decompile_script(script, original_resource_datapath, resource_datapath, remove_input=True)
+            
