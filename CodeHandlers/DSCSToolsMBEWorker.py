@@ -110,7 +110,7 @@ class MBERunnable(QtCore.QRunnable):
         except Exception as e:
             self.signals.exception.emit(ScriptHandlerError(e, self.archive))
 
-            
+
 class ReplaceMBERunnable(QtCore.QRunnable):
     def __init__(self, archive, origin, destination, method, update_messagelog, update_finished, raise_exception):
         super().__init__()
