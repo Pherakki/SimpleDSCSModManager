@@ -268,7 +268,57 @@ class PatchGenerator(QtCore.QObject):
         except Exception as e:
             raise e
         finally:
+class FinaliseInstallation(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    messageLog = QtCore.pyqtSignal(str)
+    updateMessageLog = QtCore.pyqtSignal(str)
+    lockGui = QtCore.pyqtSignal()
+    releaseGui = QtCore.pyqtSignal()
+
+    def __init__(self, dbdsp_dir, patch_dir, mvgl_loc, output_loc, resources_loc, game_resources_loc, backups_loc,
+                 dscstools_handler):
+        super().__init__()
+        self.dbdsp_dir = dbdsp_dir
+        self.patch_dir = patch_dir
+        self.mvgl_loc = mvgl_loc
+        self.output_loc = output_loc
+        self.resources_loc = resources_loc
+        self.game_resources_loc = game_resources_loc
+        self.backups_loc = backups_loc
+
+        self.dscstools_handler = dscstools_handler
+
+    def run(self):
+        try:
+            self.lockGui.emit()
+            self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
+
+            dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
+            if not os.path.exists(dsdbp_resource_loc):
+                self.messageLog.emit("Base DSDBP archive not found, generating...")
+                origin = backup_ifdef('DSDBP', self.game_resources_loc, self.backups_loc)
+                self.dscstools_handler.unpack_mvgl_plain(os.path.join(origin, 'DSDBP.steam.mvgl'), 
+                                                         os.path.join(self.resources_loc, 'DSDBP'))
+
+            shutil.copytree(dsdbp_resource_loc, self.dbdsp_dir)
+            shutil.copytree(self.patch_dir, self.dbdsp_dir, dirs_exist_ok=True)
+            self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
+            os.rename(os.path.join(self.output_loc, self.dscstools_handler.decrypted_archive_name('DSDBP')),
+                      os.path.join(self.output_loc, self.dscstools_handler.base_archive_name('DSDBP')))
+
+            self.messageLog.emit("Installing patched archive...")
+            # Now here's the important bit
+            create_backups(self.game_resources_loc, self.backups_loc, self.messageLog.emit)
+            shutil.copy2(self.mvgl_loc, os.path.join(self.game_resources_loc, 'DSDBP.steam.mvgl'))
+
+            self.messageLog.emit("Mods successfully installed.")
+        except Exception as e:
+            self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")
+            raise e
+        finally:
+            self.releaseGui.emit()
             self.finished.emit()
+
     
 def create_backups(game_resources_loc, backups_loc, logfunc):
     backup_filepath = os.path.join(backups_loc, 'DSDBP.steam.mvgl')
