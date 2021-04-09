@@ -268,9 +268,9 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         
         input_dir, archive = os.path.split(input_loc)
-        worker = DumpArchiveWorker(archive, input_dir, output_loc, self.threadpool,
-                                   self.ui.log, self.ui.updateLog, 
-                                   self.ui.disable_gui, self.ui.enable_gui)
+        gad = self.dscstools_handler.generate_archive_dumper
+        worker = gad(archive, input_dir, output_loc, self.threadpool,
+                     self.ui.log, self.ui.updateLog, self.ui.disable_gui, self.ui.enable_gui)
         worker.run()
         
     def pack_MDB1(self):
