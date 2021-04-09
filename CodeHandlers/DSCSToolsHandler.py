@@ -11,7 +11,7 @@ from tools.dscstools import DSCSTools
 from UI.CustomWidgets import ProgressDialog
 from Utils.MBE import mbe_batch_unpack
 from .DSCSToolsArchiveWorker import DumpArchiveWorker, DumpArchiveWorkerThread
-from .DSCSToolsFileWorker import DumpFilesWorker
+from .DSCSToolsFileWorker import DumpFileWorker
 from .DSCSToolsMBEWorker import MBEWorker
 
 
