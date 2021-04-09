@@ -254,15 +254,52 @@ class PatchGenerator(QtCore.QObject):
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
                 raise Exception("No mods activated.")
-    
-            bootstrap_index_resources(indices, self.game_resources_loc, self.resources_loc, 
-                                      self.backups_loc,
-                                      self.dscstools_handler, self.script_handler,
-                                      self.messageLog.emit, self.updateMessageLog.emit)
+            
             self.emitIndices.emit(indices)
-            time.sleep(1)
+            self.continue_execution.emit()
+            # return
+            # bootstrap_index_resources(indices, self.game_resources_loc, self.resources_loc, 
+            #                           self.backups_loc,
+            #                           self.dscstools_handler, self.script_handler,
+            #                           self.messageLog.emit, self.updateMessageLog.emit)
+            # self.emitIndices.emit(indices)
+            # self.messageLog.emit("Generating patch...")
+            # generate_patch(indices, self.patch_dir, self.resources_loc)
+            # self.continue_execution.emit()
+        except Exception as e:
+            raise e
+        finally:
+            self.releaseGui.emit()
+            self.finished.emit()
+            
+            
+class PatchGenerator2(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    continue_execution = QtCore.pyqtSignal()
+    messageLog = QtCore.pyqtSignal(str)
+    updateMessageLog = QtCore.pyqtSignal(str)
+    lockGui = QtCore.pyqtSignal()
+    releaseGui = QtCore.pyqtSignal()
+    emitIndices = QtCore.pyqtSignal(list)
+    
+    def __init__(self, patch_loc, output_loc, game_resources_loc, resources_loc,
+                 backups_loc, dscstools_handler, script_handler, profile_handler):
+        super().__init__()
+        self.patch_dir = patch_loc
+        self.output_loc = output_loc
+        self.game_resources_loc = game_resources_loc
+        self.resources_loc = resources_loc
+        self.backups_loc = backups_loc
+        self.dscstools_handler = dscstools_handler
+        self.script_handler = script_handler
+        self.profile_handler = profile_handler
+        self.indices = None
+    
+    def run(self):
+        try:
+            self.lockGui.emit()
             self.messageLog.emit("Generating patch...")
-            generate_patch(indices, self.patch_dir, self.resources_loc)
+            generate_patch(self.indices, self.patch_dir, self.resources_loc)
             self.continue_execution.emit()
         except Exception as e:
             raise e
