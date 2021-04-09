@@ -7,7 +7,8 @@ from PyQt5 import QtCore
 class MBEWorker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     
-    def __init__(self, origin, destination, method, test, threadpool, 
+    def __init__(self, origin, destination, method, test, threadpool,
+                 message_1, message_2,
                  messageLog, updateMessageLog, lockGui, releaseGui):
         super().__init__()
         
@@ -16,6 +17,9 @@ class MBEWorker(QtCore.QObject):
         self.replace_mode = origin == destination
         self.method = method
         self.test = test
+
+        self.message_1 = message_1
+        self.message_2 = message_2
 
         self.ncomplete = 0
         self.njobs = 0
@@ -41,9 +45,12 @@ class MBEWorker(QtCore.QObject):
             if self.njobs:
                 self.messageLogFunc("")
             else:
+                if self.replace_mode:
+                    os.rmdir(os.path.join(self.destination, 'temp'))
                 self.releaseGuiFunc()
                 self.finished.emit()
                 return
+            
             for file in files:
                 job = runnable(file, self.origin, self.destination,
                                self.method,
@@ -64,7 +71,7 @@ class MBEWorker(QtCore.QObject):
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
-        self.updateMessageLogFunc(f"Extracting MBE {self.ncomplete}/{self.njobs} [{message}]")
+        self.updateMessageLogFunc(f"{self.message_1} MBE {self.ncomplete}/{self.njobs} [{message}]")
         
     def raise_exception(self, exception):
         try:
@@ -72,12 +79,12 @@ class MBEWorker(QtCore.QObject):
         except ScriptHandlerError as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when extracting {e.args[1]}: {e.args[0]}")
+            self.messageLogFunc(f"The following exception occured when {self.message_2} {e.args[1]}: {e.args[0]}")
             raise e.args[0]
         except Exception as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when extracting {self.archive}: {e}")
+            self.messageLogFunc(f"The following exception occured when {self.message_2} MBEs: {e}")
             raise e
         finally:
             self.releaseGuiFunc()
