@@ -295,10 +295,41 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.releaseGui.connect(self.ui.enable_gui)
         self.thread.start()
         
-        input_dir, archive = os.path.split(input_loc)
-        self.dscstools_handler.pack_mvgl(archive, input_dir, output_loc, remove_input=False)
+    
+    def extract_MBEs(self):
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to unpack:")[0])
+        if input_loc == '' or input_loc == '.':
+            return
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+        if output_loc == '' or output_loc == '.':
+            return
+        
+
+        gme = self.dscstools_handler.generate_mbe_extractor
+        datmbe_worker = gme(input_loc,
+                            output_loc,
+                            self.threadpool,
+                            self.ui.log, self.ui.updateLog, 
+                            self.ui.disable_gui, self.ui.enable_gui)
         
         
+    def pack_MBEs(self):
+        input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to pack:")[0])
+        if input_loc == '' or input_loc == '.':
+            return
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder to export to:"))
+        if output_loc == '' or output_loc == '.':
+            return
+        
+
+        gmp = self.dscstools_handler.generate_mbe_packer
+        datmbe_worker = gmp(input_loc,
+                            output_loc,
+                            self.threadpool,
+                            self.ui.log, self.ui.updateLog, 
+                            self.ui.disable_gui, self.ui.enable_gui)
+        
+
     def decompile_scripts(self):
         input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing scripts to be decompiled:"))
         if input_loc == '' or input_loc == '.':
