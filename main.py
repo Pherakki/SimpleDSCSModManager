@@ -9,14 +9,13 @@ from PyQt5 import QtCore
 
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
-from ModFiles.Detection import detect_mods, install_mod_in_manager
-from Subprocesses.InstallMods import InstallModsWorkerThread
-from Subprocesses.Downloader import DSCSToolsDownloader
-from Subprocesses.DumpArchive import DumpArchiveWorkerThread, DumpArchiveWorker
-from Subprocesses.DumpMBE import DumpMBEWorker
-from ToolHandlers.DSCSToolsHandler import DSCSToolsHandler
-from ToolHandlers.ProfileHandler import ProfileHandler
+from Handlers.DSCSToolsArchiveWorker import DumpArchiveWorkerThread  # Need to deprecate this
+from Handlers.DSCSToolsHandler import DSCSToolsHandler
 from Handlers.ScriptHandler import ScriptHandler
+from ModFiles.Detection import detect_mods, install_mod_in_manager
+from Subprocesses.Downloader import DSCSToolsDownloader
+from Subprocesses.InstallMods import InstallModsWorkerThread, InstallModsWorker
+from ToolHandlers.ProfileHandler import ProfileHandler
 from UI.Design import uiMainWidget
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
