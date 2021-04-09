@@ -26,6 +26,21 @@ class MBE_table:
                 index.append(record_id)
         return 'mbe', os.path.join(path, filename), {tuple(idx): rule for idx in index}
     
+class UncompiledScript:
+    @staticmethod
+    def checkIfMatch(path, filename):
+        if os.path.split(path)[-1] == 'script64' and os.path.splitext(filename)[-1] == '.txt':
+            return True
+        else:
+            return False
+        
+    @staticmethod
+    def produce_index(path, filename, rule):
+        if rule is None:
+            rule = 'squirrel_overwrite'
+        return 'script_src', os.path.join(path, filename), {filename: rule}
+    
+    
 class Other:
     @staticmethod
     def checkIfMatch(path, filename):
@@ -37,13 +52,13 @@ class Other:
             rule = 'overwrite'
         return 'other', os.path.join(path, filename), {filename: rule}
 
-filetypes = [MBE_table, Other]
+filetypes = [MBE_table, UncompiledScript, Other]
 
 def generate_mod_index(modpath, rules):
     # Register .mbe records + rules,
     # Register .hca files + rules,
     # Register all other files + rules
-    retval = {'mbe': {}, 'hca': {}, 'other': {}}
+    retval = {'mbe': {}, 'hca': {}, 'other': {}, 'script_src': {}}
     for path, directories, files in os.walk(os.path.relpath(modpath)):
         for file in files:
             for filetype in filetypes:
