@@ -185,7 +185,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 if result == '' or result == '.':
                     return
-                backup_filepath = os.path.join(self.backups_loc, f'{archive}.steam.mvgl')
+                backup_filepath = os.path.join(self.backups_loc, self.dscstools_handler.base_archive_name(archive))
                 if os.path.exists(backup_filepath):
                     use_loc = self.backups_loc
                 else:
