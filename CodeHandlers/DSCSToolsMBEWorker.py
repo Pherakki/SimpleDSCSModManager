@@ -131,7 +131,7 @@ class ReplaceMBERunnable(QtCore.QRunnable):
             self.method(self.archive,
                         self.origin,
                         os.path.join(self.destination, 'temp'))
-            os.remove(os.path.join(self.origin, self.archive))
+            shutil.rmtree(os.path.join(self.origin, self.archive))
             os.rename(os.path.join(self.destination, 'temp', self.archive),
                       os.path.join(self.destination, self.archive))
             # This should be a signal, but first you'll need to implement a
