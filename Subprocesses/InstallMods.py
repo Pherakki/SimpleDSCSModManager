@@ -82,7 +82,9 @@ class InstallModsWorkerThread(QtCore.QObject):
             shutil.copytree(dsdbp_resource_loc, dbdsp_dir)
             shutil.copytree(patch_dir, dbdsp_dir, dirs_exist_ok=True)
             self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
-            self.dscstools_handler.encrypt_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=True)
+            os.rename(os.path.join(self.output_loc, self.dscstools_handler.decrypted_archive_name('DSDBP')),
+                      os.path.join(self.output_loc, self.dscstools_handler.base_archive_name('DSDBP')))
+            
             self.messageLog.emit("Installing patched archive...")
             # Now here's the important bit
             create_backups(self.game_resources_loc, self.backups_loc, self.messageLog.emit)
