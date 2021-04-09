@@ -50,14 +50,10 @@ class InstallModsWorkerThread(QtCore.QObject):
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
                 raise Exception("No mods activated.")
-            bootstrap_resources(self.game_resources_loc, self.resources_loc, 
-                                'mbe_resources', 'base_mbes',
-                                self.dscstools_handler, 
-                                self.messageLog.emit, self.updateMessageLog.emit)
-            # bootstrap_script_resources(self.game_resources_loc, self.resources_loc, 
-            #                     'script_resources', 'base_scripts',
-            #                     self.dscstools_handler, self.script_handler,
-            #                     self.messageLog.emit, self.updateMessageLog.emit)
+            bootstrap_index_resources(indices, self.game_resources_loc, self.resources_loc, 
+                                      self.backups_loc,
+                                      self.dscstools_handler, self.script_handler,
+                                      self.messageLog.emit, self.updateMessageLog.emit)
             self.messageLog.emit("Generating patch...")
             generate_patch(indices, patch_dir, self.resources_loc)
             
