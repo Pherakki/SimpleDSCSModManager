@@ -2,6 +2,7 @@ import csv
 import os
 import shutil
 from .ScriptPatching import patch_scripts
+from Utils.Path import splitpath
 
 def generate_patch(indices, working_dir, resources_dir):
     for index in indices:
@@ -93,7 +94,3 @@ def dict_to_mbetable(filepath, header, result):
         csvwriter = csv.writer(F, delimiter=',', quotechar='"')
         for key, value in result.items():
             csvwriter.writerow(([*key, *value]))
-
-            
-def splitpath(path):
-    return os.path.normpath(path).split(os.path.sep)
