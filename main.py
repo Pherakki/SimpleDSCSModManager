@@ -191,27 +191,34 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     use_loc = self.game_resources_loc
 
-                worker = DumpArchiveWorker(archive, use_loc, result, self.threadpool,
-                                           self.ui.log, self.ui.updateLog, 
-                                           self.ui.disable_gui, self.ui.enable_gui)
-                datmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'data'), os.path.join(result, archive, 'data'), 
-                              self.dscstools_handler.unpack_mbe, 
-                              self.threadpool,
-                              self.ui.log, self.ui.updateLog, 
-                              self.ui.disable_gui, self.ui.enable_gui)
-                msgmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'message'), os.path.join(result, archive, 'message'), 
-                                              self.dscstools_handler.unpack_mbe, 
-                                              self.threadpool,
-                                              self.ui.log, self.ui.updateLog, 
-                                              self.ui.disable_gui, self.ui.enable_gui)
-                texmbe_worker = DumpMBEWorker(os.path.join(result, archive, 'text'), os.path.join(result, archive, 'text'), self.dscstools_handler.unpack_mbe, self.threadpool,
-                                              self.ui.log, self.ui.updateLog, 
-                                              self.ui.disable_gui, self.ui.enable_gui)
+                gad = self.dscstools_handler.generate_archive_dumper
+                worker = gad(archive, use_loc, result, self.threadpool,
+                             self.ui.log, self.ui.updateLog, 
+                             self.ui.disable_gui, self.ui.enable_gui)
+                
+                gme = self.dscstools_handler.generate_mbe_extractor
+                datmbe_worker = gme(os.path.join(result, archive, 'data'), 
+                                    os.path.join(result, archive, 'data'),
+                                    self.threadpool,
+                                    self.ui.log, self.ui.updateLog, 
+                                    self.ui.disable_gui, self.ui.enable_gui)
+                msgmbe_worker = gme(os.path.join(result, archive, 'message'), 
+                                    os.path.join(result, archive, 'message'), 
+                                    self.threadpool,
+                                    self.ui.log, self.ui.updateLog, 
+                                    self.ui.disable_gui, self.ui.enable_gui)
+                texmbe_worker = gme(os.path.join(result, archive, 'text'), 
+                                    os.path.join(result, archive, 'text'),
+                                    self.threadpool,
+                                    self.ui.log, self.ui.updateLog, 
+                                    self.ui.disable_gui, self.ui.enable_gui)
+                
                 gsd = self.script_handler.generate_script_decompiler
                 script_worker = gsd(os.path.join(result, archive, 'script64'), 
                                     os.path.join(result, archive, 'script64'), 
                                     self.threadpool, self.ui.disable_gui, self.ui.enable_gui,                   
                                     self.ui.log, self.ui.updateLog, remove_input=True)
+                
                 worker.finished.connect(lambda: datmbe_worker.run())
                 datmbe_worker.finished.connect(lambda: msgmbe_worker.run())
                 msgmbe_worker.finished.connect(lambda: texmbe_worker.run())
