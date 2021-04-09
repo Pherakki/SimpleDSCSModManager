@@ -453,9 +453,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.dscstools_label = QtWidgets.QLabel("General Data Extraction")
         self.dscstools_label.setAlignment(QtCore.Qt.AlignCenter)
         self.extract_mdb1_button = self.new_button("Extract MDB1", parentWidget)
-        self.extract_mdb1_button.setEnabled(False)
         self.pack_mdb1_button = self.new_button("Pack MDB1", parentWidget)
-        self.pack_mdb1_button.setEnabled(False)
         self.extract_afs2_button = self.new_button("Extract AFS2", parentWidget)
         self.extract_afs2_button.setEnabled(False)
         self.pack_afs2_button = self.new_button("Pack AFS2", parentWidget)
@@ -549,8 +547,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
             self.archive_extract_buttons[archive].clicked.connect(mbd1_dump_factory(archive))
         for archive in self.afs2s:
             self.afs2_extract_buttons[archive].clicked.connect(afs2_dump_factory(archive))
-        #self.extract_mdb1_button.clicked.connect(extract_mdb1)
-        #self.extract_mdb1_button.clicked.connect(pack_mdb1)
+        self.extract_mdb1_button.clicked.connect(extract_mdb1)
+        self.pack_mdb1_button.clicked.connect(pack_mdb1)
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
         self.compile_scripts_button.clicked.connect(compile_scripts)
                 
