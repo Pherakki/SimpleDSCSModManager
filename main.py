@@ -21,6 +21,7 @@ from UI.Design import uiMainWidget
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
+
 def open_patreon():
     webbrowser.open_new_tab(r'https://www.patreon.com/sydmontague')
 
@@ -122,7 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
             raise e
         finally:
             self.update_mods()
-            
+
     def register_mod_filedialog(self):
         """
         Opens a file dialog and passes the path on to register_mod.
@@ -130,7 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
         file = QtWidgets.QFileDialog.getOpenFileUrl(self, "Select a mod archive")[0].toLocalFile()
         if file != '' and file != '.':
             self.register_mod(file)
-            
+
     def unregister_mod(self, index):
         mod_name = os.path.split(self.mods[index].path)[1]
         try:
@@ -140,7 +141,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.log(f"The following error occured when trying to delete {mod_name}: {e}")
         finally:
             self.update_mods()
-    
 
     def install_mods(self):
         self.profile_handler.save_profile()
@@ -164,8 +164,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.releaseGui.connect(self.ui.enable_gui)
         self.thread.start()      
 
-        
-        
     def read_config(self):
         config_file_loc = os.path.join(self.config_loc, "config.json")
         if os.path.exists(config_file_loc):
@@ -178,7 +176,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def write_config(self):
         with open(os.path.join(self.config_loc, "config.json"), 'w') as F:
             json.dump(self.config, F, indent=4)
-
     
     def mdb1_dump_factory(self, archive):
         def retval():
@@ -230,7 +227,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 worker.run()
                 
         return retval
-
     
     def afs2_dump_factory(self, archive):
         def retval():
@@ -299,7 +295,6 @@ class MainWindow(QtWidgets.QMainWindow):
                   self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
         worker.run()
         
-        
     def compile_scripts(self):
         input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing scripts to be compiled:"))
         if input_loc == '' or input_loc == '.':
@@ -312,7 +307,6 @@ class MainWindow(QtWidgets.QMainWindow):
         worker = gsc(input_loc, output_loc, self.threadpool,
                   self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
         worker.run()
-        
     
     def update_mods(self):
         self.mods = detect_mods(script_loc)
@@ -392,8 +386,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, *args, **kwargs):
         self.profile_handler.save_profile()
         super().closeEvent(*args, **kwargs)
-        
-        
+
 
 def try_to_locate_game_exe():
     for middle in [['Program Files (x86)', 'Steam'],
