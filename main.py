@@ -148,22 +148,37 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_mods()
         self.profile_handler.save_profile()
         self.thread = QtCore.QThread()
+        #
+        # self.worker = InstallModsWorkerThread(self.output_loc, self.resources_loc,
+        #                                       self.game_resources_loc, self.backups_loc,
+        #                                       self.profile_handler, self.dscstools_handler,
+        #                                       self.script_handler)
+        #
+        # self.worker.moveToThread(self.thread)
+        # self.thread.started.connect(self.worker.run)
+        # self.worker.finished.connect(self.thread.quit)
+        # self.worker.finished.connect(self.worker.deleteLater)
+        # self.thread.finished.connect(self.thread.deleteLater)
+        # self.worker.messageLog.connect(self.ui.log)
+        # self.worker.updateMessageLog.connect(self.ui.updateLog)
+        # self.worker.lockGui.connect(self.ui.disable_gui)
+        # self.worker.releaseGui.connect(self.ui.enable_gui)
+        # self.thread.start()
 
-        self.worker = InstallModsWorkerThread(self.output_loc, self.resources_loc, 
-                                              self.game_resources_loc, self.backups_loc,
-                                              self.profile_handler, self.dscstools_handler,
-                                              self.script_handler)
+        self.worker = InstallModsWorker(self.output_loc, self.resources_loc, self.game_resources_loc,  self.backups_loc,
+                                   self.profile_handler, self.dscstools_handler, self.script_handler, self.threadpool,
+                                   self.thread)
+        self.worker.lockGuiFunc = self.ui.disable_gui
+        self.worker.releaseGuiFunc = self.ui.enable_gui
+        self.worker.messageLogFunc = self.ui.log
+        self.worker.updateMessageLogFunc = self.ui.updateLog
         
-        self.worker.moveToThread(self.thread)
-        self.thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.messageLog.connect(self.ui.log)
-        self.worker.updateMessageLog.connect(self.ui.updateLog)
-        self.worker.lockGui.connect(self.ui.disable_gui)
-        self.worker.releaseGui.connect(self.ui.enable_gui)
-        self.thread.start()      
+        
+        self.worker.run()
+
 
     def read_config(self):
         config_file_loc = os.path.join(self.config_loc, "config.json")
@@ -295,7 +310,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.worker.lockGui.connect(self.ui.disable_gui)
         self.worker.releaseGui.connect(self.ui.enable_gui)
         self.thread.start()
-        
     
     def extract_MBEs(self):
         input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select a folder containing MBEs to unpack:"))
