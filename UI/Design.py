@@ -461,9 +461,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.pack_afs2_button = self.new_button("Pack AFS2", parentWidget)
         self.pack_afs2_button.setEnabled(False)
         self.extract_mbes_button = self.new_button("Extract MBEs", parentWidget)
-        self.extract_mbes_button.setEnabled(False)
         self.pack_mbes_button = self.new_button("Pack MBEs", parentWidget)
-        self.pack_mbes_button.setEnabled(False)
         
         self.scripts_label = QtWidgets.QLabel("Scripts")
         self.scripts_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -567,6 +565,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
             button.setEnabled(active)
         for button in self.afs2_extract_buttons.values():
             button.setEnabled(active)
+        self.extract_mbes_button.setEnabled(active)
+        self.pack_mbes_button.setEnabled(active)
         self.decompile_scripts_button.setEnabled(active)
         self.compile_scripts_button.setEnabled(active)
             
