@@ -78,7 +78,8 @@ class InstallModsWorkerThread(QtCore.QObject):
             dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
             if not os.path.exists(dsdbp_resource_loc):
                 self.messageLog.emit("Base DSDBP archive not found, generating...")
-                self.dscstools_handler.dump_mvgl('DSDBP', self.game_resources_loc, self.resources_loc)
+                origin = backup_ifdef('DSDBP', self.game_resources_loc, self.backups_loc)
+                self.dscstools_handler.unpack_mvgl('DSDBP', origin, self.resources_loc)
             shutil.copytree(dsdbp_resource_loc, dbdsp_dir)
             shutil.copytree(patch_dir, dbdsp_dir, dirs_exist_ok=True)
             self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
@@ -204,8 +205,9 @@ class InstallModsWorker(QtCore.QObject):
             dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
             if not os.path.exists(dsdbp_resource_loc):
                 self.messageLog.emit("Base DSDBP archive not found, generating...")
-                self.dscstools_handler.dump_mvgl('DSDBP', self.game_resources_loc, self.resources_loc)
-            
+                origin = backup_ifdef('DSDBP', self.game_resources_loc, self.backups_loc)
+                self.dscstools_handler.unpack_mvgl('DSDBP', origin, self.resources_loc)
+                
             shutil.copytree(dsdbp_resource_loc, dbdsp_dir)
             shutil.copytree(patch_dir, dbdsp_dir, dirs_exist_ok=True)
             self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
