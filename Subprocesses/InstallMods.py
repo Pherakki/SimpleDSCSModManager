@@ -35,12 +35,15 @@ class InstallModsWorkerThread(QtCore.QObject):
             patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
             dbdsp_dir = os.path.relpath(os.path.join(self.output_loc, 'DSDBP'))
             mvgl_loc = os.path.join(self.output_loc, 'DSDBP.steam.mvgl')
+            decrypt_loc = os.path.join(self.output_loc, 'DSDBP_decrypted')
             if os.path.exists(patch_dir):
                 shutil.rmtree(patch_dir)
             if os.path.exists(dbdsp_dir):
                 shutil.rmtree(dbdsp_dir)
             if os.path.exists(mvgl_loc):
                 os.remove(mvgl_loc)
+            if os.path.exists(decrypt_loc):
+                os.remove(decrypt_loc)
                 
             # Do this on mod registry...
             self.messageLog.emit("Indexing mods...")
