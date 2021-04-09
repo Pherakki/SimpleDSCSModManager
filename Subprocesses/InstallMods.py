@@ -7,6 +7,7 @@ from PyQt5 import QtCore
 from ModFiles.Indexing import generate_mod_index
 from ModFiles.PatchGen import generate_patch
 from Utils.MBE import mbe_batch_pack, mbe_batch_unpack
+from Utils.Path import splitpath
 
 
 class InstallModsWorkerThread(QtCore.QObject):
@@ -59,7 +60,6 @@ class InstallModsWorkerThread(QtCore.QObject):
             
             # Pack each mbe
             mbe_batch_pack(patch_dir, self.dscstools_handler, self.messageLog.emit, self.updateMessageLog.emit)
-            
             script_loc = os.path.join(patch_dir, "script64")
             scripts = os.listdir(script_loc)
             nscripts = len(scripts)
