@@ -549,8 +549,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
             self.afs2_extract_buttons[archive].clicked.connect(afs2_dump_factory(archive))
         self.extract_mdb1_button.clicked.connect(extract_mdb1)
         self.pack_mdb1_button.clicked.connect(pack_mdb1)
-        self.extract_mbe_button.clicked.connect(extract_mbes)
-        self.pack_mbe_button.clicked.connect(pack_mbes)
+        self.extract_mbes_button.clicked.connect(extract_mbes)
+        self.pack_mbes_button.clicked.connect(pack_mbes)
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
         self.compile_scripts_button.clicked.connect(compile_scripts)
                 
