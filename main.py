@@ -191,7 +191,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     use_loc = self.game_resources_loc
 
                 gad = self.dscstools_handler.generate_archive_dumper
-                worker = gad(archive, use_loc, result, self.threadpool,
+                worker = gad(os.path.join(use_loc, self.dscstools_handler.base_archive_name(archive)),
+                             os.path.join(result, archive), self.threadpool,
                              self.ui.log, self.ui.updateLog, 
                              self.ui.disable_gui, self.ui.enable_gui)
                 
@@ -267,7 +268,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         input_dir, archive = os.path.split(input_loc)
         gad = self.dscstools_handler.generate_archive_dumper
-        worker = gad(archive, input_dir, output_loc, self.threadpool,
+        worker = gad(input_loc, os.path.join(output_loc, archive), self.threadpool,
                      self.ui.log, self.ui.updateLog, self.ui.disable_gui, self.ui.enable_gui)
         worker.run()
         
@@ -275,9 +276,24 @@ class MainWindow(QtWidgets.QMainWindow):
         input_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select an unpacked MDB1 archive:"))
         if input_loc == '' or input_loc == '.':
             return
-        output_loc = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select an folder to pack the MDB1 into:"))
+        output_loc = os.path.normpath(QtWidgets.QFileDialog.getSaveFileName(self, "Export to file:")[0])
         if output_loc == '' or output_loc == '.':
             return
+
+        self.thread = QtCore.QThread()
+        self.worker = GenericThreadRunner(lambda: self.dscstools_handler.pack_mvgl_plain(input_loc, output_loc, remove_input=False),
+                                          f"Packing MDB1 to {output_loc}...",
+                                          "packiing MDB1")
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.messageLog.connect(self.ui.log)
+        self.worker.updateMessageLog.connect(self.ui.updateLog)
+        self.worker.lockGui.connect(self.ui.disable_gui)
+        self.worker.releaseGui.connect(self.ui.enable_gui)
+        self.thread.start()
         
         input_dir, archive = os.path.split(input_loc)
         self.dscstools_handler.pack_mvgl(archive, input_dir, output_loc, remove_input=False)
