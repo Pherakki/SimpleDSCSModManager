@@ -18,6 +18,7 @@ class GenericThreadRunner(QtCore.QObject):
         try:
             self.lockGui.emit()
             self.messageLog.emit(self.initmessage)
+            self.func()
             self.messageLog.emit("Operation successful.")
         except Exception as e:
             self.messageLog.emit(f"The following error occured when trying to {self.errormessage}: {e}")
