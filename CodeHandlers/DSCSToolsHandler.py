@@ -11,6 +11,7 @@ from tools.dscstools import DSCSTools
 from UI.CustomWidgets import ProgressDialog
 from Utils.MBE import mbe_batch_unpack
 from .DSCSToolsArchiveWorker import DumpArchiveWorker, DumpArchiveWorkerThread
+from .DSCSToolsFileWorker import DumpFilesWorker
 from .DSCSToolsMBEWorker import MBEWorker
 
 
@@ -142,14 +143,19 @@ class DSCSToolsHandler:
         return DumpArchiveWorker(origin, destination, threadpool,
                                  messageLog, updateMessageLog, lockGui, releaseGui)
     
+    def generate_file_dumper(self, file_list, origin, destination, threadpool,
+                                messageLog, updateMessageLog, lockGui, releaseGui):
+        return DumpFilesWorker(file_list, origin, destination, threadpool,
+                                 messageLog, updateMessageLog, lockGui, releaseGui)
+    
     def generate_mbe_extractor(self, origin, destination, threadpool, 
                                messageLog, updateMessageLog, lockGui, releaseGui):
-        return MBEWorker(origin, destination, self.unpack_mbe, is_packed_mbe_table, threadpool, 
+        return MBEWorker(origin, destination, self.unpack_mbe, is_packed_mbe_table, threadpool,
+                         "Unpacking", "unpacking",
                          messageLog, updateMessageLog, lockGui, releaseGui)
     
     def generate_mbe_packer(self, origin, destination, threadpool, 
                                messageLog, updateMessageLog, lockGui, releaseGui):
-        return MBEWorker(origin, destination, self.pack_mbe, is_unpacked_mbe_table, threadpool, 
+        return MBEWorker(origin, destination, self.pack_mbe, is_unpacked_mbe_table, threadpool,
+                         "Packing", "packing",
                          messageLog, updateMessageLog, lockGui, releaseGui)
-    
-        
