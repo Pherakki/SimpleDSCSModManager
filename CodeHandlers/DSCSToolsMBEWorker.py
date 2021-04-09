@@ -1,10 +1,8 @@
 import os
 import shutil
 
-from PyQt5 import QtCore 
+from PyQt5 import QtCore
 
-
-    
 
 class MBEWorker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -26,8 +24,7 @@ class MBEWorker(QtCore.QObject):
         self.updateMessageLogFunc = updateMessageLog
         self.lockGuiFunc = lockGui
         self.releaseGuiFunc = releaseGui
-    
-        
+
     def run(self):
         self.ncomplete = 0
 
@@ -84,7 +81,8 @@ class MBEWorker(QtCore.QObject):
             raise e
         finally:
             self.releaseGuiFunc()
-            
+
+
 class MBERunnable(QtCore.QRunnable):
     def __init__(self, archive, origin, destination, method, update_messagelog, update_finished, raise_exception):
         super().__init__()
@@ -111,6 +109,7 @@ class MBERunnable(QtCore.QRunnable):
             self.update_finished()
         except Exception as e:
             self.signals.exception.emit(ScriptHandlerError(e, self.archive))
+
             
 class ReplaceMBERunnable(QtCore.QRunnable):
     def __init__(self, archive, origin, destination, method, update_messagelog, update_finished, raise_exception):

@@ -102,17 +102,6 @@ class DSCSToolsHandler:
         self.dscstools_op(archive, origin, destination, lambda inp, out: DSCSTools.packAFS2(inp, out),
                      lambda x: x, self.base_archive_name, 
                      False, remove_input)
-        
-    def dump_mvgl(self, archive, origin, destination):
-        self.decrypt_mvgl(archive, origin, destination, remove_input=True)
-        self.unpack_mvgl(archive, destination, destination, remove_input=True)
-        
-    def full_dump_mdb1(self, archive, origin, destination, messageLog, updateMessageLog):
-        self.dump_mvgl(archive, origin, destination)
-        mbe_batch_unpack(os.path.join(destination, archive), self, messageLog.emit, updateMessageLog.emit)
-    
-    def full_dump_afs2(self, archive, origin, destination, messageLog, updateMessageLog):
-        self.unpack_afs2(archive, origin, destination)
             
     def unpack_mbe(self, mbe, origin, destination):
         origin_loc = os.path.join(origin, mbe)
@@ -128,13 +117,29 @@ class DSCSToolsHandler:
         origin_loc = os.path.join(origin, archive)
         destination_loc = os.path.join(destination, archive)
         DSCSTools.extractMDB1File(origin_loc, destination_loc, filepath)
-        
+
+    #################
+    # New functions #
+    #################
+    def dscstools_plain_op(self, operation, origin, *args, remove_input=False):
+        operation(origin, *args)
+        if remove_input:
+            os.remove(origin)
+
+    def unpack_mvgl_plain(self, origin, destination, remove_input=False):
+        self.dscstools_plain_op(DSCSTools.extractMDB1, origin, destination, remove_input=remove_input)
+
+    def pack_mvgl_plain(self, origin, destination, remove_input=False):
+        self.dscstools_plain_op(lambda inp, out: DSCSTools.packMDB1(inp, out, DSCSTools.CompressMode.normal, False),
+                                origin, destination,
+                                remove_input=remove_input)
+
     ##########################
     # Multithreaded Patchers #
     ##########################
-    def generate_archive_dumper(self, archive, origin, destination, threadpool, 
+    def generate_archive_dumper(self, origin, destination, threadpool,
                                 messageLog, updateMessageLog, lockGui, releaseGui):
-        return DumpArchiveWorker(archive, origin, destination, threadpool, 
+        return DumpArchiveWorker(origin, destination, threadpool,
                                  messageLog, updateMessageLog, lockGui, releaseGui)
     
     def generate_mbe_extractor(self, origin, destination, threadpool, 
