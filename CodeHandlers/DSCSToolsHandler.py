@@ -143,9 +143,9 @@ class DSCSToolsHandler:
         return DumpArchiveWorker(origin, destination, threadpool,
                                  messageLog, updateMessageLog, lockGui, releaseGui)
     
-    def generate_file_dumper(self, file_list, origin, destination, threadpool,
+    def generate_file_dumper(self, file_list, destination, threadpool,
                                 messageLog, updateMessageLog, lockGui, releaseGui):
-        return DumpFilesWorker(file_list, origin, destination, threadpool,
+        return DumpFileWorker(file_list, destination, threadpool,
                                  messageLog, updateMessageLog, lockGui, releaseGui)
     
     def generate_mbe_extractor(self, origin, destination, threadpool, 
