@@ -276,64 +276,7 @@ def create_backups(game_resources_loc, backups_loc, logfunc):
         logfunc("Creating backup...")
         os.mkdir(os.path.split(backup_filepath)[0])
         shutil.copy2(os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'), backup_filepath)
-        
-def bootstrap_resources(game_resources_loc, resources_loc, file, directory, 
-                        dscstools_handler, messageLog, updateMessageLog):
-    with open(f".\\config\\{file}.json", 'r') as F:
-        resource_bootstrap = json.load(F)
-    to_fetch = []
-    for resource in resource_bootstrap:
-        if not os.path.exists(os.path.join(resources_loc, directory, resource)):
-            to_fetch.append(resource)
-            
-    n_to_fetch = len(to_fetch)
-    if n_to_fetch:
-        messageLog(f"Fetching {n_to_fetch} missing resources...")
-        messageLog("")
-        unpack_location = os.path.join(resources_loc, directory)
-        for i, resource in enumerate(to_fetch):
-            updateMessageLog(f"Unpacking resource {i+1}/{n_to_fetch} [{resource}]")
-            dscstools_handler.get_file_from_MDB1(f"{resource_bootstrap[resource]}.steam.mvgl",
-                                                 game_resources_loc,
-                                                 unpack_location,
-                                                 resource)
-        for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']:
-            unpacked_data = os.path.join(resources_loc, directory, f"{archive}.steam.mvgl")
-            if os.path.exists(unpacked_data):
-                shutil.copytree(unpacked_data, unpack_location, dirs_exist_ok=True)
-                shutil.rmtree(unpacked_data)
-        mbe_batch_unpack(os.path.join(resources_loc, directory), dscstools_handler,
-                         messageLog, updateMessageLog, report_missing=False)
-        
-def bootstrap_script_resources(game_resources_loc, resources_loc, file, directory, 
-                        dscstools_handler, script_handler, messageLog, updateMessageLog):
-    with open(f".\\config\\{file}.json", 'r') as F:
-        resource_bootstrap = json.load(F)
-    to_fetch = []
-    for resource in resource_bootstrap:
-        if not os.path.exists(os.path.join(resources_loc, directory, resource)):
-            to_fetch.append(resource)
-            
-    n_to_fetch = len(to_fetch)
-    if n_to_fetch:
-        messageLog(f"Fetching {n_to_fetch} missing resources...")
-        messageLog("")
-        unpack_location = os.path.join(resources_loc, directory)
-        for i, resource in enumerate(to_fetch):
-            updateMessageLog(f"Unpacking resource {i+1}/{n_to_fetch} [{resource}]")
-            dscstools_handler.get_file_from_MDB1(f"{resource_bootstrap[resource]}.steam.mvgl",
-                                                 game_resources_loc,
-                                                 unpack_location,
-                                                 resource)
-            resource_path, resource_name = os.path.split(resource)
-            os.makedirs(os.path.join(resources_loc, directory, resource_path), exist_ok=True)
-            script_handler.decompile_script(resource_name,
-                                            os.path.join(resources_loc, directory, f"{resource_bootstrap[resource]}.steam.mvgl", resource_path),
-                                            os.path.join(resources_loc, directory, resource_path))
-        for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']:
-            unpacked_data = os.path.join(resources_loc, directory, f"{archive}.steam.mvgl")
-            if os.path.exists(unpacked_data):
-                shutil.rmtree(unpacked_data)
+
       
 def backup_ifdef(archive, game_resources_loc, backups_loc):
     backup_filepath = os.path.join(backups_loc, f'{archive}.steam.mvgl')
