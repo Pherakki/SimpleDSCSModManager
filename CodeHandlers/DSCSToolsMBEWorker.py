@@ -15,6 +15,7 @@ class MBEWorker(QtCore.QObject):
         self.origin = origin
         self.destination = destination
         self.replace_mode = origin == destination
+        print(origin, destination, self.replace_mode)
         self.method = method
         self.test = test
 
@@ -138,7 +139,11 @@ class ReplaceMBERunnable(QtCore.QRunnable):
             self.method(self.archive,
                         self.origin,
                         os.path.join(self.destination, 'temp'))
-            shutil.rmtree(os.path.join(self.origin, self.archive))
+            rm_dir = os.path.join(self.origin, self.archive)
+            if os.path.isdir(rm_dir):
+                shutil.rmtree(rm_dir)
+            else:
+                os.remove(rm_dir)
             os.rename(os.path.join(self.destination, 'temp', self.archive),
                       os.path.join(self.destination, self.archive))
             # This should be a signal, but first you'll need to implement a
