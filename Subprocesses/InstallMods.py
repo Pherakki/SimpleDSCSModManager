@@ -60,6 +60,16 @@ class InstallModsWorkerThread(QtCore.QObject):
             # Pack each mbe
             mbe_batch_pack(patch_dir, self.dscstools_handler, self.messageLog.emit, self.updateMessageLog.emit)
             
+            script_loc = os.path.join(patch_dir, "script64")
+            scripts = os.listdir(script_loc)
+            nscripts = len(scripts)
+            if nscripts:
+                self.messageLog.emit("")
+                for i, script in enumerate(scripts):
+                    self.updateMessageLog.emit(f"Compiling script {i+1}/{nscripts} [{script}]")
+                    self.script_handler.compile_script(script, 
+                                                       os.path.abspath(script_loc), 
+                                                       os.path.abspath(script_loc), remove_input=True)
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
         
             dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
@@ -318,7 +328,7 @@ def bootstrap_script_resources(game_resources_loc, resources_loc, file, director
             unpacked_data = os.path.join(resources_loc, directory, f"{archive}.steam.mvgl")
             if os.path.exists(unpacked_data):
                 shutil.rmtree(unpacked_data)
-                      
+      
 def backup_ifdef(archive, game_resources_loc, backups_loc):
     backup_filepath = os.path.join(backups_loc, f'{archive}.steam.mvgl')
     if not os.path.exists(backup_filepath):
