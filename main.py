@@ -9,9 +9,10 @@ from PyQt5 import QtCore
 
 # https://doc.qt.io/qt-5/qfilesystemwatcher.html
 
-from Handlers.DSCSToolsArchiveWorker import DumpArchiveWorkerThread  # Need to deprecate this
-from Handlers.DSCSToolsHandler import DSCSToolsHandler
-from Handlers.ScriptHandler import ScriptHandler
+from CodeHandlers.DSCSToolsArchiveWorker import DumpArchiveWorkerThread  # Need to deprecate this
+from CodeHandlers.DSCSToolsHandler import DSCSToolsHandler
+from CodeHandlers.GenericThreadRunner import GenericThreadRunner
+from CodeHandlers.ScriptHandler import ScriptHandler
 from ModFiles.Detection import detect_mods, install_mod_in_manager
 from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.InstallMods import InstallModsWorkerThread, InstallModsWorker
