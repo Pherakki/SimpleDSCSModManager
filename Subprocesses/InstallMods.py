@@ -169,6 +169,13 @@ class InstallModsWorker(QtCore.QObject):
             #     self.patchgen_worker.indices = lst
             
             # self.worker.emitIndices.connect(relay_indices)
+            
+            self.br = multithreaded_bootstrap_index_resources(None, self.game_resources_loc, 
+                                                              self.resources_loc, self.backups_loc,
+                                                              self.dscstools_handler, self.script_handler,
+                                                              self.threadpool,
+                                                              self.messageLogFunc, self.updateMessageLogFunc,
+                                                              self.lockGuiFunc, self.releaseGuiFunc)
             self.worker3 = PatchGenerator2(patch_dir, self.output_loc, self.game_resources_loc,
                                          self.resources_loc, self.backups_loc,
                                          self.dscstools_handler, self.script_handler, self.profile_handler)
