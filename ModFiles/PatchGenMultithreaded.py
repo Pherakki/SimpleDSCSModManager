@@ -284,7 +284,8 @@ class patch_script_src(QtCore.QRunnable):
             patch_scripts(working_script_filepath, script_filepath, patch_filepath)
             os.remove(working_script_filepath)
             os.rename(patch_filepath, working_script_filepath)
-            self.update_messagelog(file)
+            
+            self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
             self.exception.emit(ScriptHandlerError(e, self.archive))
