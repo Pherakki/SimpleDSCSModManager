@@ -278,10 +278,8 @@ class patch_script_src(QtCore.QRunnable):
             if not os.path.exists(working_script_filepath):
                 working_script_path = os.path.split(working_script_filepath)[0] + os.path.sep
                 os.makedirs(working_script_path, exist_ok=True)
-                resource_path = os.path.join(resources_dir, 'base_scripts', 'script64')
-                for file in os.listdir(resource_path):
-                    shutil.copy2(os.path.join(resource_path, file), os.path.join(working_script_path, file))
-                    
+                resource_path = os.path.join(resources_dir, 'base_scripts', local_filepath)
+                shutil.copy2(resource_path, working_script_filepath)
                     
             patch_scripts(working_script_filepath, script_filepath, patch_filepath)
             os.remove(working_script_filepath)
