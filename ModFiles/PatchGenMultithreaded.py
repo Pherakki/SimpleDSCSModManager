@@ -227,6 +227,7 @@ class mbe_patcher(QtCore.QRunnable):
                 working_mbe_path = os.path.split(working_mbe_filepath)[0] + os.path.sep
                 os.makedirs(working_mbe_path, exist_ok=True)
                 resource_filepath = os.path.join(resources_dir, 'base_mbes', mbe_table_datapath)
+                # Need to copy every table inside the MBE
                 resource_path = os.path.split(resource_filepath)[0]
                 for file in os.listdir(resource_path):
                     shutil.copy2(os.path.join(resource_path, file), os.path.join(working_mbe_path, file))
