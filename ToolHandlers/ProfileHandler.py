@@ -55,20 +55,21 @@ class ProfileHandler:
         if current_text == '' or self.modpath_to_id is None:
             return
         filepath = self.profile_path(current_text)
-        with open(filepath, 'r') as F:
-            current_profile = json.load(F)
-        actives = {}
-        for path, value in current_profile.items():
-            if path in self.modpath_to_id:
-                modid = self.modpath_to_id[path]
-                actives[modid] = value
-            
-        id_to_order = {modid: i for i, modid in enumerate(actives)}
-        ordered_mods = sorted([(i, mod) for i, mod in enumerate(self.mods)], 
-                              key=lambda x: (id_to_order.get(x[0]) is None, id_to_order.get(x[0])))
-
-        self.mods_display.set_mods(ordered_mods)
-        self.mods_display.set_mod_activation_states(actives)
+        if os.path.exists(filepath):
+            with open(filepath, 'r') as F:
+                current_profile = json.load(F)
+            actives = {}
+            for path, value in current_profile.items():
+                if path in self.modpath_to_id:
+                    modid = self.modpath_to_id[path]
+                    actives[modid] = value
+                
+            id_to_order = {modid: i for i, modid in enumerate(actives)}
+            ordered_mods = sorted([(i, mod) for i, mod in enumerate(self.mods)], 
+                                  key=lambda x: (id_to_order.get(x[0]) is None, id_to_order.get(x[0])))
+    
+            self.mods_display.set_mods(ordered_mods)
+            self.mods_display.set_mod_activation_states(actives)
     
     def save_profile(self):
         current_index = self.profile_selector.currentIndex()
