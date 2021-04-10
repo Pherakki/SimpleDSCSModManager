@@ -13,14 +13,11 @@ class PoolChain(QtCore.QObject):
     def __init__(self, *pools):
         super().__init__()
         self.pools = pools
-        for pool_1, pool_2 in zip(pools, pools[1:]):
         for pool_1, pool_2 in zip(self.pools, self.pools[1:]):
             pool_1.finished.connect(pool_2.run)
-        pools[-1].finished.connect(self.finished.emit)
         self.pools[-1].finished.connect(self.finished.emit)
         
     def run(self):
-        pools[0].run()
         self.pools[0].run()
     
 
@@ -51,7 +48,6 @@ class generate_patch_mt(QtCore.QObject):
         # for probable optimisations
         
         self.messageLogFunc("Generating patch...")
-        self.messageLogFunc("")
         cul_jobs = 0
         for index in self.indices:
             if 'mbe' in index:
