@@ -1,7 +1,7 @@
 import math
 import os
 import shutil
-import urllib
+import urllib.request
 import zipfile
 
 from PyQt5 import QtCore
