@@ -312,7 +312,7 @@ class patch_others(QtCore.QRunnable):
         try:
             working_dir = self.working_dir
             resources_dir = self.resources_dir
-            other_filepath = self.script_filepath
+            other_filepath = self.other_filepath
             other_rules = self.other_rules
             
             local_filepath = os.path.join(*splitpath(other_filepath)[3:])
