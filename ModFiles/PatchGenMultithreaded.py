@@ -54,12 +54,15 @@ class generate_patch_mt(QtCore.QObject):
         self.messageLogFunc("")
         cul_jobs = 0
         for index in self.indices:
-            if 'mbes' in index:
-                n_jobs = sum([len(index['mbes']) for index in self.indices if 'mbes' in index])
-                subindex = index['mbes']
+            if 'mbe' in index:
+                n_jobs = sum([len(index['mbe']) for index in self.indices if 'mbe' in index])
+                subindex = index['mbe']
                 n_subjobs = len(subindex)
                 runner = patch_pool_runner(subindex, self.working_dir, self.resources_dir,
-                                           mbe_patcher, self.threadpool, cul_jobs, n_jobs)
+                                           mbe_patcher, self.threadpool, cul_jobs, n_jobs,
+                                           self.lockGuiFunc, self.releaseGuiFunc,
+                                           self.messageLogFunc, self.updateMessageLogFunc,
+                                           "patching MBE", "patching MBEs")
                 cul_jobs += n_subjobs
                 self.mbe_runners.append(runner)
             
