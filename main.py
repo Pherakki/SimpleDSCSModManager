@@ -74,7 +74,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_filemenu(self.register_mod_filedialog)
         self.ui.hook_profle_interaction_widgets(self.profile_handler)
         #self.ui.hook_action_tabs(self.draw_conflicts_graph)
-        self.ui.hook_config_tab(self.find_gamelocation, self.update_dscstools)
+        self.ui.hook_config_tab(self.find_gamelocation_check, self.update_dscstools)
         self.ui.hook_extract_tab(self.mdb1_dump_factory, self.afs2_dump_factory,
                                  self.dscstools_handler,
                                  self.extract_MDB1, self.pack_MDB1,
@@ -386,10 +386,26 @@ class MainWindow(QtWidgets.QMainWindow):
         return True
             
     def find_gamelocation(self):
-        resolved_path = os.path.join(self.game_loc, "app_digister", "Digimon Story CS.exe")
-        while not os.path.exists(resolved_path):
+        result = os.path.join(self.game_loc)
+        while not os.path.exists(result):
             QtWidgets.QMessageBox.question(self, 'Game not found', 
-                                           rf"Game executable was not found in the location {resolved_path}. Please select the folder containing the folders 'app_digister' and 'resources'.", QtWidgets.QMessageBox.Ok)
+                                           rf"Game executable was not found in the location {result}. Please select the folder containing the folders 'app_digister' and 'resources'.", QtWidgets.QMessageBox.Ok)
+            result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
+
+            if result == '' or result == '.':
+                self.config['game_loc'] = ''
+                return False
+        self.config['game_loc'] = result
+        self.ui.game_location_textbox.setText(result)
+        self.write_config()
+        
+        return True
+    
+    def find_gamelocation_check(self):
+        result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
+        while not os.path.exists(result):
+            QtWidgets.QMessageBox.question(self, 'Game not found', 
+                                           rf"Game executable was not found in the location {result}. Please select the folder containing the folders 'app_digister' and 'resources'.", QtWidgets.QMessageBox.Ok)
             result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
 
             if result == '' or result == '.':
