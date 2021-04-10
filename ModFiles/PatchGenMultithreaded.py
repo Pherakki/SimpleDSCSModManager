@@ -27,13 +27,18 @@ class PoolChain(QtCore.QObject):
 class generate_patch_mt(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     
-    def __init__(self, working_dir, resources_dir, threadpool, messageLog):
+    def __init__(self, working_dir, resources_dir, threadpool, 
+                 lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc):
         super().__init__()
         self.indices = None
         self.working_dir = working_dir
         self.resources_dir = resources_dir
         self.threadpool = threadpool
-        self.messageLogFunc = messageLog
+
+        self.lockGuiFunc = lockGuiFunc
+        self.releaseGuiFunc = releaseGuiFunc
+        self.messageLogFunc = messageLogFunc
+        self.updateMessageLogFunc = updateMessageLogFunc
         
         
         self.mbe_runners = []
