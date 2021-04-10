@@ -356,3 +356,6 @@ def dict_to_mbetable(filepath, header, result):
         csvwriter = csv.writer(F, delimiter=',', quotechar='"')
         for key, value in result.items():
             csvwriter.writerow(([*key, *value]))
+            
+class ScriptHandlerError:
+    pass
