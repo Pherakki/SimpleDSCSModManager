@@ -322,7 +322,8 @@ class patch_others(QtCore.QRunnable):
                 os.makedirs(working_path, exist_ok=True)
             # Only if 'overwrite' rule...
             shutil.copy2(other_filepath, working_filepath)
-            self.update_messagelog(os.path.split(working_filepath)[-1])
+            
+            self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
             self.exception.emit(ScriptHandlerError(e, self.archive))
