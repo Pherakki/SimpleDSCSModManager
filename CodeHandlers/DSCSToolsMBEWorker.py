@@ -40,8 +40,13 @@ class MBEWorker(QtCore.QObject):
                 os.makedirs(os.path.join(self.destination, 'temp'))
             else:
                 runnable = MBERunnable
-            files = [file for file in os.listdir(self.origin) if 
-                     self.test(os.path.join(self.origin, file))]
+                
+            if os.path.exists(self.origin):
+                files = [file for file in os.listdir(self.origin) if 
+                         self.test(os.path.join(self.origin, file))]
+            else:
+                files = []
+                
             self.njobs = len(files)
             if self.njobs:
                 self.messageLogFunc("")
