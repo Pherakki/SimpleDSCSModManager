@@ -90,34 +90,11 @@ class generate_patch_mt(QtCore.QObject):
                 cul_jobs += n_subjobs
                 self.other_runners.append(runner)
             
-        for pool_1, pool_2 in zip(self.mbe_runners, self.mbe_runners[1:]):
-            pool_1.finished.connect(pool_2.run)
-        for pool_1, pool_2 in zip(self.script_runners, self.script_runners[1:]):
-            pool_1.finished.connect(pool_2.run)
-        for pool_1, pool_2 in zip(self.other_runners, self.other_runners[1:]):
-            pool_1.finished.connect(pool_2.run)
-            
-        if len(self.mbe_runners):
-            if len(self.script_runners):
-                self.mbe_runners[-1].finished.connect(self.script_runners[0].run)
-            elif len(self.other_runners):
-                self.mbe_runners[-1].finished.connect(self.other_runners[0].run)
-            else:
-                self.mbe_runners[-1].finished.connect(self.finished.emit)
-        if len(self.script_runners):
-            if len(self.other_runners):    
-                self.script_runners[-1].finished.connect(self.other_runners[0].run)
-            else:
-                self.script_runners[-1].finished.connect(self.finished.emit)
-        if len(self.other_runners):
-            self.other_runners[-1].finished.connect(self.finished.emit)
-        
-        if len(self.mbe_runners):
-            self.mbe_runners[0].run()
-        elif len(self.script_runners):
-            self.script_runners[0].run()
-        elif len(self.other_runners):
-            self.other_runners[0].run()
+        # *[*runnerlist for runnerlist in list_of_runnerlists]
+        self.poolchain = PoolChain(*self.mbe_runners, *self.script_runners, *self.other_runners)
+        self.poolchain.finished.connect(self.finished.emit)
+        self.poolchain.run()
+
             
                     
 class patch_pool_runner(QtCore.QObject):
