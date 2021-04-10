@@ -238,8 +238,8 @@ class mbe_patcher(QtCore.QRunnable):
                 # record_rule(record_id, mbe_data)
                 mbe_data[record_id] = mod_mbe_data[record_id]
             dict_to_mbetable(working_mbe_filepath, header, mbe_data)
-            self.update_messagelog(self.filepath)
-                    
+            
+            self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
             self.exception.emit(ScriptHandlerError(e, self.archive))
