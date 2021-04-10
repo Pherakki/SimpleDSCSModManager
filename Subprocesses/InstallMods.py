@@ -493,7 +493,6 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
         self.script_dump = None
         
     def run(self):
-        print("RUNNING BOOTSTRAP")
         indices = self.indices
         game_resources_loc = self.game_resources_loc
         resources_loc = self.resources_loc
