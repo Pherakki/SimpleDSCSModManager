@@ -218,7 +218,13 @@ class mbe_patcher(QtCore.QRunnable):
         
     def run(self):
         try:
+            mbe_table_filepath = self.mbe_table_filepath
+            working_dir = self.working_dir
+            resources_dir = self.resources_dir
+            mbe_rules = self.mbe_rules
+            
             mbe_table_filepath = os.path.relpath(mbe_table_filepath)
+            local_filepath = os.path.join(*splitpath(mbe_table_filepath)[3:])
             # E.g. data/mbe_folder/table.csv
             mbe_table_datapath = os.path.join(*splitpath(mbe_table_filepath)[-3:])
             working_mbe_filepath = os.path.join(working_dir, mbe_table_datapath)
