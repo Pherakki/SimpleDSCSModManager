@@ -148,8 +148,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_mods()
         self.profile_handler.save_profile()
         self.thread = QtCore.QThread()
-        # self.worker.releaseGui.connect(self.ui.enable_gui)
-        # self.thread.start()
 
         self.worker = InstallModsWorker(self.output_loc, self.resources_loc, self.game_resources_loc,  self.backups_loc,
                                    self.profile_handler, self.dscstools_handler, self.script_handler, self.threadpool,
