@@ -73,7 +73,10 @@ class generate_patch_mt(QtCore.QObject):
                 subindex = index['script_src']
                 n_subjobs = len(subindex)
                 runner = patch_pool_runner(subindex, self.working_dir, self.resources_dir,
-                                           patch_script_src, self.threadpool, cul_jobs, n_jobs)
+                                           patch_script_src, self.threadpool, cul_jobs, n_jobs,
+                                           self.lockGuiFunc, self.releaseGuiFunc,
+                                           self.messageLogFunc, self.updateMessageLogFunc,
+                                           "patching script", "patching scripts")
                 cul_jobs += n_subjobs
                 self.script_runners.append(runner)
             
@@ -126,7 +129,10 @@ class patch_pool_runner(QtCore.QObject):
     
     def __init__(self, subindex, working_dir, resources_dir, 
                  patcher,
-                 threadpool, cml_job_count, total_jobs):
+                 threadpool, cml_job_count, total_jobs,
+                 lockGuiFunc, releaseGuiFunc,
+                 messageLogFunc, updateMessageLogFunc,
+                 singmessage, plurmessage):
         super().__init__()
         self.subindex = subindex
         self.working_dir = working_dir
@@ -135,15 +141,32 @@ class patch_pool_runner(QtCore.QObject):
         self.threadpool = threadpool
         self.cml_job_count = cml_job_count
         self.total_jobs=total_jobs
+        self.plurmessage = plurmessage
+        self.singmessage = singmessage
+        self.capsingmessage = singmessage[0].upper() + singmessage[1:]
+        
+        self.lockGuiFunc = lockGuiFunc
+        self.releaseGuiFunc = releaseGuiFunc
+        self.messageLogFunc = messageLogFunc
+        self.updateMessageLogFunc = updateMessageLogFunc
         
         self.ncomplete = 0
         self.njobs = 0
         
+        
     @QtCore.pyqtSlot()   
     def run(self):
         try:
+            self.lockGuiFunc()
             self.ncomplete = 0
             self.njobs = len(self.subindex)
+            if not self.cml_job_count and self.njobs:
+                self.messageLogFunc("")
+            
+            if not self.njobs:
+                self.finished.emit()
+                return
+            
             for filepath, rules in self.subindex.items():
                 job = self.patcher(self.working_dir, self.resources_dir, filepath, rules,
                 self.update_messagelog, self.update_finished, self.raise_exception)
@@ -158,7 +181,7 @@ class patch_pool_runner(QtCore.QObject):
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
-        self.updateMessageLogFunc(f"Patching MBE {self.cml_job_count}/{self.total_jobs} [{message}]")
+        self.updateMessageLogFunc(f">>> {self.capsingmessage} {self.cml_job_count + self.ncomplete}/{self.total_jobs} [{message}]")
         
     def raise_exception(self, exception):
         try:
@@ -166,12 +189,12 @@ class patch_pool_runner(QtCore.QObject):
         except ScriptHandlerError as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when patching {e.args[1]}: {e.args[0]}")
+            self.messageLogFunc(f"The following exception occured when {self.singmessage} {e.args[1]}: {e.args[0]}")
             raise e.args[0]
         except Exception as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when patching MBEs: {e}")
+            self.messageLogFunc(f"The following exception occured when {self.plurmessage}: {e}")
             raise e
         finally:
             self.releaseGuiFunc()
