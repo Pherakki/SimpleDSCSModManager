@@ -171,6 +171,7 @@ class uiProfileInteractionWidgets:
         self.delete_profile_button.setFixedWidth(100)
         
         self.profile_selector = ClickEmitComboBox(parentWidget)
+        self.profile_selector.wheelEvent = lambda event: None
         
         
     def lay_out(self):
