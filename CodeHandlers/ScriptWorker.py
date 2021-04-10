@@ -32,7 +32,12 @@ class ScriptWorker(QtCore.QObject):
         self.ncomplete = 0
         try:
             self.lockGuiFunc()
-            scripts = [file for file in os.listdir(self.origin) if self.test(file)]
+            
+            if os.path.exists(self.origin):
+                scripts = [file for file in os.listdir(self.origin) if self.test(file)]
+            else:
+                scripts = []
+                
             self.njobs = len(scripts)
             if len(scripts):
                 self.messageLogFunc("")
