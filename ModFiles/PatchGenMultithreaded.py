@@ -79,12 +79,15 @@ class generate_patch_mt(QtCore.QObject):
             
         cul_jobs = 0
         for index in self.indices:
-            if 'others' in index:
-                n_jobs = sum([len(index['others']) for index in self.indices if 'others' in index])
-                subindex = index['others']
+            if 'other' in index:
+                n_jobs = sum([len(index['other']) for index in self.indices if 'other' in index])
+                subindex = index['other']
                 n_subjobs = len(subindex)
                 runner = patch_pool_runner(subindex, self.working_dir, self.resources_dir,
-                                           patch_others, self.threadpool, cul_jobs, n_jobs)
+                                           patch_others, self.threadpool, cul_jobs, n_jobs,
+                                           self.lockGuiFunc, self.releaseGuiFunc,
+                                           self.messageLogFunc, self.updateMessageLogFunc,
+                                           "copying file", "copying files")
                 cul_jobs += n_subjobs
                 self.other_runners.append(runner)
             
