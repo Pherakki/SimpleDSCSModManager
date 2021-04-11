@@ -37,7 +37,6 @@ class generate_patch_mt(QtCore.QObject):
         self.messageLogFunc = messageLogFunc
         self.updateMessageLogFunc = updateMessageLogFunc
         
-        
         self.mbe_runners = []
         self.script_runners = []
         self.other_runners = []
