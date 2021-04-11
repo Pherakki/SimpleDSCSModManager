@@ -102,7 +102,7 @@ class InstallModsWorkerThread(QtCore.QObject):
         finally:
             self.releaseGui.emit()
             self.finished.emit()
-            
+        
             
 class InstallModsWorker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -192,11 +192,12 @@ class InstallModsWorker(QtCore.QObject):
                                      self.lockGuiFunc, self.releaseGuiFunc)
             gsc = self.script_handler.generate_script_compiler
             self.script_worker = gsc(os.path.abspath(os.path.join(patch_dir, 'script64')), 
-                                os.path.abspath(os.path.join(patch_dir, 'script64')),
-                                self.threadpool,
-                                self.lockGuiFunc, self.releaseGuiFunc,
-                                self.messageLogFunc, self.updateMessageLogFunc,
-                                remove_input=True)
+                                     os.path.abspath(os.path.join(patch_dir, 'script64')),
+                                     self.threadpool,
+                                     self.lockGuiFunc, self.releaseGuiFunc,
+                                     self.messageLogFunc, self.updateMessageLogFunc,
+                                     remove_input=True)
+                
 
             self.worker2 = FinaliseInstallation(dbdsp_dir, patch_dir, mvgl_loc, self.output_loc, self.resources_loc,
                                                 self.game_resources_loc, self.backups_loc, self.dscstools_handler)
@@ -344,7 +345,7 @@ class FinaliseInstallation(QtCore.QObject):
             # Now here's the important bit
             create_backups(self.game_resources_loc, self.backups_loc, self.messageLog.emit)
             shutil.copy2(self.mvgl_loc, os.path.join(self.game_resources_loc, 'DSDBP.steam.mvgl'))
-
+            
             self.messageLog.emit("Mods successfully installed.")
         except Exception as e:
             self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")
