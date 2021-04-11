@@ -128,8 +128,6 @@ class InstallModsWorker(QtCore.QObject):
         self.thread = thread
         self.worker2 = None
         self.thread2 = QtCore.QThread()
-        self.worker3 = None
-        self.thread3 = QtCore.QThread()
         self.br = None
         
         self.indices = None
