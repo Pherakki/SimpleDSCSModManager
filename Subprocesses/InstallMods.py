@@ -483,7 +483,6 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
             for script in index['script_src'].keys():
                 internal_path = os.path.join(*splitpath(script)[3:])
                 if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
-                    print(os.path.join(resources_loc, 'base_scripts', internal_path))
                     missing_scripts.append(internal_path)
             for mbe in index['mbe'].keys():
                 internal_path = os.path.join(*splitpath(mbe)[3:])
