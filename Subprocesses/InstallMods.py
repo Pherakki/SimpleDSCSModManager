@@ -226,8 +226,6 @@ class InstallModsWorker(QtCore.QObject):
             self.worker.emitIndicesAndCache.connect(relay_indices_and_cache)
 
             self.worker.continue_execution.connect(self.br.run)
-            # self.br.finished.connect(self.thread3.start)
-            # self.worker3.finished.connect(lambda: self.datmbe_worker.run())
             self.br.finished.connect(self.patchgen_worker.run)
             self.patchgen_worker.finished.connect(self.datmbe_worker.run)
             self.datmbe_worker.finished.connect(lambda: self.msgmbe_worker.run())
