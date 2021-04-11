@@ -296,33 +296,6 @@ class PatchGenerator(QtCore.QObject):
             self.finished.emit()
             
             
-class PatchGenerator2(QtCore.QObject):
-    finished = QtCore.pyqtSignal()
-    continue_execution = QtCore.pyqtSignal()
-    messageLog = QtCore.pyqtSignal(str)
-    updateMessageLog = QtCore.pyqtSignal(str)
-    lockGui = QtCore.pyqtSignal()
-    releaseGui = QtCore.pyqtSignal()
-    emitIndices = QtCore.pyqtSignal(list)
-    
-    def __init__(self, patch_loc, output_loc, game_resources_loc, resources_loc,
-                 backups_loc, dscstools_handler, script_handler, profile_handler):
-        super().__init__()
-        self.patch_dir = patch_loc
-        self.output_loc = output_loc
-        self.game_resources_loc = game_resources_loc
-        self.resources_loc = resources_loc
-        self.backups_loc = backups_loc
-        self.dscstools_handler = dscstools_handler
-        self.script_handler = script_handler
-        self.profile_handler = profile_handler
-        self.indices = None
-    
-    def run(self):
-        try:
-            self.lockGui.emit()
-            self.messageLog.emit("Generating patch...")
-            generate_patch(self.indices, self.patch_dir, self.resources_loc)
             self.messageLog.emit("Indexing mods...")
             mod_hashes = hash_file_install_orders(indices)
             modcache_location = os.path.join(os.path.split(self.patch_dir)[0], "modcache.json")
@@ -341,7 +314,6 @@ class PatchGenerator2(QtCore.QObject):
             self.emitIndicesAndCache.emit(indices, all_hashes)
             self.continue_execution.emit()
         except Exception as e:
-            raise e
             self.messageLog.emit(f"The following exception occured when indexing mods: {e}")
         finally:
             self.releaseGui.emit()
