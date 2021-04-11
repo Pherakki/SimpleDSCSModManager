@@ -164,30 +164,12 @@ class InstallModsWorker(QtCore.QObject):
             self.worker.lockGui.connect(self.lockGuiFunc)
             self.worker.releaseGui.connect(self.releaseGuiFunc)
             
-            # def relay_indices(lst):
-            #     self.patchgen_worker.indices = lst
-            
-            # self.worker.emitIndices.connect(relay_indices)
-            
             self.br = multithreaded_bootstrap_index_resources(None, self.game_resources_loc, 
                                                               self.resources_loc, self.backups_loc,
                                                               self.dscstools_handler, self.script_handler,
                                                               self.threadpool,
                                                               self.messageLogFunc, self.updateMessageLogFunc,
                                                               self.lockGuiFunc, self.releaseGuiFunc)
-             
-            # self.worker3 = PatchGenerator2(patch_dir, self.output_loc, self.game_resources_loc,
-            #                              self.resources_loc, self.backups_loc,
-            #                              self.dscstools_handler, self.script_handler, self.profile_handler)
-            # self.worker3.moveToThread(self.thread3)
-            # self.thread3.started.connect(self.worker3.run)
-            # self.worker3.finished.connect(self.thread3.quit)
-            # self.worker3.finished.connect(self.worker3.deleteLater)
-            # self.thread3.finished.connect(self.thread3.deleteLater)
-            # self.worker3.messageLog.connect(self.messageLogFunc)
-            # self.worker3.updateMessageLog.connect(self.updateMessageLogFunc)
-            # self.worker3.lockGui.connect(self.lockGuiFunc)
-            # self.worker3.releaseGui.connect(self.releaseGuiFunc)
              
             def relay_indices(lst):
                 print("RELAYING INDICES")
