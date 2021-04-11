@@ -217,6 +217,13 @@ class InstallModsWorker(QtCore.QObject):
             self.worker2.updateMessageLog.connect(self.updateMessageLogFunc)
             self.worker2.lockGui.connect(self.lockGuiFunc)
             self.worker2.releaseGui.connect(self.releaseGuiFunc)
+            
+            def relay_indices_and_cache(indices, cache):
+                self.br.indices = indices
+                self.patchgen_worker.indices = indices
+                self.worker2.cached_files = cache
+                
+            self.worker.emitIndicesAndCache.connect(relay_indices_and_cache)
 
             self.worker.continue_execution.connect(self.br.run)
             # self.br.finished.connect(self.thread3.start)
