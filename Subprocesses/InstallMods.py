@@ -278,24 +278,6 @@ class PatchGenerator(QtCore.QObject):
             if len(indices) == 0:
                 raise Exception("No mods activated.")
             
-            self.emitIndices.emit(indices)
-            self.continue_execution.emit()
-            # return
-            # bootstrap_index_resources(indices, self.game_resources_loc, self.resources_loc, 
-            #                           self.backups_loc,
-            #                           self.dscstools_handler, self.script_handler,
-            #                           self.messageLog.emit, self.updateMessageLog.emit)
-            # self.emitIndices.emit(indices)
-            # self.messageLog.emit("Generating patch...")
-            # generate_patch(indices, self.patch_dir, self.resources_loc)
-            # self.continue_execution.emit()
-        except Exception as e:
-            raise e
-        finally:
-            self.releaseGui.emit()
-            self.finished.emit()
-            
-            
             self.messageLog.emit("Indexing mods...")
             mod_hashes = hash_file_install_orders(indices)
             modcache_location = os.path.join(os.path.split(self.patch_dir)[0], "modcache.json")
