@@ -163,10 +163,6 @@ class InstallModsWorker(QtCore.QObject):
             self.worker.updateMessageLog.connect(self.updateMessageLogFunc)
             self.worker.lockGui.connect(self.lockGuiFunc)
             self.worker.releaseGui.connect(self.releaseGuiFunc)
-
-            self.patchgen_worker = generate_patch_mt(patch_dir, self.resources_loc, self.threadpool, 
-                                                     self.lockGuiFunc, self.releaseGuiFunc,
-                                                     self.messageLogFunc, self.updateMessageLogFunc)
             
             # def relay_indices(lst):
             #     self.patchgen_worker.indices = lst
@@ -199,6 +195,9 @@ class InstallModsWorker(QtCore.QObject):
                 self.patchgen_worker.indices = lst
             self.worker.emitIndices.connect(relay_indices)
              
+            self.patchgen_worker = generate_patch_mt(patch_dir, self.resources_loc, self.threadpool, 
+                                                     self.lockGuiFunc, self.releaseGuiFunc,
+                                                     self.messageLogFunc, self.updateMessageLogFunc)
                 
             # Pack the resources              
             gmp = self.dscstools_handler.generate_mbe_packer
