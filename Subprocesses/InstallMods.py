@@ -319,12 +319,22 @@ class FinaliseInstallation(QtCore.QObject):
         self.resources_loc = resources_loc
         self.game_resources_loc = game_resources_loc
         self.backups_loc = backups_loc
+        
+        self.cached_files = None
+        self.cache_dir = os.path.join(os.path.split(patch_dir)[0], "cache", "modfiles")
+        self.cache_record_filepath = os.path.join(os.path.split(patch_dir)[0], "modcache.json")
 
         self.dscstools_handler = dscstools_handler
 
     def run(self):
         try:
             self.lockGui.emit()
+            
+            self.messageLog.emit("Updating cache...")
+            shutil.copytree(self.patch_dir, self.cache_dir, dirs_exist_ok=True)
+            with open(self.cache_record_filepath, 'w') as F:
+                json.dump(self.cached_files, F, indent=4)
+            
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
 
             dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
