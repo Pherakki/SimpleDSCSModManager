@@ -229,7 +229,7 @@ class InstallModsWorker(QtCore.QObject):
             # self.br.finished.connect(self.thread3.start)
             # self.worker3.finished.connect(lambda: self.datmbe_worker.run())
             self.br.finished.connect(self.patchgen_worker.run)
-            self.patchgen_worker.finished.connect(lambda: self.datmbe_worker.run())
+            self.patchgen_worker.finished.connect(self.datmbe_worker.run)
             self.datmbe_worker.finished.connect(lambda: self.msgmbe_worker.run())
             self.msgmbe_worker.finished.connect(lambda: self.texmbe_worker.run())
             self.texmbe_worker.finished.connect(lambda: self.script_worker.run())
