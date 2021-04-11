@@ -10,6 +10,7 @@ from ModFiles.PatchGen import generate_patch
 from ModFiles.PatchGenMultithreaded import generate_patch_mt
 from Utils.MBE import mbe_batch_pack, mbe_batch_unpack
 from Utils.Path import splitpath
+from ModFiles.Hashing import hash_file_install_orders, sort_hashes, add_cache_to_index, cull_index
 
 
 class InstallModsWorkerThread(QtCore.QObject):
@@ -263,7 +264,7 @@ class PatchGenerator(QtCore.QObject):
     updateMessageLog = QtCore.pyqtSignal(str)
     lockGui = QtCore.pyqtSignal()
     releaseGui = QtCore.pyqtSignal()
-    emitIndices = QtCore.pyqtSignal(list)
+    emitIndicesAndCache = QtCore.pyqtSignal(list, dict)
     
     def __init__(self, patch_loc, output_loc, game_resources_loc, resources_loc,
                  backups_loc, dscstools_handler, script_handler, profile_handler):
@@ -334,9 +335,26 @@ class PatchGenerator2(QtCore.QObject):
             self.lockGui.emit()
             self.messageLog.emit("Generating patch...")
             generate_patch(self.indices, self.patch_dir, self.resources_loc)
+            self.messageLog.emit("Indexing mods...")
+            mod_hashes = hash_file_install_orders(indices)
+            modcache_location = os.path.join(os.path.split(self.patch_dir)[0], "modcache.json")
+            if os.path.exists(modcache_location):
+                with open(modcache_location, 'r') as F:
+                    cached_hashes = json.load(F)
+                    shared_hashes = sort_hashes(mod_hashes, cached_hashes)
+                    print(len(shared_hashes))
+                    shared_hashes = add_cache_to_index(indices, shared_hashes)
+                    print(len(shared_hashes))
+                    cull_index(indices[:-1], shared_hashes)
+                    all_hashes = {**cached_hashes, **mod_hashes}
+            else:
+                all_hashes = {}
+                
+            self.emitIndicesAndCache.emit(indices, all_hashes)
             self.continue_execution.emit()
         except Exception as e:
             raise e
+            self.messageLog.emit(f"The following exception occured when indexing mods: {e}")
         finally:
             self.releaseGui.emit()
             self.finished.emit()
