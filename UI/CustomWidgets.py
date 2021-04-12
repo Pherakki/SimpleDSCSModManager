@@ -50,6 +50,8 @@ class DragDropTreeView(QtWidgets.QTreeView):
         self.style = DragDropTreeViewStyle()
         self.setStyle(self.style)
         
+        self.update_mods_func = None
+        
   
     def hook_registry_function(self, func):
         self.register_mod_from_path = func
@@ -119,6 +121,13 @@ class DragDropTreeView(QtWidgets.QTreeView):
         if e.button() == Qt.LeftButton:
             self.dragdrop_startrow = self.indexAt(e.pos()).row()
         super().mousePressEvent(e)
+        
+    def selectionChanged(self, selected, deselected):
+        super().selectionChanged(selected, deselected)
+        index = self.selectedIndexes()
+        if len(index) and self.update_mods_func is not None:
+            row = index[0].row()
+            self.update_mods_func(self.display_data[row])
         
     #########
     # LOGIC #
