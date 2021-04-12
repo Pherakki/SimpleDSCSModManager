@@ -311,6 +311,7 @@ class FinaliseInstallation(QtCore.QObject):
         self.game_resources_loc = game_resources_loc
         self.backups_loc = backups_loc
         
+        self.shared_cache = None
         self.cached_files = None
         self.cache_dir = os.path.join(os.path.split(patch_dir)[0], "cache", "modfiles")
         self.cache_record_filepath = os.path.join(os.path.split(patch_dir)[0], "modcache.json")
@@ -322,6 +323,7 @@ class FinaliseInstallation(QtCore.QObject):
             self.lockGui.emit()
             
             self.messageLog.emit("Updating cache...")
+            # Replace this with only copying updated files...
             shutil.copytree(self.patch_dir, self.cache_dir, dirs_exist_ok=True)
             with open(self.cache_record_filepath, 'w') as F:
                 json.dump(self.cached_files, F, indent=4)
