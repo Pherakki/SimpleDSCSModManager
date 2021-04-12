@@ -63,7 +63,6 @@ def add_cache_to_index(indices, files_to_add):
         new_local_filepath = local_filepath
         for parser in [mbe_parse, script_parse]:
             new_local_filepath = parser(new_local_filepath)
-        print(local_filepath, new_local_filepath)
         filepath = os.path.join("output", "cache", "modfiles", new_local_filepath)
         if os.path.exists(filepath):
             returned_files.append(local_filepath)
