@@ -13,6 +13,7 @@ class ModFile:
         self.author = "-"
         self.version = "-"
         self.category = "-"
+        self.description = ""
         
     def init_metadata(self, iostream):
         data = json.load(iostream)
@@ -20,6 +21,7 @@ class ModFile:
         self.author = data.get('Author', "-")
         self.version = data.get('Version', "-")
         self.category = data.get('Category', "-")
+        self.description = data.get('Description', "")
         
     @property
     def metadata(self):
