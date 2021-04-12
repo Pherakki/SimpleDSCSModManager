@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import subprocess
 import sys
 import webbrowser
 
@@ -82,6 +83,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                  self.decompile_scripts, self.compile_scripts)
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
+        self.ui.hook_game_launch_button(self.launch_game)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
         self.ui.hook_update_mod_info_window(self.update_mod_info_window)
         self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, 
@@ -97,6 +99,10 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def game_resources_loc(self):
         return os.path.normpath(os.path.join(self.game_loc, "resources"))
+    
+    @property
+    def game_executable_loc(self):
+        return os.path.normpath(os.path.join(self.game_loc, "app_digister", "Digimon Story CS.exe"))
 
     @property
     def game_loc(self):
@@ -105,6 +111,10 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def backups_loc(self):
         return os.path.join(self.game_resources_loc, 'backup')
+    
+    def launch_game(self):
+        subprocess.run([self.game_executable_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.game_loc)
+
     def update_mod_info_window(self, display_info):
         mod = self.mods[display_info[-1]]
         info = [mod.name, mod.filename, mod.author, mod.version, mod.description]

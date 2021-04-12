@@ -39,6 +39,7 @@ class uiMainWidget:
         self.hook_delete_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
         self.hook_update_mod_info_window = self.main_area.mod_interaction_area.mods_display_area.update_mod_info_window
         self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
+        self.hook_game_launch_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_game_launch_button
         self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
         self.log = self.logging_area.logview.log
@@ -272,15 +273,21 @@ class uiModInstallationWidgets:
         
         self.install_mods_button = QtWidgets.QPushButton("Install Mods", parentWidget)
         self.install_mods_button.setFixedWidth(120)
+        self.launch_game_button = QtWidgets.QPushButton("Launch Game", parentWidget)
+        self.launch_game_button.setFixedWidth(120)
         self.restore_backups_button = QtWidgets.QPushButton("Restore Backups", parentWidget)
         self.restore_backups_button.setFixedWidth(120)
         
     def lay_out(self):
         self.layout.addWidget(self.install_mods_button, 0, 0)
-        self.layout.addWidget(self.restore_backups_button, 0, 1)
+        self.layout.addWidget(self.launch_game_button, 0, 1)
+        self.layout.addWidget(self.restore_backups_button, 0, 2)
         
     def hook_install_button(self, func):
         self.install_mods_button.clicked.connect(func)
+        
+    def hook_game_launch_button(self, func):
+        self.launch_game_button.clicked.connect(func)
         
     def hook_backup_button(self, func):
         self.restore_backups_button.clicked.connect(func)
@@ -293,6 +300,7 @@ class uiModInstallationWidgets:
         
     def toggle_active(self, active):
         self.install_mods_button.setEnabled(active)
+        self.launch_game_button.setEnabled(active)
         self.restore_backups_button.setEnabled(active)
         
 class uiLogHistory():
@@ -365,8 +373,7 @@ class uiActionTabs:
         self.configTab.toggle_active(active)
         self.extractTab.toggle_active(active)
         self.conflictsTab.toggle_active(active)
-
-
+    
 class uiConfigTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
@@ -392,6 +399,7 @@ class uiConfigTab(QtWidgets.QWidget):
         self.dscstools_buttons_layout = QtWidgets.QGridLayout()
         self.update_dscstools_button = QtWidgets.QPushButton("Update DSCSTools", parentWidget)
         self.update_dscstools_button.setFixedWidth(120)
+        self.update_dscstools_button.setEnabled(False)
         
     def lay_out(self):
         self.dscstools_buttons_layout.addWidget(self.update_dscstools_button, 0, 0)
@@ -416,8 +424,6 @@ class uiConfigTab(QtWidgets.QWidget):
     def toggle_active(self, active):
         self.game_location_textbox.setEnabled(active)
         self.game_location_button.setEnabled(active)
-        self.update_dscstools_button.setEnabled(active)
-
         # self.update_dscstools_button.setEnabled(active)
         
 class ModInfoRegion:
