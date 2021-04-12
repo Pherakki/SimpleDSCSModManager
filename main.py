@@ -83,6 +83,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_mod_registry(self.register_mod)
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
+        self.ui.hook_update_mod_info_window(self.update_mod_info_window)
         self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, 
                                                             self.backups_loc, self.ui.log)))
         
@@ -104,6 +105,11 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def backups_loc(self):
         return os.path.join(self.game_resources_loc, 'backup')
+    def update_mod_info_window(self, display_info):
+        mod = self.mods[display_info[-1]]
+        info = [mod.name, mod.filename, mod.author, mod.version, mod.description]
+        info = ['[Unknown]' if item == '-' else item for item in info]
+        self.ui.set_mod_info(*info)
 
     def register_mod(self, mod_path):
         """

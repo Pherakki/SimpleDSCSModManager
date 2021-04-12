@@ -37,11 +37,14 @@ class uiMainWidget:
         self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
         self.hook_mod_registry = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
         self.hook_delete_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
+        self.hook_update_mod_info_window = self.main_area.mod_interaction_area.mods_display_area.update_mod_info_window
         self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
         self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
         self.log = self.logging_area.logview.log
         self.updateLog = self.logging_area.logview.updateLog
+        
+        self.set_mod_info = self.main_area.action_tabs.configTab.modinfo_region.setModInfo
         
     def enable_gui(self):
         self.toggle_active_gui(True)
@@ -256,6 +259,9 @@ class uiModsDisplay:
     def hook_delete_mod(self, func):
         self.deleteModFunction = func
         
+    def update_mod_info_window(self, func):
+        self.mods_display.update_mods_func = func
+        
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
         self.define(parentWidget)
@@ -381,6 +387,8 @@ class uiConfigTab(QtWidgets.QWidget):
         self.game_location_layout.addWidget(self.game_location_button, 0, 2)
         self.game_location_layout.setSpacing(0)
         
+        self.modinfo_region= ModInfoRegion(parentWidget)
+        
         self.dscstools_buttons_layout = QtWidgets.QGridLayout()
         self.update_dscstools_button = QtWidgets.QPushButton("Update DSCSTools", parentWidget)
         self.update_dscstools_button.setFixedWidth(120)
@@ -389,6 +397,7 @@ class uiConfigTab(QtWidgets.QWidget):
         self.dscstools_buttons_layout.addWidget(self.update_dscstools_button, 0, 0)
         self.layout.addLayout(self.game_location_layout, 0, 0)
         self.layout.addLayout(self.dscstools_buttons_layout, 1, 0)
+        self.layout.addLayout(self.modinfo_region.layout, 2, 0)
         self.layout.setRowStretch(0, 0)
         self.layout.setRowStretch(1, 0)
         self.layout.setRowStretch(2, 1)
@@ -409,6 +418,57 @@ class uiConfigTab(QtWidgets.QWidget):
         self.game_location_button.setEnabled(active)
         self.update_dscstools_button.setEnabled(active)
 
+        # self.update_dscstools_button.setEnabled(active)
+        
+class ModInfoRegion:
+    def __init__(self, parentWidget):
+        super().__init__()
+        self.define(parentWidget)
+        self.lay_out()
+        
+    def define(self, parentWidget):
+        self.layout = QtWidgets.QGridLayout()
+        
+        self.modname_label = QtWidgets.QLabel("Mod Name: [Unknown]", parentWidget)
+        self.modfolder_label = QtWidgets.QLabel("Mod Folder: [Unknown]", parentWidget)
+        self.modauthors_label = QtWidgets.QLabel("Author(s): [Unknown]", parentWidget)
+        self.modversion_label = QtWidgets.QLabel("Version: [Unknown]", parentWidget)
+        self.moddesc_box = QtWidgets.QTextEdit("", parentWidget)
+        self.moddesc_box.setReadOnly(True)
+        
+        
+    def lay_out(self):
+        self.layout.addWidget(self.modname_label, 0, 0)
+        self.layout.setRowStretch(0, 0)
+        self.layout.addWidget(self.modfolder_label, 1, 0)
+        self.layout.setRowStretch(1, 0)
+        self.layout.addWidget(self.modauthors_label, 2, 0)
+        self.layout.setRowStretch(2, 0)
+        self.layout.addWidget(self.modversion_label, 3, 0)
+        self.layout.setRowStretch(3, 0)
+        self.layout.addWidget(self.moddesc_box, 4, 0)
+        
+    def setModName(self, string):
+        self.modname_label.setText(f"Mod Name: {string}")
+        
+    def setModFolder(self, string):
+        self.modfolder_label.setText(f"Mod Folder: {string}")
+        
+    def setModAuthor(self, string):
+        self.modauthors_label.setText(f"Author(s): {string}")
+        
+    def setModVersion(self, string):
+        self.modversion_label.setText(f"Version: {string}")
+        
+    def setModDesc(self, string):
+        self.moddesc_box.setText(string)
+        
+    def setModInfo(self, name, folder, author, version, desc):
+        self.setModName(name)
+        self.setModFolder(folder)
+        self.setModAuthor(author)
+        self.setModVersion(version)
+        self.setModDesc(desc)
 
 class uiExtractTab(QtWidgets.QScrollArea):
     def __init__(self, parentWidget):
