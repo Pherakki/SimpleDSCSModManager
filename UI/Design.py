@@ -321,21 +321,26 @@ class uiLogHistory():
         self.layout.addWidget(self.logview, 0, 0)
         
     def log(self, message):
-        time_now = datetime.now()
-        adj_message = f"[{time_now.hour:02}:{time_now.minute:02}] {message}"
+        adj_message = self.timestamp_string(message)
         self.logview.addItem(adj_message)
-        if self.logview.count() >= self.max_items:
-            for i in range(self.logview.count() - self.max_items + 1):
-                self.logview.takeItem(0)
+        self.cull_messages()
+        self.logview.scrollToBottom()
         self.logview.scrollToBottom()
         
     def updateLog(self, message):
-        time_now = datetime.now()
-        adj_message = f"[{time_now.hour:02}:{time_now.minute:02}] {message}"
+        adj_message = self.timestamp_string(message)
         self.logview.takeItem(self.logview.count() - 1)
         self.logview.addItem(adj_message)
     
-        
+    def timestamp_string(self, string):
+        time_now = datetime.now()
+        return f"[{time_now.hour:02}:{time_now.minute:02}] {string}"
+    
+    def cull_messages(self):
+        if self.logview.count() >= self.max_items:
+            for i in range(self.logview.count() - self.max_items + 1):
+                self.logview.takeItem(0)
+                
 ##########################
 # Action Tabs Containers #
 ##########################
