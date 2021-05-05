@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 
-from .CustomWidgets import ClickEmitComboBox, DragDropTreeView
+from .CustomWidgets import ClickEmitComboBox, DragDropTreeView, LinkItem
         
 ###############################
 # Top-Level Widget Containers #
@@ -43,6 +43,7 @@ class uiMainWidget:
         self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
         self.log = self.logging_area.logview.log
+        self.loglink = self.logging_area.logview.loglink
         self.updateLog = self.logging_area.logview.updateLog
         
         self.set_mod_info = self.main_area.action_tabs.configTab.modinfo_region.setModInfo
@@ -325,6 +326,17 @@ class uiLogHistory():
         self.logview.addItem(adj_message)
         self.cull_messages()
         self.logview.scrollToBottom()
+        
+    def loglink(self, message):
+        adj_message = self.timestamp_string(message)
+        linkwidget = LinkItem(adj_message)
+        dummyItem = QtWidgets.QListWidgetItem(self.logview)
+        dummyItem.setSizeHint(QtCore.QSize(0, 18))
+        
+        self.logview.addItem(dummyItem)
+        self.logview.setItemWidget(dummyItem, linkwidget)
+        
+        self.cull_messages()
         self.logview.scrollToBottom()
         
     def updateLog(self, message):
