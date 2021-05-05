@@ -117,7 +117,7 @@ class MBERunnable(QtCore.QRunnable):
             # This should be a signal, but first you'll need to implement a
             # thread-safe messaging queue to prevent this overwriting the
             # error messages from the exception
-            self.update_messagelog(self.filepath)
+            self.update_messagelog(self.archive)
             self.update_finished()
         except Exception as e:
             self.signals.exception.emit(ScriptHandlerError(e, self.archive))
