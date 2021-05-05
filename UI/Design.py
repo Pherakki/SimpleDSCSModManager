@@ -331,6 +331,7 @@ class uiLogHistory():
         adj_message = self.timestamp_string(message)
         self.logview.takeItem(self.logview.count() - 1)
         self.logview.addItem(adj_message)
+        self.logview.scrollToBottom()
     
     def timestamp_string(self, string):
         time_now = datetime.now()
