@@ -22,9 +22,9 @@ from UI.Design import uiMainWidget
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
-
+patreon_addr = r'https://www.patreon.com/sydmontague'
 def open_patreon():
-    webbrowser.open_new_tab(r'https://www.patreon.com/sydmontague')
+    webbrowser.open_new_tab(patreon_addr)
 
   
 class MainWindow(QtWidgets.QMainWindow): 
@@ -93,7 +93,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.profile_handler.init_profiles()
         self.threadpool = QtCore.QThreadPool()
         self.update_mods()
+        
         self.ui.log("SimpleDSCSModManager initialised.")
+        self.ui.loglink(f"""Enjoying Cyber Sleuth modding? Consider supporting more projects like this on <a href="{patreon_addr}">Patreon</a>!""")
 
 
     @property
