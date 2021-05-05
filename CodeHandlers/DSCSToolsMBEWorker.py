@@ -113,8 +113,7 @@ class MBERunnable(QtCore.QRunnable):
     @QtCore.pyqtSlot()
     def run(self):
         try:
-            self.method(os.path.join(self.origin, self.archive),
-                        os.path.join(self.destination, self.archive))
+            self.method(self.archive, self.origin, self.destination)
             # This should be a signal, but first you'll need to implement a
             # thread-safe messaging queue to prevent this overwriting the
             # error messages from the exception
