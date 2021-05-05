@@ -1,6 +1,20 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
+class LinkItem(QtWidgets.QWidget):
+    """For using hyperlinks in e.g. a ListWidget item"""
+    def __init__(self, msg):
+        super().__init__()
+        
+        self.label=QtWidgets.QLabel(self)
+        self.label.setText(msg)
+        self.label.openExternalLinks()
+        
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.setContentsMargins(3, 0, 0, 0)
+        self.layout.addWidget(self.label)
+        self.setLayout(self.layout)
+
 class DragDropTreeViewStyle(QtWidgets.QProxyStyle):
     """
     Assistance from https://apocalyptech.com/linux/qt/qtableview/
