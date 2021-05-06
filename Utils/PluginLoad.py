@@ -14,8 +14,8 @@ def load_plugins_in(directory):
         module_name = ".".join([*splitpath(directory), file])
         importlib.import_module(module_name)
         module = sys.modules[module_name]
-        module_classes = [m[0] for m in inspect.getmembers(module, inspect.isclass) if m[1].__module__ == module.__name__]
-        results.extend([getattr(module, class_) for class_ in module_classes])
+        classes_in_module = [m[0] for m in inspect.getmembers(module, inspect.isclass) if m[1].__module__ == module.__name__]
+        results.extend([getattr(module, class_) for class_ in classes_in_module])
     return results
 
 def sort_plugins(members, ordering):
