@@ -29,4 +29,15 @@ def get_plugin_sort_order(directory):
         return []
 
 def sort_plugins(members, ordering):
-    pass
+    member_names = [member.__name__ for member in members]
+    
+    sortable_members = []
+    unsortable_members = []
+    for i, member_name in enumerate(member_names):
+        if member_name in ordering:
+            sortable_members.append((members[i], ordering.index(member_name)))
+        else:
+            unsortable_members.append((members[i], member_name))
+    
+    return [*[item[0] for item in sorted(sortable_members, lambda x: x[1])], 
+            *[item[0] for item in sorted(unsortable_members, lambda x: x[1])]]
