@@ -5,7 +5,7 @@ from Utils.PluginLoad import load_plugins_in
 
 filetype_plugins = load_plugins_in(os.path.join('plugins', 'filetypes'))
     
-class Other:
+class UnhandledFiletype:
     @staticmethod
     def checkIfMatch(path, filename):
         if os.path.isfile(os.path.join(path, filename)):
@@ -16,7 +16,7 @@ class Other:
             rule = 'overwrite'
         return 'other', os.path.join(path, filename), {filename: rule}
 
-filetypes = [*filetype_plugins, Other]
+filetypes = [*filetype_plugins, UnhandledFiletype]
 
 def generate_mod_index(modpath, rules):
     # Register .mbe records + rules,
