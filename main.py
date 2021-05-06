@@ -35,7 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.window = QtWidgets.QWidget() 
         self.setWindowTitle("SimpleDSCSModManager")
         #self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'logo.png'))
-        self.setCentralWidget(self.window) 
+        self.setCentralWidget(self.window)
         self.ui = uiMainWidget(self)
         self.window.setLayout(self.ui.layout)
         
