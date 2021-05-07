@@ -6,15 +6,18 @@ from Utils.PluginLoad import load_plugins_in
 filetype_plugins = load_plugins_in(os.path.join('plugins', 'filetypes'))
     
 class UnhandledFiletype:
+    group = 'other'
+    
     @staticmethod
     def checkIfMatch(path, filename):
         if os.path.isfile(os.path.join(path, filename)):
             return True
     
-    def produce_index(path, filename, rule):
+    @classmethod
+    def produce_index(cls, path, filename, rule):
         if rule is None:
             rule = 'overwrite'
-        return 'other', os.path.join(path, filename), {filename: rule}
+        return cls.group, os.path.join(path, filename), {filename: rule}
 
 filetypes = [*filetype_plugins, UnhandledFiletype]
 

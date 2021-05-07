@@ -1,6 +1,8 @@
 import os
 
 class UncompiledScript:
+    group = 'script_src'
+    
     @staticmethod
     def checkIfMatch(path, filename):
         if os.path.split(path)[-1] == 'script64' and os.path.splitext(filename)[-1] == '.txt':
@@ -8,8 +10,8 @@ class UncompiledScript:
         else:
             return False
         
-    @staticmethod
-    def produce_index(path, filename, rule):
+    @classmethod
+    def produce_index(cls, path, filename, rule):
         if rule is None:
             rule = 'squirrel_overwrite'
-        return 'script_src', os.path.join(path, filename), {filename: rule}
+        return cls.group, os.path.join(path, filename), {filename: rule}

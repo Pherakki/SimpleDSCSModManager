@@ -6,6 +6,8 @@ from ..Utils.Path import splitpath
 id_lengths = {'mon_design_para.mbe\Monster.csv': 2}
 
 class MBE_table:
+    group = 'mbe'
+    
     @staticmethod
     def checkIfMatch(path, filename):
         if os.path.split(path)[-1].split('.')[-1] == 'mbe' and os.path.splitext(filename)[-1] == '.csv':
@@ -13,8 +15,8 @@ class MBE_table:
         else:
             return False
         
-    @staticmethod
-    def produce_index(path, filename, rule):
+    @classmethod
+    def produce_index(cls, path, filename, rule):
         index = []
         if rule is None:
             rule = 'mbe_overwrite'
@@ -26,4 +28,4 @@ class MBE_table:
             for line in csvreader:
                 record_id = [item.strip() for item in line[:id_len]]
                 index.append(record_id)
-        return 'mbe', os.path.join(path, filename), {tuple(idx): rule for idx in index}
+        return cls.group, os.path.join(path, filename), {tuple(idx): rule for idx in index}
