@@ -1,6 +1,7 @@
 import csv
 import os
 from Utils.PluginLoad import load_plugins_in
+from Utils.Path import splitpath
 
 
 filetype_plugins = load_plugins_in(os.path.join('plugins', 'filetypes'))
@@ -39,7 +40,3 @@ def generate_mod_index(modpath, rules):
                 
                 
     return retval
-        
-def splitpath(path):
-    return os.path.normpath(path).split(os.path.sep)
-
