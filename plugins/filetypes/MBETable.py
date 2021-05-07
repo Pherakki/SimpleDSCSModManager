@@ -1,5 +1,6 @@
 import csv
 import os
+from ..Utils.Path import splitpath
 
 
 id_lengths = {'mon_design_para.mbe\Monster.csv': 2}
