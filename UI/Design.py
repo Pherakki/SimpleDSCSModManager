@@ -457,8 +457,8 @@ class ModInfoRegion:
         self.modfolder_label = QtWidgets.QLabel("Mod Folder: [Unknown]", parentWidget)
         self.modauthors_label = QtWidgets.QLabel("Author(s): [Unknown]", parentWidget)
         self.modversion_label = QtWidgets.QLabel("Version: [Unknown]", parentWidget)
-        self.moddesc_box = QtWidgets.QTextEdit("", parentWidget)
-        self.moddesc_box.setReadOnly(True)
+        self.moddesc_box = QtWidgets.QTextBrowser(parentWidget) # QtWidgets.QTextEdit("", parentWidget)
+        # self.moddesc_box.setReadOnly(True)
         
         
     def lay_out(self):
