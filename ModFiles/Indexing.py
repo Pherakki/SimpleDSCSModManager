@@ -26,7 +26,7 @@ def generate_mod_index(modpath, rules):
     # Register .mbe records + rules,
     # Register .hca files + rules,
     # Register all other files + rules
-    retval = {'mbe': {}, 'hca': {}, 'other': {}, 'script_src': {}}
+    retval = {filetype.group: {} for filetype in filetypes}
     for path, directories, files in os.walk(os.path.relpath(modpath)):
         for file in files:
             for filetype in filetypes:
