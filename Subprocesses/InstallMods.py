@@ -80,7 +80,6 @@ class InstallModsWorker(QtCore.QObject):
                                                               self.lockGuiFunc, self.releaseGuiFunc)
              
             rules = get_rule_plugins()
-            print(rules)
             self.patchgen_worker = generate_patch_mt(rules,
                                                      patch_dir, self.resources_loc, self.threadpool, 
                                                      self.lockGuiFunc, self.releaseGuiFunc,
