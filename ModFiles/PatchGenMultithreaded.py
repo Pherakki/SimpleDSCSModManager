@@ -217,7 +217,7 @@ class mbe_patcher(QtCore.QRunnable):
             self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
-            self.exception.emit(ScriptHandlerError(e, self.archive))
+            self.raise_exception(ScriptHandlerError(e, self.archive))
         
 ##########
 # SCRIPT # 
@@ -264,7 +264,7 @@ class patch_script_src(QtCore.QRunnable):
             self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
-            self.exception.emit(ScriptHandlerError(e, self.archive))
+            self.raise_exception(ScriptHandlerError(e, self.archive))
 
 
 ########
@@ -306,7 +306,7 @@ class patch_others(QtCore.QRunnable):
             self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
-            self.exception.emit(ScriptHandlerError(e, self.archive))
+            self.raise_exception(ScriptHandlerError(e, self.archive))
             
 id_lengths = {'mon_design_para.mbe\Monster.csv': 2}
 known_duplicates = [(('107', '1'), 'mon_design_para.mbe\Monster.csv')]            
@@ -337,5 +337,5 @@ def dict_to_mbetable(filepath, header, result):
         for key, value in result.items():
             csvwriter.writerow(([*key, *value]))
             
-class ScriptHandlerError:
+class ScriptHandlerError(Exception):
     pass
