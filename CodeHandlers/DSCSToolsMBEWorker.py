@@ -16,7 +16,6 @@ class MBEWorker(QtCore.QObject):
         self.origin = origin
         self.destination = destination
         self.replace_mode = origin == destination
-        print(origin, destination, self.replace_mode)
         self.method = method
         self.test = test
 
