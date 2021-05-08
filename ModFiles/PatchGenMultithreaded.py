@@ -8,7 +8,26 @@ from .ScriptPatching import patch_scripts
 from Utils.Multithreading import PoolChain
 from Utils.Path import splitpath
 
+# These functions need to be removed
+def mberecord_overwrite(record_id, mbe_data, mod_mbe_data):
+    mbe_data[record_id] = mod_mbe_data[record_id]
     
+def mberecord_join(record_id, mbe_data, mod_mbe_data):
+    new_data = [elem for elem in mod_mbe_data[record_id] if elem not in mbe_data[record_id]]
+    mbe_data[record_id].extend(new_data)
+
+def scriptfunction_overwrite(working_script_filepath, script_filepath):
+    wsd, wdf = os.path.split(working_script_filepath)
+    patch_filepath = os.path.join(wsd, '_' + wdf)
+    patch_scripts(working_script_filepath, script_filepath, patch_filepath)
+    os.remove(working_script_filepath)
+    os.rename(patch_filepath, working_script_filepath)
+    
+
+def overwrite(working_filepath, other_filepath):
+    shutil.copy2(other_filepath, working_filepath)
+    
+
     
 
 class generate_patch_mt(QtCore.QObject):
@@ -208,7 +227,7 @@ class mbe_patcher(QtCore.QRunnable):
             _, mod_mbe_data = mbetable_to_dict(mbe_table_filepath)
             for record_id, record_rule in mbe_rules.items():
                 # record_rule(record_id, mbe_data)
-                mbe_data[record_id] = mod_mbe_data[record_id]
+                mberecord_overwrite(record_id, mbe_data, mod_mbe_data)
             dict_to_mbetable(working_mbe_filepath, header, mbe_data)
             
             self.update_messagelog(local_filepath)
@@ -244,8 +263,6 @@ class patch_script_src(QtCore.QRunnable):
             local_filepath = os.path.join(*splitpath(script_filepath)[3:])
             
             working_script_filepath = os.path.join(working_dir, local_filepath)
-            wsd, wdf = os.path.split(working_script_filepath)
-            patch_filepath = os.path.join(wsd, '_' + wdf)
             
             if not os.path.exists(working_script_filepath):
                 working_script_path = os.path.split(working_script_filepath)[0] + os.path.sep
@@ -253,9 +270,8 @@ class patch_script_src(QtCore.QRunnable):
                 resource_path = os.path.join(resources_dir, 'base_scripts', local_filepath)
                 shutil.copy2(resource_path, working_script_filepath)
                     
-            patch_scripts(working_script_filepath, script_filepath, patch_filepath)
-            os.remove(working_script_filepath)
-            os.rename(patch_filepath, working_script_filepath)
+            # I.e. execute rule
+            scriptfunction_overwrite(working_script_filepath, script_filepath)
             
             self.update_messagelog(local_filepath)
             self.update_finished()
@@ -293,7 +309,7 @@ class patch_others(QtCore.QRunnable):
             if not os.path.exists(working_path):
                 os.makedirs(working_path, exist_ok=True)
             # Only if 'overwrite' rule...
-            shutil.copy2(other_filepath, working_filepath)
+            overwrite(working_filepath, other_filepath)
             
             self.update_messagelog(local_filepath)
             self.update_finished()
