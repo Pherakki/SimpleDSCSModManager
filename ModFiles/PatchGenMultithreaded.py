@@ -27,9 +27,7 @@ class generate_patch_mt(QtCore.QObject):
         self.messageLogFunc = messageLogFunc
         self.updateMessageLogFunc = updateMessageLogFunc
         
-        self.mbe_runners = []
-        self.script_runners = []
-        self.other_runners = []
+        self.runners = []
         
     def run(self):
         self.messageLogFunc("Generating patch...")
@@ -45,7 +43,7 @@ class generate_patch_mt(QtCore.QObject):
                                            self.messageLogFunc, self.updateMessageLogFunc,
                                            "patching MBE", "patching MBEs")
                 cul_jobs += n_subjobs
-                self.mbe_runners.append(runner)
+                self.runners.append(runner)
             
         cul_jobs = 0
         for index in self.indices:
@@ -59,7 +57,7 @@ class generate_patch_mt(QtCore.QObject):
                                            self.messageLogFunc, self.updateMessageLogFunc,
                                            "patching script", "patching scripts")
                 cul_jobs += n_subjobs
-                self.script_runners.append(runner)
+                self.runners.append(runner)
             
         cul_jobs = 0
         for index in self.indices:
@@ -73,10 +71,10 @@ class generate_patch_mt(QtCore.QObject):
                                            self.messageLogFunc, self.updateMessageLogFunc,
                                            "copying file", "copying files")
                 cul_jobs += n_subjobs
-                self.other_runners.append(runner)
+                self.runners.append(runner)
             
         # *[*runnerlist for runnerlist in list_of_runnerlists]
-        self.poolchain = PoolChain(*self.mbe_runners, *self.script_runners, *self.other_runners)
+        self.poolchain = PoolChain(*self.runners)
         self.poolchain.finished.connect(self.finished.emit)
         self.poolchain.run()
 
