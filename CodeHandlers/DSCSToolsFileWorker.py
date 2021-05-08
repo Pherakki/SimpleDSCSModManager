@@ -6,6 +6,7 @@ from .DSCSToolsArchiveWorker import ArchiveRunnable, ScriptHandlerError
 
 # Make DumpArchiveWorker a subclass of this which passes the archive info to the file_list...
 class DumpFileWorker(QtCore.QObject):
+    updateMessageLog = QtCore.pyqtSignal(str)
     finished = QtCore.pyqtSignal()
 
     def __init__(self, file_list, destination, threadpool,
@@ -21,6 +22,8 @@ class DumpFileWorker(QtCore.QObject):
         self.updateMessageLogFunc = updateMessageLog
         self.lockGuiFunc = lockGui
         self.releaseGuiFunc = releaseGui
+        
+        self.updateMessageLog.connect(updateMessageLog)
 
     def run(self):
         self.ncomplete = 0
@@ -48,7 +51,7 @@ class DumpFileWorker(QtCore.QObject):
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
-        self.updateMessageLogFunc(f"Extracting file {self.ncomplete}/{self.njobs} [{message}]")
+        self.updateMessageLog.emit(f"Extracting file {self.ncomplete}/{self.njobs} [{message}]")
         
     def raise_exception(self, exception):
         try:

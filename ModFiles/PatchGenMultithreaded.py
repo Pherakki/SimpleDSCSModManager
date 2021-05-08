@@ -87,6 +87,7 @@ class generate_patch_mt(QtCore.QObject):
             
                     
 class patch_pool_runner(QtCore.QObject):
+    updateMessageLog = QtCore.pyqtSignal(str)
     finished = QtCore.pyqtSignal()
     
     def __init__(self, subindex, working_dir, resources_dir, 
@@ -111,6 +112,8 @@ class patch_pool_runner(QtCore.QObject):
         self.releaseGuiFunc = releaseGuiFunc
         self.messageLogFunc = messageLogFunc
         self.updateMessageLogFunc = updateMessageLogFunc
+        
+        self.updateMessageLog.connect(self.updateMessageLogFunc)
         
         self.ncomplete = 0
         self.njobs = 0
@@ -143,7 +146,7 @@ class patch_pool_runner(QtCore.QObject):
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
-        self.updateMessageLogFunc(f">>> {self.capsingmessage} {self.cml_job_count + self.ncomplete}/{self.total_jobs} [{message}]")
+        self.updateMessageLog.emit(f">>> {self.capsingmessage} {self.cml_job_count + self.ncomplete}/{self.total_jobs} [{message}]")
         
     def raise_exception(self, exception):
         try:

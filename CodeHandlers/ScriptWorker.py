@@ -4,6 +4,8 @@ from PyQt5 import QtCore
 
     
 class ScriptWorker(QtCore.QObject):
+    messageLog = QtCore.pyqtSignal(str)
+    updateMessageLog = QtCore.pyqtSignal(str)
     finished = QtCore.pyqtSignal()
     
     def __init__(self, origin, destination, script_func, test, threadpool, func_message, func_message_past,
@@ -24,8 +26,9 @@ class ScriptWorker(QtCore.QObject):
         
         self.lockGuiFunc = lockGuiFunc
         self.releaseGuiFunc = releaseGuiFunc
-        self.messageLogFunc = messageLogFunc
-        self.updateMessageLogFunc = updateMessageLogFunc
+        
+        self.messageLog.connect(messageLogFunc)
+        self.updateMessageLog.connect(updateMessageLogFunc)
 
         
     def run(self):
@@ -40,7 +43,7 @@ class ScriptWorker(QtCore.QObject):
                 
             self.njobs = len(scripts)
             if len(scripts):
-                self.messageLogFunc("")
+                self.messageLog.emit("")
             else:
                 self.releaseGuiFunc()
                 self.finished.emit()
@@ -66,7 +69,7 @@ class ScriptWorker(QtCore.QObject):
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
-        self.updateMessageLogFunc(f"{self.func_message_past} script {self.ncomplete}/{self.njobs} [{message}]")
+        self.updateMessageLog.emit(f"{self.func_message_past} script {self.ncomplete}/{self.njobs} [{message}]")
         
     def raise_exception(self, exception):
         try:
@@ -74,12 +77,12 @@ class ScriptWorker(QtCore.QObject):
         except ScriptHandlerError as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when {self.func_message} script {e.args[1]}: {e.args[0]}")
+            self.messageLog.emit(f"The following exception occured when {self.func_message} script {e.args[1]}: {e.args[0]}")
             raise e.args[0]
         except Exception as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when {self.func_message} scripts: {e}")
+            self.messageLog.emit(f"The following exception occured when {self.func_message} scripts: {e}")
             raise e
         finally:
             self.releaseGuiFunc()

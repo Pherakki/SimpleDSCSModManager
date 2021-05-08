@@ -34,6 +34,7 @@ class DumpArchiveWorkerThread(QtCore.QObject):
 
 
 class DumpArchiveWorker(QtCore.QObject):
+    updateMessageLog = QtCore.pyqtSignal(str)
     finished = QtCore.pyqtSignal()
 
     def __init__(self, origin, destination, threadpool,
@@ -47,9 +48,10 @@ class DumpArchiveWorker(QtCore.QObject):
         self.njobs = 0
         self.threadpool = threadpool
         self.messageLogFunc = messageLog
-        self.updateMessageLogFunc = updateMessageLog
         self.lockGuiFunc = lockGui
         self.releaseGuiFunc = releaseGui
+        
+        self.updateMessageLog.connect(updateMessageLog)
 
     def run(self):
         self.ncomplete = 0
@@ -83,7 +85,7 @@ class DumpArchiveWorker(QtCore.QObject):
                 
     def update_messagelog(self, message):
         self.ncomplete += 1
-        self.updateMessageLogFunc(f"Extracting file {self.ncomplete}/{self.njobs} [{message}]")
+        self.updateMessageLog.emit(f"Extracting file {self.ncomplete}/{self.njobs} [{message}]")
         
     def raise_exception(self, exception):
         try:
