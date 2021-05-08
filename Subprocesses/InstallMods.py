@@ -69,6 +69,8 @@ class InstallModsWorker(QtCore.QObject):
             self.worker.lockGui.connect(self.lockGuiFunc)
             self.worker.releaseGui.connect(self.releaseGuiFunc)
             
+            # The resource bootstrapper is not generalised and will crash if the MBE or script plugins are removed
+            # This NEEDS to be changed
             self.br = multithreaded_bootstrap_index_resources(None, self.game_resources_loc, 
                                                               self.resources_loc, self.backups_loc,
                                                               self.dscstools_handler, self.script_handler,
@@ -280,6 +282,8 @@ def backup_ifdef(archive, game_resources_loc, backups_loc):
                             
             
 class multithreaded_bootstrap_index_resources(QtCore.QObject):
+    """Needs to be generalised to any number or kind of resource gathering...
+    no idea how to implement that sensibly yet though"""
     finished = QtCore.pyqtSignal()
     
     def __init__(self, indices, game_resources_loc, resources_loc, backups_loc,
