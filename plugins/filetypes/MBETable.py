@@ -19,7 +19,7 @@ class MBE_table:
     def produce_index(cls, path, filename, rule):
         index = []
         if rule is None:
-            rule = 'mbe_overwrite'
+            rule = 'mberecord_overwrite'
         mbe_filepath = os.path.join(path, filename)
         with open(mbe_filepath, 'r', encoding='utf8') as F:
             F.readline()
