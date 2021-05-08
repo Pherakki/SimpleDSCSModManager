@@ -46,5 +46,5 @@ def sort_plugins(members, ordering):
         else:
             unsortable_members.append((members[i], member_name))
     
-    return [*[item[0] for item in sorted(sortable_members, lambda x: x[1])], 
-            *[item[0] for item in sorted(unsortable_members, lambda x: x[1])]]
+    return [*[item[0] for item in sorted(sortable_members, key=lambda x: x[1])], 
+            *[item[0] for item in sorted(unsortable_members, key=lambda x: x[1])]]
