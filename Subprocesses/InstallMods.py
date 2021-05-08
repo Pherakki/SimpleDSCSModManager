@@ -11,6 +11,7 @@ from ModFiles.PatchGenMultithreaded import generate_patch_mt
 from Utils.MBE import mbe_batch_pack, mbe_batch_unpack
 from Utils.Path import splitpath
 from Utils.FiletypesPluginLoader import get_filetype_plugins
+from Utils.RulesPluginLoader import get_rule_plugins
 from ModFiles.Hashing import hash_file_install_orders, sort_hashes, add_cache_to_index, cull_index
 
             
@@ -78,7 +79,10 @@ class InstallModsWorker(QtCore.QObject):
                                                               self.messageLogFunc, self.updateMessageLogFunc,
                                                               self.lockGuiFunc, self.releaseGuiFunc)
              
-            self.patchgen_worker = generate_patch_mt(patch_dir, self.resources_loc, self.threadpool, 
+            rules = get_rule_plugins()
+            print(rules)
+            self.patchgen_worker = generate_patch_mt(rules,
+                                                     patch_dir, self.resources_loc, self.threadpool, 
                                                      self.lockGuiFunc, self.releaseGuiFunc,
                                                      self.messageLogFunc, self.updateMessageLogFunc)
                 

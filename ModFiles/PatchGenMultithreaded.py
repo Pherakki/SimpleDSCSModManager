@@ -33,9 +33,11 @@ def overwrite(working_filepath, other_filepath):
 class generate_patch_mt(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     
-    def __init__(self, working_dir, resources_dir, threadpool, 
+    def __init__(self, rules_dictionary, working_dir, resources_dir, threadpool, 
                  lockGuiFunc, releaseGuiFunc, messageLogFunc, updateMessageLogFunc):
         super().__init__()
+        self.rules_dictionary = rules_dictionary
+        
         self.indices = None
         self.working_dir = working_dir
         self.resources_dir = resources_dir
