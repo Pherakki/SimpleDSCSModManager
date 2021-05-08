@@ -1,3 +1,4 @@
+import inspect
 import os
 
 from Utils.PluginLoad import load_sorted_plugins_in
@@ -6,7 +7,7 @@ from Utils.PluginLoad import load_sorted_plugins_in
 def get_filetype_plugins():
     plugin_dir = os.path.join('plugins', 'filetypes')
     
-    return [*load_sorted_plugins_in(plugin_dir), UnhandledFiletype]
+    return [*load_sorted_plugins_in(plugin_dir, inspect.isclass), UnhandledFiletype]
 
 class UnhandledFiletype:
     group = 'other'

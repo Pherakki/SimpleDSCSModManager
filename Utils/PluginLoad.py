@@ -7,13 +7,13 @@ import sys
 from Utils.Path import splitpath
 
 
-def load_sorted_plugins_in(directory):
-    filetype_plugins = load_plugins_in(directory)
+def load_sorted_plugins_in(directory, predicate):
+    filetype_plugins = load_plugins_in(directory, predicate)
     plugin_order = get_plugin_sort_order(directory)
     
     return sort_plugins(filetype_plugins, plugin_order)
 
-def load_plugins_in(directory):
+def load_plugins_in(directory, predicate):
     results = []
     for file in os.listdir(directory):
         file, ext = os.path.splitext(file)
@@ -22,7 +22,7 @@ def load_plugins_in(directory):
         module_name = ".".join([*splitpath(directory), file])
         importlib.import_module(module_name)
         module = sys.modules[module_name]
-        classes_in_module = [m[0] for m in inspect.getmembers(module, inspect.isclass) if m[1].__module__ == module.__name__]
+        classes_in_module = [m[0] for m in inspect.getmembers(module, predicate) if m[1].__module__ == module.__name__]
         results.extend([getattr(module, class_) for class_ in classes_in_module])
     return results
 
