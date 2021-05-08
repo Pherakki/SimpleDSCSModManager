@@ -6,6 +6,13 @@ import sys
 
 from Utils.Path import splitpath
 
+
+def load_sorted_plugins_in(directory):
+    filetype_plugins = load_plugins_in(directory)
+    plugin_order = get_plugin_sort_order(directory)
+    
+    return sort_plugins(filetype_plugins, plugin_order)
+
 def load_plugins_in(directory):
     results = []
     for file in os.listdir(directory):
