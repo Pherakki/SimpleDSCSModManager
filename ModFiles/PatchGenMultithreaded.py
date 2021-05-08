@@ -32,49 +32,22 @@ class generate_patch_mt(QtCore.QObject):
         
     def run(self):
         self.messageLogFunc("Generating patch...")
-        cul_jobs = 0
-        for index in self.indices:
-            if 'mbe' in index:
-                n_jobs = sum([len(index['mbe']) for index in self.indices if 'mbe' in index])
-                subindex = index['mbe']
-                n_subjobs = len(subindex)
-                runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
-                                           mbe_patcher, self.threadpool, cul_jobs, n_jobs,
-                                           self.lockGuiFunc, self.releaseGuiFunc,
-                                           self.messageLogFunc, self.updateMessageLogFunc,
-                                           "patching MBE", "patching MBEs")
-                cul_jobs += n_subjobs
-                self.runners.append(runner)
+        for patcher in self.patchers:
+            cul_jobs = 0
+            for index in self.indices:
+                group = patcher.group
+                if group in index:
+                    n_jobs = sum([len(index[group]) for index in self.indices if group in index])
+                    subindex = index[group]
+                    n_subjobs = len(subindex)
+                    runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
+                                               patcher, self.threadpool, cul_jobs, n_jobs,
+                                               self.lockGuiFunc, self.releaseGuiFunc,
+                                               self.messageLogFunc, self.updateMessageLogFunc,
+                                               patcher.singular_msg, patcher.plural_msg)
+                    cul_jobs += n_subjobs
+                    self.runners.append(runner)
             
-        cul_jobs = 0
-        for index in self.indices:
-            if 'script_src' in index:
-                n_jobs = sum([len(index['script_src']) for index in self.indices if 'script_src' in index])
-                subindex = index['script_src']
-                n_subjobs = len(subindex)
-                runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
-                                           patch_script_src, self.threadpool, cul_jobs, n_jobs,
-                                           self.lockGuiFunc, self.releaseGuiFunc,
-                                           self.messageLogFunc, self.updateMessageLogFunc,
-                                           "patching script", "patching scripts")
-                cul_jobs += n_subjobs
-                self.runners.append(runner)
-            
-        cul_jobs = 0
-        for index in self.indices:
-            if 'other' in index:
-                n_jobs = sum([len(index['other']) for index in self.indices if 'other' in index])
-                subindex = index['other']
-                n_subjobs = len(subindex)
-                runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
-                                           patch_others, self.threadpool, cul_jobs, n_jobs,
-                                           self.lockGuiFunc, self.releaseGuiFunc,
-                                           self.messageLogFunc, self.updateMessageLogFunc,
-                                           "copying file", "copying files")
-                cul_jobs += n_subjobs
-                self.runners.append(runner)
-            
-        # *[*runnerlist for runnerlist in list_of_runnerlists]
         self.poolchain = PoolChain(*self.runners)
         self.poolchain.finished.connect(self.finished.emit)
         self.poolchain.run()
