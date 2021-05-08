@@ -270,9 +270,7 @@ class PatchGenerator(QtCore.QObject):
                 with open(modcache_location, 'r') as F:
                     cached_hashes = json.load(F)
                     shared_hashes = sort_hashes(mod_hashes, cached_hashes)
-                    print(len(shared_hashes))
                     shared_hashes = add_cache_to_index(indices, shared_hashes)
-                    print(len(shared_hashes))
                     cull_index(indices[:-1], shared_hashes)
                     all_hashes = {**cached_hashes, **mod_hashes}
             else:
