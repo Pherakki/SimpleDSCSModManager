@@ -1,28 +1,9 @@
 import csv
 import os
-from Utils.PluginLoad import load_plugins_in
 from Utils.Path import splitpath
 
 
-filetype_plugins = load_plugins_in(os.path.join('plugins', 'filetypes'))
-    
-class UnhandledFiletype:
-    group = 'other'
-    
-    @staticmethod
-    def checkIfMatch(path, filename):
-        if os.path.isfile(os.path.join(path, filename)):
-            return True
-    
-    @classmethod
-    def produce_index(cls, path, filename, rule):
-        if rule is None:
-            rule = 'overwrite'
-        return cls.group, os.path.join(path, filename), {filename: rule}
-
-filetypes = [*filetype_plugins, UnhandledFiletype]
-
-def generate_mod_index(modpath, rules):
+def generate_mod_index(modpath, rules, filetypes):
     # Register .mbe records + rules,
     # Register .hca files + rules,
     # Register all other files + rules

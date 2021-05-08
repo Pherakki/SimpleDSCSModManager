@@ -10,6 +10,7 @@ from ModFiles.PatchGen import generate_patch
 from ModFiles.PatchGenMultithreaded import generate_patch_mt
 from Utils.MBE import mbe_batch_pack, mbe_batch_unpack
 from Utils.Path import splitpath
+from Utils.FiletypesPluginLoader import get_sorted_filetype_plugins
 from ModFiles.Hashing import hash_file_install_orders, sort_hashes, add_cache_to_index, cull_index
 
 
@@ -253,12 +254,13 @@ class PatchGenerator(QtCore.QObject):
     
     def run(self):
         try:
+            filetypes = get_sorted_filetype_plugins()
             # Do this on mod registry...
             self.messageLog.emit("Indexing mods...")
             indices = []
             for mod in self.profile_handler.get_active_mods():
                 modfiles_path = os.path.relpath(os.path.join(mod.path, "modfiles"))
-                indices.append(generate_mod_index(modfiles_path, {}))
+                indices.append(generate_mod_index(modfiles_path, {}, filetypes))
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
                 raise Exception("No mods activated.")
