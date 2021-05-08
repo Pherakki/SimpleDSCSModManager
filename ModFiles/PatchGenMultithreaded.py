@@ -32,10 +32,6 @@ class generate_patch_mt(QtCore.QObject):
         self.other_runners = []
         
     def run(self):
-        # Replace with an iteration through plugged-in patching rules
-        # Should probably collect files by rule, and then apply all the rules in one go
-        # for probable optimisations
-        
         self.messageLogFunc("Generating patch...")
         cul_jobs = 0
         for index in self.indices:
