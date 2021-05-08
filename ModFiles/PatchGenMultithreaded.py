@@ -148,11 +148,11 @@ class patch_pool_runner(QtCore.QObject):
     def raise_exception(self, exception):
         try:
             raise exception
-        except ScriptHandlerError as e:
-            self.threadpool.clear()
-            self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when {self.singmessage} {e.args[1]}: {e.args[0]}")
-            raise e.args[0]
+        # except ScriptHandlerError as e:
+        #     self.threadpool.clear()
+        #     self.threadpool.waitForDone()
+        #     self.messageLogFunc(f"The following exception occured when {self.singmessage} {e.args[1]}: {e.args[0]}")
+        #     raise e.args[0]
         except Exception as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
@@ -332,5 +332,3 @@ def dict_to_mbetable(filepath, header, result):
         for key, value in result.items():
             csvwriter.writerow(([*key, *value]))
             
-class ScriptHandlerError(Exception):
-    pass
