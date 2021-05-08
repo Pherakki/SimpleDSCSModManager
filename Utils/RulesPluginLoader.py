@@ -10,3 +10,5 @@ def get_rule_plugins():
     return {rule.__name__: rule for rule in rules}
 
 
+def overwrite(working_filepath, other_filepath):
+    shutil.copy2(other_filepath, working_filepath)
