@@ -7,27 +7,6 @@ from PyQt5 import QtCore
 from .ScriptPatching import patch_scripts
 from Utils.Multithreading import PoolChain
 from Utils.Path import splitpath
-
-# These functions need to be removed
-def mberecord_overwrite(record_id, mbe_data, mod_mbe_data):
-    mbe_data[record_id] = mod_mbe_data[record_id]
-    
-def mberecord_join(record_id, mbe_data, mod_mbe_data):
-    new_data = [elem for elem in mod_mbe_data[record_id] if elem not in mbe_data[record_id]]
-    mbe_data[record_id].extend(new_data)
-
-def scriptfunction_overwrite(working_script_filepath, script_filepath):
-    wsd, wdf = os.path.split(working_script_filepath)
-    patch_filepath = os.path.join(wsd, '_' + wdf)
-    patch_scripts(working_script_filepath, script_filepath, patch_filepath)
-    os.remove(working_script_filepath)
-    os.rename(patch_filepath, working_script_filepath)
-    
-
-def overwrite(working_filepath, other_filepath):
-    shutil.copy2(other_filepath, working_filepath)
-    
-
     
 
 class generate_patch_mt(QtCore.QObject):
@@ -64,7 +43,7 @@ class generate_patch_mt(QtCore.QObject):
                 n_jobs = sum([len(index['mbe']) for index in self.indices if 'mbe' in index])
                 subindex = index['mbe']
                 n_subjobs = len(subindex)
-                runner = patch_pool_runner(subindex, self.working_dir, self.resources_dir,
+                runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
                                            mbe_patcher, self.threadpool, cul_jobs, n_jobs,
                                            self.lockGuiFunc, self.releaseGuiFunc,
                                            self.messageLogFunc, self.updateMessageLogFunc,
@@ -78,7 +57,7 @@ class generate_patch_mt(QtCore.QObject):
                 n_jobs = sum([len(index['script_src']) for index in self.indices if 'script_src' in index])
                 subindex = index['script_src']
                 n_subjobs = len(subindex)
-                runner = patch_pool_runner(subindex, self.working_dir, self.resources_dir,
+                runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
                                            patch_script_src, self.threadpool, cul_jobs, n_jobs,
                                            self.lockGuiFunc, self.releaseGuiFunc,
                                            self.messageLogFunc, self.updateMessageLogFunc,
@@ -92,7 +71,7 @@ class generate_patch_mt(QtCore.QObject):
                 n_jobs = sum([len(index['other']) for index in self.indices if 'other' in index])
                 subindex = index['other']
                 n_subjobs = len(subindex)
-                runner = patch_pool_runner(subindex, self.working_dir, self.resources_dir,
+                runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
                                            patch_others, self.threadpool, cul_jobs, n_jobs,
                                            self.lockGuiFunc, self.releaseGuiFunc,
                                            self.messageLogFunc, self.updateMessageLogFunc,
@@ -111,7 +90,7 @@ class patch_pool_runner(QtCore.QObject):
     updateMessageLog = QtCore.pyqtSignal(str)
     finished = QtCore.pyqtSignal()
     
-    def __init__(self, subindex, working_dir, resources_dir, 
+    def __init__(self, rules_dictionary, subindex, working_dir, resources_dir, 
                  patcher,
                  threadpool, cml_job_count, total_jobs,
                  lockGuiFunc, releaseGuiFunc,
@@ -139,6 +118,8 @@ class patch_pool_runner(QtCore.QObject):
         self.ncomplete = 0
         self.njobs = 0
         
+        self.rules_dictionary = rules_dictionary
+        
         
     @QtCore.pyqtSlot()   
     def run(self):
@@ -154,7 +135,7 @@ class patch_pool_runner(QtCore.QObject):
                 return
             
             for filepath, rules in self.subindex.items():
-                job = self.patcher(self.working_dir, self.resources_dir, filepath, rules,
+                job = self.patcher(self.rules_dictionary, self.working_dir, self.resources_dir, filepath, rules,
                 self.update_messagelog, self.update_finished, self.raise_exception)
                 self.threadpool.start(job)
         except Exception as e:
@@ -189,7 +170,7 @@ class patch_pool_runner(QtCore.QObject):
 ########           
                 
 class mbe_patcher(QtCore.QRunnable):
-    def __init__(self, working_dir, resources_dir, mbe_table_filepath, mbe_rules,
+    def __init__(self, rules_dictionary, working_dir, resources_dir, mbe_table_filepath, mbe_rules,
                  update_messagelog, update_finished, raise_exception):
         super().__init__()
         
@@ -201,6 +182,8 @@ class mbe_patcher(QtCore.QRunnable):
         self.update_messagelog = update_messagelog
         self.update_finished = update_finished
         self.raise_exception = raise_exception
+        
+        self.rules_dictionary = rules_dictionary
         
     def run(self):
         try:
@@ -228,8 +211,7 @@ class mbe_patcher(QtCore.QRunnable):
             header, mbe_data = mbetable_to_dict(working_mbe_filepath)
             _, mod_mbe_data = mbetable_to_dict(mbe_table_filepath)
             for record_id, record_rule in mbe_rules.items():
-                # record_rule(record_id, mbe_data)
-                mberecord_overwrite(record_id, mbe_data, mod_mbe_data)
+                self.rules_dictionary[record_rule](record_id, mbe_data, mod_mbe_data)
             dict_to_mbetable(working_mbe_filepath, header, mbe_data)
             
             self.update_messagelog(local_filepath)
@@ -241,7 +223,7 @@ class mbe_patcher(QtCore.QRunnable):
 # SCRIPT # 
 ##########   
 class patch_script_src(QtCore.QRunnable):
-    def __init__(self, working_dir, resources_dir, script_filepath, script_rules,
+    def __init__(self, rules_dictionary, working_dir, resources_dir, script_filepath, script_rules,
                  update_messagelog, update_finished, raise_exception):
         super().__init__()
         
@@ -253,6 +235,8 @@ class patch_script_src(QtCore.QRunnable):
         self.update_messagelog = update_messagelog
         self.update_finished = update_finished
         self.raise_exception = raise_exception
+        
+        self.rules_dictionary = rules_dictionary
         
     def run(self):
         try:
@@ -273,7 +257,9 @@ class patch_script_src(QtCore.QRunnable):
                 shutil.copy2(resource_path, working_script_filepath)
                     
             # I.e. execute rule
-            scriptfunction_overwrite(working_script_filepath, script_filepath)
+            assert len(script_rules) == 1, f"More than one rule: {script_rules}"
+            rule_name = list(script_rules.values())[0]
+            self.rules_dictionary[rule_name](working_script_filepath, script_filepath)
             
             self.update_messagelog(local_filepath)
             self.update_finished()
@@ -285,7 +271,7 @@ class patch_script_src(QtCore.QRunnable):
 # ELSE # 
 ########      
 class patch_others(QtCore.QRunnable):
-    def __init__(self, working_dir, resources_dir, other_filepath, other_rules,
+    def __init__(self, rules_dictionary, working_dir, resources_dir, other_filepath, other_rules,
                  update_messagelog, update_finished, raise_exception):
         super().__init__()
         
@@ -297,6 +283,8 @@ class patch_others(QtCore.QRunnable):
         self.update_messagelog = update_messagelog
         self.update_finished = update_finished
         self.raise_exception = raise_exception
+        
+        self.rules_dictionary = rules_dictionary
         
     def run(self):
         try:
@@ -310,8 +298,10 @@ class patch_others(QtCore.QRunnable):
             working_path = os.path.join(*splitpath(working_filepath)[:-1]) + os.path.sep
             if not os.path.exists(working_path):
                 os.makedirs(working_path, exist_ok=True)
-            # Only if 'overwrite' rule...
-            overwrite(working_filepath, other_filepath)
+
+            assert len(other_rules) == 1, f"More than one rule: {other_rules}"
+            rule_name = list(other_rules.values())[0]
+            self.rules_dictionary[rule_name](working_filepath, other_filepath)
             
             self.update_messagelog(local_filepath)
             self.update_finished()
