@@ -43,6 +43,7 @@ class InstallModsWorker(QtCore.QObject):
         self.br = None
         
         self.indices = None
+        self.all_used_archives = None
         
     def run(self):
         try:
