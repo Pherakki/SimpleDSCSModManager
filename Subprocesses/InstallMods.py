@@ -86,31 +86,11 @@ class InstallModsWorker(QtCore.QObject):
                                                      self.lockGuiFunc, self.releaseGuiFunc,
                                                      self.messageLogFunc, self.updateMessageLogFunc)
                 
-            # Pack the resources              
-            gmp = self.dscstools_handler.generate_mbe_packer
-            self.datmbe_worker = gmp(os.path.join(patch_dir, 'data'), 
-                                     os.path.join(patch_dir, 'data'),
-                                     self.threadpool,
-                                     self.messageLogFunc, self.updateMessageLogFunc, 
-                                     self.lockGuiFunc, self.releaseGuiFunc)
-            self.msgmbe_worker = gmp(os.path.join(patch_dir, 'message'), 
-                                     os.path.join(patch_dir, 'message'), 
-                                     self.threadpool,
-                                     self.messageLogFunc, self.updateMessageLogFunc, 
-                                     self.lockGuiFunc, self.releaseGuiFunc)
-            self.texmbe_worker = gmp(os.path.join(patch_dir, 'text'), 
-                                     os.path.join(patch_dir, 'text'),
-                                     self.threadpool,
-                                     self.messageLogFunc, self.updateMessageLogFunc, 
-                                     self.lockGuiFunc, self.releaseGuiFunc)
-            gsc = self.script_handler.generate_script_compiler
-            self.script_worker = gsc(os.path.abspath(os.path.join(patch_dir, 'script64')), 
-                                     os.path.abspath(os.path.join(patch_dir, 'script64')),
-                                     self.threadpool,
-                                     self.lockGuiFunc, self.releaseGuiFunc,
-                                     self.messageLogFunc, self.updateMessageLogFunc,
-                                     remove_input=True)
-                
+
+            self.packer_generator = PackerGenerator(patch_dir, self.dscstools_handler, self.script_handler, 
+                                                    self.threadpool,
+                                                    self.messageLogFunc, self.updateMessageLogFunc,
+                                                    self.lockGuiFunc, self.releaseGuiFunc)
 
             self.worker2 = FinaliseInstallation(dbdsp_dir, patch_dir, mvgl_loc, self.output_loc, self.resources_loc,
                                                 self.game_resources_loc, self.backups_loc, self.dscstools_handler)
@@ -137,11 +117,8 @@ class InstallModsWorker(QtCore.QObject):
 
             self.worker.continue_execution.connect(self.br.run)
             self.br.finished.connect(self.patchgen_worker.run)
-            self.patchgen_worker.finished.connect(self.datmbe_worker.run)
-            self.datmbe_worker.finished.connect(lambda: self.msgmbe_worker.run())
-            self.msgmbe_worker.finished.connect(lambda: self.texmbe_worker.run())
-            self.texmbe_worker.finished.connect(lambda: self.script_worker.run())
-            self.script_worker.finished.connect(lambda: self.thread2.start())
+            self.patchgen_worker.finished.connect(self.packer_generator.run)
+            self.packer_generator.finished.connect(lambda: self.thread2.start())
             
             self.worker2.finished.connect(self.finished.emit)
 
