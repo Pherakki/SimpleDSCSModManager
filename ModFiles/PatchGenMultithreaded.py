@@ -76,6 +76,7 @@ class patch_pool_runner(QtCore.QObject):
         super().__init__()
         self.subindex = subindex
         self.working_dir = working_dir
+        self.archives = archives
         self.resources_dir = resources_dir
         self.patcher = patcher
         self.threadpool = threadpool
