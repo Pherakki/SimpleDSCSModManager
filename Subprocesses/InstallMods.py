@@ -152,6 +152,69 @@ class InstallModsWorker(QtCore.QObject):
             raise e
 
 
+class PackerGenerator(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    
+    def __init__(self, patch_dir, dscstools_handler, script_handler, threadpool,
+                 messageLogFunc, updateMessageLogFunc, lockGuiFunc, releaseGuiFunc):
+        super().__init__()
+        self.patch_dir = patch_dir
+        self.dscstools_handler= dscstools_handler
+        self.script_handler = script_handler
+        self.threadpool = threadpool
+        self.messageLogFunc = messageLogFunc
+        self.updateMessageLogFunc = updateMessageLogFunc
+        self.lockGuiFunc = lockGuiFunc
+        self.releaseGuiFunc = releaseGuiFunc
+        self.workers = []
+        
+        self.all_used_archives = None
+        self.runner = None
+    
+    def run(self):
+        try:
+            self.lockGuiFunc()
+            poolchains = []
+            for archive in self.all_used_archives:
+                # Pack the resources              
+                gmp = self.dscstools_handler.generate_mbe_packer
+                datmbe_worker = gmp(os.path.join(self.patch_dir, archive, 'data'), 
+                                    os.path.join(self.patch_dir, archive, 'data'),
+                                    self.threadpool,
+                                    self.messageLogFunc, self.updateMessageLogFunc, 
+                                    self.lockGuiFunc, self.releaseGuiFunc)
+                msgmbe_worker = gmp(os.path.join(self.patch_dir, archive, 'message'), 
+                                    os.path.join(self.patch_dir, archive, 'message'), 
+                                    self.threadpool,
+                                    self.messageLogFunc, self.updateMessageLogFunc, 
+                                    self.lockGuiFunc, self.releaseGuiFunc)
+                texmbe_worker = gmp(os.path.join(self.patch_dir, archive, 'text'), 
+                                    os.path.join(self.patch_dir, archive, 'text'),
+                                    self.threadpool,
+                                    self.messageLogFunc, self.updateMessageLogFunc, 
+                                    self.lockGuiFunc, self.releaseGuiFunc)
+                gsc = self.script_handler.generate_script_compiler
+                script_worker = gsc(os.path.abspath(os.path.join(self.patch_dir, archive, 'script64')), 
+                                    os.path.abspath(os.path.join(self.patch_dir, archive, 'script64')),
+                                    self.threadpool,
+                                    self.lockGuiFunc, self.releaseGuiFunc,
+                                    self.messageLogFunc, self.updateMessageLogFunc,
+                                    remove_input=True)
+                
+                self.workers.append(datmbe_worker)
+                self.workers.append(msgmbe_worker)
+                self.workers.append(texmbe_worker)
+                self.workers.append(script_worker)
+            
+            self.runner = PoolChain(*self.workers)
+            self.runner.finished.connect(self.finished.emit)
+            self.runner.run()
+        except Exception as e:
+            self.messageLog.emit(f"The following exception occured when packing mod files: {e}")
+        finally:
+            self.releaseGuiFunc()
+            self.finished.emit()
+        
 
 class PatchGenerator(QtCore.QObject):
     finished = QtCore.pyqtSignal()
