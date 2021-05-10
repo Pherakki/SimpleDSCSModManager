@@ -124,10 +124,14 @@ class InstallModsWorker(QtCore.QObject):
             self.worker2.lockGui.connect(self.lockGuiFunc)
             self.worker2.releaseGui.connect(self.releaseGuiFunc)
             
-            def relay_indices_and_cache(indices, cache):
+            def relay_indices_and_cache(indices, cache, archives, all_used_archives):
                 self.br.indices = indices
                 self.patchgen_worker.indices = indices
+                self.patchgen_worker.archives = archives
+                self.patchgen_worker.all_used_archives = all_used_archives
+                self.packer_generator.all_used_archives = all_used_archives
                 self.worker2.cached_files = cache
+                self.worker2.all_used_archives = all_used_archives
                 
             self.worker.emitIndicesAndCache.connect(relay_indices_and_cache)
 
@@ -156,7 +160,7 @@ class PatchGenerator(QtCore.QObject):
     updateMessageLog = QtCore.pyqtSignal(str)
     lockGui = QtCore.pyqtSignal()
     releaseGui = QtCore.pyqtSignal()
-    emitIndicesAndCache = QtCore.pyqtSignal(list, dict)
+    emitIndicesAndCache = QtCore.pyqtSignal(list, dict, list, list)
     
     def __init__(self, output_loc, profile_handler):
         super().__init__()
@@ -169,27 +173,58 @@ class PatchGenerator(QtCore.QObject):
             # Do this on mod registry...
             self.messageLog.emit("Indexing mods...")
             indices = []
+            mod_archives = []
             for mod in self.profile_handler.get_active_mods():
+                # Yes, this is really messy and needs a refactor
                 modfiles_path = os.path.relpath(os.path.join(mod.path, "modfiles"))
-                indices.append(generate_mod_index(modfiles_path, {}, filetypes))
+                metadata_path = os.path.relpath(os.path.join(mod.path, "METADATA.json"))
+                if os.path.exists(metadata_path):
+                    with open(metadata_path, 'r') as F:
+                        metadata = json.load(F)
+                else:
+                    metadata = {}
+                    
+                base_archive = metadata.get("DefaultArchive", "DSDBP")
+                rules = metadata.get("Rules", {})
+                rules = {key.replace('/', os.sep): value for key, value in rules.items()}
+                archives = metadata.get("Archives", {})
+                archives = {key.replace('/', os.sep): value for key, value in archives.items()}
+                    
+                index = generate_mod_index(modfiles_path, rules, filetypes)
+                indices.append(index)
+                
+                archive_data = {}
+                for index_data in index.values():
+                    for key in index_data.keys():
+                        archive_data[key] = archives.get(key, base_archive)
+                        
+                mod_archives.append(archive_data)
+                
+
+                
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
                 raise Exception("No mods activated.")
             
             self.messageLog.emit("Indexing mods...")
             mod_hashes = hash_file_install_orders(indices)
-            modcache_location = os.path.join(os.path.split(self.patch_dir)[0], "modcache.json")
+            modcache_location = os.path.join(self.output_loc, "modcache.json")
             if os.path.exists(modcache_location):
                 with open(modcache_location, 'r') as F:
                     cached_hashes = json.load(F)
                     shared_hashes = sort_hashes(mod_hashes, cached_hashes)
-                    shared_hashes = add_cache_to_index(indices, shared_hashes)
+                    shared_hashes = add_cache_to_index(indices, mod_archives, shared_hashes)
                     cull_index(indices[:-1], shared_hashes)
                     all_hashes = {**cached_hashes, **mod_hashes}
             else:
                 all_hashes = {}
-                
-            self.emitIndicesAndCache.emit(indices, all_hashes)
+
+            all_used_archives = set()
+            for archive_data in mod_archives:
+                all_used_archives.update(set(archive_data.values()))
+            all_used_archives = sorted(list(all_used_archives))
+
+            self.emitIndicesAndCache.emit(indices, all_hashes, mod_archives, all_used_archives)
             self.continue_execution.emit()
         except Exception as e:
             self.messageLog.emit(f"The following exception occured when indexing mods: {e}")
