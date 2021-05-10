@@ -480,9 +480,9 @@ def try_to_locate_game_exe():
 def restore_backups(game_resources_loc, backup_loc, logfunc):
     try:
         logfunc("Restoring backup...")
-        
-        backup_dir = os.path.join(backup_loc, 'DSDBP.steam.mvgl')
-        shutil.copy2(backup_dir, os.path.join(game_resources_loc, 'DSDBP.steam.mvgl'))
+        for file in os.listdir(backup_loc):
+            backup_dir = os.path.join(backup_loc, file)
+            shutil.copy2(backup_dir, os.path.join(game_resources_loc, file))
         logfunc("Backup restored.")
         
     except Exception as e:
