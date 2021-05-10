@@ -19,6 +19,8 @@ class generate_patch_mt(QtCore.QObject):
         self.patchers = patchers
         
         self.indices = None
+        self.archives = None
+        self.all_used_archives = None
         self.working_dir = working_dir
         self.resources_dir = resources_dir
         self.threadpool = threadpool
@@ -32,16 +34,23 @@ class generate_patch_mt(QtCore.QObject):
         
     def run(self):
         self.messageLogFunc("Generating patch...")
+        for archive in self.all_used_archives:
+            archive_patch_dir = os.path.relpath(os.path.join(self.working_dir, archive))
+            if os.path.exists(archive_patch_dir):
+                shutil.rmtree(archive_patch_dir)
+            os.makedirs(archive_patch_dir)
+            
         for patcher in self.patchers:
             cul_jobs = 0
-            for index in self.indices:
+            for index, archive_refs in zip(self.indices, self.archives):
                 group = patcher.group
                 if group in index:
                     n_jobs = sum([len(index[group]) for index in self.indices if group in index])
                     subindex = index[group]
                     n_subjobs = len(subindex)
                     runner = patch_pool_runner(self.rules_dictionary, subindex, self.working_dir, self.resources_dir,
-                                               patcher, self.threadpool, cul_jobs, n_jobs,
+                                               patcher, archive_refs,
+                                               self.threadpool, cul_jobs, n_jobs,
                                                self.lockGuiFunc, self.releaseGuiFunc,
                                                self.messageLogFunc, self.updateMessageLogFunc,
                                                patcher.singular_msg, patcher.plural_msg)
@@ -59,7 +68,7 @@ class patch_pool_runner(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     
     def __init__(self, rules_dictionary, subindex, working_dir, resources_dir, 
-                 patcher,
+                 patcher, archives,
                  threadpool, cml_job_count, total_jobs,
                  lockGuiFunc, releaseGuiFunc,
                  messageLogFunc, updateMessageLogFunc,
@@ -103,8 +112,10 @@ class patch_pool_runner(QtCore.QObject):
                 return
             
             for filepath, rules in self.subindex.items():
-                job = self.patcher(self.rules_dictionary, self.working_dir, self.resources_dir, filepath, rules,
-                self.update_messagelog, self.update_finished, self.raise_exception)
+                used_archive = self.archives[filepath]
+                job = self.patcher(self.rules_dictionary, os.path.join(self.working_dir, used_archive), 
+                                   self.resources_dir, filepath, rules,
+                                   self.update_messagelog, self.update_finished, self.raise_exception)
                 self.threadpool.start(job)
         except Exception as e:
             self.raise_exception(e)
@@ -118,19 +129,9 @@ class patch_pool_runner(QtCore.QObject):
         self.ncomplete += 1
         self.updateMessageLog.emit(f">>> {self.capsingmessage} {self.cml_job_count + self.ncomplete}/{self.total_jobs} [{message}]")
         
-    def raise_exception(self, exception):
-        try:
-            raise exception
-        # except ScriptHandlerError as e:
-        #     self.threadpool.clear()
-        #     self.threadpool.waitForDone()
-        #     self.messageLogFunc(f"The following exception occured when {self.singmessage} {e.args[1]}: {e.args[0]}")
-        #     raise e.args[0]
-        except Exception as e:
-            self.threadpool.clear()
-            self.threadpool.waitForDone()
-            self.messageLogFunc(f"The following exception occured when {self.plurmessage}: {e}")
-            raise e
-        finally:
-            self.releaseGuiFunc()
+    def raise_exception(self, e):
+        self.threadpool.clear()
+        self.messageLogFunc(f"The following exception occured when {self.plurmessage}: {e}")
+        self.threadpool.waitForDone()
+        self.releaseGuiFunc()
 
