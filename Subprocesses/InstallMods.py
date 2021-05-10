@@ -13,8 +13,8 @@ from Utils.Path import splitpath
 from Utils.FiletypesPluginLoader import get_filetype_plugins
 from Utils.PatchersPluginLoader import get_patcher_plugins
 from Utils.RulesPluginLoader import get_rule_plugins
+from Utils.Multithreading import PoolChain
 from ModFiles.Hashing import hash_file_install_orders, sort_hashes, add_cache_to_index, cull_index
-
             
 class InstallModsWorker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -128,7 +128,6 @@ class InstallModsWorker(QtCore.QObject):
         except Exception as e:
             self.messageLogFunc(f"The following error occured when trying to install modlist: {e}")
             raise e
-
 
 class PackerGenerator(QtCore.QObject):
     finished = QtCore.pyqtSignal()
