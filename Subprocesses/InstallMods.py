@@ -58,9 +58,8 @@ class InstallModsWorker(QtCore.QObject):
             if os.path.exists(mvgl_loc):
                 os.remove(mvgl_loc)
                 
-            self.worker = PatchGenerator(patch_dir, self.output_loc, self.game_resources_loc,
-                                         self.resources_loc, self.backups_loc,
-                                         self.dscstools_handler, self.script_handler, self.profile_handler)
+                
+            self.worker = PatchGenerator(self.output_loc, self.profile_handler)
             self.worker.moveToThread(self.thread)
             self.thread.started.connect(self.worker.run)
             self.worker.finished.connect(self.thread.quit)
@@ -159,16 +158,9 @@ class PatchGenerator(QtCore.QObject):
     releaseGui = QtCore.pyqtSignal()
     emitIndicesAndCache = QtCore.pyqtSignal(list, dict)
     
-    def __init__(self, patch_loc, output_loc, game_resources_loc, resources_loc,
-                 backups_loc, dscstools_handler, script_handler, profile_handler):
+    def __init__(self, output_loc, profile_handler):
         super().__init__()
-        self.patch_dir = patch_loc
         self.output_loc = output_loc
-        self.game_resources_loc = game_resources_loc
-        self.resources_loc = resources_loc
-        self.backups_loc = backups_loc
-        self.dscstools_handler = dscstools_handler
-        self.script_handler = script_handler
         self.profile_handler = profile_handler
     
     def run(self):
