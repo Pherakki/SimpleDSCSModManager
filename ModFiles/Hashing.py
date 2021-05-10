@@ -68,7 +68,7 @@ def add_cache_to_index(indices, files_to_add):
             returned_files.append(local_filepath)
             result[filepath] = {new_local_filepath: "overwrite"}
             
-    indices.append({"mbe": {}, "hca": {}, "script_src": {}, "other": result})
+    indices.append({"other": result})
     
     return returned_files
 
