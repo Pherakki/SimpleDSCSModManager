@@ -298,41 +298,86 @@ class FinaliseInstallation(QtCore.QObject):
         self.cache_record_filepath = os.path.join(os.path.split(patch_dir)[0], "modcache.json")
 
         self.dscstools_handler = dscstools_handler
+        
+        self.all_used_archives = None
 
     def run(self):
         try:
             self.lockGui.emit()
             
+            def adapted_mvgl_pack(archive, origin, destination, remove_input):
+                self.dscstools_handler.pack_mvgl_plain(os.path.join(origin, archive),
+                                                       os.path.join(destination, archive + ".steam.mvgl"),
+                                                       remove_input=remove_input)
+            def adapted_mvgl_unpack(archive, origin, destination, remove_input):
+                self.dscstools_handler.pack_mvgl_plain(os.path.join(origin, archive),
+                                                       os.path.join(destination, archive),
+                                                       remove_input=remove_input)
+            
+            packers = {'DSDB': adapted_mvgl_pack,
+                       'DSDBA': adapted_mvgl_pack,
+                       'DSDBS': adapted_mvgl_pack,
+                       'DSDBSP': adapted_mvgl_pack,
+                       'DSDBP': adapted_mvgl_pack,
+                       'DSDBse': adapted_mvgl_pack,
+                       'DSDBPse': adapted_mvgl_pack,
+                       'DSDBbgm': self.dscstools_handler.pack_afs2,
+                       'DSDBPDSEbgm': self.dscstools_handler.pack_afs2,
+                       'DSDBvo': self.dscstools_handler.pack_afs2,
+                       'DSDBPvo': self.dscstools_handler.pack_afs2,
+                       'DSDBPvous': self.dscstools_handler.pack_afs2}
+            
+            unpackers = {'DSDB': adapted_mvgl_unpack,
+                       'DSDBA': adapted_mvgl_unpack,
+                       'DSDBS': adapted_mvgl_unpack,
+                       'DSDBSP': adapted_mvgl_unpack,
+                       'DSDBP': adapted_mvgl_unpack,
+                       'DSDBse': adapted_mvgl_unpack,
+                       'DSDBPse': adapted_mvgl_unpack,
+                       'DSDBbgm': self.dscstools_handler.unpack_afs2,
+                       'DSDBPDSEbgm': self.dscstools_handler.unpack_afs2,
+                       'DSDBvo': self.dscstools_handler.unpack_afs2,
+                       'DSDBPvo': self.dscstools_handler.unpack_afs2,
+                       'DSDBPvous': self.dscstools_handler.unpack_afs2}
+            
+            categories = {'data': 'DSDBP',
+                          'sfx': 'DSDBPse',
+                          'bgm': 'DSDBbgm',
+                          'vo': 'DSDBPvous'}
+            
             self.messageLog.emit("Updating cache...")
             # Replace this with only copying updated files...
-            shutil.copytree(self.patch_dir, self.cache_dir, dirs_exist_ok=True)
-            with open(self.cache_record_filepath, 'w') as F:
-                json.dump(self.cached_files, F, indent=4)
+            for archive in self.all_used_archives:
+                shutil.copytree(os.path.join(self.patch_dir, archive), self.cache_dir, dirs_exist_ok=True)
+                with open(self.cache_record_filepath, 'w') as F:
+                    json.dump(self.cached_files, F, indent=4)
             
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
 
-            dsdbp_resource_loc = os.path.join(self.resources_loc, 'DSDBP')
-            if not os.path.exists(dsdbp_resource_loc):
-                self.messageLog.emit("Base DSDBP archive not found, generating...")
-                origin = backup_ifdef('DSDBP', self.game_resources_loc, self.backups_loc)
-                self.dscstools_handler.unpack_mvgl_plain(os.path.join(origin, 'DSDBP.steam.mvgl'), 
-                                                         os.path.join(self.resources_loc, 'DSDBP'))
-
-            shutil.copytree(dsdbp_resource_loc, self.dbdsp_dir)
-            shutil.copytree(self.patch_dir, self.dbdsp_dir, dirs_exist_ok=True)
-            self.dscstools_handler.pack_mvgl('DSDBP', self.output_loc, self.output_loc, remove_input=False)
-            os.rename(os.path.join(self.output_loc, self.dscstools_handler.decrypted_archive_name('DSDBP')),
-                      os.path.join(self.output_loc, self.dscstools_handler.base_archive_name('DSDBP')))
+            for archive in self.all_used_archives:            
+                dsdbp_resource_loc = os.path.join(self.resources_loc, archive)
+                unpacked_archive_loc = os.path.join(self.output_loc, archive)
+                patch_loc = os.path.join(self.patch_dir, archive)
+                if not os.path.exists(dsdbp_resource_loc):
+                    self.messageLog.emit(f"Base {archive} archive not found, generating...")
+                    origin = backup_ifdef(archive, self.game_resources_loc, self.backups_loc)
+                    unpackers[archive](archive, origin, self.resources_loc)
+                
+                shutil.copytree(dsdbp_resource_loc, unpacked_archive_loc)
+                shutil.copytree(patch_loc, unpacked_archive_loc, dirs_exist_ok=True)
+                packers[archive](archive, self.output_loc, self.output_loc, remove_input=False)
+                shutil.rmtree(unpacked_archive_loc)
 
             self.messageLog.emit("Installing patched archive...")
             # Now here's the important bit
             create_backups(self.game_resources_loc, self.backups_loc, self.messageLog.emit)
-            shutil.copy2(self.mvgl_loc, os.path.join(self.game_resources_loc, 'DSDBP.steam.mvgl'))
+            for archive in self.all_used_archives:
+                shutil.move(os.path.join(self.output_loc, f'{archive}.steam.mvgl'), 
+                            os.path.join(self.game_resources_loc, f'{archive}.steam.mvgl'))
             
             self.messageLog.emit("Mods successfully installed.")
         except Exception as e:
             self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")
-            raise e
         finally:
             self.releaseGui.emit()
             self.finished.emit()
