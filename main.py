@@ -374,7 +374,10 @@ class MainWindow(QtWidgets.QMainWindow):
         worker.run()
     
     def update_mods(self):
-        self.mods = detect_mods(script_loc)
+        try:
+            self.mods = detect_mods(script_loc)
+        except Exception as e:
+            print(f"Error: {e}")
         self.modpath_to_id = {mod.path: i for i, mod in enumerate(self.mods)}
         self.modid_to_path = {i: mod.path for i, mod in enumerate(self.mods)}
         self.profile_handler.update_mod_info(self.mods, self.modpath_to_id)
