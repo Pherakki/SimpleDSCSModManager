@@ -56,8 +56,15 @@ def cull_index(indices, files_to_cull):
                     
     return indices
                 
-def add_cache_to_index(indices, files_to_add):
+def add_cache_to_index(indices, mod_archives, files_to_add):
+    final_archive_ref = {}
+    for archive_data in mod_archives:
+        for key, value in archive_data.items():
+            key = os.path.join(*splitpath(key)[3:])
+            final_archive_ref[key] = value
+            
     result = {}
+    mod_archive_result = {}
     returned_files = []
     for local_filepath in files_to_add:
         new_local_filepath = local_filepath
@@ -67,8 +74,10 @@ def add_cache_to_index(indices, files_to_add):
         if os.path.exists(filepath):
             returned_files.append(local_filepath)
             result[filepath] = {new_local_filepath: "overwrite"}
+        mod_archive_result[filepath] = final_archive_ref[local_filepath]
             
     indices.append({"other": result})
+    mod_archives.append(mod_archive_result)
     
     return returned_files
 
