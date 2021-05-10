@@ -12,7 +12,7 @@ def generate_mod_index(modpath, rules, filetypes):
         for file in files:
             for filetype in filetypes:
                 if filetype.checkIfMatch(path, file):
-                    rule = rules.get(os.path.join(path, file))
+                    rule = rules.get(os.path.join(*splitpath(path)[3:], file))
                     category, key, index_data = filetype.produce_index(path, file, rule)
                     if key not in retval[category]:
                         retval[category][key] = {}
