@@ -443,15 +443,17 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
         missing_scripts = []
         missing_mbes = []
         for index in indices:
-            for script in index['script_src'].keys():
-                internal_path = os.path.join(*splitpath(script)[3:])
-                if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
-                    missing_scripts.append(internal_path)
-            for mbe in index['mbe'].keys():
-                internal_path = os.path.join(*splitpath(mbe)[3:])
-                if not os.path.exists(os.path.join(resources_loc, 'base_mbes', internal_path)):
-                    missing_mbes.append(internal_path)
-                
+            if 'script_src' in index:
+                for script in index['script_src'].keys():
+                    internal_path = os.path.join(*splitpath(script)[3:])
+                    if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
+                        missing_scripts.append(internal_path)
+            if 'mbe' in index:
+                for mbe in index['mbe'].keys():
+                    internal_path = os.path.join(*splitpath(mbe)[3:])
+                    if not os.path.exists(os.path.join(resources_loc, 'base_mbes', internal_path)):
+                        missing_mbes.append(internal_path)
+                    
         with open(os.path.join("config", "filelist.json"), 'r') as F:
             filelist = json.load(F)
             
