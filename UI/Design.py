@@ -672,9 +672,10 @@ class uiConflictsTab(QtWidgets.QWidget):
         
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
-        self.conflicts_graph = QtWidgets.QTreeView()
-        model = QtGui.QStandardItemModel(self.conflicts_graph)
-        self.conflicts_graph.setModel(model)
+        self.conflicts_graph = QtWidgets.QLabel("Work In Progress")#QtWidgets.QTreeView()
+        self.conflicts_graph.setAlignment(QtCore.Qt.AlignCenter)
+        # model = QtGui.QStandardItemModel(self.conflicts_graph)
+        # self.conflicts_graph.setModel(model)
         
     def lay_out(self):
         self.layout.addWidget(self.conflicts_graph, 0, 0)
