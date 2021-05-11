@@ -423,7 +423,7 @@ class MainWindow(QtWidgets.QMainWindow):
         return True
     
     def check_dscstools(self):
-        executable = os.path.join(self.dscstools_loc, "DSCSTools.exe")
+        executable = os.path.join(self.dscstools_loc, "DSCSTools.pyd")
         if not os.path.exists(executable):
             buttons = QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
             msgBox = QtWidgets.QMessageBox.question(self, "DSCSTools not found", "DSCSTools was not detected on your computer. Would you like to download it?", buttons)
