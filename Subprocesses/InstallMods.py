@@ -53,16 +53,22 @@ class InstallModsWorker(QtCore.QObject):
             if os.path.exists(patch_dir):
                 shutil.rmtree(patch_dir)
             
+            def hook_signals(pool_obj, thread):
+                # Setup and life cycle signals
+                pool_obj.moveToThread(thread)
+                thread.started.connect(pool_obj.run)
+                pool_obj.finished.connect(thread.quit)
+                pool_obj.finished.connect(pool_obj.deleteLater)
+                thread.finished.connect(thread.deleteLater)
+                
+                # GUI signals
+                pool_obj.messageLog.connect(self.messageLogFunc)
+                pool_obj.updateMessageLog.connect(self.updateMessageLogFunc)
+                pool_obj.lockGui.connect(self.lockGuiFunc)
+                pool_obj.releaseGui.connect(self.releaseGuiFunc)   
+                
             self.mod_indexer = ModsIndexer(self.output_loc, self.profile_handler)
-            self.mod_indexer.moveToThread(self.thread)
-            self.thread.started.connect(self.mod_indexer.run)
-            self.mod_indexer.finished.connect(self.thread.quit)
-            self.mod_indexer.finished.connect(self.mod_indexer.deleteLater)
-            self.thread.finished.connect(self.thread.deleteLater)
-            self.mod_indexer.messageLog.connect(self.messageLogFunc)
-            self.mod_indexer.updateMessageLog.connect(self.updateMessageLogFunc)
-            self.mod_indexer.lockGui.connect(self.lockGuiFunc)
-            self.mod_indexer.releaseGui.connect(self.releaseGuiFunc)
+            hook_signals(self.mod_indexer, self.thread)
             
             # The resource bootstrapper is not generalised and will crash if the MBE or script plugins are removed
             # This NEEDS to be changed
@@ -88,15 +94,7 @@ class InstallModsWorker(QtCore.QObject):
 
             self.patch_installer = FinaliseInstallation(patch_dir, self.output_loc, self.resources_loc,
                                                         self.game_resources_loc, self.backups_loc, self.dscstools_handler)
-            self.patch_installer.moveToThread(self.thread2)
-            self.thread2.started.connect(self.patch_installer.run)
-            self.patch_installer.finished.connect(self.thread2.quit)
-            self.patch_installer.finished.connect(self.patch_installer.deleteLater)
-            self.thread2.finished.connect(self.thread2.deleteLater)
-            self.patch_installer.messageLog.connect(self.messageLogFunc)
-            self.patch_installer.updateMessageLog.connect(self.updateMessageLogFunc)
-            self.patch_installer.lockGui.connect(self.lockGuiFunc)
-            self.patch_installer.releaseGui.connect(self.releaseGuiFunc)
+            hook_signals(self.patch_installer, self.thread2)
             
             def relay_indices_and_cache(indices, cache, archives, all_used_archives):
                 self.resource_bootstrapper.indices = indices
