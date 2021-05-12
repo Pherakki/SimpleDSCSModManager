@@ -50,15 +50,8 @@ class InstallModsWorker(QtCore.QObject):
             self.lockGuiFunc()
             self.messageLogFunc("Preparing to patch mods together...")
             patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
-            dbdsp_dir = os.path.relpath(os.path.join(self.output_loc, 'DSDBP'))
-            mvgl_loc = os.path.join(self.output_loc, 'DSDBP.steam.mvgl')
             if os.path.exists(patch_dir):
                 shutil.rmtree(patch_dir)
-            if os.path.exists(dbdsp_dir):
-                shutil.rmtree(dbdsp_dir)
-            if os.path.exists(mvgl_loc):
-                os.remove(mvgl_loc)
-                
             
             self.mod_indexer = ModsIndexer(self.output_loc, self.profile_handler)
             self.mod_indexer.moveToThread(self.thread)
