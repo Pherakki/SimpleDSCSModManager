@@ -93,7 +93,7 @@ class InstallModsWorker(QtCore.QObject):
                                                     self.messageLogFunc, self.updateMessageLogFunc,
                                                     self.lockGuiFunc, self.releaseGuiFunc)
 
-            self.patch_installer = FinaliseInstallation(dbdsp_dir, patch_dir, mvgl_loc, self.output_loc, self.resources_loc,
+            self.patch_installer = FinaliseInstallation(patch_dir, self.output_loc, self.resources_loc,
                                                         self.game_resources_loc, self.backups_loc, self.dscstools_handler)
             self.patch_installer.moveToThread(self.thread2)
             self.thread2.started.connect(self.patch_installer.run)
@@ -279,12 +279,9 @@ class FinaliseInstallation(QtCore.QObject):
     lockGui = QtCore.pyqtSignal()
     releaseGui = QtCore.pyqtSignal()
 
-    def __init__(self, dbdsp_dir, patch_dir, mvgl_loc, output_loc, resources_loc, game_resources_loc, backups_loc,
-                 dscstools_handler):
+    def __init__(self, patch_dir, output_loc, resources_loc, game_resources_loc, backups_loc, dscstools_handler):
         super().__init__()
-        self.dbdsp_dir = dbdsp_dir
         self.patch_dir = patch_dir
-        self.mvgl_loc = mvgl_loc
         self.output_loc = output_loc
         self.resources_loc = resources_loc
         self.game_resources_loc = game_resources_loc
