@@ -46,10 +46,13 @@ class InstallModsWorker(QtCore.QObject):
         try:
             self.lockGuiFunc()
             self.messageLogFunc("Preparing to patch mods together...")
+            
+            # 1. Clean up any pre-existing patch files
             patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
             if os.path.exists(patch_dir):
                 shutil.rmtree(patch_dir)
             
+            # 2. Define a function to set up the signals on any single-threaded operations
             def hook_signals(pool_obj, thread):
                 # Setup and life cycle signals
                 pool_obj.moveToThread(thread)
@@ -64,9 +67,13 @@ class InstallModsWorker(QtCore.QObject):
                 pool_obj.lockGui.connect(self.lockGuiFunc)
                 pool_obj.releaseGui.connect(self.releaseGuiFunc)   
                 
+            # 3. Create an object to detect which files are in the mods, figure out which archives
+            #    they should be put into, read which rules should be applied to each file in the
+            #    mod to combine it into the patch, etc.
             self.mod_indexer = ModsIndexer(self.output_loc, self.profile_handler)
             hook_signals(self.mod_indexer, self.thread)
             
+            # 4. Create an object to get any files the mods depends on from game archives
             # The resource bootstrapper is not generalised and will crash if the MBE or script plugins are removed
             # This NEEDS to be changed
             self.resource_bootstrapper = multithreaded_bootstrap_index_resources(None, self.game_resources_loc, 
@@ -76,6 +83,8 @@ class InstallModsWorker(QtCore.QObject):
                                                                                  self.messageLogFunc, self.updateMessageLogFunc,
                                                                                  self.lockGuiFunc, self.releaseGuiFunc)
              
+            # 5. Create an object to patch all the mods together into their respective archives
+            #    using the given rules
             rules = get_rule_plugins()
             patchers = get_patcher_plugins()
             self.patch_builder = generate_patch_mt(rules, patchers,
@@ -83,16 +92,19 @@ class InstallModsWorker(QtCore.QObject):
                                                    self.lockGuiFunc, self.releaseGuiFunc,
                                                    self.messageLogFunc, self.updateMessageLogFunc)
                 
-
+            # 6. Create an object to pack any MBE tables into MBE archives, and to compile any
+            #    Squirrel files
             self.file_packer = PackerGenerator(patch_dir, self.dscstools_handler, self.script_handler, 
                                                     self.threadpool,
                                                     self.messageLogFunc, self.updateMessageLogFunc,
                                                     self.lockGuiFunc, self.releaseGuiFunc)
 
+            # 7. Create an object to update the mod manager's file cache, pack the archives, and then install them
             self.patch_installer = FinaliseInstallation(patch_dir, self.output_loc, self.resources_loc,
                                                         self.game_resources_loc, self.backups_loc, self.dscstools_handler)
             hook_signals(self.patch_installer, self.thread2)
             
+            # 8. Make a function to pass the mod index/metadata/target archive to other objects
             def relay_indices_and_cache(indices, cache, archives, all_used_archives):
                 self.resource_bootstrapper.indices = indices
                 self.patch_builder.indices = indices
@@ -101,15 +113,19 @@ class InstallModsWorker(QtCore.QObject):
                 self.file_packer.all_used_archives = all_used_archives
                 self.patch_installer.cached_files = cache
                 self.patch_installer.all_used_archives = all_used_archives
-                
+                           
             self.mod_indexer.emitIndicesAndCache.connect(relay_indices_and_cache)
-
+            
+            # 9. Link up the installer objects such that they kick off the next object in a chain
+            #    Don't forget that e.g. thread2.start() starts off patch_installer, so we can hook
+            #    the finished() signal of patch_installer
             self.mod_indexer.continue_execution.connect(self.resource_bootstrapper.run)
             self.resource_bootstrapper.finished.connect(self.patch_builder.run)
             self.patch_builder.finished.connect(self.file_packer.run)
             self.file_packer.finished.connect(lambda: self.thread2.start())
             self.patch_installer.finished.connect(self.finished.emit)
 
+            # 10. Green light! Go go go!
             self.thread.start()
 
         except Exception as e:
@@ -134,7 +150,6 @@ class ModsIndexer(QtCore.QObject):
     def run(self):
         try:
             filetypes = get_filetype_plugins()
-            # Do this on mod registry...
             self.messageLog.emit("Indexing mods...")
             indices = []
             mod_archives = []
