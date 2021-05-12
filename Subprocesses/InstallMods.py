@@ -1,14 +1,11 @@
 import json
 import os
 import shutil
-import time
 
 from PyQt5 import QtCore 
 
 from ModFiles.Indexing import generate_mod_index
-from ModFiles.PatchGen import generate_patch
 from ModFiles.PatchGenMultithreaded import generate_patch_mt
-from Utils.MBE import mbe_batch_pack, mbe_batch_unpack
 from Utils.Path import splitpath
 from Utils.FiletypesPluginLoader import get_filetype_plugins
 from Utils.PatchersPluginLoader import get_patcher_plugins
