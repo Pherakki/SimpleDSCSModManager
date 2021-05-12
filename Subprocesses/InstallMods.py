@@ -36,11 +36,11 @@ class InstallModsWorker(QtCore.QObject):
         self.messageLogFunc = None
         self.updateMessageLogFunc = None
         
-        self.worker = None
+        self.mod_indexer = None
         self.thread = thread
-        self.worker2 = None
+        self.patch_installer = None
         self.thread2 = QtCore.QThread()
-        self.br = None
+        self.resource_bootstrapper = None
         
         self.indices = None
         self.all_used_archives = None
@@ -59,69 +59,68 @@ class InstallModsWorker(QtCore.QObject):
             if os.path.exists(mvgl_loc):
                 os.remove(mvgl_loc)
                 
-                
-            self.worker = PatchGenerator(self.output_loc, self.profile_handler)
-            self.worker.moveToThread(self.thread)
-            self.thread.started.connect(self.worker.run)
-            self.worker.finished.connect(self.thread.quit)
-            self.worker.finished.connect(self.worker.deleteLater)
+            
+            self.mod_indexer = ModsIndexer(self.output_loc, self.profile_handler)
+            self.mod_indexer.moveToThread(self.thread)
+            self.thread.started.connect(self.mod_indexer.run)
+            self.mod_indexer.finished.connect(self.thread.quit)
+            self.mod_indexer.finished.connect(self.mod_indexer.deleteLater)
             self.thread.finished.connect(self.thread.deleteLater)
-            self.worker.messageLog.connect(self.messageLogFunc)
-            self.worker.updateMessageLog.connect(self.updateMessageLogFunc)
-            self.worker.lockGui.connect(self.lockGuiFunc)
-            self.worker.releaseGui.connect(self.releaseGuiFunc)
+            self.mod_indexer.messageLog.connect(self.messageLogFunc)
+            self.mod_indexer.updateMessageLog.connect(self.updateMessageLogFunc)
+            self.mod_indexer.lockGui.connect(self.lockGuiFunc)
+            self.mod_indexer.releaseGui.connect(self.releaseGuiFunc)
             
             # The resource bootstrapper is not generalised and will crash if the MBE or script plugins are removed
             # This NEEDS to be changed
-            self.br = multithreaded_bootstrap_index_resources(None, self.game_resources_loc, 
-                                                              self.resources_loc, self.backups_loc,
-                                                              self.dscstools_handler, self.script_handler,
-                                                              self.threadpool,
-                                                              self.messageLogFunc, self.updateMessageLogFunc,
-                                                              self.lockGuiFunc, self.releaseGuiFunc)
+            self.resource_bootstrapper = multithreaded_bootstrap_index_resources(None, self.game_resources_loc, 
+                                                                                 self.resources_loc, self.backups_loc,
+                                                                                 self.dscstools_handler, self.script_handler,
+                                                                                 self.threadpool,
+                                                                                 self.messageLogFunc, self.updateMessageLogFunc,
+                                                                                 self.lockGuiFunc, self.releaseGuiFunc)
              
             rules = get_rule_plugins()
             patchers = get_patcher_plugins()
-            self.patchgen_worker = generate_patch_mt(rules, patchers,
-                                                     patch_dir, self.resources_loc, self.threadpool, 
-                                                     self.lockGuiFunc, self.releaseGuiFunc,
-                                                     self.messageLogFunc, self.updateMessageLogFunc)
+            self.patch_builder = generate_patch_mt(rules, patchers,
+                                                   patch_dir, self.resources_loc, self.threadpool, 
+                                                   self.lockGuiFunc, self.releaseGuiFunc,
+                                                   self.messageLogFunc, self.updateMessageLogFunc)
                 
 
-            self.packer_generator = PackerGenerator(patch_dir, self.dscstools_handler, self.script_handler, 
+            self.file_packer = PackerGenerator(patch_dir, self.dscstools_handler, self.script_handler, 
                                                     self.threadpool,
                                                     self.messageLogFunc, self.updateMessageLogFunc,
                                                     self.lockGuiFunc, self.releaseGuiFunc)
 
-            self.worker2 = FinaliseInstallation(dbdsp_dir, patch_dir, mvgl_loc, self.output_loc, self.resources_loc,
-                                                self.game_resources_loc, self.backups_loc, self.dscstools_handler)
-            self.worker2.moveToThread(self.thread2)
-            self.thread2.started.connect(self.worker2.run)
-            self.worker2.finished.connect(self.thread2.quit)
-            self.worker2.finished.connect(self.worker2.deleteLater)
+            self.patch_installer = FinaliseInstallation(dbdsp_dir, patch_dir, mvgl_loc, self.output_loc, self.resources_loc,
+                                                        self.game_resources_loc, self.backups_loc, self.dscstools_handler)
+            self.patch_installer.moveToThread(self.thread2)
+            self.thread2.started.connect(self.patch_installer.run)
+            self.patch_installer.finished.connect(self.thread2.quit)
+            self.patch_installer.finished.connect(self.patch_installer.deleteLater)
             self.thread2.finished.connect(self.thread2.deleteLater)
-            self.worker2.messageLog.connect(self.messageLogFunc)
-            self.worker2.updateMessageLog.connect(self.updateMessageLogFunc)
-            self.worker2.lockGui.connect(self.lockGuiFunc)
-            self.worker2.releaseGui.connect(self.releaseGuiFunc)
+            self.patch_installer.messageLog.connect(self.messageLogFunc)
+            self.patch_installer.updateMessageLog.connect(self.updateMessageLogFunc)
+            self.patch_installer.lockGui.connect(self.lockGuiFunc)
+            self.patch_installer.releaseGui.connect(self.releaseGuiFunc)
             
             def relay_indices_and_cache(indices, cache, archives, all_used_archives):
-                self.br.indices = indices
-                self.patchgen_worker.indices = indices
-                self.patchgen_worker.archives = archives
-                self.patchgen_worker.all_used_archives = all_used_archives
-                self.packer_generator.all_used_archives = all_used_archives
-                self.worker2.cached_files = cache
-                self.worker2.all_used_archives = all_used_archives
+                self.resource_bootstrapper.indices = indices
+                self.patch_builder.indices = indices
+                self.patch_builder.archives = archives
+                self.patch_builder.all_used_archives = all_used_archives
+                self.file_packer.all_used_archives = all_used_archives
+                self.patch_installer.cached_files = cache
+                self.patch_installer.all_used_archives = all_used_archives
                 
-            self.worker.emitIndicesAndCache.connect(relay_indices_and_cache)
+            self.mod_indexer.emitIndicesAndCache.connect(relay_indices_and_cache)
 
-            self.worker.continue_execution.connect(self.br.run)
-            self.br.finished.connect(self.patchgen_worker.run)
-            self.patchgen_worker.finished.connect(self.packer_generator.run)
-            self.packer_generator.finished.connect(lambda: self.thread2.start())
-            
-            self.worker2.finished.connect(self.finished.emit)
+            self.mod_indexer.continue_execution.connect(self.resource_bootstrapper.run)
+            self.resource_bootstrapper.finished.connect(self.patch_builder.run)
+            self.patch_builder.finished.connect(self.file_packer.run)
+            self.file_packer.finished.connect(lambda: self.thread2.start())
+            self.patch_installer.finished.connect(self.finished.emit)
 
             self.thread.start()
 
@@ -193,7 +192,7 @@ class PackerGenerator(QtCore.QObject):
             self.finished.emit()
         
 
-class PatchGenerator(QtCore.QObject):
+class ModsIndexer(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     continue_execution = QtCore.pyqtSignal()
     messageLog = QtCore.pyqtSignal(str)
