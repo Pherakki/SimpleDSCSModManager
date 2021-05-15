@@ -107,7 +107,6 @@ def check_mod_type(path):
             return modformat(path)
     return False
 
-def install_mod_in_manager(mod_path, install_path, mbe_unpack):
 ##############
 # INSTALLERS #
 ##############
@@ -142,10 +141,14 @@ def check_installer_type(path):
     return None
 
 
+###################################
+# FUNCTIONS INTENDED TO BE PUBLIC #
+###################################
+def install_mod_in_manager(mod_source_path, install_path, mbe_unpack):
     """
     Dumps the input file/folder to the install_path if it is a supported mod format.
     """
-    mod = check_mod_type(mod_path)
+    mod = check_mod_type(mod_source_path)
     if mod:
         # Unpack / Copy the files
         mod.toLoose(os.path.join(install_path, mod.filename))
