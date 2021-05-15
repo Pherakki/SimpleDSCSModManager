@@ -85,5 +85,5 @@ class DSCSToolsDownloader(QtCore.QObject):
         
     def get_dscstools_download_url(self):
         tag = self.get_dscstools_tag()
-        return rf"https://github.com/SydMontague/DSCSTools/releases/download/{tag}/DSCSTools_win64.zip", tag
+        return rf"https://github.com/SydMontague/DSCSTools/releases/download/{tag}/DSCSTools_{tag}-win64-shared.zip", tag
 
