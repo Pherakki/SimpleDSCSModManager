@@ -524,7 +524,7 @@ def restore_backups(game_resources_loc, backup_loc, logfunc):
         logfunc(f"The following error occured when trying to restore the backup: {e}")
 
 
-if __name__ == '__main__': 
+if __name__ == '__main__':    
     app = QtWidgets.QApplication([]) 
   
     win = MainWindow() 
