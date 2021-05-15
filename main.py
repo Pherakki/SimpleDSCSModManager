@@ -391,6 +391,29 @@ class MainWindow(QtWidgets.QMainWindow):
         self.profile_handler.update_mod_info(self.mods, self.modpath_to_id)
         self.profile_handler.apply_profile()
 
+    def mod_has_wizard(self, index):
+        mod = self.mods[index]
+
+        return mod.wizard is not None
+
+    def reinstall_mod(self, index):
+        mod = self.mods[index]
+        mod_name = os.path.split(mod.path)[1]
+        try:
+            modfiles_dir = os.path.join(self.mods[index].path, "modfiles")
+            wizard = mod.wizard
+            if not wizard.launch_wizard():
+                raise ModInstallWizardCancelled()
+            shutil.rmtree(modfiles_dir)
+            os.mkdir(modfiles_dir)
+            wizard.install()
+            self.ui.log(f"Re-installed {mod_name}.")
+        except Exception as e:
+            self.ui.log(f"The following error occured when trying to delete {mod_name}: {e}")
+        finally:
+            self.update_mods()
+
+
     def check_gamelocation(self):
         if self.game_loc is None or not os.path.exists(os.path.join(str(self.game_loc), "app_digister", "Digimon Story CS.exe")):
             if not self.find_gamelocation():
