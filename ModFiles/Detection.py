@@ -28,7 +28,7 @@ class ModFile:
         return [str(item) for item in [self.name, self.author, self.version, self.category]]
     
     @staticmethod
-    def checkIfMatch(itempath):
+    def check_if_match(itempath):
         raise NotImplementedError
         
     def toLoose(self, path):
@@ -43,7 +43,7 @@ class LooseMod(ModFile):
                 self.init_metadata(F)
         
     @staticmethod
-    def checkIfMatch(itempath):
+    def check_if_match(itempath):
         if os.path.isdir(itempath):
             if os.path.exists(os.path.join(itempath, "modfiles/")):
                 return True
@@ -61,7 +61,7 @@ class ZipMod(ModFile):
                 self.init_metadata(fJ)
         
     @staticmethod
-    def checkIfMatch(itempath):
+    def check_if_match(itempath):
         if os.path.isfile(itempath):
             filename, ext = os.path.splitext(itempath)
             if ext == '.zip':
@@ -83,7 +83,7 @@ class NestedZipMod(ModFile):
                 self.init_metadata(fJ)
                 
     @staticmethod
-    def checkIfMatch(itempath):
+    def check_if_match(itempath):
         if os.path.isfile(itempath):
             filename, ext = os.path.splitext(itempath)
             if ext == '.zip':
@@ -104,7 +104,7 @@ def check_mod_type(path):
     Figures out which of the supported mod formats the input file/folder is in, if any.
     """
     for modformat in modformats:
-        if modformat.checkIfMatch(path):
+        if modformat.check_if_match(path):
             return modformat(path)
     return False
 
