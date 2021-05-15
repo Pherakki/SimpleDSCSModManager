@@ -2,6 +2,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 
 from .CustomWidgets import ClickEmitComboBox, DragDropTreeView, LinkItem
+                
+def safe_disconnect(func):
+    try:
+        func.disconnect()
+    except TypeError:
+        pass
         
 ###############################
 # Top-Level Widget Containers #
@@ -37,6 +43,7 @@ class uiMainWidget:
         self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
         self.hook_mod_registry = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
         self.hook_delete_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
+        self.hook_wizard_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_wizard_funcs
         self.hook_update_mod_info_window = self.main_area.mod_interaction_area.mods_display_area.update_mod_info_window
         self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
         self.hook_game_launch_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_game_launch_button
@@ -223,11 +230,14 @@ class uiModsDisplay:
         self.mods_display.setMinimumSize(500, 300)
         
         self.contextMenu = QtWidgets.QMenu()
+        self.reinstallModAction = self.contextMenu.addAction("Reinstall...")
         self.deleteModAction = self.contextMenu.addAction("Delete Mod")
         
         self.mods_display.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.mods_display.customContextMenuRequested.connect(self.menuContextTree)
         self.deleteModFunction = None
+        self.hasWizardFunc = None
+        self.reinstallModFunction = None
         
         
     def lay_out(self):
@@ -243,27 +253,35 @@ class uiModsDisplay:
         self.mods_display.setEnabled(active)
 
     def menuContextTree(self, point):
-        try:
-            self.deleteModAction.triggered.disconnect()
-        except TypeError:
-            pass
+        safe_disconnect(self.deleteModAction.triggered)
+        safe_disconnect(self.reinstallModAction.triggered)
 
         # Infos about the node selected.
         index = self.mods_display.indexAt(point)
 
         if not index.isValid():
             return
+        
+        mod_id = self.mods_display.display_data[index.row()][self.mods_display.id_column]
+        
+        has_wizard = self.hasWizardFunc(mod_id)
+        self.reinstallModAction.setEnabled(has_wizard)
 
-        self.deleteModAction.triggered.connect(lambda: self.deleteModFunction(index.row()))
+        self.reinstallModAction.triggered.connect(lambda: self.reinstallModFunction(mod_id))
+        self.deleteModAction.triggered.connect(lambda: self.deleteModFunction(mod_id))
 
         self.contextMenu.exec_(self.mods_display.mapToGlobal(point))
         
     def hook_delete_mod(self, func):
         self.deleteModFunction = func
         
+    def hook_wizard_funcs(self, hasWizardFunc, reinstallModFunction):
+        self.hasWizardFunc = hasWizardFunc
+        self.reinstallModFunction = reinstallModFunction
+        
     def update_mod_info_window(self, func):
         self.mods_display.update_mods_func = func
-        
+
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
         self.define(parentWidget)
