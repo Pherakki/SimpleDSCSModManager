@@ -1,9 +1,10 @@
 import csv
+import json
 import os
 from Utils.Path import splitpath
 
-
-id_lengths = {'mon_design_para.mbe\Monster.csv': 2}
+with open(os.path.join("config", "mberecordidsizes.json"), 'r') as F:
+    id_lengths = json.load(F)
 
 class MBE_table:
     group = 'mbe'
@@ -23,7 +24,7 @@ class MBE_table:
         mbe_filepath = os.path.join(path, filename)
         with open(mbe_filepath, 'r', encoding='utf8') as F:
             F.readline()
-            id_len = id_lengths.get('\\'.join(splitpath(mbe_filepath)[-2:]), 1)
+            id_len = id_lengths.get('/'.join(splitpath(mbe_filepath)[-3:]), 1)
             csvreader = csv.reader(F, delimiter=',', quotechar='"')
             for line in csvreader:
                 record_id = [item.strip() for item in line[:id_len]]

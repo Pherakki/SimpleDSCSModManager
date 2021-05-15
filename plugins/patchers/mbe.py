@@ -1,4 +1,5 @@
 import csv
+import json
 import os
 import shutil
 
@@ -6,9 +7,16 @@ from PyQt5 import QtCore
 
 from Utils.Path import splitpath
 
-
-id_lengths = {'mon_design_para.mbe\Monster.csv': 2}
-known_duplicates = [(('107', '1'), 'mon_design_para.mbe\Monster.csv')]     
+with open(os.path.join("config", "mberecordidsizes.json"), 'r') as F:
+    id_lengths = json.load(F)
+with open(os.path.join("config", "mberecordsizes.json"), 'r') as F:
+    max_record_sizes = json.load(F)
+    
+known_duplicates = []
+with open(os.path.join("config", "mbeduplicaterecords.json"), 'r') as F:
+    for key, value in json.load(F).items():
+        for subkey in value:
+            known_duplicates.append((tuple(subkey), key))
 
 class mbe_patcher(QtCore.QRunnable):
     group = 'mbe'
@@ -73,7 +81,7 @@ def mbetable_to_dict(filepath):
         csvreader = csv.reader(F, delimiter=',', quotechar='"')
         for line in csvreader:
             data = line
-            id_length_key = '\\'.join(splitpath(filepath)[-2:])
+            id_length_key = '/'.join(splitpath(filepath)[-3:])
             id_size = id_lengths.get(id_length_key, 1)
             record_id = tuple(data[:id_size])
             if record_id not in result:
