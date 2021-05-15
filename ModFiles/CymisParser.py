@@ -87,7 +87,7 @@ boolean_operators = {'and': and_operator,
 #############################
 # DEFINE INSTALLATION RULES #
 #############################
-def copy_rule(path_prefix, rule_name, source, destination):
+def copy_rule(path_prefix, rule, source, destination):
     validate_path(source)
     validate_path(destination)
     source = os.path.join(path_prefix, *source.split('/'))
