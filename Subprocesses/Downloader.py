@@ -5,7 +5,7 @@ import urllib.request
 import zipfile
 
 from PyQt5 import QtCore
-import time
+
 class DSCSToolsDownloader(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     emitTag = QtCore.pyqtSignal(str)
