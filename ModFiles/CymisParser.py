@@ -29,7 +29,6 @@ class Flag:
     
 class ChooseOne:
     def __init__(self, options):
-        self.name = options['Name']
         self.type = options['Type']
         self.description = options.get("Description", "No description.")
         self.flags = {flag_def['Name']: Flag(flag_def) for flag_def in options.get("Flags", [])}
