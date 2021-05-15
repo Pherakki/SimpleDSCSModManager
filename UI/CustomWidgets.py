@@ -141,7 +141,8 @@ class DragDropTreeView(QtWidgets.QTreeView):
         index = self.selectedIndexes()
         if len(index) and self.update_mods_func is not None:
             row = index[0].row()
-            self.update_mods_func(self.display_data[row])
+            if row < len(self.display_data):
+                self.update_mods_func(self.display_data[row])
         
     #########
     # LOGIC #
