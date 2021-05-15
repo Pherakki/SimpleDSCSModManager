@@ -179,7 +179,7 @@ def detect_mods(path):
     for item in os.listdir(dirpath):
         itempath = os.path.join(dirpath, item)
         modtype = LooseMod
-        if modtype.checkIfMatch(itempath):
+        if modtype.check_if_match(itempath):
             detected_mods.append(modtype(itempath))
     return detected_mods
 
