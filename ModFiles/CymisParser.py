@@ -95,7 +95,7 @@ def copy_rule(path_prefix, rule, source, destination):
     if os.path.exists(source):
         os.makedirs(os.path.split(destination)[0], exist_ok=True)
         if os.path.isfile(source):
-            os.copy2(source, destination)
+            shutil.copy2(source, destination)
         elif os.path.isdir(source):
             shutil.copytree(source, destination)
         else:
