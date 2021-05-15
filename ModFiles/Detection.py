@@ -3,6 +3,7 @@ import os
 import shutil
 import zipfile
 
+from UI.CymisWizard import CymisWizard
 class ModFile:
     def __init__(self, path):
         self.path = path
@@ -107,6 +108,40 @@ def check_mod_type(path):
     return False
 
 def install_mod_in_manager(mod_path, install_path, mbe_unpack):
+##############
+# INSTALLERS #
+##############
+class Cymis:
+    def __init__(self, modpath):
+        self.modpath = modpath
+        cymis_path = os.path.join(self.modpath, "INSTALL.json")
+        self.wizard = CymisWizard(cymis_path)
+
+    @staticmethod
+    def check_if_match(modpath):
+        return os.path.exists(os.path.join(modpath, "INSTALL.json"))       
+    
+    def launch_wizard(self):
+        dir_contents = os.listdir(os.path.join(self.modpath, 'modfiles'))
+        assert len(dir_contents) == 0, f"'modfiles' folder was not empty for Cymis installer: {len(dir_contents)} items found."
+        
+        return self.wizard.exec()
+
+    def install(self):
+        self.wizard.launch_installation()
+
+modinstallers = [Cymis]
+
+def check_installer_type(path):
+    """
+    Figures out which of the supported mod formats the input file/folder is in, if any.
+    """
+    for installer in modinstallers:
+        if installer.check_if_match(path):
+            return installer(path)
+    return None
+
+
     """
     Dumps the input file/folder to the install_path if it is a supported mod format.
     """
