@@ -64,7 +64,8 @@ class mbe_patcher(QtCore.QRunnable):
             header, mbe_data = mbetable_to_dict(working_mbe_filepath)
             _, mod_mbe_data = mbetable_to_dict(mbe_table_filepath)
             for record_id, record_rule in mbe_rules.items():
-                self.rules_dictionary[record_rule](record_id, mbe_data, mod_mbe_data)
+                key = '/'.join(splitpath(mbe_table_filepath)[-3:])
+                self.rules_dictionary[record_rule](record_id, mbe_data, mod_mbe_data, max_record_sizes[key])
             dict_to_mbetable(working_mbe_filepath, header, mbe_data)
             
             self.update_messagelog(local_filepath)

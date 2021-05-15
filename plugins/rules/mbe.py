@@ -1,8 +1,8 @@
-def mberecord_overwrite(record_id, mbe_data, mod_mbe_data):
+def mberecord_overwrite(record_id, mbe_data, mod_mbe_data, record_size):
     mbe_data[record_id] = mod_mbe_data[record_id]
     
-def evorecord_join(record_id, mbe_data, mod_mbe_data):
-    max_records = 6
+def mberecord_join(record_id, mbe_data, mod_mbe_data, record_size):
+    max_records = record_size - 1
     nonzero_data = [elem for elem in mbe_data.get(record_id, []) if elem != '0']
     new_data = [elem for elem in mod_mbe_data[record_id] if elem not in nonzero_data]
     nonzero_data.extend(new_data)
