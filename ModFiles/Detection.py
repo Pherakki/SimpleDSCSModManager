@@ -4,6 +4,11 @@ import shutil
 import zipfile
 
 from UI.CymisWizard import CymisWizard
+from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, ModInstallWizardCancelled
+
+###################
+# MOD DEFINITIONS #
+###################
 class ModFile:
     def __init__(self, path):
         self.path = path
@@ -150,25 +155,39 @@ def install_mod_in_manager(mod_source_path, install_path, mbe_unpack):
     """
     mod = check_mod_type(mod_source_path)
     if mod:
-        # Unpack / Copy the files
-        mod.toLoose(os.path.join(install_path, mod.filename))
-        
-        # Unpack any MBEs
-        for mbe_folder in ["data", "message", "text"]:
-            data_path = os.path.join(install_path, mod.filename, "modfiles", mbe_folder)
-            if os.path.exists(data_path):
-                temp_path = os.path.join(data_path, 'temp')
-                os.makedirs(temp_path, exist_ok=True)
-                for item in os.listdir(data_path):
-                    itempath = os.path.join(data_path, item)
-                    if os.path.isfile(itempath) and os.path.splitext(item)[-1] == '.mbe':
-                        temp_item_path = os.path.join(temp_path, item)
-                        os.rename(os.path.join(data_path, item), temp_item_path)
-                        mbe_unpack(item, temp_path, data_path)
-                shutil.rmtree(temp_path)
-        return True
+        modpath = os.path.join(install_path, mod.filename)
+        try:
+            # Unpack / Copy the files           
+            mod.toLoose(modpath)
+            
+            wizard = check_installer_type(modpath)
+            if wizard is not None:
+                try:
+                    if not wizard.launch_wizard():
+                        raise ModInstallWizardCancelled()
+                    wizard.install()
+                except Exception as e:
+                    raise ModInstallWizardError(e)
+                    
+            # Unpack any MBEs
+            for mbe_folder in ["data", "message", "text"]:
+                data_path = os.path.join(install_path, mod.filename, "modfiles", mbe_folder)
+                if os.path.exists(data_path):
+                    temp_path = os.path.join(data_path, 'temp')
+                    os.makedirs(temp_path, exist_ok=True)
+                    for item in os.listdir(data_path):
+                        itempath = os.path.join(data_path, item)
+                        if os.path.isfile(itempath) and os.path.splitext(item)[-1] == '.mbe':
+                            temp_item_path = os.path.join(temp_path, item)
+                            os.rename(os.path.join(data_path, item), temp_item_path)
+                            mbe_unpack(item, temp_path, data_path)
+                    shutil.rmtree(temp_path)
+            return
+        except Exception as e:
+            shutil.rmtree(modpath)
+            raise e
     else:
-        return False
+        raise UnrecognisedModFormatError()
 
 def detect_mods(path):
     """Check for qualifying mods in the registered mods folder."""

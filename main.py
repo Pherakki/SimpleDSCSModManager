@@ -19,6 +19,7 @@ from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.InstallMods import InstallModsWorker
 from ToolHandlers.ProfileHandler import ProfileHandler
 from UI.Design import uiMainWidget
+from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, ModInstallWizardCancelled
   
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
@@ -131,11 +132,18 @@ class MainWindow(QtWidgets.QMainWindow):
         mod_name = os.path.split(mod_path)[-1]
         try:
             self.ui.log(f"Attempting to register {mod_name}...")
-            success = install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe)
-            if success:
+            try:
+                install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe)
                 self.ui.log(f"Successfully registered {mod_name}.")
-            else:
+            except ModInstallWizardCancelled:
+                self.ui.log(f"Did not install {mod_name}: wizard was cancelled.")
+            except ModInstallWizardError as e:
+                self.ui.log(f"Installation wizard encountered an error: {e}.")
+            except UnrecognisedModFormatError:
                 self.ui.log(f"{mod_name} is not in a recognised mod format.")
+            except Exception as e:
+                raise e
+                self.ui.log(f"The mod manager encountered an unhandled error when attempting to install {mod_name}: {e}.")
         except Exception as e:
             shutil.rmtree(os.path.join(self.mods_loc, mod_name))
             self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
