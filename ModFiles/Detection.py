@@ -45,6 +45,7 @@ class LooseMod(ModFile):
         if os.path.exists(metadata_path):
             with open(metadata_path, 'r') as F:
                 self.init_metadata(F)
+        self.wizard = None
         
     @staticmethod
     def check_if_match(itempath):
@@ -199,6 +200,11 @@ def detect_mods(path):
         itempath = os.path.join(dirpath, item)
         modtype = LooseMod
         if modtype.check_if_match(itempath):
-            detected_mods.append(modtype(itempath))
+            mod_obj = modtype(itempath)
+            # If the mod has a wizard defined, attach it for reinstallation purposes
+            wizard = check_installer_type(itempath)
+            if wizard is not None:
+                mod_obj.wizard = wizard
+            detected_mods.append(mod_obj)
     return detected_mods
 
