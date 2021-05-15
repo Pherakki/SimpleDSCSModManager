@@ -1,5 +1,3 @@
-import distutils
-from distutils import dir_util
 import json
 import os
 import shutil
@@ -50,7 +48,7 @@ class LooseMod(ModFile):
         return False
     
     def toLoose(self, path):
-        dir_util.copy_tree(self.path, path)
+        shutil.copytree(self.path, path, dirs_exist_ok=True)
     
         
 class ZipMod(ModFile):
