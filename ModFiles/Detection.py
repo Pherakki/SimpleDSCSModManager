@@ -128,7 +128,7 @@ class Cymis:
     
     def launch_wizard(self):
         dir_contents = os.listdir(os.path.join(self.modpath, 'modfiles'))
-        assert len(dir_contents) == 0, f"'modfiles' folder was not empty for Cymis installer: {len(dir_contents)} items found."
+        # assert len(dir_contents) == 0, f"'modfiles' folder was not empty for Cymis installer: {len(dir_contents)} items found."
         
         return self.wizard.exec()
 
