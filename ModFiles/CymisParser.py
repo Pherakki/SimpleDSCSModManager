@@ -11,6 +11,7 @@ from Utils.Path import splitpath
 class HiddenFlag:
     def __init__(self, options):
         self.name = options['Name']
+        self.type = options['Type']
         self.value = options['Default']
         
     def get_flag_status(self):
@@ -19,6 +20,7 @@ class HiddenFlag:
 class Flag:
     def __init__(self, options):
         self.name = options['Name']
+        self.type = options['Type']
         self.description = options.get("Description", "No description.")
         self.value = options.get("Default", False)
     
@@ -28,6 +30,7 @@ class Flag:
 class ChooseOne:
     def __init__(self, options):
         self.name = options['Name']
+        self.type = options['Type']
         self.description = options.get("Description", "No description.")
         self.flags = {flag_def['Name']: Flag(flag_def) for flag_def in options.get("Flags", [])}
         for flag in self.flags.values():
