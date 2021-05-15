@@ -91,7 +91,7 @@ def copy_rule(path_prefix, rule, source, destination):
     validate_path(source)
     validate_path(destination)
     source = os.path.join(path_prefix, *source.split('/'))
-    destination = os.path.join(path_prefix, *destination.split('/'))
+    destination = os.path.join(path_prefix, 'modfiles', *destination.split('/'))
     if os.path.exists(source):
         os.makedirs(os.path.split(destination)[0], exist_ok=True)
         if os.path.isfile(source):
