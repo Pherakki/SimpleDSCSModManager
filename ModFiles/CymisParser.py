@@ -132,7 +132,7 @@ class CymisInstaller:
         path_prefix = os.path.split(filepath)[0]
         
         for page in cymis["Wizard"]:
-            wizard_page = CymisWizardPage(page)
+            wizard_page = CymisInstallerPage(page)
             instance.wizard_pages.append(wizard_page)
             instance.flag_table.update(wizard_page.retrieve_flags())
         instance.installation_steps = [CymisInstallationStep(path_prefix, step_info, instance.flag_table) for step_info in cymis["Install"]]
@@ -144,7 +144,7 @@ class CymisInstaller:
             if installer_step.check_should_execute():
                 installer_step.execute_step()
             
-class CymisWizardPage:
+class CymisInstallerPage:
     def __init__(self, page):
         self.title = page.get("Title", "No Title")
         self.contents = page.get("Contents")
