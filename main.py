@@ -86,6 +86,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_install_button(self.install_mods)
         self.ui.hook_game_launch_button(self.launch_game)
         self.ui.hook_delete_mod_menu(self.unregister_mod)
+        self.ui.hook_wizard_mod_menu(self.mod_has_wizard, self.reinstall_mod)
         self.ui.hook_update_mod_info_window(self.update_mod_info_window)
         self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, 
                                                             self.backups_loc, self.ui.log)))
