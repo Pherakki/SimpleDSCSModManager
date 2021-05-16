@@ -34,8 +34,10 @@ class ChooseOne:
         self.flags = {flag_def['Name']: Flag({**flag_def, 'Type': 'Flag'}) for flag_def in options.get("Flags", [])}
         for flag in self.flags.values():
             flag.value = False
-        if "Default" in options:
-            self.flags[options["Default"]] = True
+
+        if len(self.flags):
+            default_option = options.get("Default", options["Flags"][0]["Name"])
+            self.flags[default_option].value = True
             
     def get_flag_status(self):
         return {flag_name: flag.value for flag_name, flag in self.flags.items()}
