@@ -167,6 +167,8 @@ def install_mod_in_manager(mod_source_path, install_path, mbe_unpack):
                     if not wizard.launch_wizard():
                         raise ModInstallWizardCancelled()
                     wizard.install()
+                except ModInstallWizardCancelled as e:
+                    raise e
                 except Exception as e:
                     raise ModInstallWizardError(e)
                     
