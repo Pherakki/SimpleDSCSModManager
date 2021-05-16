@@ -539,6 +539,10 @@ def restore_backups(game_resources_loc, backup_loc, logfunc):
     except Exception as e:
         logfunc(f"The following error occured when trying to restore the backup: {e}")
 
+def expectation_management_popup():
+    buttons = QtWidgets.QMessageBox.Ok
+    issue_tracker = "<a href=\"https://github.com/Pherakki/SimpleDSCSModManager/issues\">issue tracker</a>"
+    msgBox = QtWidgets.QMessageBox.question(None, "Early Build Notice", f"This is an early build of SimpleDSCSModManager. You may run into bugs using some features of this program. If you encounter one, please check if this bug is already an open issue at the {issue_tracker}, and if not, open a new issue.", buttons)
 
 if __name__ == '__main__':    
     app = QtWidgets.QApplication([]) 
@@ -551,5 +555,6 @@ if __name__ == '__main__':
         win.config['game_loc'] = try_to_locate_game_exe()
         win.write_config()
     win.check_gamelocation()
+    expectation_management_popup()
   
     sys.exit(app.exec_())
