@@ -116,6 +116,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def backups_loc(self):
         return os.path.join(self.game_resources_loc, 'backup')
     
+    ####################################
+    # MOD REGISTRY FUNCTIONS AND UTILS #
+    ####################################
     def launch_game(self):
         subprocess.run([self.game_executable_loc], creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.game_loc)
 
@@ -202,6 +205,9 @@ class MainWindow(QtWidgets.QMainWindow):
         with open(os.path.join(self.config_loc, "config.json"), 'w') as F:
             json.dump(self.config, F, indent=4)
     
+    ###########################################
+    # FUNCTIONS ATTACHED TO "EXTRACT" BUTTONS #
+    ###########################################
     def mdb1_dump_factory(self, archive):
         def retval():
             if self.check_gamelocation():
@@ -380,6 +386,9 @@ class MainWindow(QtWidgets.QMainWindow):
                   self.ui.disable_gui, self.ui.enable_gui, self.ui.log, self.ui.updateLog)
         worker.run()
     
+    ############################################
+    # MOD FILE INTERACTION FUNCTIONS AND UTILS #
+    ############################################
     def update_mods(self):
         try:
             self.mods = detect_mods(script_loc)
@@ -452,6 +461,9 @@ class MainWindow(QtWidgets.QMainWindow):
         
         return True
     
+    ##################
+    # TOOL FUNCTIONS #
+    ##################
     def check_dscstools(self):
         executable = os.path.join(self.dscstools_loc, "DSCSTools.pyd")
         if not os.path.exists(executable):
@@ -497,6 +509,9 @@ class MainWindow(QtWidgets.QMainWindow):
         except Exception as e:
             self.ui.log(f"The following error occurred when attempting to save the DSCSTools version information: {e}")
     
+    #################
+    # WINDOW EVENTS #
+    #################
     def closeEvent(self, *args, **kwargs):
         self.profile_handler.save_profile()
         super().closeEvent(*args, **kwargs)
