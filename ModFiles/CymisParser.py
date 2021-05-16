@@ -124,6 +124,7 @@ class CymisInstaller:
         self.flag_table = {}
         self.wizard_pages = []
         self.installation_steps = []
+        self.version = None
         
     @classmethod
     def init_from_script(cls, filepath):
@@ -131,6 +132,7 @@ class CymisInstaller:
             cymis = json.load(F)
         
         instance = cls()
+        instance.version = cymis['Version']
         path_prefix = os.path.split(filepath)[0]
         
         for page in cymis["Wizard"]:
