@@ -56,6 +56,7 @@ class ChooseOneView(QtWidgets.QWidget):
         
         for flagname, flag in self.flag_data.flags.items():
             radiobutton = QtWidgets.QRadioButton(flag.description)
+            radiobutton.setChecked(flag.value)
             radiobutton.toggled.connect(self.generate_togglefunc(flagname, radiobutton))
             self.buttongroup.addButton(radiobutton)
             self.layout.addWidget(radiobutton)
