@@ -225,8 +225,7 @@ Each flag in the ``Flags" item should contain the following items:
 \item Description
 \end{itemize}
 ``Name" is the name this flag is referred to by.\\
-``Default" defines whether the Flag begins in a True or False state. By default, it is False.\\\\
-An example ChooseOne definition is given below.
+``Description" is the label attached to the radio button.\\
 \newpage
 \begin{lstlisting}[language=json,firstnumber=1]
 {
@@ -302,7 +301,7 @@ The ``and" rule takes a \textbf{list} of conditions and returns True if \textbf{
 \subsubsection{or}
 The ``or" rule takes a \textbf{list} of conditions and returns True if \textbf{any} the contained conditions are true.
 \begin{lstlisting}[language=json,firstnumber=1]
-"if": {"any": [<condition 1>, <condition 2>, <condition 3>, ..., <condition N>]}
+"if": {"or": [<condition 1>, <condition 2>, <condition 3>, ..., <condition N>]}
 \end{lstlisting}
 \subsubsection{not}
 The ``not" rule takes a \textbf{single} condition and returns the opposite of the value of that condition.
