@@ -24,6 +24,8 @@ from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, 
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
 patreon_addr = r'https://www.patreon.com/sydmontague'
+discord_addr = r'https://discord.gg/cb5AuxU6su'
+
 def open_patreon():
     webbrowser.open_new_tab(patreon_addr)
 
@@ -98,6 +100,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.ui.log("SimpleDSCSModManager initialised.")
         self.ui.loglink(f"""Enjoying Cyber Sleuth modding? Consider supporting more projects like this on <a href="{patreon_addr}">Patreon</a>!""")
+        self.ui.loglink(f"""Want to contribute to modding tools or develop mods? Consider joining the <a href="{discord_addr}">Digimon Modding Community discord server</a>.""")
 
 
     @property
