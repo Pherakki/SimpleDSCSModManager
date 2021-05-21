@@ -21,10 +21,6 @@ class CymisWizard(QtWidgets.QWizard):
         # self.button(QtWidgets.QWizard.FinishButton).clicked.connect(self.launch_installation)
         
     def launch_installation(self):
-        common_dir = os.path.join(os.path.split(self.filepath)[0], "common")
-        modfiles_dir = os.path.join(os.path.split(self.filepath)[0], "modfiles")
-        if os.path.exists(common_dir):
-            shutil.copytree(common_dir, modfiles_dir, dir_exist_ok=True)
         # Should hook into this to provide GUI logging functions
         self.installer.install_mod()
 
