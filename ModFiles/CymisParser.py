@@ -174,8 +174,12 @@ class CymisInstallationStep:
         else:
             assert 0, f"Unrecognised installation condition type: {type(execution_condition)}. Should be a string, dict, or not present."
         
-        self.instructions = [lambda: installation_rules[kwargs["rule"]](path_prefix, **kwargs) for kwargs in step_info["then"]]
+        self.instructions = step_info["then"]
+        self.path_prefix = path_prefix
     
     def execute_step(self):
         for instruction in self.instructions:
-            instruction()
+            self.get_rule(instruction["rule"])(self.path_prefix, **instruction)
+
+    def get_rule(self, rule):
+        return installation_rules[rule]
