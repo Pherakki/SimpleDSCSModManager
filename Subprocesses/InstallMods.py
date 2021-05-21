@@ -269,11 +269,13 @@ class PackerGenerator(QtCore.QObject):
             self.runner.finished.connect(self.finished.emit)
             self.runner.run()
         except Exception as e:
-            self.messageLog.emit(f"The following exception occured when packing mod files: {e}")
+            self.messageLogFunc.emit(f"The following exception occured when packing mod files: {e}")
         finally:
             self.releaseGuiFunc()
             # self.finished.emit()
             
+            
+    
             
 class FinaliseInstallation(QtCore.QObject):
     finished = QtCore.pyqtSignal()
