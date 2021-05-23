@@ -34,6 +34,7 @@ class generate_patch_mt(QtCore.QObject):
         
     def run(self):
         self.messageLogFunc("Generating patch...")
+        
         for archive in self.all_used_archives:
             archive_patch_dir = os.path.relpath(os.path.join(self.working_dir, archive))
             if os.path.exists(archive_patch_dir):
@@ -59,11 +60,14 @@ class generate_patch_mt(QtCore.QObject):
             
         self.poolchain = PoolChain(*self.runners)
         self.poolchain.finished.connect(self.finished.emit)
+        self.poolchain.lockGui.connect(self.lockGuiFunc)
         self.poolchain.run()
 
             
                     
 class patch_pool_runner(QtCore.QObject):
+    lockGui = QtCore.pyqtSignal()
+    releaseGui = QtCore.pyqtSignal()
     updateMessageLog = QtCore.pyqtSignal(str)
     finished = QtCore.pyqtSignal()
     
@@ -101,7 +105,7 @@ class patch_pool_runner(QtCore.QObject):
         
     def run(self):
         try:
-            self.lockGuiFunc()
+            self.lockGui.emit()
             self.ncomplete = 0
             self.njobs = len(self.subindex)
             if not self.cml_job_count and self.njobs:
@@ -117,6 +121,7 @@ class patch_pool_runner(QtCore.QObject):
                                    self.resources_dir, filepath, rules,
                                    self.update_messagelog, self.update_finished, self.raise_exception)
                 self.threadpool.start(job)
+            
         except Exception as e:
             self.raise_exception(e)
             
@@ -133,5 +138,5 @@ class patch_pool_runner(QtCore.QObject):
         self.threadpool.clear()
         self.messageLogFunc(f"The following exception occured when {self.plurmessage}: {e}")
         self.threadpool.waitForDone()
-        self.releaseGuiFunc()
+        self.releaseGui.emit()
 
