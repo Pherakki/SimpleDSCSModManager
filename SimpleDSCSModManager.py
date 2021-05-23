@@ -99,8 +99,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_mods()
         
         self.ui.log("SimpleDSCSModManager initialised.")
-        self.ui.loglink(f"""Enjoying Cyber Sleuth modding? Consider supporting more projects like this on <a href="{patreon_addr}">Patreon</a>!""")
-        self.ui.loglink(f"""Want to contribute to modding tools or develop mods? Consider joining the <a href="{discord_addr}">Digimon Modding Community discord server</a>.""")
+        self.ui.loglink(f"""Enjoying Cyber Sleuth modding? Consider supporting more projects like this on <a href="{patreon_addr}">Patreon</a>! [Right-click to copy link]""")
+        self.ui.loglink(f"""Want to contribute to modding tools or develop mods? Consider joining the <a href="{discord_addr}">Digimon Modding Community discord server</a>. [Right-click to copy link]""")
 
 
     @property
@@ -418,7 +418,7 @@ class MainWindow(QtWidgets.QMainWindow):
             shutil.rmtree(modfiles_dir)
             os.mkdir(modfiles_dir)
             wizard.install()
-            self.ui.log(f"Re-installed {mod_name}.")
+            self.ui.log(f"Re-registered {mod_name}.")
         except Exception as e:
             self.ui.log(f"The following error occured when trying to delete {mod_name}: {e}")
         finally:
