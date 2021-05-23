@@ -99,7 +99,6 @@ class patch_pool_runner(QtCore.QObject):
         self.rules_dictionary = rules_dictionary
         
         
-    @QtCore.pyqtSlot()   
     def run(self):
         try:
             self.lockGuiFunc()
