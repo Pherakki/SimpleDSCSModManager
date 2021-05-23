@@ -207,8 +207,9 @@ class ModsIndexer(QtCore.QObject):
             self.continue_execution.emit()
         except Exception as e:
             self.messageLog.emit(f"The following exception occured when indexing mods: {e}")
-        finally:
             self.releaseGui.emit()
+        finally:
+            # self.releaseGui.emit()
             self.finished.emit()
 
 
