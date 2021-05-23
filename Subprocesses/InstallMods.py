@@ -267,6 +267,7 @@ class PackerGenerator(QtCore.QObject):
             
             self.runner = PoolChain(*self.workers)
             self.runner.finished.connect(self.finished.emit)
+            self.runner.lockGui.connect(self.lockGuiFunc)
             self.runner.run()
         except Exception as e:
             self.messageLogFunc.emit(f"The following exception occured when packing mod files: {e}")
