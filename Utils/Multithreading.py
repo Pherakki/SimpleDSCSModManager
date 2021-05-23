@@ -1,7 +1,8 @@
 from PyQt5 import QtCore
 
-
 class PoolChain(QtCore.QObject):
+    lockGui = QtCore.pyqtSignal()
+    releaseGui = QtCore.pyqtSignal()
     finished = QtCore.pyqtSignal()
     
     def __init__(self, *pools):
@@ -13,3 +14,4 @@ class PoolChain(QtCore.QObject):
         
     def run(self):
         self.pools[0].run()
+        self.lockGui.emit()
