@@ -99,7 +99,7 @@ def copy_rule(path_prefix, rule, source, destination):
         if os.path.isfile(source):
             shutil.copy2(source, destination)
         elif os.path.isdir(source):
-            shutil.copytree(source, destination)
+            shutil.copytree(source, destination, dirs_exist_ok=True)
         else:
             assert 0, f"{source} is neither a file nor a directory."
 
@@ -113,7 +113,7 @@ def validate_path(path):
     assert not(any([check_if_only_periods(item) for item in path_directories])), "Paths may not contain relative references."
 
 def check_if_only_periods(string):
-    return all(char == '.' for char in string)
+    return all(char == '.' for char in string) and len(string) > 1
 
 ##########################
 # DEFINE CYMIS INSTALLER #
