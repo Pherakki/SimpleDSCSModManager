@@ -1,6 +1,6 @@
 # SimpleDSCSModManager
 A basic mod manager for Digimon Story: Cyber Sleuth.
-Currently in an early release state, which means that not all desired features are complete and bugs are not completely unexpected. Although the source code should in principle be cross-platform, only Windows releases are currently supported.
+Currently in an early release state, which means that not all desired features are complete and bugs are not completely unexpected. Although the source code should in principle be cross-platform, only Windows releases are currently supported. Other operating systems are untested and, therefore, may suffer from more bugs.
 
 ## Features
 - Automatic patching of database and script edits
