@@ -544,7 +544,14 @@ def expectation_management_popup():
     issue_tracker = "<a href=\"https://github.com/Pherakki/SimpleDSCSModManager/issues\">issue tracker</a>"
     msgBox = QtWidgets.QMessageBox.question(None, "Beta Build Notice", f"This is a beta build of SimpleDSCSModManager which has several incomplete features. You may run into bugs using some features of this program. If you encounter one, please check whether this bug is already an open issue at the {issue_tracker}, and if not, open a new issue.", buttons)
 
-if __name__ == '__main__':    
+# Can't figure out how to catch all crashes yet
+# def CTD_popup(e):
+#     buttons = QtWidgets.QMessageBox.Ok
+#     issue_tracker = "<a href=\"https://github.com/Pherakki/SimpleDSCSModManager/issues\">issue tracker</a>"
+#     msgBox = QtWidgets.QMessageBox.question(None, "Fatal Error", f"SimpleDSCSModManager has encounted an issue and needs to close. The error is:\n\n{e}\n\nPlease check whether this bug is already an open issue at the {issue_tracker}, and if not, open a new issue.", buttons)
+   
+
+if __name__ == '__main__':
     app = QtWidgets.QApplication([]) 
   
     win = MainWindow() 
