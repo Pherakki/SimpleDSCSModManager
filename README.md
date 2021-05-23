@@ -6,6 +6,7 @@ Currently in an early release state, which means that not all desired features a
 - Automatic patching of database and script edits
 - Profile system for switching between sets of mods
 - GUI for several tools that extract and re-pack most game files
+- Caching of pre-built mod files to improve install times
 
 ## Future Plans and Ideas
 - A "request" file that installs vanilla dependencies
