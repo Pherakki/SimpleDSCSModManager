@@ -312,9 +312,9 @@ class FinaliseInstallation(QtCore.QObject):
                                                        os.path.join(destination, archive + ".steam.mvgl"),
                                                        remove_input=remove_input)
             def adapted_mvgl_unpack(archive, origin, destination, remove_input):
-                self.dscstools_handler.pack_mvgl_plain(os.path.join(origin, archive),
-                                                       os.path.join(destination, archive),
-                                                       remove_input=remove_input)
+                self.dscstools_handler.unpack_mvgl_plain(os.path.join(origin, archive + ".steam.mvgl"),
+                                                         os.path.join(destination, archive),
+                                                         remove_input=remove_input)
             
             packers = {'DSDB': adapted_mvgl_pack,
                        'DSDBA': adapted_mvgl_pack,
@@ -363,7 +363,7 @@ class FinaliseInstallation(QtCore.QObject):
                 if not os.path.exists(dsdbp_resource_loc):
                     self.messageLog.emit(f"Base {archive} archive not found, generating...")
                     origin = backup_ifdef(archive, self.game_resources_loc, self.backups_loc)
-                    unpackers[archive](archive, origin, self.resources_loc)
+                    unpackers[archive](archive, origin, self.resources_loc, remove_input=False)
                 
                 shutil.copytree(dsdbp_resource_loc, unpacked_archive_loc)
                 shutil.copytree(patch_loc, unpacked_archive_loc, dirs_exist_ok=True)
