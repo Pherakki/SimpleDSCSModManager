@@ -42,7 +42,7 @@ These mod files can be installed by dragging-and-dropping them into the left pan
 
 ## Building from source
 ### Building dependencies
-1. Download the latest release of [DSCSTools](https://github.com/SydMontague/DSCSTools) and move the `.pyd` file to `tools/dscstools/`. Move the `structures` folder to the same directory as the mod manager.
+1. Download the latest release of [DSCSTools](https://github.com/SydMontague/DSCSTools) and move the `.pyd` file to `tools/dscstools/`. Move the `structures` folder to the same directory as the mod manager executable.
 2. Build this [64-bit fork of NutCracker](https://github.com/SydMontague/NutCracker) and move the executable to `tools/nutcracker/`.
 3. Build the 64-bit version of the [Squirrel 2.2.4 compiler](https://sourceforge.net/projects/squirrel/files/squirrel2/squirrel%202.2.4%20stable/) and move the executable to `tools/squirrel/`.
 ### Building PyInstaller
