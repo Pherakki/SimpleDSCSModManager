@@ -19,5 +19,5 @@ def generate_mod_index(modpath, rules, filetypes):
                     retval[category][key].update(index_data)
                     break
                 
-                
+            
     return retval
