@@ -20,7 +20,8 @@ from Subprocesses.InstallMods import InstallModsWorker
 from ToolHandlers.ProfileHandler import ProfileHandler
 from UI.Design import uiMainWidget
 from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, ModInstallWizardCancelled
-  
+
+
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
 patreon_addr = r'https://www.patreon.com/sydmontague'
