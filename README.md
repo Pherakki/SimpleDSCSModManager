@@ -1,4 +1,6 @@
 # SimpleDSCSModManager
+**If you have difficulties installing mods or if using mods causes the game to crash or behave unexpectedly, run the mod manager as an administrator or install the game in a location outside of Program Files on Windows.** 
+
 A basic mod manager for Digimon Story: Cyber Sleuth.
 Currently in an early release state, which means that not all desired features are complete and bugs are not completely unexpected. Although the source code should in principle be cross-platform, only Windows releases are currently supported. Other operating systems are untested and, therefore, may suffer from more bugs.
 
@@ -19,7 +21,13 @@ Currently in an early release state, which means that not all desired features a
 - Graphing/reporting of mod conflicts
 
 ## Installation
-1. Download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer.
+You can run the mod manager in one of two ways:
+1. The foolproof way of running SimpleDSCSModManager is to install Python 3.8.10 on your system and run the source code directly.
+   1. Install [Python 3.8.10](https://www.python.org/downloads/release/python-3810/). Windows users should select the appropriate installer (one of the final two links in the table  at the bottom of the page).
+   2. Open a Command Prompt and type `pip install PyQt5` to install the dependency of PyQt5. (If you ever want to remove this package from your system, use `pip uninstall PyQt5`)
+   3. Download the SimpleDSCSModManager source code and unzip it. Create a text file in the downloaded folder and type `python SimpleDSCSModManager.py` into the file. If you are on Windows, rename the file so that it has a `.bat` extension.
+   4. You can run SimpleDSCSModManager by running the `.bat` file. You can also create a shortcut to this `.bat` file and run that instead.
+2. Alternatively, Windows users can download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer and run `SimpleDSCSModManager.exe`. This may or may not work on your particular system.
 
 ## Usage
 A guide to usage can be found in the accompanying documentation in the file `user_guide.pdf`.
@@ -42,7 +50,7 @@ These mod files can be installed by dragging-and-dropping them into the left pan
 
 ## Building from source
 ### Building dependencies
-1. Download the latest release of [DSCSTools](https://github.com/SydMontague/DSCSTools) and move the `.pyd` file to `tools/dscstools/`. Move the `structures` folder to the same directory as the mod manager executable.
+1. Download the source code for the latest release of [DSCSTools](https://github.com/SydMontague/DSCSTools) and move the `.pyd` file to `tools/dscstools/`. Move the `structures` folder to the same directory as the mod manager executable.
 2. Build this [64-bit fork of NutCracker](https://github.com/SydMontague/NutCracker) and move the executable to `tools/nutcracker/`.
 3. Build the 64-bit version of the [Squirrel 2.2.4 compiler](https://sourceforge.net/projects/squirrel/files/squirrel2/squirrel%202.2.4%20stable/) and move the executable to `tools/squirrel/`.
 ### Building PyInstaller
