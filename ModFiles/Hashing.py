@@ -95,6 +95,7 @@ def cull_index(indices, files_to_cull):
             first_key = list(subindex.keys())[0]  # Could be any key, would be nice to avoid having to do this massive list conversion
             index_stem = os.path.join(*splitpath(first_key)[:3])
             for local_filepath in files_to_cull:
+                # Figure out which mod file the item in the index contributed to
                 index_filepath = os.path.join(index_stem, local_filepath)
                 if index_filepath in subindex:
                     del subindex[index_filepath]
