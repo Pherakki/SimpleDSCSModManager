@@ -52,7 +52,7 @@ def gather_mod_install_orders(indices):
         for rule, data in index.items():
             for filepath, stuff in data.items(): 
                 local_filepath = os.path.join(*splitpath(filepath)[3:])
-                for preparser in [sqmod_preparse]:
+                for preparser in preparsers:
                     local_filepath = preparser(local_filepath)
                 if local_filepath not in results:
                     results[local_filepath] = []
@@ -113,7 +113,7 @@ def add_cache_to_index(indices, mod_archives, files_to_add):
     returned_files = []
     for local_filepath in files_to_add:
         new_local_filepath = local_filepath
-        for parser in [mbe_parse, script_parse, sqmod_parse]:
+        for parser in parsers:
             new_local_filepath = parser(new_local_filepath)
         filepath = os.path.join("output", "cache", "modfiles", new_local_filepath)
         if os.path.exists(filepath):
