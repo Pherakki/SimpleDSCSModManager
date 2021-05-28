@@ -9,6 +9,8 @@ def gather_mod_install_orders(indices):
         for rule, data in index.items():
             for filepath, stuff in data.items(): 
                 local_filepath = os.path.join(*splitpath(filepath)[3:])
+                for preparser in [sqmod_preparse]:
+                    local_filepath = preparser(local_filepath)
                 if local_filepath not in results:
                     results[local_filepath] = []
                 results[local_filepath].append((filepath, stuff))
@@ -68,7 +70,7 @@ def add_cache_to_index(indices, mod_archives, files_to_add):
     returned_files = []
     for local_filepath in files_to_add:
         new_local_filepath = local_filepath
-        for parser in [mbe_parse, script_parse]:
+        for parser in [mbe_parse, script_parse, sqmod_parse]:
             new_local_filepath = parser(new_local_filepath)
         filepath = os.path.join("output", "cache", "modfiles", new_local_filepath)
         if os.path.exists(filepath):
@@ -81,6 +83,13 @@ def add_cache_to_index(indices, mod_archives, files_to_add):
     
     return returned_files
 
+def mbe_preparse(name):
+    path = splitpath(name)
+    if len(path) > 2:
+        if path[-2][-3:] == 'mbe':
+            return path
+    return name
+
 def mbe_parse(name):
     path = splitpath(name)
     if len(path) > 2:
@@ -88,9 +97,26 @@ def mbe_parse(name):
             return os.path.join(*path[:-1])
     return name
 
+def script_preparse(name):
+    return name
+
 def script_parse(name):
     path = splitpath(name)
     if len(path) >= 2:
         if path[-2] == 'script64' and name[-3:] == 'txt':
+            return name[:-3] + 'nut'
+    return name
+
+def sqmod_preparse(name):
+    path = splitpath(name)
+    if len(path) >= 2:
+        if path[-2] == 'script64' and name[-3:] == 'sqmod':
+            return name[:-3] + 'txt'
+    return name
+
+def sqmod_parse(name):
+    path = splitpath(name)
+    if len(path) >= 2:
+        if path[-2] == 'script64' and name[-3:] == 'sqmod':
             return name[:-3] + 'nut'
     return name
