@@ -3,6 +3,44 @@ import os
 
 from Utils.Path import splitpath
 
+### These bits need to go into the patchers/filetyes/you really need a better architecture for the plugins
+
+def mbe_preparse(name):
+    return name
+
+def mbe_parse(name):
+    path = splitpath(name)
+    if len(path) > 2:
+        if path[-2][-3:] == 'mbe':
+            return os.path.join(*path[:-1])
+    return name
+
+def script_preparse(name):
+    return name
+
+def script_parse(name):
+    path = splitpath(name)
+    if len(path) >= 2:
+        if path[-2] == 'script64' and name[-3:] == 'txt':
+            return name[:-3] + 'nut'
+    return name
+
+def sqmod_preparse(name):
+    path = splitpath(name)
+    if len(path) >= 2:
+        if path[-2] == 'script64' and name[-5:] == 'sqmod':
+            return name[:-5] + 'txt'
+    return name
+
+def sqmod_parse(name):
+    path = splitpath(name)
+    if len(path) >= 2:
+        if path[-2] == 'script64' and name[-5:] == 'sqmod':
+            return name[:-5] + 'nut'
+    return name
+
+preparsers = [sqmod_preparse]
+parsers = [mbe_parse, script_parse, sqmod_parse]
 def gather_mod_install_orders(indices):
     results = {}
     for index in indices:
@@ -82,41 +120,3 @@ def add_cache_to_index(indices, mod_archives, files_to_add):
     mod_archives.append(mod_archive_result)
     
     return returned_files
-
-def mbe_preparse(name):
-    path = splitpath(name)
-    if len(path) > 2:
-        if path[-2][-3:] == 'mbe':
-            return path
-    return name
-
-def mbe_parse(name):
-    path = splitpath(name)
-    if len(path) > 2:
-        if path[-2][-3:] == 'mbe':
-            return os.path.join(*path[:-1])
-    return name
-
-def script_preparse(name):
-    return name
-
-def script_parse(name):
-    path = splitpath(name)
-    if len(path) >= 2:
-        if path[-2] == 'script64' and name[-3:] == 'txt':
-            return name[:-3] + 'nut'
-    return name
-
-def sqmod_preparse(name):
-    path = splitpath(name)
-    if len(path) >= 2:
-        if path[-2] == 'script64' and name[-3:] == 'sqmod':
-            return name[:-3] + 'txt'
-    return name
-
-def sqmod_parse(name):
-    path = splitpath(name)
-    if len(path) >= 2:
-        if path[-2] == 'script64' and name[-3:] == 'sqmod':
-            return name[:-3] + 'nut'
-    return name
