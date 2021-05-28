@@ -57,7 +57,11 @@ class ProfileHandler:
         filepath = self.profile_path(current_text)
         if os.path.exists(filepath):
             with open(filepath, 'r') as F:
-                current_profile = json.load(F)
+                try:
+                    current_profile = json.load(F)
+                except Exception as e:
+                    self.mainwindow.ui.log(f"The following error occured when loading the profile {current_text}: {e}")
+                    current_profile = {}
             actives = {}
             for path, value in current_profile.items():
                 if path in self.modpath_to_id:
