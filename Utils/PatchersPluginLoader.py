@@ -3,14 +3,14 @@ import os
 
 from PyQt5 import QtCore
 
-from Utils.PluginLoad import load_plugins_in
+from Utils.PluginLoad import load_sorted_plugins_in
 from Utils.Path import splitpath
 
 
 def get_patcher_plugins():
     plugin_dir = os.path.join('plugins', 'patchers')
     
-    return [patcher for patcher in [*load_plugins_in(plugin_dir, inspect.isclass), patch_others]]
+    return [patcher for patcher in [*load_sorted_plugins_in(plugin_dir, inspect.isclass), patch_others]]
 
 class patch_others(QtCore.QRunnable):
     group = 'other'
