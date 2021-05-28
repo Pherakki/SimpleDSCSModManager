@@ -41,6 +41,11 @@ def sqmod_parse(name):
 
 preparsers = [sqmod_preparse]
 parsers = [mbe_parse, script_parse, sqmod_parse]
+
+### Hashing Funcs / Utils
+# These can probably be made more efficient by using the "filetype" objects rather than just filepaths,
+# if each "filetype" owns the appropriate parse + preparse funcs
+
 def gather_mod_install_orders(indices):
     results = {}
     for index in indices:
