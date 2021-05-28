@@ -54,5 +54,4 @@ class patch_sqmod(QtCore.QRunnable):
             self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
-            raise e
             self.raise_exception(e)
