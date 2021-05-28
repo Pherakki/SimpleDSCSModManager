@@ -7,7 +7,7 @@ from PyQt5 import QtCore
 from .ScriptPatching import patch_scripts
 from Utils.Multithreading import PoolChain
 from Utils.Path import splitpath
-    
+
 
 class generate_patch_mt(QtCore.QObject):
     finished = QtCore.pyqtSignal()
