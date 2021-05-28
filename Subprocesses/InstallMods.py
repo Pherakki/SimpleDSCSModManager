@@ -196,7 +196,7 @@ class ModsIndexer(QtCore.QObject):
                     cull_index(indices[:-1], shared_hashes)
                     all_hashes = {**cached_hashes, **mod_hashes}
             else:
-                all_hashes = {}
+                all_hashes = {**mod_hashes}
 
             all_used_archives = set()
             for archive_data in mod_archives:
