@@ -189,7 +189,7 @@ def install_mod_in_manager(mod_source_path, install_path, mbe_unpack):
     else:
         raise UnrecognisedModFormatError()
 
-def detect_mods(path):
+def detect_mods(path, log):
     """Check for qualifying mods in the registered mods folder."""
     dirpath = os.path.join(path, "mods")
     os.makedirs(dirpath, exist_ok=True)
@@ -199,11 +199,19 @@ def detect_mods(path):
         itempath = os.path.join(dirpath, item)
         modtype = LooseMod
         if modtype.check_if_match(itempath):
-            mod_obj = modtype(itempath)
+            try:
+                mod_obj = modtype(itempath)
+            except json.decoder.JSONDecodeError as e:
+                log(f"An error occured when reading {item}/METADATA.json: {e}")
+                continue
             # If the mod has a wizard defined, attach it for reinstallation purposes
-            wizard = check_installer_type(itempath)
-            if wizard is not None:
-                mod_obj.wizard = wizard
+            try:
+                wizard = check_installer_type(itempath)
+                if wizard is not None:
+                    mod_obj.wizard = wizard
+            except json.decoder.JSONDecodeError as e:
+                log(f"An error occured when reading INSTALL.json for {mod_obj.name}: {e}")
+                continue
             detected_mods.append(mod_obj)
     return detected_mods
 

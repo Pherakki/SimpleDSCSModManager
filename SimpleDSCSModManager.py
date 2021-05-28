@@ -395,7 +395,7 @@ class MainWindow(QtWidgets.QMainWindow):
     ############################################
     def update_mods(self):
         try:
-            self.mods = detect_mods(script_loc)
+            self.mods = detect_mods(script_loc, self.ui.log)
         except Exception as e:
             self.ui.log(f"An unknown error occured during mod detection: {e}")
         self.modpath_to_id = {mod.path: i for i, mod in enumerate(self.mods)}
