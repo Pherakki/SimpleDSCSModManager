@@ -77,7 +77,7 @@ def hash_file_install_orders(indices):
             hasher.update(str(rulebook).encode())
         hashhex = hasher.hexdigest()
         for filepath, _ in install_order:
-            filepath_for_hash = os.path.join(*splitpath(filepath)[-2:])
+            filepath_for_hash = os.path.join(*splitpath(filepath)[3:])
             result[filepath_for_hash] = hashhex
         
     return result
