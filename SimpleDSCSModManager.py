@@ -93,6 +93,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_update_mod_info_window(self.update_mod_info_window)
         self.ui.hook_backup_button((lambda: restore_backups(self.game_resources_loc, 
                                                             self.backups_loc, self.ui.log)))
+        self.ui.hook_clear_cache_button(self.clear_cache)
         
         # Init the UI data
         self.profile_handler.init_profiles()
@@ -194,6 +195,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.thread.finished.connect(self.thread.deleteLater)
         
         self.worker.run()
+        
+    def clear_cache(self):
+        cache_loc = os.path.join(self.output_loc, "cache")
+        cache_json_loc = os.path.join(self.output_loc, "modcache.json")
+        did_error = False
+        try:
+            if os.path.exists(cache_loc):
+                shutil.rmtree(cache_loc)
+        except Exception as e:
+            self.ui.log(f"An error occured when clearing cache: {e}")
+            did_error = True
+        try:
+            if os.path.exists(cache_json_loc):
+                os.remove(cache_json_loc)
+        except Exception as e:
+            self.ui.log(f"An error occured when removing modcache.json: {e}")
+            did_error = True
+        if not did_error:
+            self.ui.log("Cache cleared.")
 
 
     def read_config(self):

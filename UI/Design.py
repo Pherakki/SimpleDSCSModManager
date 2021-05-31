@@ -48,6 +48,7 @@ class uiMainWidget:
         self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
         self.hook_game_launch_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_game_launch_button
         self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
+        self.hook_clear_cache_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_clear_cache_button
         
         self.log = self.logging_area.logview.log
         self.loglink = self.logging_area.logview.loglink
@@ -296,11 +297,14 @@ class uiModInstallationWidgets:
         self.launch_game_button.setFixedWidth(120)
         self.restore_backups_button = QtWidgets.QPushButton("Restore Backups", parentWidget)
         self.restore_backups_button.setFixedWidth(120)
+        self.clear_cache_button = QtWidgets.QPushButton("Clear Cache", parentWidget)
+        self.clear_cache_button.setFixedWidth(120)
         
     def lay_out(self):
         self.layout.addWidget(self.install_mods_button, 0, 0)
         self.layout.addWidget(self.launch_game_button, 0, 1)
         self.layout.addWidget(self.restore_backups_button, 0, 2)
+        self.layout.addWidget(self.clear_cache_button, 0, 3)
         
     def hook_install_button(self, func):
         self.install_mods_button.clicked.connect(func)
@@ -310,6 +314,9 @@ class uiModInstallationWidgets:
         
     def hook_backup_button(self, func):
         self.restore_backups_button.clicked.connect(func)
+        
+    def hook_clear_cache_button(self, func):
+        self.clear_cache_button.clicked.connect(func)
         
     def enable(self):
         self.toggle_active(True)   
@@ -321,6 +328,7 @@ class uiModInstallationWidgets:
         self.install_mods_button.setEnabled(active)
         self.launch_game_button.setEnabled(active)
         self.restore_backups_button.setEnabled(active)
+        self.clear_cache_button.setEnabled(active)
         
 class uiLogHistory():
     def __init__(self, parentWidget):
