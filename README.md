@@ -19,6 +19,7 @@ Currently in an early release state, which means that not all desired features a
 - Colour schemes (dark mode)
 - List of installed plugins
 - Graphing/reporting of mod conflicts
+- Language options for the GUI
 
 ## Installation
 You can run the mod manager in one of two ways:
