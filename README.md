@@ -68,5 +68,5 @@ e-mail: pherakki@gmail.com
 
 ## Acknowledgements
 1. [SydMontague](https://github.com/SydMontague) for creating [DSCSTools](https://github.com/SydMontague/DSCSTools), producing the Python API for it, and for having an endless patience..!
-2. Thanks to SydMontague, KiroAkashima, and ChronosTarget for their patience and assistance debugging critical issues with the alpha builds.
+2. Thanks to SydMontague, KiroAkashima, and A Heroic Panda for their patience and assistance debugging critical issues with the alpha builds.
 3. Releases are compiled with [Pyinstaller](https://www.pyinstaller.org/).
