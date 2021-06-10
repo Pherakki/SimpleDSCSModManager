@@ -1,6 +1,8 @@
 # SimpleDSCSModManager
 **If you have difficulties installing mods or if using mods causes the game to crash or behave unexpectedly, run the mod manager as an administrator or install the game in a location outside of Program Files on Windows.** 
 
+**Executables can be found in the "Releases" tab on the right-hand side of this page.**
+
 A basic mod manager for Digimon Story: Cyber Sleuth.
 Currently in an early release state, which means that not all desired features are complete and bugs are not completely unexpected. Although the source code should in principle be cross-platform, only Windows releases are currently supported. Other operating systems are untested and, therefore, may suffer from more bugs.
 
