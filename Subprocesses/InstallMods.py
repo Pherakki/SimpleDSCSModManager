@@ -49,8 +49,17 @@ class InstallModsWorker(QtCore.QObject):
             
             # 1. Clean up any pre-existing patch files
             patch_dir = os.path.relpath(os.path.join(self.output_loc, 'patch'))
-            if os.path.exists(patch_dir):
-                shutil.rmtree(patch_dir)
+            keep_items = ["modcache.json", "cache"]
+            for path in os.listdir(self.output_loc):
+                if path in keep_items:
+                    continue
+                item_dir = os.path.relpath(os.path.join(self.output_loc, path))
+                if os.path.isdir(item_dir):
+                    shutil.rmtree(item_dir)
+                elif os.path.isfile(item_dir):
+                    os.remove(item_dir)
+                else:
+                    self.messageLogFunc(f"WARNING: Could not remove item \"{item_dir}\", was neither a file nor a directory.")
             
             # 2. Define a function to set up the signals on any single-threaded operations
             def hook_signals(pool_obj, thread):
