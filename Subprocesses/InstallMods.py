@@ -400,7 +400,11 @@ def backup_ifdef(archive, game_resources_loc, backups_loc):
     else:
         return backups_loc
                             
-            
+def make_blank_file(path):
+    os.makedirs(os.path.dirname(path))
+    with open(path, 'w') as F:
+        F.write("")
+
 class multithreaded_bootstrap_index_resources(QtCore.QObject):
     """Needs to be generalised to any number or kind of resource gathering...
     no idea how to implement that sensibly yet though"""
@@ -443,21 +447,28 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
         gfd = dscstools_handler.generate_file_dumper
             
         missing_scripts = []
+        new_scripts = []
         missing_mbes = []
+        new_mbes = []
+        with open(os.path.join("config", "filelist.json"), 'r') as F:
+            filelist = json.load(F)
         for index in indices:
             if 'script_src' in index:
                 for script in index['script_src'].keys():
                     internal_path = os.path.join(*splitpath(script)[3:])
                     if not os.path.exists(os.path.join(resources_loc, 'base_scripts', internal_path)):
-                        missing_scripts.append(internal_path)
+                        if internal_path in filelist:
+                            missing_scripts.append(internal_path)
+                        else:
+                            new_scripts.append(internal_path)
             if 'mbe' in index:
                 for mbe in index['mbe'].keys():
                     internal_path = os.path.join(*splitpath(mbe)[3:])
                     if not os.path.exists(os.path.join(resources_loc, 'base_mbes', internal_path)):
-                        missing_mbes.append(internal_path)
-                    
-        with open(os.path.join("config", "filelist.json"), 'r') as F:
-            filelist = json.load(F)
+                        if internal_path in filelist:
+                            missing_mbes.append(internal_path)
+                        else:
+                            new_mbes.append(internal_path)
             
         archive_origins = {archive: backup_ifdef(archive, game_resources_loc, backups_loc)
                            for archive in ['DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP']}
@@ -481,6 +492,11 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
             os.makedirs(os.path.join(resources_loc, 'base_scripts', 'script64'), exist_ok=True)
             self.script_dump = gfd(missing_script_paths, os.path.join(resources_loc, 'base_scripts'), 
                                    threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
+            
+        for mbe_path in new_mbes:
+            make_blank_file(os.path.join(resources_loc, "base_mbes", mbe_path))
+        for script_path in new_scripts:
+            make_blank_file(os.path.join(resources_loc, "base_scripts", script_path))
 
         gme = self.dscstools_handler.generate_mbe_extractor
         self.mbe_ex_data = gme(os.path.join(resources_loc, 'base_mbes', 'data'), os.path.join(resources_loc, 'base_mbes', 'data'), 
