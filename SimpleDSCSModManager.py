@@ -104,7 +104,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.loglink(f"""Enjoying Cyber Sleuth modding? Consider supporting more projects like this on <a href="{patreon_addr}">Patreon</a>! [Right-click to copy link]""")
         self.ui.loglink(f"""Want to contribute to modding tools or develop mods? Consider joining the <a href="{discord_addr}">Digimon Modding Community discord server</a>. [Right-click to copy link]""")
 
-
     @property
     def game_resources_loc(self):
         return os.path.normpath(os.path.join(self.game_loc, "resources"))
