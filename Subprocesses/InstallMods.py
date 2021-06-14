@@ -464,12 +464,12 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
         # Strip out the individual tables and get the packed MBE archives they belong to
         missing_mbes = sorted(list(set([os.path.split(mbe_path)[0] for mbe_path in missing_mbes])))
         nmbes = len(missing_mbes)
+        os.makedirs(os.path.join(resources_loc, 'base_mbes', 'data'), exist_ok=True)
+        os.makedirs(os.path.join(resources_loc, 'base_mbes', 'message'), exist_ok=True)
+        os.makedirs(os.path.join(resources_loc, 'base_mbes', 'text'), exist_ok=True)
         if nmbes:
             messageLog(f"Fetching {nmbes} missing mbes...")
             missing_mbe_paths = {mbe_path: os.path.join(archive_origins[filelist[mbe_path]], filelist[mbe_path] + '.steam.mvgl') for mbe_path in missing_mbes}
-            os.makedirs(os.path.join(resources_loc, 'base_mbes', 'data'), exist_ok=True)
-            os.makedirs(os.path.join(resources_loc, 'base_mbes', 'message'), exist_ok=True)
-            os.makedirs(os.path.join(resources_loc, 'base_mbes', 'text'), exist_ok=True)
             self.mbe_dump = gfd(missing_mbe_paths, os.path.join(resources_loc, 'base_mbes'), 
                                 threadpool, messageLog, updateMessageLog, lockGui, releaseGui)
         
