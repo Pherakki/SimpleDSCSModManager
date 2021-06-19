@@ -77,18 +77,20 @@ class mbe_patcher(QtCore.QRunnable):
 def mbetable_to_dict(filepath):
     header = None
     result = {}
+    id_length_key = '/'.join(splitpath(filepath)[-3:])
+    id_size = id_lengths.get(id_length_key, 1)
+    print(id_length_key, id_size)
     with open(filepath, 'r', encoding='utf8') as F:
         header = F.readline()
         csvreader = csv.reader(F, delimiter=',', quotechar='"')
         for line in csvreader:
             data = line
-            id_length_key = '/'.join(splitpath(filepath)[-3:])
-            id_size = id_lengths.get(id_length_key, 1)
             record_id = tuple(data[:id_size])
             if record_id not in result:
                 result[record_id] = data[id_size:]
-            elif (record_id, id_length_key) in known_duplicates:
-                pass
+            elif id_length_key in id_lengths:
+                print(">>>", "Hit a duplicate in", filepath)
+                result[record_id] = data[id_size:]
             else:
                 assert 0, f"Duplicate ID {record_id} in {filepath}, mod manager not ready to handle this situation yet. Please raise an issue on the GitHub page."
     return header, result

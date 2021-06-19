@@ -1,4 +1,14 @@
 {
+    "data/field_common_param.mbe/movie_bg.csv": 2,
+    "data/field_common_param.mbe/ui_field_name.csv": 3,
+    "data/field_npc_para_add.mbe/t0504.csv" : 1,
+    "data/model_attach_para.mbe/digimon01.csv" : 2,
+    "data/model_attach_para.mbe/digimon02.csv" : 2,
+    "data/model_attach_para.mbe/digimon03.csv" : 2,
+    "data/model_attach_para.mbe/event.csv" : 3,
+    "data/model_attach_para.mbe/npc.csv" : 5,
+    "data/mon_design_para.mbe/Monster.csv": 2,
     "data/mon_para.mbe/Monster.csv": 2,
-    "data/mon_design_para.mbe/Monster.csv": 2
+    "data/mon_para_hard.mbe/Monster.csv": 2,
+    "data/talk_position.mbe/position.csv": 1
 }
