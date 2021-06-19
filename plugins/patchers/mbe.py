@@ -59,7 +59,7 @@ class mbe_patcher(QtCore.QRunnable):
                 resource_path = os.path.split(resource_filepath)[0]
                 for file in os.listdir(resource_path):
                     shutil.copy2(os.path.join(resource_path, file), os.path.join(working_mbe_path, file))
-            
+
             # Join the records of the two tables
             header, mbe_data = mbetable_to_dict(working_mbe_filepath)
             _, mod_mbe_data = mbetable_to_dict(mbe_table_filepath)
@@ -67,7 +67,7 @@ class mbe_patcher(QtCore.QRunnable):
                 key = '/'.join(splitpath(mbe_table_filepath)[-3:])
                 self.rules_dictionary[record_rule](record_id, mbe_data, mod_mbe_data, max_record_sizes.get(key, 1))
             dict_to_mbetable(working_mbe_filepath, header, mbe_data)
-            
+
             self.update_messagelog(local_filepath)
             self.update_finished()
         except Exception as e:
