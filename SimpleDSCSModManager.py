@@ -58,6 +58,7 @@ class MainWindow(QtWidgets.QMainWindow):
         os.makedirs(self.dscstools_loc, exist_ok=True)
         os.makedirs(self.nutcracker_loc, exist_ok=True)
         os.makedirs(self.mods_loc, exist_ok=True)
+        os.makedirs(self.output_loc, exist_ok=True)
         os.makedirs(self.profiles_loc, exist_ok=True)
         os.makedirs(self.resources_loc, exist_ok=True)
 
