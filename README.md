@@ -29,7 +29,8 @@ You can run the mod manager in one of two ways:
    1. Install [Python 3.8.10](https://www.python.org/downloads/release/python-3810/). Windows users should select the appropriate installer (one of the final two links in the table  at the bottom of the page).
    2. Open a Command Prompt and type `pip install PyQt5` to install the dependency of PyQt5. (If you ever want to remove this package from your system, use `pip uninstall PyQt5`)
    3. Download the SimpleDSCSModManager source code and unzip it. Create a text file in the downloaded folder and type `python SimpleDSCSModManager.py` into the file. If you are on Windows, rename the file so that it has a `.bat` extension.
-   4. You can run SimpleDSCSModManager by running the `.bat` file. You can also create a shortcut to this `.bat` file and run that instead.
+   4. In the SimpleDSCSModManager directory, create a folder called "tools". Copy and paste the contents of the "tools" folder from the latest SimpleDSCSModManager release into this folder.
+   5. You can run SimpleDSCSModManager by running the `.bat` file. You can also create a shortcut to this `.bat` file and run that instead.
 2. Alternatively, Windows users can download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer and run `SimpleDSCSModManager.exe`. This may or may not work on your particular system.
 
 ## Usage
