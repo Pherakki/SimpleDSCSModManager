@@ -431,8 +431,6 @@ class FinaliseInstallation(QtCore.QObject):
                 with open(self.cache_record_filepath, 'w') as F:
                     json.dump(self.cached_files, F, indent=4)
             
-            self.messageLog.emit("")
-            
             
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
 
