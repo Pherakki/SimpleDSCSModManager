@@ -488,34 +488,30 @@ class MainWindow(QtWidgets.QMainWindow):
         return True
             
     def find_gamelocation(self):
-        result = os.path.join(self.game_loc)
+        origin = os.path.join(self.game_loc)
+        result = os.path.join(str(self.game_loc), "app_digister", "Digimon Story CS.exe")
         while not os.path.exists(result):
             QtWidgets.QMessageBox.question(self, 'Game not found', 
                                            rf"Game executable was not found in the location {result}. Please select the folder containing the folders 'app_digister' and 'resources'.", QtWidgets.QMessageBox.Ok)
-            result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
-
-            if result == '' or result == '.':
+            origin = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
+            result = os.path.join(origin, "app_digister", "Digimon Story CS.exe")
+            if origin == '' or origin == '.':
                 self.config['game_loc'] = ''
                 return False
-        self.config['game_loc'] = result
-        self.ui.game_location_textbox.setText(result)
+        self.config['game_loc'] = origin
+        self.ui.game_location_textbox.setText(origin)
         self.write_config()
         
         return True
     
     def find_gamelocation_check(self):
-        result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
-        while not os.path.exists(result):
-            QtWidgets.QMessageBox.question(self, 'Game not found', 
-                                           rf"Game executable was not found in the location {result}. Please select the folder containing the folders 'app_digister' and 'resources'.", QtWidgets.QMessageBox.Ok)
-            result = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self, "Select your game location:"))
-
-            if result == '' or result == '.':
-                self.config['game_loc'] = ''
-                return False
-        self.config['game_loc'] = result
-        self.ui.game_location_textbox.setText(result)
+        cache_result = self.config["game_loc"]
         self.write_config()
+        self.config["game_loc"] = None
+        if not self.check_gamelocation():
+            self.config["game_loc"] = cache_result
+        
+            self.write_config()
         
         return True
     
