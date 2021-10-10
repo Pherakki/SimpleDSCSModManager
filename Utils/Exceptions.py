@@ -6,3 +6,9 @@ class ModInstallWizardError(Exception):
 
 class ModInstallWizardCancelled(Exception):
     pass
+
+class InstallerWizardParsingError(Exception):
+    pass
+
+class SpecificInstallerWizardParsingError(Exception):
+    pass
