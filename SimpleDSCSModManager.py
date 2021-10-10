@@ -23,7 +23,7 @@ from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancell
                              InstallerWizardParsingError, SpecificInstallerWizardParsingError
 
 
-script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
+modmanager_directory = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
 
 patreon_addr = r'https://www.patreon.com/sydmontague'
 discord_addr = r'https://discord.gg/cb5AuxU6su'
@@ -45,14 +45,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.window.setLayout(self.ui.layout)
         
         # Set up the directories we're going to need
-        self.config_loc = os.path.normpath(os.path.join(script_loc, "config"))
-        self.compiler_loc = os.path.normpath(os.path.join(script_loc, "tools", "squirrel"))
-        self.dscstools_loc = os.path.normpath(os.path.join(script_loc, "tools", "dscstools"))
-        self.nutcracker_loc = os.path.normpath(os.path.join(script_loc, "tools", "nutcracker"))
-        self.mods_loc = os.path.normpath(os.path.join(script_loc, "mods"))
-        self.output_loc = os.path.normpath(os.path.join(script_loc, "output"))
-        self.profiles_loc = os.path.normpath(os.path.join(script_loc, "profiles"))
-        self.resources_loc = os.path.normpath(os.path.join(script_loc, "resources"))
+        self.config_loc = os.path.normpath(os.path.join(modmanager_directory, "config"))
+        self.compiler_loc = os.path.normpath(os.path.join(modmanager_directory, "tools", "squirrel"))
+        self.dscstools_loc = os.path.normpath(os.path.join(modmanager_directory, "tools", "dscstools"))
+        self.localisations_loc = os.path.normpath(os.path.join(modmanager_directory, "localisation"))
+        self.mods_loc = os.path.normpath(os.path.join(modmanager_directory, "mods"))
+        self.nutcracker_loc = os.path.normpath(os.path.join(modmanager_directory, "tools", "nutcracker"))
+        self.output_loc = os.path.normpath(os.path.join(modmanager_directory, "output"))
+        self.profiles_loc = os.path.normpath(os.path.join(modmanager_directory, "profiles"))
+        self.resources_loc = os.path.normpath(os.path.join(modmanager_directory, "resources"))
         
         os.makedirs(self.config_loc, exist_ok=True)
         os.makedirs(self.compiler_loc, exist_ok=True)
@@ -72,9 +73,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.read_config()
         self.script_handler = ScriptHandler(os.path.join(self.nutcracker_loc, 'NutCracker.exe'),
                                             os.path.join(self.compiler_loc, 'sq.exe'))
-        self.dscstools_handler = DSCSToolsHandler('', os.path.join(self.dscstools_loc, 'DSCSTools.exe'))
+        self.dscstools_handler = DSCSToolsHandler()
         self.profile_handler = ProfileHandler(self.profiles_loc, self.ui.profile_selector, self.ui.mods_display, self)
         self.check_dscstools()
+        
+        # Localisation
+        self.setLanguage(self.config.get("Language", "en-US"))
         
         # Hook the UI
         self.ui.hook_menu(open_patreon)
