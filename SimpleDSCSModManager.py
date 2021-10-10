@@ -196,19 +196,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.profile_handler.save_profile()
         self.thread = QtCore.QThread()
 
-        self.worker = InstallModsWorker(self.output_loc, self.resources_loc, self.game_resources_loc,  self.backups_loc,
-                                   self.profile_handler, self.dscstools_handler, self.script_handler, self.threadpool,
-                                   self.thread)
-        self.worker.lockGuiFunc = self.ui.disable_gui
-        self.worker.releaseGuiFunc = self.ui.enable_gui
-        self.worker.messageLogFunc = self.ui.log
-        self.worker.updateMessageLogFunc = self.ui.updateLog
-        
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        
-        self.worker.run()
+        if self.check_gamelocation():
+            self.worker = InstallModsWorker(self.output_loc, self.resources_loc, self.game_resources_loc,  self.backups_loc,
+                                       self.profile_handler, self.dscstools_handler, self.script_handler, self.threadpool,
+                                       self.thread)
+            self.worker.lockGuiFunc = self.ui.disable_gui
+            self.worker.releaseGuiFunc = self.ui.enable_gui
+            self.worker.messageLogFunc = self.ui.log
+            self.worker.updateMessageLogFunc = self.ui.updateLog
+            
+            self.worker.finished.connect(self.thread.quit)
+            self.worker.finished.connect(self.worker.deleteLater)
+            self.thread.finished.connect(self.thread.deleteLater)
+            
+            self.worker.run()
         
     def clear_cache(self):
         cache_loc = os.path.join(self.output_loc, "cache")
