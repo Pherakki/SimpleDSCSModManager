@@ -231,7 +231,7 @@ class uiModsDisplay:
         self.mods_display.setMinimumSize(500, 300)
         
         self.contextMenu = QtWidgets.QMenu()
-        self.reinstallModAction = self.contextMenu.addAction("Reinstall...")
+        self.reinstallModAction = self.contextMenu.addAction("Re-register...")
         self.deleteModAction = self.contextMenu.addAction("Delete Mod")
         
         self.mods_display.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
