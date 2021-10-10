@@ -569,6 +569,22 @@ class MainWindow(QtWidgets.QMainWindow):
     def closeEvent(self, *args, **kwargs):
         self.profile_handler.save_profile()
         super().closeEvent(*args, **kwargs)
+        
+    #####################
+    # LANGUAGE SETTINGS #
+    #####################
+    def setLanguage(self, language_code):
+        self.config["Language"] = language_code
+        with open(os.path.join(self.localisations_loc, "en-US") + ".json", 'r') as F:
+            self.localised_strings = json.load(F)
+            
+        language_loc = os.path.join(self.localisations_loc, language_code) + ".json"
+        if os.path.exists(language_loc):
+            try:
+                with open(language_loc, 'r') as F:
+                    self.localised_strings = {**self.localised_strings, **json.load(F)}
+            except Exception as e:
+                self.ui.log(f"Could not read \'{language_code}.json\': {e}")
 
 
 def try_to_locate_game_exe():
