@@ -28,6 +28,8 @@ class uiMainWidget:
     def lay_out(self):
         self.layout.addLayout(self.main_area.layout, 0, 0)
         self.layout.addLayout(self.logging_area.layout, 1, 0)
+        self.layout.setRowStretch(0, 4)
+        self.layout.setRowStretch(1, 1)
         
     def create_shortcuts(self):
         self.profile_selector = self.main_area.mod_interaction_area.profile_interaction_widgets.profile_selector
@@ -342,7 +344,7 @@ class uiLogHistory():
         self.logview = QtWidgets.QListWidget()
         self.logview.setAlternatingRowColors(True)
         self.logview.setWordWrap(False) 
-        self.logview.setFixedHeight(100)
+        self.logview.setMinimumHeight(110)
         
     def lay_out(self):
         self.layout.addWidget(self.logview, 0, 0)
