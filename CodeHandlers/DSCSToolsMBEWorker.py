@@ -121,6 +121,11 @@ class MBERunnable(QtCore.QRunnable):
             # error messages from the exception
             self.update_messagelog(self.archive)
             self.update_finished()
+        except ValueError as e:
+            if e.__str__() == "invalid stoi argument":
+                self.signals.exception.emit(ScriptHandlerError(Exception("Incorrect data type found in an MBE table - check that all data entries have the expected type."), self.archive))
+            else:
+                self.signals.exception.emit(ScriptHandlerError(e, self.archive))
         except Exception as e:
             self.signals.exception.emit(ScriptHandlerError(e, self.archive))
 
@@ -157,6 +162,11 @@ class ReplaceMBERunnable(QtCore.QRunnable):
             # error messages from the exception
             self.update_messagelog(self.archive)
             self.update_finished()
+        except ValueError as e:
+            if e.__str__() == "invalid stoi argument":
+                self.signals.exception.emit(ScriptHandlerError(Exception("Incorrect data type found in an MBE table - check that all data entries have the expected type."), self.archive))
+            else:
+                self.signals.exception.emit(ScriptHandlerError(e, self.archive))
         except Exception as e:
             self.signals.exception.emit(ScriptHandlerError(e, self.archive))
 
