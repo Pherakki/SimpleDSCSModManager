@@ -2,6 +2,7 @@ import os
 
 class UncompiledScript:
     group = 'script_src'
+    enable_softcodes = True
     
     @staticmethod
     def checkIfMatch(path, filename):

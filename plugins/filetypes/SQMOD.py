@@ -2,6 +2,7 @@ import os
 
 class SqMod:
     group = 'sqmod'
+    enable_softcodes = False
     
     @staticmethod
     def checkIfMatch(path, filename):

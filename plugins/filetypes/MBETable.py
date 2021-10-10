@@ -8,6 +8,7 @@ with open(os.path.join("config", "mberecordidsizes.json"), 'r') as F:
 
 class MBE_table:
     group = 'mbe'
+    enable_softcodes = True
     
     @staticmethod
     def checkIfMatch(path, filename):
