@@ -71,6 +71,7 @@ class ScriptWorker(QtCore.QObject):
         self.ncomplete += 1
         self.updateMessageLog.emit(f"{self.func_message_past} script {self.ncomplete}/{self.njobs} [{message}]")
         
+    @QtCore.pyqtSlot(Exception)
     def raise_exception(self, exception):
         try:
             raise exception
@@ -78,12 +79,12 @@ class ScriptWorker(QtCore.QObject):
             self.threadpool.clear()
             self.threadpool.waitForDone()
             self.messageLog.emit(f"The following exception occured when {self.func_message} script {e.args[1]}: {e.args[0]}")
-            raise e.args[0]
+            # raise e.args[0]
         except Exception as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
             self.messageLog.emit(f"The following exception occured when {self.func_message} scripts: {e}")
-            raise e
+            # raise e
         finally:
             self.releaseGuiFunc()
 
