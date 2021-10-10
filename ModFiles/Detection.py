@@ -6,7 +6,6 @@ import zipfile
 from PyQt5 import QtCore
 
 from UI.CymisWizard import CymisWizard
-from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, ModInstallWizardCancelled
 from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancelled,\
                              InstallerWizardParsingError, SpecificInstallerWizardParsingError
 
@@ -75,7 +74,8 @@ class ZipMod(ModFile):
             filename, ext = os.path.splitext(itempath)
             if ext == '.zip':
                 with zipfile.ZipFile(itempath, "r") as F:
-                    if 'modfiles/' in F.namelist():
+                    directories = (set(os.path.normpath(f).split(os.path.sep)[0] for f in F.namelist()))
+                    if 'modfiles' in directories and 'modfiles' not in F.namelist():
                         return True
         return False
         
@@ -88,23 +88,29 @@ class NestedZipMod(ModFile):
         super().__init__(path)
         with zipfile.ZipFile(path, 'r') as F:
             filename, ext = os.path.splitext(path)
-            with F.open("{filename}/METADATA.json", 'r') as fJ:
+            filename = os.path.split(filename)[1]
+            with F.open(f"{filename}/METADATA.json", 'r') as fJ:
                 self.init_metadata(fJ)
                 
     @staticmethod
     def check_if_match(itempath):
         if os.path.isfile(itempath):
             filename, ext = os.path.splitext(itempath)
+            filename = os.path.split(filename)[1]
             if ext == '.zip':
                 with zipfile.ZipFile(itempath, "r") as F:
-                    if f"{filename}/modfiles/" in F.namelist():
+                    required_name = os.path.join(filename, "modfiles")
+                    required_name_zip = f"{filename}/modfiles"
+                    directories = (set(os.path.join(*os.path.normpath(f).split(os.path.sep)[:2]) for f in F.namelist()))
+                    
+                    if required_name in directories and required_name_zip not in F.namelist():
                         return True
         return False
     
     def toLoose(self, path):
         with zipfile.ZipFile(self.path, 'r') as zip_ref:
-            with zip_ref.open(f'{self.filename}') as zf, open(path, 'wb') as f:
-                shutil.copyfileobj(zf, f)
+            with zipfile.ZipFile(self.path, 'r') as zip_ref:
+                zip_ref.extractall(os.path.split(path)[0])
 
 modformats = [LooseMod, ZipMod, NestedZipMod]
 
