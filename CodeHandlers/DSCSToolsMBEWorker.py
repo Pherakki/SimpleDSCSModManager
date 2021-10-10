@@ -80,6 +80,7 @@ class MBEWorker(QtCore.QObject):
         self.ncomplete += 1
         self.updateMessageLog.emit(f"{self.message_1} MBE {self.ncomplete}/{self.njobs} [{message}]")
         
+    @QtCore.pyqtSlot(Exception)
     def raise_exception(self, exception):
         try:
             raise exception
@@ -87,12 +88,12 @@ class MBEWorker(QtCore.QObject):
             self.threadpool.clear()
             self.threadpool.waitForDone()
             self.messageLogFunc(f"The following exception occured when {self.message_2} {e.args[1]}: {e.args[0]}")
-            raise e.args[0]
+            #raise e.args[0]
         except Exception as e:
             self.threadpool.clear()
             self.threadpool.waitForDone()
             self.messageLogFunc(f"The following exception occured when {self.message_2} MBEs: {e}")
-            raise e
+            #raise e
         finally:
             self.releaseGuiFunc()
 
