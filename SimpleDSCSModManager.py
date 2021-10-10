@@ -19,7 +19,8 @@ from Subprocesses.Downloader import DSCSToolsDownloader
 from Subprocesses.InstallMods import InstallModsWorker
 from ToolHandlers.ProfileHandler import ProfileHandler
 from UI.Design import uiMainWidget
-from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, ModInstallWizardCancelled
+from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancelled, \
+                             InstallerWizardParsingError, SpecificInstallerWizardParsingError
 
 
 script_loc = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
@@ -133,6 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
         info = ['[Unknown]' if item == '-' else item for item in info]
         self.ui.set_mod_info(*info)
 
+
     def register_mod(self, mod_path):
         """
         Checks if the file/folder at mod_path is an accepted mod format, and if so,
@@ -142,21 +144,29 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             self.ui.log(f"Attempting to register {mod_name}...")
             try:
-                install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe)
-                self.ui.log(f"Successfully registered {mod_name}.")
+                self.thread = QtCore.QThread()
+                self.thread.started.connect(self.ui.disable_gui)
+                self.thread.finished.connect(self.ui.enable_gui)
+                self.thread.finished.connect(self.thread.deleteLater)
+                self.thread.finished.connect(self.update_mods)
+                install_mod_in_manager(mod_path, self.mods_loc, self.dscstools_handler.unpack_mbe,
+                                       self.thread, self.ui.log, self.ui.updateLog)
+
             except ModInstallWizardCancelled:
-                self.ui.log(f"Did not install {mod_name}: wizard was cancelled.")
-            except ModInstallWizardError as e:
-                self.ui.log(f"Installation wizard encountered an error: {e}.")
+                self.ui.log(f"Did not register {mod_name}: wizard was cancelled.")
             except UnrecognisedModFormatError:
                 self.ui.log(f"{mod_name} is not in a recognised mod format.")
+            except InstallerWizardParsingError as e:
+                self.ui.log(f"Error creating the registry wizard for {mod_name}: {e}.")
+            except SpecificInstallerWizardParsingError as e:
+                self.ui.log(e.__str__())
             except Exception as e:
+                raise e
                 self.ui.log(f"The mod manager encountered an unhandled error when attempting to register {mod_name}: {e}.")
         except Exception as e:
             shutil.rmtree(os.path.join(self.mods_loc, mod_name))
             self.ui.log(f"The following error occured when trying to register {mod_name}: {e}")
-        finally:
-            self.update_mods()
+
 
     def register_mod_filedialog(self):
         """
@@ -415,7 +425,7 @@ class MainWindow(QtWidgets.QMainWindow):
     ############################################
     def update_mods(self):
         try:
-            self.mods = detect_mods(script_loc, self.ui.log)
+            self.mods = detect_mods(modmanager_directory, self.ui.log, ignore_debugs=True)
         except Exception as e:
             self.ui.log(f"An unknown error occured during mod detection: {e}")
         self.modpath_to_id = {mod.path: i for i, mod in enumerate(self.mods)}
@@ -435,15 +445,30 @@ class MainWindow(QtWidgets.QMainWindow):
             modfiles_dir = os.path.join(self.mods[index].path, "modfiles")
             wizard = mod.wizard
             if not wizard.launch_wizard():
-                raise ModInstallWizardCancelled()
+                self.ui.log(f"Did not register {mod_name}: wizard was cancelled.")
+                return
             shutil.rmtree(modfiles_dir)
             os.mkdir(modfiles_dir)
-            wizard.install()
-            self.ui.log(f"Re-registered {mod_name}.")
+            
+            self.thread = QtCore.QThread()
+            self.thread.started.connect(self.ui.disable_gui)
+            self.thread.finished.connect(self.ui.enable_gui)
+            self.thread.finished.connect(self.thread.deleteLater)
+            self.thread.finished.connect(self.update_mods)
+            
+            wizard.moveToThread(self.thread)
+            
+            wizard.messageLog.connect(self.ui.log)
+            wizard.success.connect(lambda: wizard.messageLog.emit(f"Successfully re-registered {mod_name}."))
+            wizard.finished.connect(self.thread.quit)
+            
+            self.thread.started.connect(lambda: wizard.messageLog.emit("Registering mod..."))
+            self.thread.started.connect(wizard.install)
+            
+            self.thread.start()
         except Exception as e:
-            self.ui.log(f"The following error occured when trying to delete {mod_name}: {e}")
-        finally:
-            self.update_mods()
+            self.ui.log(f"The following error occured when trying to re-register {mod_name}: {e}")
+
 
 
     def check_gamelocation(self):

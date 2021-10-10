@@ -3,8 +3,12 @@ import os
 import shutil
 import zipfile
 
+from PyQt5 import QtCore
+
 from UI.CymisWizard import CymisWizard
 from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardError, ModInstallWizardCancelled
+from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancelled,\
+                             InstallerWizardParsingError, SpecificInstallerWizardParsingError
 
 ###################
 # MOD DEFINITIONS #
@@ -116,11 +120,16 @@ def check_mod_type(path):
 ##############
 # INSTALLERS #
 ##############
-class Cymis:
-    def __init__(self, modpath):
+class Cymis(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
+    success = QtCore.pyqtSignal()
+    messageLog = QtCore.pyqtSignal(str)
+    
+    def __init__(self, modpath, messageLog):
+        super().__init__()
         self.modpath = modpath
         cymis_path = os.path.join(self.modpath, "INSTALL.json")
-        self.wizard = CymisWizard(cymis_path)
+        self.wizard = CymisWizard(cymis_path, messageLog)
 
     @staticmethod
     def check_if_match(modpath):
@@ -129,59 +138,93 @@ class Cymis:
     def launch_wizard(self):
         return self.wizard.exec()
 
+    @QtCore.pyqtSlot()
     def install(self):
-        self.wizard.launch_installation()
+        try:
+            self.wizard.launch_installation()
+            self.success.emit()
+        except Exception as e:
+            self.messageLog.emit(f"Registry wizard encountered an error: {e}.")
+            self.finished.connect(lambda: shutil.rmtree(self.modpath))
+        finally:
+            self.finished.emit()
+            
+    def try_set_logger(self, log):
+        if self.wizard.installer.enable_debug:
+            self.wizard.log = log
+            self.wizard.installer.log = log
+            
+    @staticmethod
+    def installer_error_message(msg):
+        return f"Error parsing CYMIS INSTALL.JSON script: {msg}"
+        
+        
+    
 
 modinstallers = [Cymis]
 
-def check_installer_type(path):
+def check_installer_type(path, messageLog):
     """
     Figures out which of the supported mod formats the input file/folder is in, if any.
     """
     for installer in modinstallers:
         if installer.check_if_match(path):
-            return installer(path)
+            try:
+                return installer(path, messageLog)
+            except Exception as e:
+                if hasattr(installer, "installer_error_message"):
+                    raise SpecificInstallerWizardParsingError(installer.installer_error_message(e.__str__())) from e
+                else:
+                    raise InstallerWizardParsingError(e.__str__()) from e
     return None
 
 
 ###################################
 # FUNCTIONS INTENDED TO BE PUBLIC #
 ###################################
-def install_mod_in_manager(mod_source_path, install_path, mbe_unpack):
+def install_mod_in_manager(mod_source_path, install_path, mbe_unpack, thread, messageLog, updateMessageLog):
     """
     Dumps the input file/folder to the install_path if it is a supported mod format.
     """
     mod = check_mod_type(mod_source_path)
+    mod_name = os.path.split(mod_source_path)[-1]
     if mod:
         modpath = os.path.join(install_path, mod.filename)
         try:
             # Unpack / Copy the files           
             mod.toLoose(modpath)
             
-            wizard = check_installer_type(modpath)
+            wizard = check_installer_type(modpath, messageLog)
             if wizard is not None:
                 try:
                     if not wizard.launch_wizard():
                         raise ModInstallWizardCancelled()
-                    wizard.install()
+                    wizard.moveToThread(thread)
+                    
+                    wizard.messageLog.connect(messageLog)
+                    wizard.success.connect(lambda: wizard.messageLog.emit(f"Successfully registered {mod_name}."))
+                    wizard.finished.connect(thread.quit)
+                    
+                    thread.started.connect(lambda: wizard.messageLog.emit("Registering mod..."))
+                    thread.started.connect(wizard.install)
+                    
+                    thread.start()
                 except ModInstallWizardCancelled as e:
                     raise e
-                except Exception as e:
-                    raise ModInstallWizardError(e)
                     
-            # Unpack any MBEs
-            for mbe_folder in ["data", "message", "text"]:
-                data_path = os.path.join(install_path, mod.filename, "modfiles", mbe_folder)
-                if os.path.exists(data_path):
-                    temp_path = os.path.join(data_path, 'temp')
-                    os.makedirs(temp_path, exist_ok=True)
-                    for item in os.listdir(data_path):
-                        itempath = os.path.join(data_path, item)
-                        if os.path.isfile(itempath) and os.path.splitext(item)[-1] == '.mbe':
-                            temp_item_path = os.path.join(temp_path, item)
-                            os.rename(os.path.join(data_path, item), temp_item_path)
-                            mbe_unpack(item, temp_path, data_path)
-                    shutil.rmtree(temp_path)
+            # # Unpack any MBEs
+            # for mbe_folder in ["data", "message", "text"]:
+            #     data_path = os.path.join(install_path, mod.filename, "modfiles", mbe_folder)
+            #     if os.path.exists(data_path):
+            #         temp_path = os.path.join(data_path, 'temp')
+            #         os.makedirs(temp_path, exist_ok=True)
+            #         for item in os.listdir(data_path):
+            #             itempath = os.path.join(data_path, item)
+            #             if os.path.isfile(itempath) and os.path.splitext(item)[-1] == '.mbe':
+            #                 temp_item_path = os.path.join(temp_path, item)
+            #                 os.rename(os.path.join(data_path, item), temp_item_path)
+            #                 mbe_unpack(item, temp_path, data_path)
+            #         shutil.rmtree(temp_path)
             return
         except Exception as e:
             shutil.rmtree(modpath)
@@ -189,7 +232,7 @@ def install_mod_in_manager(mod_source_path, install_path, mbe_unpack):
     else:
         raise UnrecognisedModFormatError()
 
-def detect_mods(path, log):
+def detect_mods(path, log, ignore_debugs=True):
     """Check for qualifying mods in the registered mods folder."""
     dirpath = os.path.join(path, "mods")
     os.makedirs(dirpath, exist_ok=True)
@@ -206,12 +249,21 @@ def detect_mods(path, log):
                 continue
             # If the mod has a wizard defined, attach it for reinstallation purposes
             try:
-                wizard = check_installer_type(itempath)
+                wizard = check_installer_type(itempath, None if ignore_debugs else log)
                 if wizard is not None:
                     mod_obj.wizard = wizard
-            except json.decoder.JSONDecodeError as e:
-                log(f"An error occured when reading INSTALL.json for {mod_obj.name}: {e}")
+                    wizard.try_set_logger(log)
+            except InstallerWizardParsingError as e:
+                log(f"Error creating the registry wizard for {mod_obj.name}: {e}.")
                 continue
+            except SpecificInstallerWizardParsingError as e:
+                log(e.__str__())
+                continue
+            except Exception as e:
+                log(f"An unhandled error occured when reading {mod_obj.name} data: {e}")
+            #except json.decoder.JSONDecodeError as e:
+            #    log(f"An error occured when reading INSTALL.json for {mod_obj.name}: {e}")
+            #    continue
             detected_mods.append(mod_obj)
     return detected_mods
 
