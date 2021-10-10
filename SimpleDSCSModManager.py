@@ -16,7 +16,7 @@ from CodeHandlers.GenericThreadRunner import GenericThreadRunner
 from CodeHandlers.ScriptHandler import ScriptHandler
 from ModFiles.Detection import detect_mods, install_mod_in_manager
 from Subprocesses.Downloader import DSCSToolsDownloader
-from Subprocesses.InstallMods import InstallModsWorker
+from Subprocesses.ModInstallation import InstallModsWorker
 from ToolHandlers.ProfileHandler import ProfileHandler
 from UI.Design import uiMainWidget
 from Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancelled, \

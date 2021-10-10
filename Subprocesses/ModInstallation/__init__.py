@@ -4,14 +4,15 @@ import shutil
 
 from PyQt5 import QtCore 
 
-from ModFiles.Indexing import generate_mod_index
-from ModFiles.PatchGenMultithreaded import generate_patch_mt
-from Utils.Path import splitpath
+from Subprocesses.ModInstallation.Hashing import hash_file_install_orders, sort_hashes, add_cache_to_index, cull_index
+from Subprocesses.ModInstallation.Indexing import generate_mod_index
+from Subprocesses.ModInstallation.PatchGenMultithreaded import generate_patch_mt
+from Subprocesses.ModInstallation.Softcoding import search_string_for_softcodes, construct_softcode_links
 from Utils.FiletypesPluginLoader import get_filetype_plugins
-from Utils.PatchersPluginLoader import get_patcher_plugins
-from Utils.RulesPluginLoader import get_rule_plugins
 from Utils.Multithreading import PoolChain
-from ModFiles.Hashing import hash_file_install_orders, sort_hashes, add_cache_to_index, cull_index
+from Utils.PatchersPluginLoader import get_patcher_plugins
+from Utils.Path import splitpath
+from Utils.RulesPluginLoader import get_rule_plugins
             
 class InstallModsWorker(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -100,20 +101,24 @@ class InstallModsWorker(QtCore.QObject):
                                                    patch_dir, self.resources_loc, self.threadpool, 
                                                    self.lockGuiFunc, self.releaseGuiFunc,
                                                    self.messageLogFunc, self.updateMessageLogFunc)
-                
-            # 6. Create an object to pack any MBE tables into MBE archives, and to compile any
+            
+            # 6. Create an object to parse the final patch for softcodes, and convert them to
+            #    hardcodes
+            self.softcode_linker = SoftcodeLinker(patch_dir, self.messageLogFunc, self.updateMessageLogFunc, self.lockGuiFunc, self.releaseGuiFunc)
+            
+            # 7. Create an object to pack any MBE tables into MBE archives, and to compile any
             #    Squirrel files
             self.file_packer = PackerGenerator(patch_dir, self.dscstools_handler, self.script_handler, 
                                                     self.threadpool,
                                                     self.messageLogFunc, self.updateMessageLogFunc,
                                                     self.lockGuiFunc, self.releaseGuiFunc)
 
-            # 7. Create an object to update the mod manager's file cache, pack the archives, and then install them
+            # 8. Create an object to update the mod manager's file cache, pack the archives, and then install them
             self.patch_installer = FinaliseInstallation(patch_dir, self.output_loc, self.resources_loc,
                                                         self.game_resources_loc, self.backups_loc, self.dscstools_handler)
             hook_signals(self.patch_installer, self.thread2)
             
-            # 8. Make a function to pass the mod index/metadata/target archive to other objects
+            # 9. Make a function to pass the mod index/metadata/target archive to other objects
             def relay_indices_and_cache(indices, cache, archives, all_used_archives):
                 self.resource_bootstrapper.indices = indices
                 self.patch_builder.indices = indices
@@ -125,22 +130,33 @@ class InstallModsWorker(QtCore.QObject):
                            
             self.mod_indexer.emitIndicesAndCache.connect(relay_indices_and_cache)
             
-            # 9. Link up the installer objects such that they kick off the next object in a chain
-            #    Don't forget that e.g. thread2.start() starts off patch_installer, so we can hook
-            #    the finished() signal of patch_installer
+            # 10. Link up the installer objects such that they kick off the next object in a chain
+            #     Don't forget that e.g. thread2.start() starts off patch_installer, so we can hook
+            #     the finished() signal of patch_installer
             self.mod_indexer.continue_execution.connect(self.resource_bootstrapper.run)
             self.resource_bootstrapper.finished.connect(self.patch_builder.run)
             self.patch_builder.finished.connect(self.file_packer.run)
-            self.file_packer.finished.connect(lambda: self.thread2.start())
+            # self.patch_builder.finished.connect(self.softcode_linker.run)
+            # self.softcode_linker.finished.connect(self.file_packer.run)
+            self.file_packer.finished.connect(self.thread2.start)
             self.patch_installer.finished.connect(self.finished.emit)
 
-            # 10. Green light! Go go go!
+            # 11. Green light! Go go go!
             self.thread.start()
 
         except Exception as e:
             self.messageLogFunc(f"The following error occured when trying to install modlist: {e}")
-            raise e
+            self.releaseGuiFunc()
+
+class IndexException(Exception):
+    def __init__(self, base_msg, mod_name):
+        super().__init__(self)
+        self.base_msg = base_msg
+        self.mod_name = mod_name
         
+    def __str__(self):
+        return f"{self.mod_name}: {self.base_msg}"
+
 
 class ModsIndexer(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -156,6 +172,32 @@ class ModsIndexer(QtCore.QObject):
         self.output_loc = output_loc
         self.profile_handler = profile_handler
     
+    def index(self, mod, filetypes):
+        # Yes, this is really messy and needs a refactor
+        modfiles_path = os.path.relpath(os.path.join(mod.path, "modfiles"))
+        metadata_path = os.path.relpath(os.path.join(mod.path, "METADATA.json"))
+        if os.path.exists(metadata_path):
+            with open(metadata_path, 'r') as F:
+                metadata = json.load(F)
+        else:
+            metadata = {}
+            
+        base_archive = metadata.get("DefaultArchive", "DSDBP")
+        rules = metadata.get("Rules", {})
+        rules = {key.replace('/', os.sep): value for key, value in rules.items()}
+        archives = metadata.get("Archives", {})
+        archives = {key.replace('/', os.sep): value for key, value in archives.items()}
+            
+        index = generate_mod_index(modfiles_path, rules, filetypes)
+
+        
+        archive_data = {}
+        for index_data in index.values():
+            for key in index_data.keys():
+                archive_data[key] = archives.get(key, base_archive)
+        return archive_data, index
+                
+    
     def run(self):
         try:
             filetypes = get_filetype_plugins()
@@ -163,38 +205,18 @@ class ModsIndexer(QtCore.QObject):
             indices = []
             mod_archives = []
             for mod in self.profile_handler.get_active_mods():
-                # Yes, this is really messy and needs a refactor
-                modfiles_path = os.path.relpath(os.path.join(mod.path, "modfiles"))
-                metadata_path = os.path.relpath(os.path.join(mod.path, "METADATA.json"))
-                if os.path.exists(metadata_path):
-                    with open(metadata_path, 'r') as F:
-                        metadata = json.load(F)
-                else:
-                    metadata = {}
-                    
-                base_archive = metadata.get("DefaultArchive", "DSDBP")
-                rules = metadata.get("Rules", {})
-                rules = {key.replace('/', os.sep): value for key, value in rules.items()}
-                archives = metadata.get("Archives", {})
-                archives = {key.replace('/', os.sep): value for key, value in archives.items()}
-                    
-                index = generate_mod_index(modfiles_path, rules, filetypes)
-                indices.append(index)
-                
-                archive_data = {}
-                for index_data in index.values():
-                    for key in index_data.keys():
-                        archive_data[key] = archives.get(key, base_archive)
-                        
-                mod_archives.append(archive_data)
-                
-
+                try:
+                    archive_data, index = self.index(mod, filetypes)
+                    mod_archives.append(archive_data)
+                    indices.append(index)
+                except Exception as e:
+                    raise IndexException(e.__str__(), mod.name) from e
                 
             self.messageLog.emit(f"Indexed ({len(indices)}) active mods.")
             if len(indices) == 0:
                 raise Exception("No mods activated.")
             
-            self.messageLog.emit("Indexing mods...")
+            self.messageLog.emit("Checking cache...")
             mod_hashes = hash_file_install_orders(indices)
             modcache_location = os.path.join(self.output_loc, "modcache.json")
             if os.path.exists(modcache_location):
@@ -218,9 +240,59 @@ class ModsIndexer(QtCore.QObject):
             self.messageLog.emit(f"The following exception occured when indexing mods: {e}")
             self.releaseGui.emit()
         finally:
-            # self.releaseGui.emit()
             self.finished.emit()
+            
+class SoftcodeLinker(QtCore.QObject):
+    finished = QtCore.pyqtSignal()
 
+    def __init__(self, patch_dir, messageLogFunc, updateMessageLog, lockGuiFunc, releaseGuiFunc):
+        super().__init__()
+        self.patch_dir = patch_dir
+        self.messageLogFunc = messageLogFunc
+        self.updateMessageLog = updateMessageLog
+        self.lockGuiFunc = lockGuiFunc
+        self.releaseGuiFunc = releaseGuiFunc
+    
+    def run(self):
+        try:
+            self.lockGuiFunc()
+            # Find all files that contribute to the softcode library
+            self.messageLogFunc("Indexing patch...")
+            softcodable_filetypes = [filetype for filetype in get_filetype_plugins() if getattr(filetype, "enable_softcodes", False)]
+            patch_index = generate_mod_index(self.patch_dir, {}, softcodable_filetypes)
+            
+            # Now find all the softcodes
+            # Should run this bit in parallel...
+            self.messageLogFunc("Finding softcodes...")
+            softcodes = set()
+            files_to_update = []
+            i = 0
+            n_files = sum([len(modfiles) for modfiles in patch_index.values()])
+            if len(n_files):
+                self.messageLogFunc("")
+            for modfiles in patch_index.values():
+                for modfile in modfiles:
+                    with open(modfile, 'r', encoding="utf-8") as F:
+                        i += 1
+                        self.updateMessageLog(f"Searching file {i}/{n_files}...")
+                        new_codes = search_string_for_softcodes(F.read())
+                        softcodes = softcodes.union(new_codes)
+                        if len(new_codes):
+                            files_to_update.append((modfile, new_codes))
+            code_links = construct_softcode_links(softcodes)
+            for (filepath, codes) in files_to_update:
+                with open(filepath, 'r', encoding="utf-8") as F:
+                    data = F.read()
+                for code in codes:
+                    data = data.replace(code, code_links[code])
+                with open(filepath, 'w', encoding="utf-8") as F:
+                    F.write(data)
+            
+            self.finished.emit()
+        except Exception as e:
+            self.messageLogFunc(f"The following exception occured when linking softcodes: {e}")
+            self.releaseGuiFunc()
+            
 
 class PackerGenerator(QtCore.QObject):
     finished = QtCore.pyqtSignal()
@@ -281,13 +353,9 @@ class PackerGenerator(QtCore.QObject):
             self.runner.run()
         except Exception as e:
             self.messageLogFunc.emit(f"The following exception occured when packing mod files: {e}")
-        finally:
-            self.releaseGuiFunc()
-            # self.finished.emit()
+            self.releaseGui.emit()
             
-            
-    
-            
+
 class FinaliseInstallation(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     messageLog = QtCore.pyqtSignal(str)
@@ -353,7 +421,7 @@ class FinaliseInstallation(QtCore.QObject):
             
             categories = {'data': 'DSDBP',
                           'sfx': 'DSDBPse',
-                          'bgm': 'DSDBbgm',
+                          'bgm': 'ExtraMusic',
                           'vo': 'DSDBPvous'}
             
             self.messageLog.emit("Updating cache...")
@@ -362,6 +430,9 @@ class FinaliseInstallation(QtCore.QObject):
                 shutil.copytree(os.path.join(self.patch_dir, archive), self.cache_dir, dirs_exist_ok=True)
                 with open(self.cache_record_filepath, 'w') as F:
                     json.dump(self.cached_files, F, indent=4)
+            
+            self.messageLog.emit("")
+            
             
             self.messageLog.emit("Generating patched MVGL archive (this may take a few minutes)...")
 
@@ -388,10 +459,10 @@ class FinaliseInstallation(QtCore.QObject):
             
             self.messageLog.emit("Mods successfully installed.")
         except Exception as e:
-            self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")
+            self.messageLog.emit(f"The following error occured when trying to install modlist: {e}")       
         finally:
-            self.releaseGui.emit()
             self.finished.emit()
+            self.releaseGui.emit()
 
     
 def create_backups(game_resources_loc, backups_loc, logfunc):
@@ -455,7 +526,6 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
             resources_loc = self.resources_loc
             backups_loc = self.backups_loc
             dscstools_handler = self.dscstools_handler
-            script_handler = self.script_handler
             threadpool = self.threadpool
             messageLog = self.messageLog
             updateMessageLog = self.updateMessageLog
@@ -548,7 +618,6 @@ class multithreaded_bootstrap_index_resources(QtCore.QObject):
             else:
                 self.finished.emit()
         except Exception as e:
-            raise e
             self.messageLog(f"An error occurred when collecting base resources: {e}")
             self.releaseGui()
-        
+    

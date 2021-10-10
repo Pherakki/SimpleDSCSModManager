@@ -4,7 +4,7 @@ import shutil
 
 from PyQt5 import QtCore
 
-from .ScriptPatching import patch_scripts
+from ModFiles.ScriptPatching import patch_scripts
 from Utils.Multithreading import PoolChain
 from Utils.Path import splitpath
 
@@ -31,6 +31,7 @@ class generate_patch_mt(QtCore.QObject):
         self.updateMessageLogFunc = updateMessageLogFunc
         
         self.runners = []
+
         
     def run(self):
         self.messageLogFunc("Generating patch...")
@@ -135,8 +136,13 @@ class patch_pool_runner(QtCore.QObject):
         self.updateMessageLog.emit(f">>> {self.capsingmessage} {self.cml_job_count + self.ncomplete}/{self.total_jobs} [{message}]")
         
     def raise_exception(self, e):
+        """
+        THIS FUNCTION IS BUGGY
+        MESSAGE FUNCTION DOESN'T WORK
+        HANGS WHEN WAITING FOR THE THREADPOOL
+        """
         self.threadpool.clear()
-        self.messageLogFunc(f"The following exception occured when {self.plurmessage}: {e}")
+        self.updateMessageLog.emit(f"The following exception occured when {self.plurmessage}: {e}")
         self.threadpool.waitForDone()
         self.releaseGui.emit()
 
