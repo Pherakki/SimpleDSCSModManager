@@ -109,6 +109,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.log("SimpleDSCSModManager initialised.")
         self.ui.loglink(f"""Enjoying Cyber Sleuth modding? Consider supporting more projects like this on <a href="{patreon_addr}">Patreon</a>! [Right-click to copy link]""")
         self.ui.loglink(f"""Want to contribute to modding tools or develop mods? Consider joining the <a href="{discord_addr}">Digimon Modding Community discord server</a>. [Right-click to copy link]""")
+        self.ui.log( """If you're encountering issues installing mods, remember to use SimpleDSCSModManager in a non-protected location (e.g. not Desktop, Documents, etc.) and run it in Admin mode.""")
+        self.ui.log( """Script errors can be caused by your anti-virus program. If you encounter issues installing scripts, click 'Clear Cache' and disable your AV when installing mods.""")
 
     @property
     def game_resources_loc(self):
