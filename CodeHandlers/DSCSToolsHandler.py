@@ -1,16 +1,8 @@
-import math
 import os
 import shutil
-import subprocess
-import urllib
-import zipfile
-import time
-import subprocess
 
 from tools.dscstools import DSCSTools
-from UI.CustomWidgets import ProgressDialog
-from Utils.MBE import mbe_batch_unpack
-from .DSCSToolsArchiveWorker import DumpArchiveWorker, DumpArchiveWorkerThread
+from .DSCSToolsArchiveWorker import DumpArchiveWorker
 from .DSCSToolsFileWorker import DumpFileWorker
 from .DSCSToolsMBEWorker import MBEWorker
 
@@ -23,10 +15,8 @@ def is_packed_mbe_table(path):
 
 
 class DSCSToolsHandler:
-    def __init__(self, game_location, dscstools_location):
-        self.game_location = game_location
-        self.dscstools_location = dscstools_location
-        self.dscstools_folder = os.path.join(*os.path.split(dscstools_location)[:-1])
+    def __init__(self):
+        self.game_location = None
         
     ####################
     # Helper Functions #
@@ -39,24 +29,7 @@ class DSCSToolsHandler:
     
     ############################
     # DSCSTools Call Functions #
-    ############################
-    def mvgl_op(self, archive, origin, destination, operation, 
-                input_transform, output_transform, 
-                copy_required, remove_input):
-        if copy_required:
-            original_archive = os.path.join(origin, input_transform(archive))
-            input_file = os.path.join(destination, input_transform(archive))
-            shutil.copy2(original_archive, input_file)
-        else:
-            input_file = os.path.join(origin, input_transform(archive))
-        
-        output_file = os.path.join(destination, output_transform(archive))
-        subprocess.call([self.dscstools_location, f'--{operation}', input_file, output_file],
-                        creationflags=subprocess.CREATE_NO_WINDOW, cwd=self.dscstools_folder)
-
-        if remove_input:
-            os.remove(input_file)
-            
+    ############################            
     def dscstools_op(self, archive, origin, destination, operation, 
                      input_transform, output_transform, 
                      copy_required, remove_input):
