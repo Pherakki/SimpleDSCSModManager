@@ -15,6 +15,10 @@ class CymisWizard(QtWidgets.QWizard):
         for page in self.pages:    
             self.addPage(page)
         
+        self.button(QtWidgets.QWizard.BackButton).setEnabled(True)
+        self.button(QtWidgets.QWizard.BackButton).clicked.connect(lambda: self.update_flagtable(-1))
+        self.button(QtWidgets.QWizard.FinishButton).clicked.connect(lambda: self.update_flagtable(0))
+        self.button(QtWidgets.QWizard.NextButton).clicked.connect(lambda: self.update_flagtable(1))
             
         self.currentCymisPageIndex = 0
         
@@ -26,6 +30,16 @@ class CymisWizard(QtWidgets.QWizard):
     def launch_installation(self):
         # Should hook into this to provide GUI logging functions
         self.installer.install_mod()
+        
+    def update_flagtable(self, index_delta):
+        result = self.pages[self.currentCymisPageIndex].page_data.retrieve_flags()
+        if self.log is not None:
+            self.log("Updating flag table.")
+            for flag_name, flag_value in result.items():
+                self.log(f"{flag_name} is now {flag_value}.")
+        self.installer.flag_table.update(result)
+        self.currentCymisPageIndex += index_delta
+        
 
 
 ###################
