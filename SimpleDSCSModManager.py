@@ -609,7 +609,7 @@ def restore_backups(game_resources_loc, backup_loc, logfunc):
 def expectation_management_popup():
     buttons = QtWidgets.QMessageBox.Ok
     issue_tracker = "<a href=\"https://github.com/Pherakki/SimpleDSCSModManager/issues\">issue tracker</a>"
-    msgBox = QtWidgets.QMessageBox.question(None, "Alpha Build Notice", f"This is an alpha build of SimpleDSCSModManager which has several incomplete features. You may run into bugs using some features of this program. If you encounter one, please check whether this bug is already an open issue at the {issue_tracker}, and if not, open a new issue.", buttons)
+    QtWidgets.QMessageBox.question(None, "Alpha Build Notice", f"This is an alpha build of SimpleDSCSModManager which has several incomplete features. You may run into bugs using some features of this program. If you encounter one, please check whether this bug is already an open issue at the {issue_tracker}, and if not, open a new issue.", buttons)
 
 # Can't figure out how to catch all crashes yet
 # def CTD_popup(e):
