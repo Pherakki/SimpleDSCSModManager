@@ -125,6 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
     @property
     def backups_loc(self):
         return os.path.join(self.game_resources_loc, 'backup')
+
     
     ####################################
     # MOD REGISTRY FUNCTIONS AND UTILS #
@@ -237,12 +238,13 @@ class MainWindow(QtWidgets.QMainWindow):
             with open(config_file_loc, 'r') as F:
                 self.config = json.load(F)
         else:
-            self.config = {'game_loc': script_loc, 'dscstools_version': None}
+            self.config = {'game_loc': modmanager_directory, 'dscstools_version': None}
             self.write_config()
             
     def write_config(self):
         with open(os.path.join(self.config_loc, "config.json"), 'w') as F:
             json.dump(self.config, F, indent=4)
+            
     
     ###########################################
     # FUNCTIONS ATTACHED TO "EXTRACT" BUTTONS #
