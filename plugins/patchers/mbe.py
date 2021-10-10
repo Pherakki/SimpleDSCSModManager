@@ -50,7 +50,7 @@ class mbe_patcher(QtCore.QRunnable):
             # E.g. data/mbe_folder/table.csv
             mbe_table_datapath = os.path.join(*splitpath(mbe_table_filepath)[-3:])
             working_mbe_filepath = os.path.join(working_dir, mbe_table_datapath)
-    
+
             if not os.path.exists(working_mbe_filepath):
                 working_mbe_path = os.path.split(working_mbe_filepath)[0] + os.path.sep
                 os.makedirs(working_mbe_path, exist_ok=True)
@@ -79,7 +79,6 @@ def mbetable_to_dict(filepath):
     result = {}
     id_length_key = '/'.join(splitpath(filepath)[-3:])
     id_size = id_lengths.get(id_length_key, 1)
-    print(id_length_key, id_size)
     with open(filepath, 'r', encoding='utf8') as F:
         header = F.readline()
         csvreader = csv.reader(F, delimiter=',', quotechar='"')
