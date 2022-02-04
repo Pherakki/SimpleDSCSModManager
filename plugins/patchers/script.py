@@ -4,52 +4,49 @@ import shutil
 from PyQt5 import QtCore
 
 from Utils.Path import splitpath
+from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
 
+rules = get_rule_plugins()
 
-class patch_script_src(QtCore.QRunnable):
-    group = 'script_src'
-    singular_msg = "patching script"
-    plural_msg = "patching scripts"
+class ScriptPatcher:
+    __slots__ = ("softcode_lookup", "filepack", "paths", "path_prefix", "post_action")
+    group = "Script"
     
-    def __init__(self, rules_dictionary, working_dir, resources_dir, script_filepath, script_rules,
-                 update_messagelog, update_finished, raise_exception):
-        super().__init__()
+    def __init__(self, filepack, paths, path_prefix, softcode_lookup, post_action=None):
+        self.filepack = filepack
+        self.paths = paths
+        self.softcode_lookup = softcode_lookup
+        self.path_prefix = path_prefix
+        self.post_action = post_action
         
-        self.working_dir = working_dir
-        self.resources_dir = resources_dir
-        self.script_filepath = script_filepath
-        self.script_rules = script_rules
+    def execute(self):
+        file_target = self.filepack.get_file_targets()[0]
         
-        self.update_messagelog = update_messagelog
-        self.update_finished = update_finished
-        self.raise_exception = raise_exception
+        script_resource = os.path.join(self.paths.base_resources_loc, self.filepack.get_resource_targets()[0])
+        dst = os.path.join(self.paths.patch_build_loc, file_target)
         
-        self.rules_dictionary = rules_dictionary
+        pipeline = self.filepack.build_pipeline
+        # Load the table to be patched into memory
+        if os.path.exists(script_resource):
+            with open(script_resource, 'r') as F:
+                source_code = F.read()
+        else:
+            source_code = ""
+            
+        # Now iterate over build steps
+        for build_step in pipeline:
+            mod_source_file = os.path.join(self.paths.mm_root, build_step.mod, build_step.src)
+            source_code = rules[build_step.rule](source_code, mod_source_file)
         
-    def run(self):
-        try:
-            working_dir = self.working_dir
-            resources_dir = self.resources_dir
-            script_filepath = self.script_filepath
-            script_rules = self.script_rules
-            
-            script_filepath = os.path.relpath(script_filepath)
-            local_filepath = os.path.join(*splitpath(script_filepath)[3:])
-            
-            working_script_filepath = os.path.join(working_dir, local_filepath)
-            
-            if not os.path.exists(working_script_filepath):
-                working_script_path = os.path.split(working_script_filepath)[0] + os.path.sep
-                os.makedirs(working_script_path, exist_ok=True)
-                resource_path = os.path.join(resources_dir, 'base_scripts', local_filepath)
-                shutil.copy2(resource_path, working_script_filepath)
-                    
-            # I.e. execute rule
-            assert len(script_rules) == 1, f"More than one rule: {script_rules}"
-            rule_name = list(script_rules.values())[0]
-            self.rules_dictionary[rule_name](working_script_filepath, script_filepath)
-            
-            self.update_messagelog(local_filepath)
-            self.update_finished()
-        except Exception as e:
-            self.raise_exception(e)
+        os.makedirs(os.path.split(dst)[0], exist_ok=True)
+        with open(dst, 'w') as F:
+            F.write(source_code)
+        self.filepack.wipe_pipelines()
+        
+        # Pack into the pack target
+        cached_file = os.path.join(self.paths.patch_cache_loc, self.path_prefix, self.filepack.get_pack_targets()[0])
+        os.makedirs(os.path.split(cached_file)[0], exist_ok=True)
+        self.filepack.pack(dst, cached_file)
+
+        if self.post_action is not None:
+            self.post_action(cached_file, cached_file)

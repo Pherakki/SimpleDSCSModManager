@@ -2,6 +2,7 @@ import os
 
 class UncompiledScript:
     group = 'script_src'
+    default_rule = 'squirrel_concat'
     enable_softcodes = True
     
     @staticmethod
@@ -11,8 +12,19 @@ class UncompiledScript:
         else:
             return False
         
+    @staticmethod
+    def get_target(filepath):
+        return filepath
+    
     @classmethod
-    def produce_index(cls, path, filename, rule):
-        if rule is None:
-            rule = 'squirrel_overwrite'
-        return cls.group, os.path.join(path, filename), {filename: rule}
+    def get_rule(cls, filepath):
+        return cls.default_rule
+    
+    @classmethod
+    def produce_index(cls, path, filename):
+        return cls.group, os.path.join(path, filename), [filename]
+    
+    @staticmethod
+    def get_pack_name(filepath):
+        return filepath
+        

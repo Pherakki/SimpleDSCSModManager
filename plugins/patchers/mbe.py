@@ -1,102 +1,75 @@
-import csv
 import json
 import os
 import shutil
 
-from PyQt5 import QtCore
+from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from Utils.MBE import mbetable_to_dict, dict_to_mbetable
 
-from Utils.Path import splitpath
-
-with open(os.path.join("config", "mberecordidsizes.json"), 'r') as F:
+with open(os.path.join("config", "mberecord_idsizes.json"), 'r') as F:
     id_lengths = json.load(F)
-with open(os.path.join("config", "mberecordsizes.json"), 'r') as F:
-    max_record_sizes = json.load(F)
-    
-known_duplicates = []
-with open(os.path.join("config", "mbeduplicaterecords.json"), 'r') as F:
-    for key, value in json.load(F).items():
-        for subkey in value:
-            known_duplicates.append((tuple(subkey), key))
 
-class mbe_patcher(QtCore.QRunnable):
-    group = 'mbe'
-    singular_msg = "patching MBE"
-    plural_msg = "patching MBEs"
+rules = get_rule_plugins()
+
+class MBEPatcher:
+    __slots__ = ("softcode_lookup", "filepack", "paths", "path_prefix", "post_action")
+    group = "MBE"
     
-    def __init__(self, rules_dictionary, working_dir, resources_dir, mbe_table_filepath, mbe_rules,
-                 update_messagelog, update_finished, raise_exception):
-        super().__init__()
+    # Need to insert the archive_pack, not the post_action...
+    def __init__(self, filepack, paths, path_prefix, softcode_lookup, post_action=None):
+        self.filepack = filepack
+        self.paths = paths
+        self.path_prefix = path_prefix
+        self.post_action = post_action
+        self.softcode_lookup = softcode_lookup
         
-        self.working_dir = working_dir
-        self.resources_dir = resources_dir
-        self.mbe_table_filepath = mbe_table_filepath
-        self.mbe_rules = mbe_rules
+    def execute(self):
+        file_targets = set(self.filepack.get_file_targets())
+        source_tables = set()
         
-        self.update_messagelog = update_messagelog
-        self.update_finished = update_finished
-        self.raise_exception = raise_exception
+        # Copy all tables that don't need to be built
+        mbe_resource = os.path.join(self.paths.base_resources_loc, self.filepack.get_resource_targets()[0])
+        # dst needs to have the archive name inserted
+        dst = os.path.join(self.paths.patch_build_loc, self.filepack.get_resource_targets()[0])
         
-        self.rules_dictionary = rules_dictionary
-        
-    def run(self):
-        try:
-            mbe_table_filepath = self.mbe_table_filepath
-            working_dir = self.working_dir
-            resources_dir = self.resources_dir
-            mbe_rules = self.mbe_rules
+        os.makedirs(dst, exist_ok=True)
+        if os.path.isdir(mbe_resource):
+            for file in os.listdir(mbe_resource):
+                source_tables.add(os.path.join(self.filepack.get_resource_targets()[0], file))
+                if os.path.join(self.filepack.get_resource_targets()[0], file) not in file_targets:
+                    table_path = os.path.join(mbe_resource, file)
+                    file_dst = os.path.join(dst, file)
+                    shutil.copy2(table_path, file_dst)
+                
+        # Iterate over targets; build each target
+        for file_target, pipeline in zip(self.filepack.get_file_targets(), self.filepack.build_pipelines):
             
-            mbe_table_filepath = os.path.relpath(mbe_table_filepath)
-            local_filepath = os.path.join(*splitpath(mbe_table_filepath)[3:])
-            # E.g. data/mbe_folder/table.csv
-            mbe_table_datapath = os.path.join(*splitpath(mbe_table_filepath)[-3:])
-            working_mbe_filepath = os.path.join(working_dir, mbe_table_datapath)
-
-            if not os.path.exists(working_mbe_filepath):
-                working_mbe_path = os.path.split(working_mbe_filepath)[0] + os.path.sep
-                os.makedirs(working_mbe_path, exist_ok=True)
-                resource_filepath = os.path.join(resources_dir, 'base_mbes', mbe_table_datapath)
-                # Need to copy every table inside the MBE
-                resource_path = os.path.split(resource_filepath)[0]
-                for file in os.listdir(resource_path):
-                    shutil.copy2(os.path.join(resource_path, file), os.path.join(working_mbe_path, file))
-
-            # Join the records of the two tables
-            header, mbe_data = mbetable_to_dict(working_mbe_filepath)
-            _, mod_mbe_data = mbetable_to_dict(mbe_table_filepath)
-            for record_id, record_rule in mbe_rules.items():
-                key = '/'.join(splitpath(mbe_table_filepath)[-3:])
-                self.rules_dictionary[record_rule](record_id, mbe_data, mod_mbe_data, max_record_sizes.get(key, 1))
-            dict_to_mbetable(working_mbe_filepath, header, mbe_data)
-
-            self.update_messagelog(local_filepath)
-            self.update_finished()
-        except Exception as e:
-            self.raise_exception(e)
-               
-
-def mbetable_to_dict(filepath):
-    header = None
-    result = {}
-    id_length_key = '/'.join(splitpath(filepath)[-3:])
-    id_size = id_lengths.get(id_length_key, 1)
-    with open(filepath, 'r', encoding='utf8') as F:
-        header = F.readline()
-        csvreader = csv.reader(F, delimiter=',', quotechar='"')
-        for line in csvreader:
-            data = line
-            record_id = tuple(data[:id_size])
-            if record_id not in result:
-                result[record_id] = data[id_size:]
-            elif id_length_key in id_lengths:
-                print(">>>", "Hit a duplicate in", filepath)
-                result[record_id] = data[id_size:]
+            id_len = id_lengths.get(file_target.replace(os.sep, "/"), 1)
+            # Load the table to be patched into memory
+            if file_target in source_tables:
+                table_source = os.path.join(self.paths.base_resources_loc, file_target)
+                header, working_table = mbetable_to_dict({}, table_source, id_len, None, None)
             else:
-                assert 0, f"Duplicate ID {record_id} in {filepath}, mod manager not ready to handle this situation yet. Please raise an issue on the GitHub page."
-    return header, result
+                step_1 = pipeline[0]
+                table_source = os.path.join(self.paths.mm_root, step_1.mod, step_1.src)
+                header, working_table = mbetable_to_dict({}, table_source, id_len, None, None)
+                # In case there are any softcodes in the first table...
+                working_table = {}
+            
+            # Now iterate over build steps
+            for build_step in pipeline:
+                table_source = os.path.join(self.paths.mm_root, build_step.mod, build_step.src)
+                rules[build_step.rule](working_table, table_source, id_len, build_step.softcodes, self.softcode_lookup)
+                
+            abs_filepath = os.path.join(dst, os.path.split(file_target)[1])
+            dict_to_mbetable(abs_filepath, header, working_table)
+        
+        # Pack into the pack target
+        cached_file = os.path.join(self.paths.patch_cache_loc, self.path_prefix, self.filepack.get_pack_targets()[0])
+        os.makedirs(os.path.split(cached_file)[0], exist_ok=True)
+        self.filepack.pack(dst, cached_file)
+        self.filepack.set_build_pipelines(None)
 
-def dict_to_mbetable(filepath, header, result):
-    with open(filepath, 'w', newline='', encoding='utf8') as F:
-        F.write(header)
-        csvwriter = csv.writer(F, delimiter=',', quotechar='"')
-        for key, value in result.items():
-            csvwriter.writerow(([*key, *value]))
+        # Do any post actions, such as compressing the file
+        if self.post_action is not None:
+            self.post_action(cached_file, cached_file)
+            

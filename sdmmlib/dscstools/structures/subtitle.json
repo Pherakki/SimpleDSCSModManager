@@ -1,0 +1,9 @@
+{
+  "Sheet1": {
+    "id": "int",
+    "StartTime": "int",
+    "EndTime": "int",
+    "SubtitleTextID": "int",
+    "SubtitleCode": "string"
+  }
+}

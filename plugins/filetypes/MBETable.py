@@ -3,11 +3,9 @@ import json
 import os
 from Utils.Path import splitpath
 
-with open(os.path.join("config", "mberecordidsizes.json"), 'r') as F:
-    id_lengths = json.load(F)
-
 class MBE_table:
     group = 'mbe'
+    default_rule = 'mberecord_merge'
     enable_softcodes = True
     
     @staticmethod
@@ -17,17 +15,27 @@ class MBE_table:
         else:
             return False
         
+    @staticmethod
+    def get_target(filepath):
+        return filepath
+    
     @classmethod
-    def produce_index(cls, path, filename, rule):
-        index = []
-        if rule is None:
-            rule = 'mberecord_overwrite'
-        mbe_filepath = os.path.join(path, filename)
-        with open(mbe_filepath, 'r', encoding='utf8') as F:
-            F.readline()
-            id_len = id_lengths.get('/'.join(splitpath(mbe_filepath)[-3:]), 1)
-            csvreader = csv.reader(F, delimiter=',', quotechar='"')
-            for line in csvreader:
-                record_id = [item.strip() for item in line[:id_len]]
-                index.append(record_id)
-        return cls.group, os.path.join(path, filename), {tuple(idx): rule for idx in index}
+    def get_rule(cls, filepath):
+        return cls.default_rule
+        
+    # @classmethod
+    # def produce_index(cls, path, filename):
+    #     index = []
+    #     mbe_filepath = os.path.join(path, filename)
+    #     with open(mbe_filepath, 'r', encoding='utf8') as F:
+    #         F.readline()
+    #         id_len = id_lengths.get('/'.join(splitpath(mbe_filepath)[-3:]), 1)
+    #         csvreader = csv.reader(F, delimiter=',', quotechar='"')
+    #         for line in csvreader:
+    #             record_id = [item.strip() for item in line[:id_len]]
+    #             index.append(record_id)
+    #     return cls.group, os.path.join(path, filename), [tuple(idx) for idx in index]
+
+    @staticmethod
+    def get_pack_name(filepath):
+        return os.path.split(filepath)[0]

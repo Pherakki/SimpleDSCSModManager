@@ -2,7 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
 
 from .CustomWidgets import ClickEmitComboBox, DragDropTreeView, LinkItem
-                
+
+translate = QtCore.QCoreApplication.translate
+
 def safe_disconnect(func):
     try:
         func.disconnect()
@@ -37,26 +39,38 @@ class uiMainWidget:
         self.game_location_textbox = self.main_area.action_tabs.configTab.game_location_textbox
         self.conflicts_graph = self.main_area.action_tabs.conflictsTab.conflicts_graph
 
-        self.hook_menu = self.menu.hook
-        self.hook_filemenu = self.menu.hook_filemenu
+        self.hook_menu                       = self.menu.hook
+        self.hook_filemenu                   = self.menu.hook_filemenu
+        self.hook_languageaction             = self.menu.hook_languageaction
         self.hook_profle_interaction_widgets = self.main_area.mod_interaction_area.profile_interaction_widgets.hook
-        self.hook_action_tabs = self.main_area.action_tabs.hook
-        self.hook_config_tab = self.main_area.action_tabs.configTab.hook
-        self.hook_extract_tab = self.main_area.action_tabs.extractTab.hook
-        self.hook_mod_registry = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
-        self.hook_delete_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
-        self.hook_wizard_mod_menu = self.main_area.mod_interaction_area.mods_display_area.hook_wizard_funcs
-        self.hook_update_mod_info_window = self.main_area.mod_interaction_area.mods_display_area.update_mod_info_window
-        self.hook_install_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
-        self.hook_game_launch_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_game_launch_button
-        self.hook_backup_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
-        self.hook_clear_cache_button = self.main_area.mod_interaction_area.mod_installation_widgets.hook_clear_cache_button
+        self.hook_action_tabs                = self.main_area.action_tabs.hook
+        self.hook_modinfo_tab                = self.main_area.action_tabs.modInfoTab.hook
+        self.hook_config_tab                 = self.main_area.action_tabs.configTab.hook
+        self.hook_extract_tab                = self.main_area.action_tabs.extractTab.hook
+        self.hook_mod_registry               = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
+        self.hook_delete_mod_menu            = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
+        self.hook_wizard_mod_menu            = self.main_area.mod_interaction_area.mods_display_area.hook_wizard_funcs
+        self.hook_update_mod_info_window     = self.main_area.mod_interaction_area.mods_display_area.update_mod_info_window
+        self.hook_install_button             = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
+        self.hook_game_launch_button         = self.main_area.mod_interaction_area.mod_installation_widgets.hook_game_launch_button
+        self.hook_backup_button              = self.main_area.mod_interaction_area.mod_installation_widgets.hook_backup_button
         
-        self.log = self.logging_area.logview.log
-        self.loglink = self.logging_area.logview.loglink
-        self.updateLog = self.logging_area.logview.updateLog
+        self.log                             = self.logging_area.logview.log
+        self.loglink                         = self.logging_area.logview.loglink
+        self.updateLog                       = self.logging_area.logview.updateLog
         
-        self.set_mod_info = self.main_area.action_tabs.configTab.modinfo_region.setModInfo
+        self.set_mod_info                    = self.main_area.action_tabs.modInfoTab.modinfo_region.setModInfo
+        self.createLanguageMenu              = self.menu.createLanguageMenu
+        
+        # Widgets
+        self.action_tabs                     = self.main_area.action_tabs
+        self.mods_display_area               = self.main_area.mod_interaction_area.mods_display_area
+        self.mod_installation_widgets        = self.main_area.mod_interaction_area.mod_installation_widgets
+        self.profile_interaction_widgets     = self.main_area.mod_interaction_area.profile_interaction_widgets
+        self.modinfo_tab                     = self.main_area.action_tabs.modInfoTab
+        self.config_tab                      = self.main_area.action_tabs.configTab
+        self.extract_tab                     = self.main_area.action_tabs.extractTab
+        self.modinfo_region                  = self.modinfo_tab.modinfo_region
         
     def enable_gui(self):
         self.toggle_active_gui(True)
@@ -75,20 +89,33 @@ class uiMainWidget:
 ################################
 class uiMenu:
     def __init__(self, parentWidget):
+        self.parentWidget = parentWidget
         self.define(parentWidget)
         self.lay_out()
+        self.set_language_func = lambda x: None
         
     def define(self, parentWidget):
-        self.fileMenu = QtWidgets.QMenu("&File", parentWidget)
-        self.helpMenu = QtWidgets.QMenu("&Help", parentWidget)
+        self.language_actions = []
+        self.fileMenu = QtWidgets.QMenu(parentWidget)
+        self.languageMenu = QtWidgets.QMenu(parentWidget)
+        self.helpMenu = QtWidgets.QMenu(parentWidget)
         parentWidget.menuBar().addMenu(self.fileMenu)
+        parentWidget.menuBar().addMenu(self.languageMenu)
         parentWidget.menuBar().addMenu(self.helpMenu)
                 
-        self.addModAction = QtWidgets.QAction("Add Mod...", parentWidget)
+        self.addModAction = QtWidgets.QAction(parentWidget)
         self.fileMenu.addAction(self.addModAction)
         
-        self.donateAction = QtWidgets.QAction("Support Digimon Game Research...", parentWidget)
+        self.donateAction = QtWidgets.QAction(parentWidget)
         self.helpMenu.addAction(self.donateAction)
+        
+        self.creditsAction = QtWidgets.QAction(parentWidget)
+        self.creditsAction.triggered.connect(lambda : creditsPopup(self.parentWidget))
+        self.helpMenu.addAction(self.creditsAction)
+        
+        self.aboutQtAction = QtWidgets.QAction(parentWidget)
+        self.aboutQtAction.triggered.connect(lambda : QtWidgets.QMessageBox.aboutQt(self.parentWidget))
+        self.helpMenu.addAction(self.aboutQtAction)
         
     def lay_out(self):
         pass
@@ -99,6 +126,9 @@ class uiMenu:
     def hook_filemenu(self, register_mod_dialog):
         self.addModAction.triggered.connect(register_mod_dialog)
         
+    def hook_languageaction(self, set_language_func):
+        self.set_language_func = set_language_func
+        
     def enable(self):
         self.toggle_active(True)
         
@@ -107,6 +137,58 @@ class uiMenu:
         
     def toggle_active(self, active):
         self.addModAction.setEnabled(active)
+        
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):
+        self.fileMenu.setTitle(translate("UI::MenuBar", "&File"))
+        self.languageMenu.setTitle(translate("UI::MenuBar", "&Language"))
+        self.helpMenu.setTitle(translate("UI::MenuBar", "&Help"))
+        self.addModAction.setText(translate("UI::FileMenu", "Add Mod..."))
+        self.donateAction.setText(translate("UI::HelpMenu", "Support Digimon Game Research..."))
+        self.creditsAction.setText(translate("UI::HelpMenu", "Credits"))
+        self.aboutQtAction.setText(translate("UI::HelpMenu", "About Qt"))
+        
+    def createLanguageMenu(self, language_files):
+        self.language_actions = []
+        self.languageMenu.clear()
+        def generate_func(file):
+            return lambda : self.set_language_func(file) 
+        for name, file in language_files.items():
+            act = QtWidgets.QAction(name, self.parentWidget)
+            act.triggered.connect(generate_func(file))
+            self.language_actions.append(act)
+            
+            self.languageMenu.addAction(act)
+            
+class creditsPopup:
+    def __init__(self, win):
+        msgBox = QtWidgets.QMessageBox(win)
+        msgBox.setWindowTitle(translate("UI::Credts", "Credits"))
+        
+        msgBoxText = translate("UI::Credits", "The people on this list have all significantly contributed to SimpleDSCSModManager in some way. They have my deepest thanks.")
+        msgBoxText += "<br><br>"
+        msgBoxText += "<b>" + translate("UI::Credits", "Special Thanks") + "</b>"
+        msgBoxText += "<br>"
+        msgBoxText += " " + translate("Common::ListElementsSeparator", ", ").join(["Romsstar", "SydMontague"])
+        msgBoxText += "<br>"
+        msgBoxText += "<br>"
+        msgBoxText +=" <b>" + translate("UI::Credits", "Bugtesting") + "</b>"
+        msgBoxText += "<br>"
+        msgBoxText += " " + translate("Common::ListElementsSeparator", ", ").join(["A Heroic Panda", "KiroAkashima", "SydMontague"])
+        msgBoxText += "<br>"
+        msgBoxText += "<br>"
+        msgBoxText += "<b>" + translate("UI::Credits", "Translations") + "</b>"
+        msgBoxText += "<br>"
+        msgBoxText += u"Español (España):"
+        msgBoxText += " " + translate("Common::ListElementsSeparator", ", ").join(["IlDucci"])
+        
+        msgBox.setText(msgBoxText)
+        
+        msgBox.exec_()
 
 
 class uiMainArea:
@@ -178,16 +260,25 @@ class uiProfileInteractionWidgets:
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
         
-        self.new_profile_button = QtWidgets.QPushButton("New Profile", parentWidget)
+        self.new_profile_button = QtWidgets.QPushButton(parentWidget)
         self.new_profile_button.setFixedWidth(100)
-        self.rename_profile_button = QtWidgets.QPushButton("Rename Profile", parentWidget)
+        self.rename_profile_button = QtWidgets.QPushButton(parentWidget)
         self.rename_profile_button.setFixedWidth(100)
-        self.delete_profile_button = QtWidgets.QPushButton("Delete Profile", parentWidget)
+        self.delete_profile_button = QtWidgets.QPushButton(parentWidget)
         self.delete_profile_button.setFixedWidth(100)
         
         self.profile_selector = ClickEmitComboBox(parentWidget)
         self.profile_selector.wheelEvent = lambda event: None
         
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):      
+        self.new_profile_button.setText(translate("UI::NewProfileButton", "New Profile"))
+        self.rename_profile_button.setText(translate("UI::RenameProfileButton", "Rename Profile"))
+        self.delete_profile_button.setText(translate("UI::DeleteProfileButton", "Delete Profile"))
         
     def lay_out(self):
         self.layout.addWidget(self.new_profile_button, 0, 0)
@@ -215,18 +306,20 @@ class uiProfileInteractionWidgets:
         self.profile_selector.setEnabled(active)
     
 
-class uiModsDisplay:
+class uiModsDisplay(QtCore.QObject):
     def __init__(self, parentWidget):
-        super().__init__()
+        super().__init__(parentWidget)
         self.define(parentWidget)
         self.lay_out()
         
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
         self.mods_display = DragDropTreeView(parentWidget) 
-        model = QtGui.QStandardItemModel(self.mods_display)
-        model.setHorizontalHeaderLabels(["Name", "Author", "Version", "Category"])
-        self.mods_display.setModel(model)
+
+        self.md_model = QtGui.QStandardItemModel(self.mods_display)
+        self.md_model.setHorizontalHeaderLabels([translate("UI::ModsDisplay", "Name"), translate("UI::ModsDisplay", "Author"), translate("UI::ModsDisplay", "Version"), translate("UI::ModsDisplay", "Category")])
+        self.mods_display.setModel(self.md_model)
+        
         self.mods_display.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)  
         self.mods_display.setColumnWidth(0, 200)
         self.mods_display.setColumnWidth(2, 50)
@@ -242,6 +335,16 @@ class uiModsDisplay:
         self.hasWizardFunc = None
         self.reinstallModFunction = None
         
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):    
+        self.md_model.setHorizontalHeaderLabels([translate("UI::ModsDisplay", "Name"), translate("UI::ModsDisplay", "Author"), translate("UI::ModsDisplay", "Version"), translate("UI::ModsDisplay", "Category")])
+        self.reinstallModAction.setText(translate("UI::ModRightClickMenu", "Re-register..."))
+        self.deleteModAction.setText(translate("UI::ModRightClickMenu", "Delete Mod"))
+        
         
     def lay_out(self):
         self.layout.addWidget(self.mods_display, 0, 0)
@@ -255,6 +358,7 @@ class uiModsDisplay:
     def toggle_active(self, active):
         self.mods_display.setEnabled(active)
 
+    @QtCore.pyqtSlot(QtCore.QPoint)
     def menuContextTree(self, point):
         safe_disconnect(self.deleteModAction.triggered)
         safe_disconnect(self.reinstallModAction.triggered)
@@ -284,6 +388,9 @@ class uiModsDisplay:
         
     def update_mod_info_window(self, func):
         self.mods_display.update_mods_func = func
+        
+    def hook_itemchanged(self, func):
+        self.mods_display.model.itemChanged.connect(func)
 
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
@@ -293,20 +400,27 @@ class uiModInstallationWidgets:
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
         
-        self.install_mods_button = QtWidgets.QPushButton("Install Mods", parentWidget)
+        self.install_mods_button = QtWidgets.QPushButton(parentWidget)
         self.install_mods_button.setFixedWidth(120)
-        self.launch_game_button = QtWidgets.QPushButton("Launch Game", parentWidget)
+        self.launch_game_button = QtWidgets.QPushButton(parentWidget)
         self.launch_game_button.setFixedWidth(120)
-        self.restore_backups_button = QtWidgets.QPushButton("Restore Backups", parentWidget)
-        self.restore_backups_button.setFixedWidth(120)
-        self.clear_cache_button = QtWidgets.QPushButton("Clear Cache", parentWidget)
-        self.clear_cache_button.setFixedWidth(120)
+        self.restore_backups_button = QtWidgets.QPushButton(parentWidget)
+        self.restore_backups_button.setFixedWidth(120)     
+        
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):    
+        self.install_mods_button.setText(translate("UI::InstallModsButton", "Install Mods"))
+        self.launch_game_button.setText(translate("UI::LaunchGameButton", "Launch Game"))
+        self.restore_backups_button.setText(translate("UI::UninstallModsButton", "Restore Backups"))
         
     def lay_out(self):
         self.layout.addWidget(self.install_mods_button, 0, 0)
         self.layout.addWidget(self.launch_game_button, 0, 1)
         self.layout.addWidget(self.restore_backups_button, 0, 2)
-        self.layout.addWidget(self.clear_cache_button, 0, 3)
         
     def hook_install_button(self, func):
         self.install_mods_button.clicked.connect(func)
@@ -316,9 +430,6 @@ class uiModInstallationWidgets:
         
     def hook_backup_button(self, func):
         self.restore_backups_button.clicked.connect(func)
-        
-    def hook_clear_cache_button(self, func):
-        self.clear_cache_button.clicked.connect(func)
         
     def enable(self):
         self.toggle_active(True)   
@@ -330,10 +441,11 @@ class uiModInstallationWidgets:
         self.install_mods_button.setEnabled(active)
         self.launch_game_button.setEnabled(active)
         self.restore_backups_button.setEnabled(active)
-        self.clear_cache_button.setEnabled(active)
         
-class uiLogHistory():
+        
+class uiLogHistory(QtCore.QObject):
     def __init__(self, parentWidget):
+        super().__init__()
         self.max_items = 500
         self.define(parentWidget)
         self.lay_out()
@@ -346,15 +458,19 @@ class uiLogHistory():
         self.logview.setWordWrap(False) 
         self.logview.setMinimumHeight(110)
         
+        
     def lay_out(self):
         self.layout.addWidget(self.logview, 0, 0)
         
+    @QtCore.pyqtSlot(str)
     def log(self, message):
-        adj_message = self.timestamp_string(message)
-        self.logview.addItem(adj_message)
-        self.cull_messages()
-        self.logview.scrollToBottom()
+        self.loglink(message)
+        #adj_message = self.timestamp_string(message)
+        #self.logview.addItem(adj_message)
+        #self.cull_messages()
+        #self.logview.scrollToBottom()
         
+    @QtCore.pyqtSlot(str)
     def loglink(self, message):
         adj_message = self.timestamp_string(message)
         linkwidget = LinkItem(adj_message)
@@ -367,11 +483,13 @@ class uiLogHistory():
         self.cull_messages()
         self.logview.scrollToBottom()
         
+    @QtCore.pyqtSlot(str)
     def updateLog(self, message):
-        adj_message = self.timestamp_string(message)
+        #adj_message = self.timestamp_string(message)
         self.logview.takeItem(self.logview.count() - 1)
-        self.logview.addItem(adj_message)
-        self.logview.scrollToBottom()
+        #self.logview.addItem(adj_message)
+        self.loglink(message)
+        #self.logview.scrollToBottom()
     
     def timestamp_string(self, string):
         time_now = datetime.now()
@@ -389,22 +507,36 @@ class uiActionTabs:
     def __init__(self, parentWidget):
         self.define(parentWidget)
         self.lay_out()
+        self.retranslateUi()
         
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
         
         self.actions = QtWidgets.QTabWidget()
         self.actions.setMinimumSize(500, 300)
+        self.modInfoTab = uiModInfoTab(parentWidget)
         self.configTab = uiConfigTab(parentWidget)
         self.extractTab = uiExtractTab(parentWidget)
         self.conflictsTab = uiConflictsTab(parentWidget)
         
     def lay_out(self):
+        self.actions.addTab(self.modInfoTab, "Mod Info")
         self.actions.addTab(self.configTab, "Configuration")
         self.actions.addTab(self.extractTab, "Extract")
         self.actions.addTab(self.conflictsTab, "Conflicts")
         
         self.layout.addWidget(self.actions, 0, 0)
+        
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):
+        self.actions.setTabText(0, translate("UI::ModInfoTab", "Mod Info"))
+        self.actions.setTabText(1, translate("UI::ModInfoTab", "Configuration"))
+        self.actions.setTabText(2, translate("UI::ModInfoTab", "Extract"))
+        self.actions.setTabText(3, translate("UI::ModInfoTab", "Conflicts"))
         
     def hook(self, draw_conflicts_graph):
         self.actions.currentChanged.connect(draw_conflicts_graph)
@@ -416,50 +548,25 @@ class uiActionTabs:
         self.toggle_active(False)   
         
     def toggle_active(self, active):
+        self.modInfoTab.toggle_active(active)
         self.configTab.toggle_active(active)
         self.extractTab.toggle_active(active)
         self.conflictsTab.toggle_active(active)
     
-class uiConfigTab(QtWidgets.QWidget):
+class uiModInfoTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
         self.define(parentWidget)
         self.lay_out()
         
     def define(self, parentWidget):
-        self.layout = QtWidgets.QGridLayout()
-        
-        self.game_location_layout = QtWidgets.QGridLayout()
-        self.game_location_label = QtWidgets.QLabel("Game Location:  ", parentWidget)
-        self.game_location_textbox = QtWidgets.QLineEdit(parentWidget)
-        self.game_location_textbox.setReadOnly(True)
-        self.game_location_button = QtWidgets.QPushButton("...", parentWidget)
-        self.game_location_button.setFixedWidth(20)
-        self.game_location_layout.addWidget(self.game_location_label, 0, 0)
-        self.game_location_layout.addWidget(self.game_location_textbox, 0, 1)
-        self.game_location_layout.addWidget(self.game_location_button, 0, 2)
-        self.game_location_layout.setSpacing(0)
+        self.layout = QtWidgets.QVBoxLayout()
         
         self.modinfo_region= ModInfoRegion(parentWidget)
         
-        self.dscstools_buttons_layout = QtWidgets.QGridLayout()
-        self.update_dscstools_button = QtWidgets.QPushButton("Update DSCSTools", parentWidget)
-        self.update_dscstools_button.setFixedWidth(120)
-        self.update_dscstools_button.setEnabled(False)
-        
     def lay_out(self):
-        self.dscstools_buttons_layout.addWidget(self.update_dscstools_button, 0, 0)
-        self.layout.addLayout(self.game_location_layout, 0, 0)
-        self.layout.addLayout(self.dscstools_buttons_layout, 1, 0)
-        self.layout.addLayout(self.modinfo_region.layout, 2, 0)
-        self.layout.setRowStretch(0, 0)
-        self.layout.setRowStretch(1, 0)
-        self.layout.setRowStretch(2, 1)
+        self.layout.addLayout(self.modinfo_region.layout, 0)
         self.setLayout(self.layout)
-        
-    def hook(self, find_gamelocation, update_dscstools):
-        self.game_location_button.clicked.connect(find_gamelocation)
-        self.update_dscstools_button.clicked.connect(update_dscstools)
         
     def enable(self):
         self.toggle_active(True)   
@@ -468,9 +575,10 @@ class uiConfigTab(QtWidgets.QWidget):
         self.toggle_active(False)
         
     def toggle_active(self, active):
-        self.game_location_textbox.setEnabled(active)
-        self.game_location_button.setEnabled(active)
-        # self.update_dscstools_button.setEnabled(active)
+        pass
+    
+    def hook(self):
+        pass
         
 class ModInfoRegion:
     def __init__(self, parentWidget):
@@ -481,13 +589,31 @@ class ModInfoRegion:
     def define(self, parentWidget):
         self.layout = QtWidgets.QGridLayout()
         
-        self.modname_label = QtWidgets.QLabel("Mod Name: [Unknown]", parentWidget)
-        self.modfolder_label = QtWidgets.QLabel("Mod Folder: [Unknown]", parentWidget)
-        self.modauthors_label = QtWidgets.QLabel("Author(s): [Unknown]", parentWidget)
-        self.modversion_label = QtWidgets.QLabel("Version: [Unknown]", parentWidget)
+        self.modname_label = QtWidgets.QLabel(parentWidget)
+        self.modfolder_label = QtWidgets.QLabel(parentWidget)
+        self.modauthors_label = QtWidgets.QLabel(parentWidget)
+        self.modversion_label = QtWidgets.QLabel(parentWidget)
         self.moddesc_box = QtWidgets.QTextBrowser(parentWidget) # QtWidgets.QTextEdit("", parentWidget)
         # self.moddesc_box.setReadOnly(True)
         
+        none_selected = translate("UI::ModInfo::NoSelection", "[None Selected]")
+        self.active_modname = none_selected
+        self.active_modfolder = none_selected
+        self.active_modauthors = none_selected
+        self.active_modversion = none_selected
+        self.active_moddesc = ""
+        
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):   
+        self.modname_label.setText(translate("UI::ModInfo", "Mod Name: {string}").format(string=self.active_modname))
+        self.modfolder_label.setText(translate("UI::ModInfo", "Mod Folder: {string}").format(string=self.active_modfolder))
+        self.modauthors_label.setText(translate("UI::ModInfo", "Author(s): {string}").format(string=self.active_modauthors))
+        self.modversion_label.setText(translate("UI::ModInfo", "Version: {string}").format(string=self.active_modversion))
+        self.moddesc_box.setText(self.active_moddesc)
         
     def lay_out(self):
         self.layout.addWidget(self.modname_label, 0, 0)
@@ -501,19 +627,19 @@ class ModInfoRegion:
         self.layout.addWidget(self.moddesc_box, 4, 0)
         
     def setModName(self, string):
-        self.modname_label.setText(f"Mod Name: {string}")
+        self.active_modname = string
         
     def setModFolder(self, string):
-        self.modfolder_label.setText(f"Mod Folder: {string}")
+        self.active_modfolder = string
         
     def setModAuthor(self, string):
-        self.modauthors_label.setText(f"Author(s): {string}")
+        self.active_modauthors = string
         
     def setModVersion(self, string):
-        self.modversion_label.setText(f"Version: {string}")
+        self.active_modversion = string
         
     def setModDesc(self, string):
-        self.moddesc_box.setText(string)
+        self.active_moddesc = string
         
     def setModInfo(self, name, folder, author, version, desc):
         self.setModName(name)
@@ -521,13 +647,148 @@ class ModInfoRegion:
         self.setModAuthor(author)
         self.setModVersion(version)
         self.setModDesc(desc)
+        self.retranslateUi()
 
+class uiConfigTab(QtWidgets.QWidget):
+    
+    def __init__(self, parentWidget):
+        super().__init__()
+        self.define(parentWidget)
+        self.lay_out()
+        
+    def define(self, parentWidget):
+        self.layout = QtWidgets.QVBoxLayout()
+        
+        self.game_location_layout = QtWidgets.QHBoxLayout()
+        self.game_location_label = QtWidgets.QLabel(parentWidget)
+        self.game_location_textbox = QtWidgets.QLineEdit(parentWidget)
+        self.game_location_textbox.setReadOnly(True)
+        self.game_location_button = QtWidgets.QPushButton("...", parentWidget)
+        self.game_location_button.setFixedWidth(20)
+        self.game_location_layout.addWidget(self.game_location_label)
+        self.game_location_layout.addWidget(self.game_location_textbox)
+        self.game_location_layout.addWidget(self.game_location_button)
+        self.game_location_layout.setSpacing(0)
+        
+        
+        self.buttons_layout = QtWidgets.QGridLayout()
+        self.update_dscstools_button = QtWidgets.QPushButton(parentWidget)
+        self.update_dscstools_button.setFixedWidth(120)
+        self.update_dscstools_button.setEnabled(False)
+        
+        self.purge_softcodes_button = QtWidgets.QPushButton(parentWidget)
+        self.purge_softcodes_button.setFixedWidth(120)
+        
+        self.purge_indices_button = QtWidgets.QPushButton(parentWidget)
+        self.purge_indices_button.setFixedWidth(120)
+        
+        self.purge_cache_button = QtWidgets.QPushButton(parentWidget)
+        self.purge_cache_button.setFixedWidth(120)
+        
+        self.purge_resources_button = QtWidgets.QPushButton(parentWidget)
+        self.purge_resources_button.setFixedWidth(120)
+        
+        self.crash_handle_layout = QtWidgets.QHBoxLayout(parentWidget)
+        self.crash_handle_label = QtWidgets.QLabel()
+        self.crash_handle_label.setFixedWidth(120)
+        self.crash_handle_box = QtWidgets.QComboBox(parentWidget)
+        self.crash_handle_box.setFixedWidth(120)
+        
+        self.block_handle_layout = QtWidgets.QHBoxLayout(parentWidget)
+        self.block_handle_label = QtWidgets.QLabel()
+        self.block_handle_label.setFixedWidth(120)
+        self.block_handle_box = QtWidgets.QComboBox(parentWidget)
+        self.block_handle_box.setFixedWidth(120)
+        
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):
+        self.game_location_label.setText(translate("UI::GameLocationLabel", "Game Location: "))
+        
+        self.update_dscstools_button.setText(translate("UI::UpdateDSCSToolsButton", "Update DSCSTools"))
+        self.purge_softcodes_button.setText(translate("UI::PurgeSoftcodes", "Purge softcodes"))
+        self.purge_indices_button.setText(translate("UI::PurgeModIndicesButton", "Purge mod indices"))
+        self.purge_cache_button.setText(translate("UI::PurgeModCacheButton", "Purge mod cache"))
+        self.purge_resources_button.setText(translate("UI::PurgeResourcesButton", "Purge mod resources"))
+        
+        self.crash_handle_label.setText(translate("UI::CrashMethodBox", "Crash method: "))
+        self.block_handle_label.setText(translate("UI::GameLaunchMethodBox", "Game launch method: "))
+        
+        for i, text in enumerate(self.crash_handler_options()):
+            self.crash_handle_box.setItemText(i, text)
+        for i, text in enumerate(self.block_handler_operations()):
+            self.block_handle_box.setItemText(i, text)
+        
+    def lay_out(self):
+        self.crash_handle_layout.addWidget(self.crash_handle_label, 0)
+        self.crash_handle_layout.addWidget(self.crash_handle_box, 0)
+        
+        self.block_handle_layout.addWidget(self.block_handle_label, 0)
+        self.block_handle_layout.addWidget(self.block_handle_box, 0)
+        
+        self.buttons_layout.addWidget(self.update_dscstools_button, 0, 0)
+        self.buttons_layout.addWidget(self.purge_softcodes_button, 1, 0)
+        self.buttons_layout.addWidget(self.purge_indices_button, 2, 0)
+        self.buttons_layout.addWidget(self.purge_cache_button, 3, 0)
+        self.buttons_layout.addWidget(self.purge_resources_button, 4, 0)
+        
+        self.layout.addLayout(self.game_location_layout, 0)
+        self.layout.addLayout(self.buttons_layout, 1)
+        self.layout.addLayout(self.crash_handle_layout, 2)
+        self.layout.addLayout(self.block_handle_layout, 3)
+        self.setLayout(self.layout)
+        
+    def hook(self, find_gamelocation, update_dscstools, purge_softcodes, purge_indices,
+             purge_cache, purge_resources, update_crash_handler, crash_handler_options,
+             update_block_handler, block_handler_operations):
+        self.crash_handler_options = crash_handler_options
+        self.block_handler_operations = block_handler_operations
+        
+        self.game_location_button.clicked.connect(find_gamelocation)
+        self.update_dscstools_button.clicked.connect(update_dscstools)
+        self.purge_softcodes_button.clicked.connect(purge_softcodes)
+        self.purge_indices_button.clicked.connect(purge_indices)
+        self.purge_cache_button.clicked.connect(purge_cache)
+        self.purge_resources_button.clicked.connect(purge_resources)
+        self.crash_handle_box.currentIndexChanged.connect(update_crash_handler)
+        self.block_handle_box.currentIndexChanged.connect(update_block_handler)
+        
+        for option in crash_handler_options():
+            self.crash_handle_box.addItem(option)
+        for option in block_handler_operations():
+            self.block_handle_box.addItem(option)
+            
+        
+    def enable(self):
+        self.toggle_active(True)   
+        
+    def disable(self):
+        self.toggle_active(False)
+        
+    def toggle_active(self, active):
+        self.game_location_textbox.setEnabled(active)
+        self.game_location_button.setEnabled(active)
+        # self.update_dscstools_button.setEnabled(active)
+        self.purge_softcodes_button.setEnabled(active)
+        self.purge_indices_button.setEnabled(active)
+        self.purge_cache_button.setEnabled(active)
+        self.purge_resources_button.setEnabled(active)
+        self.crash_handle_box.setEnabled(active)
+        self.block_handle_box.setEnabled(active)
+        
 class uiExtractTab(QtWidgets.QScrollArea):
     def __init__(self, parentWidget):
-        self.mvgls = ["DSDB", "DSDBA", "DSDBS", "DSDBSP", "DSDBP", "DSDBse", "DSDBPse"]
-        self.afs2s = ["DSDBbgm", "DSDBPDSEbgm", "DSDBvo", "DSDBPvo", "DSDBPvous"]
-        self.archive_extract_buttons = {}
-        self.afs2_extract_buttons = {}
+        self.data_mvgls = ["DSDB", "DSDBA", "DSDBS", "DSDBSP", "DSDBP"]
+        self.sound_mvgls = ["DSDBse", "DSDBPse"]
+        self.bgm_afs2s = ["DSDBbgm", "DSDBPDSEbgm"]
+        self.vo_afs2s = ["DSDBvo", "DSDBPvo", "DSDBPvous"]
+        self.data_archive_extract_buttons = {}
+        self.snds_archive_extract_buttons = {}
+        self.bgm_afs2_extract_buttons = {}
+        self.vo_afs2_extract_buttons = {}
         
         super().__init__()
         self.define(parentWidget)
@@ -539,8 +800,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
         
         self.autoextract_widget = QtWidgets.QWidget()
         self.autoextract_layout = QtWidgets.QGridLayout()
-        self.mdb1_layout = QtWidgets.QGridLayout()
-        self.afs2_layout = QtWidgets.QGridLayout()
+        self.mdb1_layout = QtWidgets.QVBoxLayout()
+        self.afs2_layout = QtWidgets.QVBoxLayout()
         
         self.manualextract_widget = QtWidgets.QWidget()
         self.manualextract_layout = QtWidgets.QGridLayout()
@@ -551,56 +812,118 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.vgstream_widget = QtWidgets.QWidget()
         self.vgstream_layout = QtWidgets.QGridLayout()
         
-        self.mdb1_label = QtWidgets.QLabel("Auto-Extract Data")
-        self.mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
-        
-        for i, archive in enumerate(self.mvgls):
-            button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
+        self.data_mdb1_label = QtWidgets.QLabel()
+        self.data_mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
+        for i, archive in enumerate(self.data_mvgls):
+            button = QtWidgets.QPushButton(parentWidget)
             button.setFixedWidth(130)
             button.setFixedHeight(22)
-            self.archive_extract_buttons[archive] = button
-        for i, archive in enumerate(self.afs2s):
-            button = QtWidgets.QPushButton(f"Extract {archive}", parentWidget)
+            self.data_archive_extract_buttons[archive] = button
+
+        self.snds_mdb1_label = QtWidgets.QLabel()
+        self.snds_mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
+        for i, archive in enumerate(self.sound_mvgls):
+            button = QtWidgets.QPushButton(parentWidget)
             button.setFixedWidth(130)
             button.setFixedHeight(22)
-            self.afs2_extract_buttons[archive] = button
+            self.snds_archive_extract_buttons[archive] = button
             
-        self.dscstools_label = QtWidgets.QLabel("General Data Extraction")
+        self.bgm_afs2_label = QtWidgets.QLabel()
+        self.bgm_afs2_label.setAlignment(QtCore.Qt.AlignCenter)
+        for i, archive in enumerate(self.bgm_afs2s):
+            button = QtWidgets.QPushButton(parentWidget)
+            button.setFixedWidth(130)
+            button.setFixedHeight(22)
+            self.bgm_afs2_extract_buttons[archive] = button
+            
+        self.vo_afs2_label = QtWidgets.QLabel()
+        self.vo_afs2_label.setAlignment(QtCore.Qt.AlignCenter)
+        for i, archive in enumerate(self.vo_afs2s):
+            button = QtWidgets.QPushButton(parentWidget)
+            button.setFixedWidth(130)
+            button.setFixedHeight(22)
+            self.vo_afs2_extract_buttons[archive] = button
+            
+        self.dscstools_label = QtWidgets.QLabel()
         self.dscstools_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.extract_mdb1_button = self.new_button("Extract MDB1", parentWidget)
-        self.pack_mdb1_button = self.new_button("Pack MDB1", parentWidget)
-        self.extract_afs2_button = self.new_button("Extract AFS2", parentWidget)
-        self.extract_afs2_button.setEnabled(False)
-        self.pack_afs2_button = self.new_button("Pack AFS2", parentWidget)
-        self.pack_afs2_button.setEnabled(False)
-        self.extract_mbes_button = self.new_button("Extract MBEs", parentWidget)
-        self.pack_mbes_button = self.new_button("Pack MBEs", parentWidget)
+        self.extract_mdb1_button = self.new_button("", parentWidget)
+        self.pack_mdb1_button = self.new_button("", parentWidget)
+        self.extract_afs2_button = self.new_button("", parentWidget)
+        self.pack_afs2_button = self.new_button("", parentWidget)
+        self.extract_mbes_button = self.new_button("", parentWidget)
+        self.pack_mbes_button = self.new_button("", parentWidget)
         
-        self.scripts_label = QtWidgets.QLabel("Scripts")
+        self.scripts_label = QtWidgets.QLabel()
         self.scripts_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.decompile_scripts_button = self.new_button("Decompile scripts", parentWidget)
-        self.compile_scripts_button = self.new_button("Compile scripts", parentWidget)
+        self.decompile_scripts_button = self.new_button("", parentWidget)
+        self.compile_scripts_button = self.new_button("", parentWidget)
         
-        self.sounds_label = QtWidgets.QLabel("Sounds")
+        self.sounds_label = QtWidgets.QLabel()
         self.sounds_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.hca_to_wav = self.new_button("Convert HCA to WAV", parentWidget)
+        self.hca_to_wav = self.new_button("", parentWidget)
         self.hca_to_wav.setEnabled(False)
-        self.wav_to_hca = self.new_button("Convert WAV to HCA", parentWidget)
+        self.wav_to_hca = self.new_button("", parentWidget)
         self.wav_to_hca.setEnabled(False)
         
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslateUi()
+        super().changeEvent(event)
+
+    def retranslateUi(self):
+        self.data_mdb1_label.setText(translate("UI::ExtractTab", "Auto-Extract Database Files"))
+        for archive, button in self.data_archive_extract_buttons.items():
+            button.setText(translate("UI::ExtractTab", "Extract {item}").format(item=archive))
+            
+        self.snds_mdb1_label.setText(translate("UI::ExtractTab", "Auto-Extract SFX Files"))
+        for archive, button in self.snds_archive_extract_buttons.items():
+            button.setText(translate("UI::ExtractTab", "Extract {item}").format(item=archive))
+            
+        self.bgm_afs2_label.setText(translate("UI::ExtractTab","Auto-Extract BGM"))
+        for archive, button in self.bgm_afs2_extract_buttons.items():
+            button.setText(translate("UI::ExtractTab", "Extract {item}").format(item=archive))
+            
+        self.vo_afs2_label.setText(translate("UI::ExtractTab", "Auto-Extract Voice Lines"))
+        for archive, button in self.vo_afs2_extract_buttons.items():
+            button.setText(translate("UI::ExtractTab", "Extract {item}").format(item=archive))
+            
+        self.dscstools_label.setText(translate("UI::ExtractTab", "General Data Extraction"))
+        self.extract_mdb1_button.setText(translate("UI::ExtractTab", "Extract MDB1"))
+        self.pack_mdb1_button.setText(translate("UI::ExtractTab",    "Pack MDB1"))
+        self.extract_afs2_button.setText(translate("UI::ExtractTab", "Extract AFS2"))
+        self.pack_afs2_button.setText(translate("UI::ExtractTab",    "Pack AFS2"))
+        self.extract_mbes_button.setText(translate("UI::ExtractTab", "Extract MBEs"))
+        self.pack_mbes_button.setText(translate("UI::ExtractTab",    "Pack MBEs"))
+        
+        self.scripts_label.setText(translate("UI::ExtractTab", "Scripts"))
+        self.decompile_scripts_button.setText(translate("UI::ExtractTab", "Decompile scripts"))
+        self.compile_scripts_button.setText(translate("UI::ExtractTab", "Compile scripts"))
+        
+        self.sounds_label.setText(translate("UI::ExtractTab", "Sounds"))
+        self.hca_to_wav.setText(translate("UI::ExtractTab", "Convert HCA to WAV"))
+        self.wav_to_hca.setText(translate("UI::ExtractTab", "Convert WAV to HCA"))
+    
     def lay_out(self):
         # Lay out the LHS button pane
-        self.mdb1_layout.addWidget(self.mdb1_label, 0, 0)
-        self.mdb1_layout.setRowStretch(0, 0)
-        for i, archive in enumerate(self.mvgls):
-            button = self.archive_extract_buttons[archive]
-            self.mdb1_layout.addWidget(button, i+1, 0)
-            self.mdb1_layout.setRowStretch(i+1, 0)
+        self.mdb1_layout.addWidget(self.data_mdb1_label, 0)
+        for i, archive in enumerate(self.data_mvgls):
+            button = self.data_archive_extract_buttons[archive]
+            self.mdb1_layout.addWidget(button, 0)
+            
+        self.mdb1_layout.addWidget(self.snds_mdb1_label, 0)
+        for i, archive in enumerate(self.sound_mvgls):
+            button = self.snds_archive_extract_buttons[archive]
+            self.mdb1_layout.addWidget(button, 0)
         
-        for i, archive in enumerate(self.afs2s):
-            button = self.afs2_extract_buttons[archive]
-            self.afs2_layout.addWidget(button, i, 0)
-            self.afs2_layout.setRowStretch(i, 0)
+        self.afs2_layout.addWidget(self.bgm_afs2_label, 0)
+        for i, archive in enumerate(self.bgm_afs2s):
+            button = self.bgm_afs2_extract_buttons[archive]
+            self.afs2_layout.addWidget(button, 0)
+            
+        self.afs2_layout.addWidget(self.vo_afs2_label, 0)
+        for i, archive in enumerate(self.vo_afs2s):
+            button = self.vo_afs2_extract_buttons[archive]
+            self.afs2_layout.addWidget(button, 0)
         
         self.autoextract_layout.setRowStretch(0, 1)
         self.autoextract_layout.addLayout(self.mdb1_layout, 1, 0)
@@ -652,16 +975,23 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.setWidget(self.scrollArea)
         self.setWidgetResizable(True)
         
-    def hook(self, mbd1_dump_factory, afs2_dump_factory, dscstools_handler, 
+    def hook(self, mbd1_dump_factory, afs2_dump_factory, 
              extract_mdb1, pack_mdb1,
+             extract_afs2, pack_afs2,
              extract_mbes, pack_mbes,
              decompile_scripts, compile_scripts):
-        for archive in self.mvgls:
-            self.archive_extract_buttons[archive].clicked.connect(mbd1_dump_factory(archive))
-        for archive in self.afs2s:
-            self.afs2_extract_buttons[archive].clicked.connect(afs2_dump_factory(archive))
+        for archive in self.data_mvgls:
+            self.data_archive_extract_buttons[archive].clicked.connect(mbd1_dump_factory(archive))
+        for archive in self.sound_mvgls:
+            self.snds_archive_extract_buttons[archive].clicked.connect(mbd1_dump_factory(archive))
+        for archive in self.bgm_afs2s:
+            self.bgm_afs2_extract_buttons[archive].clicked.connect(afs2_dump_factory(archive))
+        for archive in self.vo_afs2s:
+            self.vo_afs2_extract_buttons[archive].clicked.connect(afs2_dump_factory(archive))
         self.extract_mdb1_button.clicked.connect(extract_mdb1)
         self.pack_mdb1_button.clicked.connect(pack_mdb1)
+        self.extract_afs2_button.clicked.connect(extract_afs2)
+        self.pack_afs2_button.clicked.connect(pack_afs2)
         self.extract_mbes_button.clicked.connect(extract_mbes)
         self.pack_mbes_button.clicked.connect(pack_mbes)
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
@@ -674,12 +1004,18 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.toggle_active(False)
         
     def toggle_active(self, active):
-        for button in self.archive_extract_buttons.values():
+        for button in self.data_archive_extract_buttons.values():
             button.setEnabled(active)
-        for button in self.afs2_extract_buttons.values():
+        for button in self.snds_archive_extract_buttons.values():
+            button.setEnabled(active)
+        for button in self.bgm_afs2_extract_buttons.values():
+            button.setEnabled(active)
+        for button in self.vo_afs2_extract_buttons.values():
             button.setEnabled(active)
         self.extract_mdb1_button.setEnabled(active)
         self.pack_mdb1_button.setEnabled(active)
+        self.extract_afs2_button.setEnabled(active)
+        self.pack_afs2_button.setEnabled(active)
         self.extract_mbes_button.setEnabled(active)
         self.pack_mbes_button.setEnabled(active)
         self.decompile_scripts_button.setEnabled(active)

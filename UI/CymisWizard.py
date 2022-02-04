@@ -1,7 +1,8 @@
 from PyQt5 import QtCore, QtWidgets
 
-from ModFiles.CymisParser import CymisInstaller
+from CoreOperations.Cymis.CymisParser import CymisInstaller
 
+translate = QtCore.QCoreApplication.translate
 
 class CymisWizard(QtWidgets.QWizard):
     def __init__(self, filepath, log, parent=None):
@@ -22,7 +23,7 @@ class CymisWizard(QtWidgets.QWizard):
             
         self.currentCymisPageIndex = 0
         
-        self.setWindowTitle("Cymis Installer Wizard")
+        self.setWindowTitle(translate("ModWizards::CYMIS", "Cymis Installer Wizard"))
         self.resize(640,480)
         # This is neat, but I don't know how to catch exceptions from it!
         # self.button(QtWidgets.QWizard.FinishButton).clicked.connect(self.launch_installation)
@@ -34,9 +35,9 @@ class CymisWizard(QtWidgets.QWizard):
     def update_flagtable(self, index_delta):
         result = self.pages[self.currentCymisPageIndex].page_data.retrieve_flags()
         if self.log is not None:
-            self.log("Updating flag table.")
+            self.log(translate("ModWizards::CYMIS", "Updating flag table."))
             for flag_name, flag_value in result.items():
-                self.log(f"{flag_name} is now {flag_value}.")
+                self.log(translate("ModWizards::CYMIS::Logging", "{flag_name} is now {_bool}.").format(flag_name=flag_name, _bool=flag_value))
         self.installer.flag_table.update(result)
         self.currentCymisPageIndex += index_delta
         
@@ -57,7 +58,7 @@ class FlagView(QtWidgets.QCheckBox):
         
     def flipFlag(self):
         if self.log is not None:
-            self.log(f"Flipping {self.flag_data.name} to {self.isChecked()}.")
+            self.log(translate("ModWizards::CYMIS::Logging", "Flipping {flag_name} to {_bool}.").format(flag_name=self.flag_data.name, _bool=self.isChecked()))
         self.flag_data.value = self.isChecked()
 
 class ChooseOneView(QtWidgets.QWidget):
@@ -82,7 +83,7 @@ class ChooseOneView(QtWidgets.QWidget):
         
     def flipFlag(self, flagname, sender):
         if self.log is not None:
-            self.log(f"Flipping {flagname} to {sender.isChecked()}.")
+            self.log(translate("ModWizards::CYMIS::Logging", "Flipping {flag_name} to {_bool}.").format(flag_name=flagname, _bool=sender.isChecked()))
         self.flag_data.flags[flagname].value = sender.isChecked()
      
     def generate_togglefunc(self, flagname, radiobutton):

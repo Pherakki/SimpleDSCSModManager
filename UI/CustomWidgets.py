@@ -1,14 +1,25 @@
+import webbrowser
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
+translate = QtCore.QCoreApplication.translate
+
 class LinkItem(QtWidgets.QWidget):
+    
+    def openLink(self, link):
+        webbrowser.open_new_tab(link)
+    
     """For using hyperlinks in e.g. a ListWidget item"""
     def __init__(self, msg):
         super().__init__()
         
         self.label=QtWidgets.QLabel(self)
         self.label.setText(msg)
+        self.label.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse | QtCore.Qt.LinksAccessibleByMouse)
+
         self.label.openExternalLinks()
+        self.label.linkActivated.connect(self.openLink)
         
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setContentsMargins(3, 0, 0, 0)
@@ -46,6 +57,8 @@ def is_in_bottom_half(point, rect):
     return clamped_adjust
 
 class DragDropTreeView(QtWidgets.QTreeView):
+    itemsUpdated = QtCore.pyqtSignal()
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setAlternatingRowColors(True)
@@ -110,7 +123,22 @@ class DragDropTreeView(QtWidgets.QTreeView):
             e.accept()
         else:
             e.ignore()
-        
+            
+    @staticmethod
+    def full_stack():
+        import sys
+        import traceback
+        exc = sys.exc_info()[0]
+        stack = traceback.extract_stack()[:-1]  # last one would be full_stack()
+        if exc is not None:  # i.e. an exception is present
+            del stack[-1]       # remove call of full_stack, the printed exception
+                                # will contain the caught exception caller instead
+        trc = 'Traceback (most recent call last):\n'
+        stackstr = trc + ''.join(traceback.format_list(stack))
+        if exc is not None:
+             stackstr += '  ' + traceback.format_exc().lstrip(trc)
+        return stackstr
+    
     def reorderElementsDropEvent(self, e):
         index = self.indexAt(e.pos())
         parent = index.parent()
@@ -160,20 +188,24 @@ class DragDropTreeView(QtWidgets.QTreeView):
             
     def get_mod_activation_states(self):
         result = {}
-        for ridx, display_row in zip(range(self.model().rowCount()), self.display_data):
-            row = self.model().takeRow(ridx)
-            self.model().insertRow(ridx, row)
-            name_item = row[0]
+        ridxs = iter(range(self.model().rowCount()))
+        for ridx, display_row in zip(ridxs, self.display_data):
+            name_item = self.model().item(ridx)
+            
+            while name_item is None:
+                ridx = next(ridxs)
+                name_item = self.model().item(ridx)
+                
             id_index = display_row[self.id_column]
+
             result[id_index] = name_item.checkState()
         return result
     
     def set_mod_activation_states(self, states):
         for mod_id, state in states.items():
             for ridx, display_row in zip(range(self.model().rowCount()), self.display_data):
-                row = self.model().takeRow(ridx)
-                self.model().insertRow(ridx, row)
-                name_item = row[0]
+                row = self.model().item(ridx)
+                name_item = row
                 id_index = display_row[self.id_column]
                 if id_index == mod_id:
                     name_item.setCheckState(state)
@@ -198,11 +230,11 @@ class OnlyOneProfileNotification(QtWidgets.QDialog):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.setWindowTitle("Delete Profile")
+        self.setWindowTitle(translate("UI::TriedToDeleteFinalProfilePopup", "Delete Profile"))
         
-        label = QtWidgets.QLabel("There is only one profile, will not delete.", self)
+        label = QtWidgets.QLabel(translate("UI::TriedToDeleteFinalProfilePopup", "There is only one profile, will not delete."), self)
         
-        okButton = QtWidgets.QPushButton("Ok")
+        okButton = QtWidgets.QPushButton(translate("Common::OkButton", "Ok"))
         okButton.setFixedWidth(80)
         okButton.clicked.connect(self.accept)
 

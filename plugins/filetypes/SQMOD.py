@@ -2,6 +2,7 @@ import os
 
 class SqMod:
     group = 'sqmod'
+    default_rule = 'squirrel_modify'
     enable_softcodes = False
     
     @staticmethod
@@ -10,9 +11,19 @@ class SqMod:
             return True
         else:
             return False
-        
+    
+    @staticmethod
+    def get_target(filepath):
+        return os.path.splitext(filepath)[0] + ".txt"
+    
     @classmethod
-    def produce_index(cls, path, filename, rule):
-        if rule is None:
-            rule = 'squirrel_modify'
-        return cls.group, os.path.join(path, filename), {filename: rule}
+    def get_rule(cls, filepath):
+        return cls.default_rule
+    
+    @classmethod
+    def produce_index(cls, path, filename):
+        return cls.group, os.path.join(path, filename), [filename]
+
+    @staticmethod
+    def get_pack_name(filepath):
+        return filepath

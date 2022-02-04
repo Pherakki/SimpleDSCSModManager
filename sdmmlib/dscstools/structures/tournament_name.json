@@ -1,0 +1,12 @@
+{
+  "event": 
+  {
+    "ID": "int",
+    "Japanese": "string",
+    "English": "string",
+    "Chinese": "string",
+    "EnglishCensored": "string",
+    "Korean": "string",
+    "German": "string"
+  }
+}

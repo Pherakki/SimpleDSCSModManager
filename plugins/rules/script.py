@@ -1,11 +1,13 @@
 import os
 
-from ModFiles.ScriptPatching import patch_scripts
+# from ModFiles.ScriptPatching import patch_scripts
 
 
-def squirrel_overwrite(working_script_filepath, script_filepath):
-    wsd, wdf = os.path.split(working_script_filepath)
-    patch_filepath = os.path.join(wsd, '_' + wdf)
-    patch_scripts(working_script_filepath, script_filepath, patch_filepath)
-    os.remove(working_script_filepath)
-    os.rename(patch_filepath, working_script_filepath)
+def squirrel_concat(source_code, script_filepath):
+    with open(script_filepath, 'r') as F:
+        mod_source_code = F.read()
+    source_code += "\n// CONCAT INPUT FILE: \n\n"
+    source_code += mod_source_code
+    
+    return source_code
+    
