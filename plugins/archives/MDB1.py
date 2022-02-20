@@ -100,7 +100,7 @@ class MBD1(BaseArchiveType):
             self.updateLog(translate("ArchiveTypes::MDB1", "Backing up MDB1 {archive_name}...").format(archive_name=self.archive_name))
             self.backups.try_back_up_file(dst, self.paths.game_resources_loc, self.paths.backups_loc)
         self.updateLog(translate("ArchiveTypes::MDB1", "Packing MDB1 {archive_name}...").format(archive_name=self.archive_name))
-        DSCSTools.packMDB1(archive_build_dir, dst, DSCSTools.CompressMode.none, False)
+        DSCSTools.packMDB1(archive_build_dir, dst, DSCSTools.CompressMode.none, True, False)
         # Check that something unexpected and terrible didn't happen to the archive_build_dir path
         assert (os.path.split(archive_build_dir)[1] == self.archive_name) and (len(self.archive_name) > 1), translate("ArchiveTypes::MDB1", "Something critically bad happened to the archive packing directory - aborting.")
         shutil.rmtree(archive_build_dir)
