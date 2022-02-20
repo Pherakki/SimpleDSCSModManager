@@ -46,25 +46,33 @@ class BuildGraphRunner(QtCore.QObject):
     @QtCore.pyqtSlot()
     def execute(self):
         try:
+            # Get all mods to be installed
             active_mods = self.ops.profile_manager.get_active_mods()
             self.log.emit(translate("ModInstall", "Installing {count} mods...").format(count=len(active_mods)))
             for mod in active_mods:
                 self.log.emit(f"> {mod.name}")
             self.log.emit(translate("ModInstall", "{curr_step_message} Generating build graph...").format(curr_step_message=self.pre_message))
-            # Make all the build pipelines...
+            
+            # Make the build pipeline for each file to be built across
+            # all mods, also pull out all softcodes mentioned in the mods
             mod_build_graph_creator = ModBuildGraphCreator(self.ops)
             build_graphs, softcodes = mod_build_graph_creator.create_build_graph(active_mods, 
                                                                                  self.sendLog, 
                                                                                  self.sendUpdateLog)
 
+            # Get the values of all softcodes mentioned in the mods to be installed
             softcode_lookup = {}
             for match in softcodes:
                 softcode_lookup[match] = self.ops.softcode_manager.lookup_softcode(match)
             
+            # Now cull the graph depending on the hash of each pack target,
+            # which requests are required, etc.
             self.process_graph(build_graphs, softcode_lookup)
             # Save any newly-generated softcode values to the cache
             #self.ops.softcode_manager.dump_cached_softcodes()
             
+            # Forward the culled graph and required softcodes to the next
+            # stage in the install process
             self.sendBuildGraphs.emit(build_graphs)
             self.sendSoftcodes.emit(softcode_lookup)
             self.finished.emit()
@@ -73,12 +81,20 @@ class BuildGraphRunner(QtCore.QObject):
 
     def process_graph(self, build_graphs, softcode_lookup):
         self.sendLog(translate("ModInstall", "Looking for cached mod files..."))
+        
+        # Create the cache index if it doesn't exist
         if not os.path.exists(self.ops.paths.patch_cache_index_loc):
             with open(self.ops.paths.patch_cache_index_loc, 'w') as F:
                 F.write("{}")
+                
+        # Create the cache folder if it doesn't exist
         os.makedirs(self.ops.paths.patch_cache_loc, exist_ok=True)
         with open(self.ops.paths.patch_cache_index_loc, 'r') as F:
             cache_index = json.load(F)
+            
+        # Now prepare the process the build graph
+        # Init some variables to count the number of packs in the build graph,
+        # and the count how many are found in the cache
         n_found = 0
         n_total = 0
         # First just loop over the archive categories and archives...
@@ -93,28 +109,41 @@ class BuildGraphRunner(QtCore.QObject):
                     
                     # 1. Start by iterating over each pack in each pack category
                     for pack_name, pack in list(packs.items()):
-                        # Substitute softcode names in the packs
-                        # Hash pack
+                        ###########################################
+                        # Bake the softcode values into the packs #
+                        ###########################################
+                        # 1. This replaces filenames and data softcodes with values
                         pack.bake_softcodes(softcode_lookup)
+                        
+                        #################################
+                        # Check is pack is in the cache #
+                        #################################
+                        # 1. Make a hash of the filepack
                         pack.hash = hashFilepack(self.ops.paths.mm_root, pack)
                         pack_is_in_cache = True
                         pack_targets = pack.get_pack_targets()
                         n_total += len(pack_targets)
+                        
+                        # 2. Check if each source file of the filepack is
+                        # in the cache
                         for pack_target in pack_targets:
                             archive_pack_target = os.path.join(archive_obj.get_prefix(), pack_target)
                             if cache_index.get(archive_pack_target) != pack.hash or not os.path.isfile(os.path.join(self.ops.paths.patch_cache_loc, archive_pack_target)):
                                 pack_is_in_cache = False
                                 break
                             n_found += 1
-                        # Cull the pack if all pack targets are in the cache...
+                            
+                        # 3. Cull the pack if all pack targets are in the cache
                         if pack_is_in_cache:
                             for pack_target in pack_targets:
                                 archive_obj.cached_pack_targets.append(pack_target)
                             del packs[pack_name]
-                    # Cull any groups with no packs
+                            
+                    # 2. Cull any groups with no packs
                     if not len(build_pipelines[pack_type]):
                         del build_pipelines[pack_type]
         self.sendUpdateLog(translate("ModInstall", "Looking for cached mod files... found {ratio} in cache.").format(ratio=f"[{n_found}/{n_total}]"))
+       
        
     @QtCore.pyqtSlot(str) 
     def sendLog(self, msg):
