@@ -48,16 +48,14 @@ def index_mod_softcodes(modpath, filetypes, mod_contents_index):
                 line_offset = F.tell()
                 while line:
                     for match in search_bytestring_for_softcodes(line):
-                        code_cat, code_key = match.groups((1, 2))
-                        code_cat = code_cat.decode('utf8')
-                        code_key = code_key.decode('utf8')
                         code_offset = match.start() - 1
-                        if code_cat not in file_softcodes:
-                            file_softcodes[code_cat] = {}
-                        if code_key not in file_softcodes[code_cat]:
-                            file_softcodes[code_cat][code_key] = []
-                        file_softcodes[code_cat][code_key].append(line_offset + code_offset)
-                        all_softcodes.add((code_cat, code_key))
+                        match = match.group(0)
+                        print(match)
+                        match = match.decode('utf8')
+                        if match not in file_softcodes:
+                            file_softcodes[match] = []
+                        file_softcodes[match].append(line_offset + code_offset)
+                        all_softcodes.add(match)
                     line_offset = F.tell()
                     line = F.readline()
             softcodes[file] = file_softcodes
@@ -70,14 +68,12 @@ def get_targets_softcodes(filetargets):
         for target in targets:
             target_softcodes[target] = {}
             for match in search_string_for_softcodes(target):
-                code_cat, code_key = match.groups((1, 2))
                 code_offset = match.start() - 1
-                if code_cat not in target_softcodes[target]:
-                    target_softcodes[target][code_cat] = {}
-                if code_key not in target_softcodes[target][code_cat]:
-                    target_softcodes[target][code_cat][code_key] = []
-                target_softcodes[target][code_cat][code_key].append(code_offset)
-                all_softcodes.add((code_cat, code_key))
+                code = match.group(0)
+                if code not in target_softcodes[target]:
+                    target_softcodes[target][code] = []
+                target_softcodes[target][code].append(code_offset)
+                all_softcodes.add(code)
             if not len(target_softcodes[target]):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
@@ -169,11 +165,7 @@ def build_index(filepath, filetypes, archive_getter, targets_getter, rules_gette
                 if not len(archive_index[filetype]):
                     del index[archive][filetype]
                 
-    softcode_dump = {}
-    for (category, key) in sorted(list(all_softcodes)):
-        if category not in softcode_dump:
-            softcode_dump[sys.intern(category)] = []
-        softcode_dump[category].append(sys.intern(key))
 
+    softcode_dump = [sys.intern(key) for key in sorted(all_softcodes)]
 
     return {'data': index, 'softcodes': softcode_dump, "last_edit_time": last_edit_time}

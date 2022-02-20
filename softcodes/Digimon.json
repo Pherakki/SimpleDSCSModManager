@@ -1,358 +1,4354 @@
 {
-    "Lunamon": 2,
-    "Lekismon": 3,
-    "Crescemon": 4,
-    "Golemon": 5,
-    "SkullSatamon": 6,
-    "Hagurumon": 9,
-    "Meramon": 10,
-    "Airdramon": 11,
-    "Garurumon": 12,
-    "Bakemon": 13,
-    "Starmon": 14,
-    "Aquilamon": 15,
-    "Strikedramon": 16,
-    "Dorugoramon": 19,
-    "Chuumon": 20,
-    "Whamon": 21,
-    "Hudiemon": 22,
-    "Dinobeemon": 23,
-    "MarineAngemon": 24,
-    "Raptordramon": 25,
-    "Grademon": 26,
-    "WarGreymon": 27,
-    "Sangloupmon": 30,
-    "Matadormon": 31,
-    "GranDracmon": 32,
-    "Triceramon": 33,
-    "Lilithmon": 34,
-    "Beelzemon": 35,
-    "Barbamon": 36,
-    "Leviamon": 37,
-    "Creepymon": 38,
-    "Lucemon FM": 39,
-    "Belphemon RM": 40,
-    "Pandamon": 41,
-    "FanBeemon": 42,
-    "BlackGatomon": 43,
-    "CatchMamemon": 44,
-    "Megidramon": 47,
-    "Goldramon": 48,
-    "BanchoLeomon": 49,
-    "Kudamon": 53,
-    "GeoGreymon": 54,
-    "Gaomon": 55,
-    "Lalamon": 56,
-    "Rosemon": 57,
-    "Sunflowmon": 58,
-    "Volcanomon": 59,
-    "PileVolcamon": 60,
-    "Monzaemon": 61,
-    "Arcadiamon In-Tr.": 62,
-    "Arcadiamon Rookie": 63,
-    "Arcadiamon Champion": 64,
-    "GaoGamon": 68,
-    "PlatinumNumemon": 69,
-    "Numemon": 70,
-    "RizeGreymon": 71,
-    "Leomon": 72,
-    "Lilamon": 73,
-    "MachGaogamon": 74,
-    "Neptunemon": 75,
-    "Reppamon": 77,
-    "Growlmon": 78,
-    "SuperStarmon": 79,
-    "Merukimon": 80,
-    "Impmon": 81,
-    "HippoGryphonmon": 82,
-    "Gryphonmon": 83,
-    "Chirinmon": 84,
-    "Myotismon": 85,
-    "Kentaurosmon": 86,
-    "Angemon": 87,
-    "Omnimon": 88,
-    "Guilmon": 90,
-    "Stingmon": 91,
-    "Gatomon": 92,
-    "Devimon": 93,
-    "ShineGreymon": 94,
-    "MirageGaogamon": 95,
-    "Patamon": 96,
-    "DemiDevimon": 97,
-    "MagnaAngemon": 101,
-    "Turuiemon": 102,
-    "Susanomon": 104,
-    "Gallantmon CM": 105,
-    "Armageddemon": 106,
-    "LadyDevimon": 107,
-    "Goblimon": 111,
-    "Dorumon": 112,
-    "GoldNumemon": 113,
-    "Veemon": 114,
-    "BaoHuckmon": 115,
-    "SaviorHuckmon": 116,
-    "Varodurumon": 117,
-    "Chaosmon VA": 118,
-    "Gallantmon": 126,
-    "KingEtemon": 127,
-    "TyrantKabuterimon": 128,
-    "Dragomon": 129,
-    "Coelamon": 130,
-    "MegaSeadramon": 132,
-    "WarGrowlmon": 134,
-    "MetalGarurumon": 135,
-    "WereGarurumon": 140,
-    "Agumon (Blk)": 143,
-    "Angewomon": 148,
-    "ChaosGallantmon": 150,
-    "Gabumon": 151,
-    "BlackWarGreymon": 175,
-    "BlueMeramon": 177,
-    "MetalGarurumon (Blk)": 182,
-    "Ryudamon": 190,
-    "Ginryumon": 191,
-    "Hisyaryumon": 192,
-    "Ouryumon": 193,
-    "Dracomon": 208,
-    "Coredramon (Green)": 209,
-    "Wingdramon": 210,
-    "Groundramon": 211,
-    "Slayerdramon": 213,
-    "Brakedramon": 214,
-    "Coredramon (Blue)": 218,
-    "Megadramon": 301,
-    "MetalGreymon": 302,
-    "Tentomon": 303,
-    "Kabuterimon": 304,
-    "MegaKabuterimon": 305,
-    "HerculesKabuterimon": 306,
-    "Biyomon": 307,
-    "Birdramon": 308,
-    "Garudamon": 309,
-    "Hououmon": 310,
-    "Etemon": 311,
-    "MetalEtemon": 312,
-    "Sukamon": 313,
-    "Vegiemon": 314,
-    "Seraphimon": 315,
-    "Botamon": 317,
-    "Poyomon": 320,
-    "Wanyamon": 321,
-    "Koromon": 322,
-    "Tokomon": 325,
-    "Greymon": 326,
-    "MetalGreymon (Blue)": 327,
-    "Apocalymon": 328,
-    "Guardromon": 341,
-    "Andromon": 342,
-    "Gomamon": 343,
-    "Ikkakumon": 344,
-    "Zudomon": 345,
-    "Vikemon": 346,
-    "Seadramon": 347,
-    "Palmon": 348,
-    "Togemon": 349,
-    "Examon": 350,
-    "Lillymon": 359,
-    "King Drasil_7D6": 360,
-    "Salamon": 361,
-    "Tyrannomon": 363,
-    "MetalTyrannomon": 364,
-    "ExVeemon": 365,
-    "Kuwagamon": 367,
-    "Monochromon": 369,
-    "Frigimon": 370,
-    "Digitamamon": 374,
-    "Nanimon": 375,
-    "ShogunGekomon": 376,
-    "Wizardmon": 377,
-    "Cherrymon": 379,
-    "Magnamon": 382,
-    "RustTyranomon": 383,
-    "Machinedramon": 385,
-    "Pabumon": 387,
-    "Motimon": 388,
-    "Betamon": 389,
-    "Lucemon": 390,
-    "Renamon": 391,
-    "Wormmon": 392,
-    "Woodmon": 393,
-    "Ogremon": 394,
-    "Kyubimon": 395,
-    "Dorugamon": 396,
-    "Veedramon": 397,
-    "Clockmon": 398,
-    "Gekomon": 399,
-    "AeroVeedramon": 400,
-    "Okuwamon": 401,
-    "Gigadramon": 402,
-    "GrapLeomon": 403,
-    "SkullGreymon": 404,
-    "Taomon": 405,
-    "SkullMeramon": 406,
-    "DoruGreymon": 407,
-    "Paildramon": 408,
-    "Panjyamon": 409,
-    "Piximon": 410,
-    "Vademon": 411,
-    "Mamemon": 412,
-    "MetalMamemon": 413,
-    "UlforceVeedramon": 417,
-    "Imperialdramon FM": 419,
-    "Imperialdramon PM": 420,
-    "Ophanimon": 421,
-    "Chaosdramon": 422,
-    "GranKuwagamon": 423,
-    "SaberLeomon": 424,
-    "Sakuyamon": 425,
-    "HiAndromon": 426,
-    "Piedmon": 427,
-    "Puppetmon": 428,
-    "PrinceMamemon": 429,
-    "Boltmon": 431,
-    "MetalSeadramon": 434,
-    "Lucemon SM": 435,
-    "Punimon": 437,
-    "Tsunomon": 438,
-    "Belphemon SM": 439,
-    "Titamon": 440,
-    "Plesiomon": 450,
-    "Ebemon": 451,
-    "Cyclonemon": 452,
-    "Magnadramon": 453,
-    "Waspmon": 454,
-    "ShellNumemon": 455,
-    "Dracmon": 457,
-    "Monodramon": 458,
-    "Yokomon": 510,
-    "Tanemon": 512,
-    "Bukamon": 514,
-    "Nyaromon": 515,
-    "Unimon": 548,
-    "Elecmon": 564,
-    "Pagumon": 567,
-    "Gazimon": 569,
-    "Datamon": 576,
-    "Otamamon": 582,
-    "Phantomon": 584,
-    "Raremon": 590,
-    "Gotsumon": 595,
-    "Pumpkinmon": 596,
-    "VenomMyotismon": 600,
-    "Mushroomon": 607,
-    "Tankmon": 621,
-    "Keramon": 626,
-    "Infermon": 627,
-    "Kuramon": 629,
-    "Kurisarimon": 630,
-    "Tsumemon": 631,
-    "Diaboromon": 632,
-    "MagnaGarurumon (SV)": 675,
-    "Agunimon": 676,
-    "KaiserGreymon": 677,
-    "MagnaGarurumon": 678,
-    "BurningGreymon": 679,
-    "Lobomon": 680,
-    "KendoGarurumon": 681,
-    "Shoutmon": 682,
-    "OmniShoutmon": 683,
-    "Hackmon": 687,
-    "Gankoomon": 688,
-    "Zubamon": 697,
-    "ZubaEagermon": 698,
-    "Duramon": 699,
-    "Durandamon": 700,
-    "Terriermon": 701,
-    "Peckmon": 702,
-    "Crusadermon": 703,
-    "GroundLocomon": 704,
-    "Falcomon": 705,
-    "Hawkmon": 706,
-    "Armadillomon": 707,
-    "ToyAgumon": 708,
-    "Syakomon": 709,
-    "Gargomon": 710,
-    "Ankylomon": 711,
-    "Greymon (Blue)": 712,
-    "Gabumon (Blk)": 713,
-    "Garurumon (Blk)": 714,
-    "WereGarurumon (Blk)": 715,
-    "Flamedramon": 716,
-    "Knightmon": 718,
-    "Cyberdramon": 719,
-    "Silphymon": 720,
-    "Crowmon": 721,
-    "Rapidmon": 722,
-    "Shakkoumon": 723,
-    "Wisemon": 726,
-    "CannonBeemon": 727,
-    "Solarmon": 728,
-    "Geremon": 729,
-    "IceDevimon": 730,
-    "Antylamon": 731,
-    "Imperialdramon DM": 732,
-    "Dianamon": 733,
-    "Craniamon": 734,
-    "Kerpymon (Good)": 735,
-    "Justimon": 737,
-    "Dynasmon": 738,
-    "Leopardmon": 739,
-    "Ravemon": 740,
-    "MegaGargomon": 741,
-    "Lotosmon": 742,
-    "Leopardmon LM": 743,
-    "Gaiomon": 744,
-    "TigerVespamon": 745,
-    "Minervamon": 747,
-    "Mastemon": 748,
-    "Jesmon": 749,
-    "Lopmon": 750,
-    "Rapidmon (Armor)": 751,
-    "PlatinumSukamon": 752,
-    "BlackKingNumemon": 753,
-    "Kuzuhamon": 754,
-    "Socerimon": 755,
-    "Meteormon": 756,
-    "Omnimon Zwart": 757,
-    "Icemon": 758,
-    "MudFrigimon": 759,
-    "Guardromon (Gold)": 760,
-    "Agumon": 765,
-    "Alphamon Ouryuken": 766,
-    "Darkdramon": 771,
-    "Chaosmon": 772,
-    "Valkyrimon": 773,
-    "Kerpymon (Blk)": 774,
-    "Beelzemon BM": 775,
-    "ShineGreymon BM": 776,
-    "MirageGaogamon BM": 777,
-    "Ravemon BM": 778,
-    "Rosemon BM": 779,
-    "Sistermon Blanc": 781,
-    "Sistermon B (Awake.)": 782,
-    "Sistermon Noir": 783,
-    "Sistermon N (Awake.)": 784,
-    "Eater": 801,
-    "Eater Eve": 802,
-    "Eater Adam": 803,
-    "Arata": 805,
-    "Right Arm": 806,
-    "Core": 807,
-    "Left Arm": 808,
-    "Right Wing": 809,
-    "Left Wing": 810,
-    "Mother Eater": 811,
-    "Eater Bit": 814,
-    "Eater Legion": 815,
-    "Eater EDEN": 816,
-    "Security Wall": 824,
-    "Alphamon": 900,
-    "Alphamon NX": 901,
-    "Crusadermon NX": 902,
-    "Leopardmon NX": 903,
-    "Omnimon NX": 904,
-    "Gallantmon NX": 905,
-    "Arcadiamon Ultimate": 910,
-    "Arcadiamon Mega": 911,
-    "Arcadiamon Ultra": 912
+  "definition":
+  {
+    "min": 1,
+    "max": 999,
+    "src": 
+    {
+      "file": "text/charname.mbe/Sheet1.csv",
+      "columns": [0]
+    },
+    "value": {"return": "{0}"},
+    "methods":
+    {
+      "3ID": {"return": "{0:0>3}"},
+      "4ID": {"return": "1{0:0>3}"},
+      "filename": {"return": "chr{0:0>3}"}
+    },
+    "children":
+    {
+      "EnemyVariant":
+      {
+        "min": 1,
+        "max": 255,
+        "src": 
+        {
+          "file": "data/mon_para.mbe/Monster.csv",
+          "columns": [1]
+        },
+        "value": {"return": "{0}"}
+      }
+    }
+  },
+  "codes":
+  {
+    "AeroVeedramon":
+    [
+      400,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Agumon":
+    [
+      50,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Agumon_2":
+    [
+      761,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Agumon_3":
+    [
+      762,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Agumon_4":
+    [
+      763,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Agumon_5":
+    [
+      764,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Agumon_6":
+    [
+      765,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Agumon (Blk)":
+    [
+      143,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Agunimon":
+    [
+      676,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Airdramon":
+    [
+      11,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Alphamon":
+    [
+      416,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Alphamon_2":
+    [
+      900,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Alphamon NX":
+    [
+      901,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Alphamon Ouryuken":
+    [
+      766,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Andromon":
+    [
+      342,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Angemon":
+    [
+      87,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Angewomon":
+    [
+      148,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Ankylomon":
+    [
+      711,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Antylamon":
+    [
+      731,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Apocalymon":
+    [
+      328,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Aquilamon":
+    [
+      15,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Arata":
+    [
+      805,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Arcadiamon Champion":
+    [
+      64,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon In-Tr.":
+    [
+      62,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Mega":
+    [
+      66,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Mega_2":
+    [
+      911,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Rookie":
+    [
+      63,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Ultimate":
+    [
+      65,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Ultimate_2":
+    [
+      910,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Ultra":
+    [
+      67,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Arcadiamon Ultra_2":
+    [
+      912,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Armadillomon":
+    [
+      707,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Armageddemon":
+    [
+      106,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Bakemon":
+    [
+      13,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "BanchoLeomon":
+    [
+      49,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "BaoHuckmon":
+    [
+      115,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Barbamon":
+    [
+      36,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Beelzemon":
+    [
+      35,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Beelzemon BM":
+    [
+      775,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Belphemon RM":
+    [
+      40,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Belphemon SM":
+    [
+      439,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Betamon":
+    [
+      389,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Birdramon":
+    [
+      308,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Biyomon":
+    [
+      307,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "BlackGatomon":
+    [
+      43,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "BlackKingNumemon":
+    [
+      753,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "BlackWarGreymon":
+    [
+      175,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "BlueMeramon":
+    [
+      177,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Boltmon":
+    [
+      431,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Botamon":
+    [
+      317,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Brakedramon":
+    [
+      214,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Bukamon":
+    [
+      514,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "BurningGreymon":
+    [
+      679,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "CannonBeemon":
+    [
+      727,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "CatchMamemon":
+    [
+      44,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "ChaosGallantmon":
+    [
+      150,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Chaosdramon":
+    [
+      422,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Chaosmon":
+    [
+      772,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Chaosmon VA":
+    [
+      118,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Cherrymon":
+    [
+      379,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Chirinmon":
+    [
+      84,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Chuumon":
+    [
+      20,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Clockmon":
+    [
+      398,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Coelamon":
+    [
+      130,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Core":
+    [
+      807,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Coredramon (Blue)":
+    [
+      218,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Coredramon (Green)":
+    [
+      209,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Craniamon":
+    [
+      734,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Creepymon":
+    [
+      38,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Crescemon":
+    [
+      4,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Crowmon":
+    [
+      721,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Crusadermon":
+    [
+      703,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Crusadermon NX":
+    [
+      902,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Cyberdramon":
+    [
+      719,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Cyclonemon":
+    [
+      452,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Darkdramon":
+    [
+      771,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Datamon":
+    [
+      576,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "DemiDevimon":
+    [
+      97,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Devimon":
+    [
+      93,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Diaboromon":
+    [
+      632,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Dianamon":
+    [
+      733,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Digitamamon":
+    [
+      374,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Dinobeemon":
+    [
+      23,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "DoruGreymon":
+    [
+      407,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Dorugamon":
+    [
+      396,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Dorugoramon":
+    [
+      19,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Dorumon":
+    [
+      112,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Dracmon":
+    [
+      457,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Dracomon":
+    [
+      208,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Dragomon":
+    [
+      129,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Duramon":
+    [
+      699,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Durandamon":
+    [
+      700,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Dynasmon":
+    [
+      738,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Eater":
+    [
+      800,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6],
+          "G": [7]
+        }
+      }
+    ],
+    "Eater_2":
+    [
+      801,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6],
+          "G": [7],
+          "H": [8]
+        }
+      }
+    ],
+    "Eater Adam":
+    [
+      803,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Eater Bit":
+    [
+      814,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Eater EDEN":
+    [
+      816,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Eater Eve":
+    [
+      802,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Eater Legion":
+    [
+      815,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Ebemon":
+    [
+      451,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Elecmon":
+    [
+      564,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Etemon":
+    [
+      311,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "ExVeemon":
+    [
+      365,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Examon":
+    [
+      215,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Examon_2":
+    [
+      350,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Falcomon":
+    [
+      705,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "FanBeemon":
+    [
+      42,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Flamedramon":
+    [
+      716,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Frigimon":
+    [
+      370,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Gabumon":
+    [
+      151,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Gabumon (Blk)":
+    [
+      713,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Gaiomon":
+    [
+      744,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Gallantmon":
+    [
+      126,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Gallantmon CM":
+    [
+      105,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Gallantmon NX":
+    [
+      905,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Gankoomon":
+    [
+      688,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "GaoGamon":
+    [
+      68,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Gaomon":
+    [
+      55,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Gargomon":
+    [
+      710,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Garudamon":
+    [
+      309,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Garurumon":
+    [
+      12,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Garurumon (Blk)":
+    [
+      714,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Gatomon":
+    [
+      92,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Gazimon":
+    [
+      569,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Gekomon":
+    [
+      399,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "GeoGreymon":
+    [
+      54,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Geremon":
+    [
+      729,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Gigadramon":
+    [
+      402,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Ginryumon":
+    [
+      191,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Goblimon":
+    [
+      111,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "GoldNumemon":
+    [
+      113,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Goldramon":
+    [
+      48,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Golemon":
+    [
+      5,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Gomamon":
+    [
+      343,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Gotsumon":
+    [
+      595,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Grademon":
+    [
+      26,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "GranDracmon":
+    [
+      32,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "GranKuwagamon":
+    [
+      423,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "GrapLeomon":
+    [
+      403,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Greymon":
+    [
+      326,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Greymon (Blue)":
+    [
+      712,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "GroundLocomon":
+    [
+      704,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Groundramon":
+    [
+      211,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Growlmon":
+    [
+      78,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Gryphonmon":
+    [
+      83,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Guardromon":
+    [
+      341,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Guardromon (Gold)":
+    [
+      760,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Guilmon":
+    [
+      90,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Hackmon":
+    [
+      687,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Hagurumon":
+    [
+      9,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Hawkmon":
+    [
+      706,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "HerculesKabuterimon":
+    [
+      306,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "HiAndromon":
+    [
+      426,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "HippoGryphonmon":
+    [
+      82,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Hisyaryumon":
+    [
+      192,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Hououmon":
+    [
+      310,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Hudiemon":
+    [
+      22,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "IceDevimon":
+    [
+      730,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Icemon":
+    [
+      758,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Ikkakumon":
+    [
+      344,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Imperialdramon DM":
+    [
+      732,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Imperialdramon FM":
+    [
+      419,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Imperialdramon PM":
+    [
+      420,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Impmon":
+    [
+      81,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Infermon":
+    [
+      627,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Jesmon":
+    [
+      749,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Justimon":
+    [
+      737,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Kabuterimon":
+    [
+      304,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "KaiserGreymon":
+    [
+      677,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "KendoGarurumon":
+    [
+      681,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Kentaurosmon":
+    [
+      86,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Keramon":
+    [
+      626,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Kerpymon (Blk)":
+    [
+      774,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Kerpymon (Good)":
+    [
+      735,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "KingEtemon":
+    [
+      127,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "King Drasil_7D6":
+    [
+      360,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Knightmon":
+    [
+      718,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Koromon":
+    [
+      322,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Kudamon":
+    [
+      53,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Kuramon":
+    [
+      629,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Kurisarimon":
+    [
+      630,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Kuwagamon":
+    [
+      367,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Kuzuhamon":
+    [
+      754,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Kyubimon":
+    [
+      395,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "LadyDevimon":
+    [
+      107,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Lalamon":
+    [
+      56,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Left Arm":
+    [
+      808,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Left Wing":
+    [
+      810,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Lekismon":
+    [
+      3,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Leomon":
+    [
+      72,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Leopardmon":
+    [
+      739,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Leopardmon LM":
+    [
+      743,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Leopardmon NX":
+    [
+      903,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Leviamon":
+    [
+      37,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Lilamon":
+    [
+      73,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Lilithmon":
+    [
+      34,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Lillymon":
+    [
+      359,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Lobomon":
+    [
+      680,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Lopmon":
+    [
+      750,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Lotosmon":
+    [
+      742,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Lucemon":
+    [
+      390,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Lucemon FM":
+    [
+      39,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Lucemon SM":
+    [
+      435,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Lunamon":
+    [
+      2,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "MachGaogamon":
+    [
+      74,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Machinedramon":
+    [
+      385,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "MagnaAngemon":
+    [
+      101,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "MagnaGarurumon":
+    [
+      678,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MagnaGarurumon (SV)":
+    [
+      675,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Magnadramon":
+    [
+      453,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Magnamon":
+    [
+      382,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Mamemon":
+    [
+      412,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MarineAngemon":
+    [
+      24,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Mastemon":
+    [
+      748,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Matadormon":
+    [
+      31,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MegaGargomon":
+    [
+      741,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "MegaKabuterimon":
+    [
+      305,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MegaSeadramon":
+    [
+      132,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Megadramon":
+    [
+      301,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Megidramon":
+    [
+      47,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Meramon":
+    [
+      10,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Merukimon":
+    [
+      80,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MetalEtemon":
+    [
+      312,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "MetalGarurumon":
+    [
+      135,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "MetalGarurumon (Blk)":
+    [
+      182,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "MetalGreymon":
+    [
+      302,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "MetalGreymon (Blue)":
+    [
+      327,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MetalMamemon":
+    [
+      413,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "MetalSeadramon":
+    [
+      434,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MetalTyrannomon":
+    [
+      364,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Meteormon":
+    [
+      756,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Minervamon":
+    [
+      747,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "MirageGaogamon":
+    [
+      95,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "MirageGaogamon BM":
+    [
+      777,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Monochromon":
+    [
+      369,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Monodramon":
+    [
+      458,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Monzaemon":
+    [
+      61,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Mother Eater":
+    [
+      804,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Mother Eater_2":
+    [
+      811,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Motimon":
+    [
+      388,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "MudFrigimon":
+    [
+      759,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Mushroomon":
+    [
+      607,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Myotismon":
+    [
+      85,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Nanimon":
+    [
+      375,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Neptunemon":
+    [
+      75,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Numemon":
+    [
+      70,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Nyaromon":
+    [
+      515,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Ogremon":
+    [
+      394,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Okuwamon":
+    [
+      401,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "OmniShoutmon":
+    [
+      683,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Omnimon":
+    [
+      88,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Omnimon NX":
+    [
+      904,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Omnimon Zwart":
+    [
+      757,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Ophanimon":
+    [
+      421,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Otamamon":
+    [
+      582,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Ouryumon":
+    [
+      193,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Pabumon":
+    [
+      387,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Pagumon":
+    [
+      567,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Paildramon":
+    [
+      408,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Palmon":
+    [
+      348,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Pandamon":
+    [
+      41,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Panjyamon":
+    [
+      409,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Patamon":
+    [
+      96,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Peckmon":
+    [
+      702,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Phantomon":
+    [
+      584,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Piedmon":
+    [
+      427,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "PileVolcamon":
+    [
+      60,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Piximon":
+    [
+      410,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "PlatinumNumemon":
+    [
+      69,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "PlatinumSukamon":
+    [
+      752,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Plesiomon":
+    [
+      450,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Poyomon":
+    [
+      320,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "PrinceMamemon":
+    [
+      429,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Pumpkinmon":
+    [
+      596,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Punimon":
+    [
+      437,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Puppetmon":
+    [
+      428,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Rapidmon":
+    [
+      722,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Rapidmon (Armor)":
+    [
+      751,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Raptordramon":
+    [
+      25,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Raremon":
+    [
+      590,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Ravemon":
+    [
+      740,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Ravemon BM":
+    [
+      778,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Renamon":
+    [
+      391,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Reppamon":
+    [
+      77,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Right Arm":
+    [
+      806,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Right Wing":
+    [
+      809,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "RizeGreymon":
+    [
+      71,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Rosemon":
+    [
+      57,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6]
+        }
+      }
+    ],
+    "Rosemon BM":
+    [
+      779,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "RustTyranomon":
+    [
+      383,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Ryudamon":
+    [
+      190,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "SaberLeomon":
+    [
+      424,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Sakuyamon":
+    [
+      425,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Salamon":
+    [
+      361,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Sangloupmon":
+    [
+      30,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "SaviorHuckmon":
+    [
+      116,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Seadramon":
+    [
+      347,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Security Wall":
+    [
+      817,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_2":
+    [
+      818,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_3":
+    [
+      819,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_4":
+    [
+      820,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_5":
+    [
+      821,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_6":
+    [
+      822,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_7":
+    [
+      823,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Security Wall_8":
+    [
+      824,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Seraphimon":
+    [
+      315,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Shakkoumon":
+    [
+      723,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "ShellNumemon":
+    [
+      455,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "ShineGreymon":
+    [
+      94,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "ShineGreymon BM":
+    [
+      776,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "ShogunGekomon":
+    [
+      376,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Shoutmon":
+    [
+      682,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Silphymon":
+    [
+      720,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Sistermon B (Awake.)":
+    [
+      782,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Sistermon Blanc":
+    [
+      781,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Sistermon N (Awake.)":
+    [
+      784,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Sistermon Noir":
+    [
+      783,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "SkullGreymon":
+    [
+      404,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "SkullMeramon":
+    [
+      406,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "SkullSatamon":
+    [
+      6,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Slayerdramon":
+    [
+      213,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Socerimon":
+    [
+      755,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Solarmon":
+    [
+      728,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Starmon":
+    [
+      14,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Stingmon":
+    [
+      91,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Strikedramon":
+    [
+      16,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Sukamon":
+    [
+      313,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Sunflowmon":
+    [
+      58,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "SuperStarmon":
+    [
+      79,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Susanomon":
+    [
+      104,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Syakomon":
+    [
+      709,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Tanemon":
+    [
+      512,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Tankmon":
+    [
+      621,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Taomon":
+    [
+      405,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Tentomon":
+    [
+      303,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Terriermon":
+    [
+      701,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "TigerVespamon":
+    [
+      745,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5],
+          "F": [6],
+          "G": [7]
+        }
+      }
+    ],
+    "Titamon":
+    [
+      440,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Togemon":
+    [
+      349,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Tokomon":
+    [
+      325,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "ToyAgumon":
+    [
+      708,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Triceramon":
+    [
+      33,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Tsumemon":
+    [
+      631,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Tsunomon":
+    [
+      438,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Turuiemon":
+    [
+      102,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Tyrannomon":
+    [
+      363,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "TyrantKabuterimon":
+    [
+      128,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "UlforceVeedramon":
+    [
+      417,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Unimon":
+    [
+      548,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Vademon":
+    [
+      411,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Valkyrimon":
+    [
+      773,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Varodurumon":
+    [
+      117,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Veedramon":
+    [
+      397,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Veemon":
+    [
+      114,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Vegiemon":
+    [
+      314,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "VenomMyotismon":
+    [
+      600,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Vikemon":
+    [
+      346,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Volcanomon":
+    [
+      59,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Wanyamon":
+    [
+      321,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "WarGreymon":
+    [
+      27,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "WarGrowlmon":
+    [
+      134,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Waspmon":
+    [
+      454,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "WereGarurumon":
+    [
+      140,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "WereGarurumon (Blk)":
+    [
+      715,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Whamon":
+    [
+      21,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Wingdramon":
+    [
+      210,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Wisemon":
+    [
+      726,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4]
+        }
+      }
+    ],
+    "Wizardmon":
+    [
+      377,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3],
+          "D": [4],
+          "E": [5]
+        }
+      }
+    ],
+    "Woodmon":
+    [
+      393,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "Wormmon":
+    [
+      392,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Yokomon":
+    [
+      510,
+      {
+        "EnemyVariant":
+        {
+          "A": [1]
+        }
+      }
+    ],
+    "ZubaEagermon":
+    [
+      698,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2],
+          "C": [3]
+        }
+      }
+    ],
+    "Zubamon":
+    [
+      697,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ],
+    "Zudomon":
+    [
+      345,
+      {
+        "EnemyVariant":
+        {
+          "A": [1],
+          "B": [2]
+        }
+      }
+    ]
+  }
 }

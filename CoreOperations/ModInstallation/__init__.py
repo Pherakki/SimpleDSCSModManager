@@ -58,15 +58,13 @@ class BuildGraphRunner(QtCore.QObject):
                                                                                  self.sendUpdateLog)
 
             softcode_lookup = {}
-            for category in softcodes:
-                softcode_lookup[category] = {}
-                for key in softcodes[category]:
-                    softcode_lookup[category][key] = self.ops.softcode_manager.get_softcode(category, key)
-            self.process_graph(build_graphs, softcode_lookup)
+            for match in softcodes:
+                softcode_lookup[match] = self.ops.softcode_manager.lookup_softcode(match)
             
-            # Now cull the graph depending on the hash of each pack target...
-            self.ops.softcode_manager.dump_cached_softcodes()
-            # assert 0
+            self.process_graph(build_graphs, softcode_lookup)
+            # Save any newly-generated softcode values to the cache
+            #self.ops.softcode_manager.dump_cached_softcodes()
+            
             self.sendBuildGraphs.emit(build_graphs)
             self.sendSoftcodes.emit(softcode_lookup)
             self.finished.emit()
@@ -89,6 +87,11 @@ class BuildGraphRunner(QtCore.QObject):
                 # Now we can actually inspect the filepacks we want to install...
                 build_pipelines = archive_obj.build_graph
                 for pack_type, packs in list(build_pipelines.items()):
+                    ######################################
+                    # Process each pack's build pipeline #
+                    ######################################
+                    
+                    # 1. Start by iterating over each pack in each pack category
                     for pack_name, pack in list(packs.items()):
                         # Substitute softcode names in the packs
                         # Hash pack

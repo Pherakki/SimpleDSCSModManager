@@ -31,6 +31,7 @@ class UncategorisedPatcher:
         
         cached_file = os.path.join(self.paths.patch_cache_loc, self.path_prefix, self.filepack.get_pack_targets()[0])
         os.makedirs(os.path.split(cached_file)[0], exist_ok=True)
+        
         for build_step in build_pipeline:
             mod_source_file = os.path.join(self.paths.mm_root, build_step.mod, build_step.src)
             rules[build_step.rule](mod_source_file, cached_file)

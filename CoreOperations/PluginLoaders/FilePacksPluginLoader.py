@@ -143,9 +143,8 @@ class BaseFilepack:
         for file_target, build_pipeline in zip(self.get_file_targets(), self.get_build_pipelines()):
             if 'softcodes' in build_pipeline:
                 file_codes = {}
-                for cat in build_pipeline['softcodes']:
-                    for key in build_pipeline['softcodes'][cat]:
-                        file_codes[(cat, key)] = build_pipeline['softcodes'][cat][key]
+                for match in build_pipeline['softcodes']:
+                    file_codes[match] = build_pipeline['softcodes'][match]
                 file_target = replace_softcodes(file_target.encode('utf8'), file_codes, softcodes).decode('utf8')
             new_targets.append(sys.intern(file_target))
             new_pipes.append(build_pipeline["build_steps"])
@@ -154,14 +153,11 @@ class BaseFilepack:
         for pack_target in self.get_pack_targets():
             pack_softcodes = {}
             for match in search_string_for_softcodes(pack_target):
-                code_cat, code_key = match.groups((1, 2))
-                code_cat = code_cat
-                code_key = code_key
                 code_offset = match.start() - 1
-                code_catkey = (code_cat, code_key)
-                if code_catkey not in pack_softcodes:
-                    pack_softcodes[code_catkey] = []
-                pack_softcodes[code_catkey].append(code_offset)
+                match = match.group(0)
+                if match not in pack_softcodes:
+                    pack_softcodes[match] = []
+                pack_softcodes[match].append(code_offset)
             pack_target = replace_softcodes(pack_target.encode('utf8'), pack_softcodes, softcodes).decode('utf8')
             new_pack_targets.append(sys.intern(pack_target))
         

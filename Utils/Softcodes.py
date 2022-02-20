@@ -5,9 +5,9 @@ def replace_softcodes(text_bytes, text_softcodes, softcode_lookup):
    
     if text_softcodes is not None:
         all_replacements = []
-        for (category, key), offsets in text_softcodes.items():
-            value = softcode_lookup[category][key]
-            softcode_length = len(category.encode('utf8')) + len(key.encode('utf8')) + 3 # For [, :, and ]
+        for match, offsets in text_softcodes.items():
+            value = softcode_lookup[match]
+            softcode_length = len(match) + 2 # For [ and ]
             for offset in offsets:
                 all_replacements.append((offset, value, softcode_length))
         all_replacements = sorted(all_replacements, key=lambda x : x[0])

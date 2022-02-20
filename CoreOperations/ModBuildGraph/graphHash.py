@@ -14,9 +14,8 @@ def hashFilepack(mm_root, filepack):
                 for arg in build_step.rule_args:
                     hasher.update(arg.encode(default_encoding))
             if build_step.softcodes is not None:
-                for (category, key), softcode_offsets in build_step.softcodes.items():
-                    hasher.update(category.encode(default_encoding))
-                    hasher.update(key.encode(default_encoding))
+                for softcode, softcode_offsets in build_step.softcodes.items():
+                    hasher.update(softcode.encode(default_encoding))
                     for offset in softcode_offsets:
                         hasher.update(str(offset).encode(default_encoding))
     return hasher.hexdigest()

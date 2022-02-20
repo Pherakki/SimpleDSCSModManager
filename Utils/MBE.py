@@ -15,6 +15,7 @@ def mbetable_to_dict(result, filepath, id_size, softcodes, softcode_lookup, enco
             with open(filepath, 'rb') as F, open(working_fp, 'wb') as G:
                 G.write(replace_softcodes(F.read(), softcodes, softcode_lookup))
                 
+                
         with open(working_fp, 'r', newline='', encoding=encoding) as F:
             header = F.readline()
             csvreader = csv.reader(F, delimiter=',', quotechar='"')

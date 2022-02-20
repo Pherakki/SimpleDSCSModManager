@@ -31,9 +31,8 @@ def make_interned_buildstep(dct):
                          sys.intern(dct['src']),
                          sys.intern(dct['rule']),
                          {
-                             tuple([sys.intern(category), sys.intern(key)]): tuple(offsets)
-                             for category, keyset in softcodes.items()
-                             for key, offsets in keyset.items()
+                             sys.intern(match): tuple(offsets)
+                             for match, offsets in softcodes.items()
                          } if len(softcodes) else None,
                          *dct.get('rule_args', []))
     else:
@@ -128,7 +127,7 @@ class ModBuildGraphCreator:
         archive_type_classes = get_archivetype_plugins_dict()
         self.regenerate_missing_mod_indices(active_mods, log, updateLog)
         build_graphs = {}
-        mod_softcodes = {}
+        mod_softcodes = []
         log(translate("BuildGraph::Debug", "---build graph message slot---"))
         n = len(active_mods)
         for i, mod in enumerate(active_mods):
@@ -162,10 +161,10 @@ class ModBuildGraphCreator:
             
             # Handle softcodes
             softcode_data = index["softcodes"]
-            for category, keys in softcode_data.items():
-                if category not in mod_softcodes:
-                    mod_softcodes[category] = []
-                mod_softcodes[category].extend(keys)
+            # for category, keys in softcode_data.items():
+            #     if category not in mod_softcodes:
+            #         mod_softcodes[category] = []
+            mod_softcodes.extend(softcode_data)
                 
         updateLog(translate("BuildGraph", "Building install graph nodes... Done. ") + f"[{i+1}/{n}]")
         return categorise_build_targets(build_graphs, self.ops, log, updateLog), mod_softcodes
