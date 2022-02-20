@@ -139,42 +139,42 @@
 <context>
     <name>BuildGraph</name>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="51"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="50"/>
         <source>Categorising install graph pipelines...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="109"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="108"/>
         <source>Located all mod indices.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="90"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="89"/>
         <source>Categorising install graph pipelines... Done. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="112"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="111"/>
         <source>Creating missing mod indices... </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="115"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="114"/>
         <source>Creating missing mod indices... Done. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="121"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="120"/>
         <source>{msg} [Regenerating index...]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="137"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="136"/>
         <source>Building install graph nodes... </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="170"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="169"/>
         <source>Building install graph nodes... Done. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -182,12 +182,12 @@
 <context>
     <name>BuildGraph::Debug</name>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="107"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="106"/>
         <source>---mod index message slot---</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="132"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="131"/>
         <source>---build graph message slot---</source>
         <translation type="unfinished"></translation>
     </message>
@@ -619,7 +619,7 @@
 <context>
     <name>Filepacks::Unhandled</name>
     <message>
-        <location filename="../../CoreOperations/PluginLoaders/FilePacksPluginLoader.py" line="194"/>
+        <location filename="../../CoreOperations/PluginLoaders/FilePacksPluginLoader.py" line="190"/>
         <source>Building miscellaneous files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -708,82 +708,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="53"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="59"/>
         <source>{curr_step_message} Generating build graph...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="77"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="88"/>
         <source>Looking for cached mod files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="114"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="150"/>
         <source>Looking for cached mod files... found {ratio} in cache.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="155"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="192"/>
         <source>{curr_step_msg} Checking required resources...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="197"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="234"/>
         <source>{curr_step_message} Checking required resources... found missing resources.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="207"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="244"/>
         <source>{curr_step_message} Checking required resources... no additional resources required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="244"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="281"/>
         <source>{curr_step_message} Creating modded assets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="272"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="309"/>
         <source>{curr_step_message} Creating modded assets... no files to build.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="410"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="447"/>
         <source>{curr_step_message} Installing mod files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="457"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="494"/>
         <source>Mods successfully installed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="463"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="500"/>
         <source>[!] Preparing to install... [!]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="529"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="566"/>
         <source>[!] Starting mod installation... [!]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="298"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="335"/>
         <source>{curr_step_message} Sorting Field Guide...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="330"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="367"/>
         <source>{curr_step_message} Sorting Field Guide... sort complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="332"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="369"/>
         <source>{curr_step_message} Sorting Field Guide... no edits required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="50"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="56"/>
         <source>Installing {count} mods...</source>
         <translation type="unfinished"></translation>
     </message>
