@@ -137,7 +137,7 @@ class BaseFilepack:
         raise NotImplementedError()
         
 
-    def link_softcodes(self, softcodes):
+    def bake_softcodes(self, softcodes):
         new_targets = []
         new_pipes = []
         for file_target, build_pipeline in zip(self.get_file_targets(), self.get_build_pipelines()):

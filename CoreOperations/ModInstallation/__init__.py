@@ -91,8 +91,8 @@ class BuildGraphRunner(QtCore.QObject):
                 for pack_type, packs in list(build_pipelines.items()):
                     for pack_name, pack in list(packs.items()):
                         # Substitute softcode names in the packs
-                        pack.link_softcodes(softcode_lookup)
                         # Hash pack
+                        pack.bake_softcodes(softcode_lookup)
                         pack.hash = hashFilepack(self.ops.paths.mm_root, pack)
                         pack_is_in_cache = True
                         pack_targets = pack.get_pack_targets()
