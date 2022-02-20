@@ -30,10 +30,6 @@ class BaseFiletype:
     @classmethod
     def get_rule(cls, filepath):
         raise NotImplementedError()
-    
-    @classmethod
-    def produce_index(cls, path, filename):
-        raise NotImplementedError()
 
     @staticmethod
     def get_pack_name(filepath):
@@ -55,10 +51,6 @@ class UnhandledFiletype(BaseFiletype):
     @classmethod
     def get_rule(cls, filepath):
         return cls.default_rule
-    
-    @classmethod
-    def produce_index(cls, path, filename):
-        return cls.group, os.path.join(path, filename), [filename]
 
     @staticmethod
     def get_pack_name(filepath):
