@@ -62,9 +62,9 @@ class BuildGraphRunner(QtCore.QObject):
                 softcode_lookup[category] = {}
                 for key in softcodes[category]:
                     softcode_lookup[category][key] = self.ops.softcode_manager.get_softcode(category, key)
+            self.process_graph(build_graphs, softcode_lookup)
             
             # Now cull the graph depending on the hash of each pack target...
-            self.check_cached_files(build_graphs, softcode_lookup)
             self.ops.softcode_manager.dump_cached_softcodes()
             # assert 0
             self.sendBuildGraphs.emit(build_graphs)
@@ -73,7 +73,7 @@ class BuildGraphRunner(QtCore.QObject):
         except Exception as e:
             self.raise_exception.emit(e)
 
-    def check_cached_files(self, build_graphs, softcode_lookup):
+    def process_graph(self, build_graphs, softcode_lookup):
         self.sendLog(translate("ModInstall", "Looking for cached mod files..."))
         if not os.path.exists(self.ops.paths.patch_cache_index_loc):
             with open(self.ops.paths.patch_cache_index_loc, 'w') as F:
