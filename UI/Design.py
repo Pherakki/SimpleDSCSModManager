@@ -185,6 +185,26 @@ class creditsPopup:
         msgBoxText += "<br>"
         msgBoxText += u"Español (España):"
         msgBoxText += " " + translate("Common::ListElementsSeparator", ", ").join(["IlDucci"])
+        # More translations here
+        
+        msgBoxText += "<br>"
+        msgBoxText += "<br>"
+        msgBoxText += "<b>" + translate("UI::Credits", "Tool and Software Dependencies") + "</b>"
+        msgBoxText += "<br>"
+        msgBoxText += "<a href=\"https://github.com/SydMontague/DSCSTools\">"
+        msgBoxText += u"DSCSTools</a>: SydMontague"
+        msgBoxText += "<br>"
+        msgBoxText += "<a href=\"https://sourceforge.net/projects/squirrel/files/squirrel2/squirrel%202.2.4%20stable/\">"
+        msgBoxText += u"Squirrel 2.2.4</a>: Alberto Demichelis"
+        msgBoxText += "<br>"
+        msgBoxText += "<a href=\"https://github.com/SydMontague/NutCracker\">"
+        msgBoxText += u"NutCracker</a>: DamianXVI (64-bit port: SydMontague)"
+        msgBoxText += "<br>"
+        msgBoxText += "<a href=\"https://github.com/Thealexbarney/VGAudio\">"
+        msgBoxText += u"VGAudio</a>: Thealexbarney"
+        msgBoxText += "<br>"
+        msgBoxText += "<a href=\"https://github.com/Pherakki/Blender-Tools-for-DSCS/\">"
+        msgBoxText += u"Blender Tools for DSCS</a>: Pherakki"
         
         msgBox.setText(msgBoxText)
         
