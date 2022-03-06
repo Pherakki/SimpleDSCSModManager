@@ -829,8 +829,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.dscstools_layout = QtWidgets.QGridLayout()
         self.scripts_widget = QtWidgets.QWidget()
         self.scripts_layout= QtWidgets.QGridLayout()
-        self.vgstream_widget = QtWidgets.QWidget()
-        self.vgstream_layout = QtWidgets.QGridLayout()
+        self.vgaudio_widget = QtWidgets.QWidget()
+        self.vgaudio_layout = QtWidgets.QGridLayout()
         
         self.data_mdb1_label = QtWidgets.QLabel()
         self.data_mdb1_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -881,9 +881,8 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.sounds_label = QtWidgets.QLabel()
         self.sounds_label.setAlignment(QtCore.Qt.AlignCenter)
         self.hca_to_wav = self.new_button("", parentWidget)
-        self.hca_to_wav.setEnabled(False)
         self.wav_to_hca = self.new_button("", parentWidget)
-        self.wav_to_hca.setEnabled(False)
+        self.wav_to_hca_looped = self.new_button("", parentWidget)
         
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
@@ -922,6 +921,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.sounds_label.setText(translate("UI::ExtractTab", "Sounds"))
         self.hca_to_wav.setText(translate("UI::ExtractTab", "Convert HCA to WAV"))
         self.wav_to_hca.setText(translate("UI::ExtractTab", "Convert WAV to HCA"))
+        self.wav_to_hca_looped.setText(translate("UI::ExtractTab", "Convert WAV to Looped HCA"))
     
     def lay_out(self):
         # Lay out the LHS button pane
@@ -968,17 +968,17 @@ class uiExtractTab(QtWidgets.QScrollArea):
             self.scripts_layout.setRowStretch(i+1, 0)
         self.scripts_widget.setLayout(self.scripts_layout)
         
-        self.vgstream_layout.addWidget(self.sounds_label, 0, 0)
-        self.vgstream_layout.setRowStretch(0, 0)
-        for i, button in enumerate((self.hca_to_wav, self.wav_to_hca)): 
-            self.vgstream_layout.addWidget(button, i+1, 0)
-            self.vgstream_layout.setRowStretch(i+1, 0)
-        self.vgstream_widget.setLayout(self.vgstream_layout)
+        self.vgaudio_layout.addWidget(self.sounds_label, 0, 0)
+        self.vgaudio_layout.setRowStretch(0, 0)
+        for i, button in enumerate((self.wav_to_hca, self.wav_to_hca_looped)): 
+            self.vgaudio_layout.addWidget(button, i+1, 0)
+            self.vgaudio_layout.setRowStretch(i+1, 0)
+        self.vgaudio_widget.setLayout(self.vgaudio_layout)
         
         self.manualextract_layout.setRowStretch(0, 1)
         self.manualextract_layout.addWidget(self.dscstools_widget, 1, 0)
         self.manualextract_layout.addWidget(self.scripts_widget, 2, 0)
-        self.manualextract_layout.addWidget(self.vgstream_widget, 3, 0)
+        self.manualextract_layout.addWidget(self.vgaudio_widget, 3, 0)
         self.manualextract_layout.setRowStretch(4, 1)
         self.manualextract_widget.setLayout(self.manualextract_layout)
            
@@ -999,7 +999,9 @@ class uiExtractTab(QtWidgets.QScrollArea):
              extract_mdb1, pack_mdb1,
              extract_afs2, pack_afs2,
              extract_mbes, pack_mbes,
-             decompile_scripts, compile_scripts):
+             decompile_scripts, compile_scripts,
+             convert_hca_to_wav, convert_wav_to_hca,
+             convert_wav_to_hca_looped):
         for archive in self.data_mvgls:
             self.data_archive_extract_buttons[archive].clicked.connect(mbd1_dump_factory(archive))
         for archive in self.sound_mvgls:
@@ -1016,6 +1018,9 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.pack_mbes_button.clicked.connect(pack_mbes)
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
         self.compile_scripts_button.clicked.connect(compile_scripts)
+        self.hca_to_wav.clicked.connect(convert_hca_to_wav)
+        self.wav_to_hca.clicked.connect(convert_wav_to_hca)
+        self.wav_to_hca_looped.clicked.connect(convert_wav_to_hca_looped)
                 
     def enable(self):
         self.toggle_active(True)   
@@ -1040,6 +1045,9 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.pack_mbes_button.setEnabled(active)
         self.decompile_scripts_button.setEnabled(active)
         self.compile_scripts_button.setEnabled(active)
+        self.hca_to_wav.setEnabled(active)
+        self.wav_to_hca.setEnabled(active)
+        self.wav_to_hca_looped.setEnabled(active)
             
     def new_button(self, text, parentWidget):
         button = QtWidgets.QPushButton(text, parentWidget)
