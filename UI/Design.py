@@ -543,7 +543,7 @@ class uiActionTabs:
         self.actions.addTab(self.modInfoTab, "Mod Info")
         self.actions.addTab(self.configTab, "Configuration")
         self.actions.addTab(self.extractTab, "Extract")
-        self.actions.addTab(self.conflictsTab, "Conflicts")
+        #self.actions.addTab(self.conflictsTab, "Conflicts")
         
         self.layout.addWidget(self.actions, 0, 0)
         
@@ -556,7 +556,7 @@ class uiActionTabs:
         self.actions.setTabText(0, translate("UI::ModInfoTab", "Mod Info"))
         self.actions.setTabText(1, translate("UI::ModInfoTab", "Configuration"))
         self.actions.setTabText(2, translate("UI::ModInfoTab", "Extract"))
-        self.actions.setTabText(3, translate("UI::ModInfoTab", "Conflicts"))
+        #self.actions.setTabText(3, translate("UI::ModInfoTab", "Conflicts"))
         
     def hook(self, draw_conflicts_graph):
         self.actions.currentChanged.connect(draw_conflicts_graph)
