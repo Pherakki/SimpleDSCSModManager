@@ -1,0 +1,9 @@
+{
+  "definition":
+  {
+    "min": 10001,
+    "max": 20000,
+    "value": {"return": "{0}"}
+  },
+  "codes": {}
+}

@@ -3,11 +3,6 @@
   {
     "min": 1,
     "max": 65535,
-    "src": 
-    {
-      "file": "data/battle_bgm.mbe/bgm.csv",
-      "columns": [0]
-    },
     "value": {"return": "{0}"}
   },
   "codes":

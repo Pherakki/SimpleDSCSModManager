@@ -3,11 +3,6 @@
   {
     "min": 1,
     "max": 999,
-    "src": 
-    {
-      "file": "data/field_area_para_add.mbe/Field_List.csv",
-      "columns": [1]
-    },
     "value": {"return": "{0}"}
   },
   "codes":
