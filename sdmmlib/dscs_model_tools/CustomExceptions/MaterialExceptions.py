@@ -1,0 +1,2 @@
+class MissingShaderUniformError(ValueError):
+    pass
