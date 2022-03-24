@@ -83,3 +83,30 @@ class mberecord_append:
             
         build_data.csv_data = result
 
+class mberecord_remove:
+    overrides_all_previous = False
+    is_anchor = True
+    is_solitary = False
+    
+    group = "CSV"
+    
+    def __call__(self, build_data):
+        filepath        = build_data.source
+        result          = build_data.csv_data
+        id_len          = build_data.id_len
+        softcodes       = build_data.softcodes
+        softcode_lookup = build_data.softcode_lookup
+        encoding        = build_data.encoding
+        fill_value      = build_data.rule_args[0] if len(build_data.rule_args) else '0'
+        
+        header, data = mbetable_to_dict({}, filepath, id_len, softcodes, softcode_lookup, encoding)
+        
+        max_records = len(header) - id_len
+        for key, value in data.items():
+            remove_elems = data[key]
+            nonzero_data = [elem for elem in result.get(key, []) if (elem != fill_value) or (elem not in remove_elems)]
+            
+            nonzero_data.extend([fill_value]*(max_records - len(nonzero_data)))
+            result[key] = nonzero_data[:max_records]
+        
+        build_data.csv_data = result
