@@ -17,9 +17,10 @@ def mbetable_to_dict(result, filepath, id_size, softcodes, softcode_lookup, enco
                 
                 
         with open(working_fp, 'r', newline='', encoding=encoding) as F:
-            header = F.readline()
             csvreader = csv.reader(F, delimiter=',', quotechar='"')
-            for line in csvreader:
+            csvreader_data = iter(csvreader)
+            header = next(csvreader_data)
+            for line in csvreader_data:
                 data = line
                 # Might have to go careful that there are no duplicates
                 record_id = tuple(data[:id_size])
@@ -33,7 +34,7 @@ def mbetable_to_dict(result, filepath, id_size, softcodes, softcode_lookup, enco
 
 def dict_to_mbetable(filepath, header, result, encoding=default_encoding):
     with open(filepath, 'w', newline='', encoding=encoding) as F:
-        F.write(header)
         csvwriter = csv.writer(F, delimiter=',', quotechar='"')
+        csvwriter.writerow(header)
         for key, value in result.items():
             csvwriter.writerow(([*key, *value]))
