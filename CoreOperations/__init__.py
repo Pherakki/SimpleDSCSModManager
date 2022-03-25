@@ -2,7 +2,6 @@ import os
 import shutil
 import gc
 
-from PyQt5 import QtCore, QtWidgets
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from CoreOperations.BackupsManager import BackupsManager
@@ -314,7 +313,6 @@ class CoreOperations:
         
         script_ex.success.connect(lambda: self.main_window.ui.log(translate("CoreOps::LogMessage", "Extraction complete.")))
         script_ex.finished.connect(self.main_window.ui.enable_gui)
-        
         self.main_window.ui.disable_gui()
         mdb1_ex.execute()
         
