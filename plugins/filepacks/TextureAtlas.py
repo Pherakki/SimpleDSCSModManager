@@ -8,8 +8,7 @@ translate = QtCore.QCoreApplication.translate
 
 class TextureAtlasFilepack(BaseFilepack):
     __slots__ = ('file_target', 'build_pipeline', 'hash')
-    packgroup = "TextureAtlas"
-    groups = ("texture_atlas",)
+    filepack = "TextureAtlas"
     
     def __init__(self, pack_target):
         super().__init__()
