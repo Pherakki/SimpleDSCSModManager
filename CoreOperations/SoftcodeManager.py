@@ -97,6 +97,9 @@ class SoftcodeCategory:
             self.keys[key_name] = SoftcodeKey(self.generate_next_key(), self.definition.subcategory_defs, {})
         return self.keys[key_name]
     
+    def get_data_as_serialisable(self):
+        return {key_name: key.get_data_as_serialisable() for key_name, key in self.keys.items()}
+    
 class SoftcodeKey:
     chunk_delimiter = "|"
     kv_delimiter = "::"
