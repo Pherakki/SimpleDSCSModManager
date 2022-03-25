@@ -287,8 +287,11 @@ class CoreOperations:
     def extract_MDB1_from(self, archive_path, extract_contents):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for output path..."))
         extract_path = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder to unpack to:")))
-        if (extract_path == '' or extract_path == '.') or not os.path.isdir(extract_path):
+        if (extract_path == '' or extract_path == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(extract_path):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Output path is not a directory."))
             return
         
         mdb1_ex = self.dscstools.generateMDB1Extractor(self.main_window.threadpool, self, archive_path, extract_path, parent=self.main_window)
@@ -318,8 +321,11 @@ class CoreOperations:
     def extract_MDB1(self):
         self.main_window.ui.log("Asking for input path...")
         archive_path = os.path.normpath(QtWidgets.QFileDialog.getOpenFileName(self.main_window, translate("Common", "Select an MDB1 archive:"))[0])
-        if (archive_path == '' or archive_path == '.') or not os.path.isfile(archive_path):
+        if (archive_path == '' or archive_path == '.'):
             self.main_window.ui.log("Operation cancelled.")
+            return
+        if (not os.path.isfile(archive_path)):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a file."))
             return
         
         self.extract_MDB1_from(archive_path, extract_contents=False)
@@ -355,8 +361,11 @@ class CoreOperations:
     def extract_AFS2_from(self, archive_path):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for output path..."))
         extract_path = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder to unpack to:")))
-        if (extract_path == '' or extract_path == '.') or not os.path.isdir(extract_path):
+        if (extract_path == '' or extract_path == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(extract_path):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Output path is not a directory."))
             return
 
         extract_path = os.path.join(extract_path, os.path.split(archive_path)[1])
@@ -369,8 +378,11 @@ class CoreOperations:
     def extract_AFS2(self):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
         archive_path = os.path.normpath(QtWidgets.QFileDialog.getOpenFileName(self.main_window, translate("Common", "Select an AFS2 archive:"))[0])
-        if (archive_path == '' or archive_path == '.') or not os.path.isfile(archive_path):
+        if (archive_path == '' or archive_path == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if (not os.path.isfile(archive_path)):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a file."))
             return
         
         self.extract_AFS2_from(archive_path)
@@ -378,8 +390,12 @@ class CoreOperations:
     def pack_AFS2(self):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
         archive_path = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select an unpacked AFS2 archive:")))
-        if (archive_path == '' or archive_path == '.') or not os.path.isfile(archive_path):
+
+        if (archive_path == '' or archive_path == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(archive_path):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
             return
         
         thrd = ThreadRunner(self.main_window)
@@ -409,8 +425,11 @@ class CoreOperations:
     def extract_MBEs(self):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
         mbes_path = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing packed MBEs:")))
-        if (mbes_path == '' or mbes_path == '.') or not os.path.isdir(mbes_path):
+        if (mbes_path == '' or mbes_path == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(mbes_path):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
             return
         
         self.extract_MBEs_from(mbes_path)
@@ -428,8 +447,11 @@ class CoreOperations:
     def pack_MBEs(self):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
         mbes_path = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing unpacked MBEs:")))
-        if (mbes_path == '' or mbes_path == '.') or not os.path.isdir(mbes_path):
+        if (mbes_path == '' or mbes_path == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(mbes_path):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
             return
         
         self.pack_MBEs_from(mbes_path)
@@ -455,8 +477,11 @@ class CoreOperations:
     def extract_scripts(self):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
         script_folder = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing compiled scripts:")))
-        if (script_folder == '' or script_folder == '.') or not os.path.isdir(script_folder):
+        if (script_folder == '' or script_folder == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(script_folder):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
             return
         
         self.extract_scripts_from(script_folder)
@@ -474,8 +499,11 @@ class CoreOperations:
     def pack_scripts(self):
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
         script_folder = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing script source codes:")))
-        if (script_folder == '' or script_folder == '.') or not os.path.isdir(script_folder):
+        if (script_folder == '' or script_folder == '.'):
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(script_folder):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
             return
         
         self.pack_scripts_from(script_folder)
