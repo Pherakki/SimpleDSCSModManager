@@ -20,6 +20,7 @@ class LinkItem(QtWidgets.QWidget):
 
         self.label.openExternalLinks()
         self.label.linkActivated.connect(self.openLink)
+        self.label.setWordWrap(True)
         
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setContentsMargins(3, 0, 0, 0)
