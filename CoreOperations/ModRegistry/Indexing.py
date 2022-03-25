@@ -173,6 +173,16 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
     archives = archive_getter(filepath, contents)
     targets = targets_getter(filepath, contents, archives)
     rules = rules_getter(filepath, contents)
+
+    buildscript_targets = {}
+    if buildscript:
+        mod_path_sec = splitpath(filepath)[-3:]
+        for target, buildscript_pipeline in buildscript.target_dict.items():
+            for buildstep in buildscript_pipeline.buildsteps:
+                src = os.path.normpath(os.path.join(*mod_path_sec, buildstep.src_file))
+                if src not in buildscript_targets:
+                    buildscript_targets[src] = []
+                buildscript_targets[src].append(os.path.normpath(target))
     
     target_softcodes, all_target_softcodes = get_targets_softcodes({**targets, **buildscript_targets}, aliases)
 
