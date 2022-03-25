@@ -139,42 +139,42 @@
 <context>
     <name>BuildGraph</name>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="50"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="91"/>
         <source>Categorising install graph pipelines...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="108"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="156"/>
         <source>Located all mod indices.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="89"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="137"/>
         <source>Categorising install graph pipelines... Done. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="111"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="159"/>
         <source>Creating missing mod indices... </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="114"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="162"/>
         <source>Creating missing mod indices... Done. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="120"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="168"/>
         <source>{msg} [Regenerating index...]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="136"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="184"/>
         <source>Building install graph nodes... </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="169"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="218"/>
         <source>Building install graph nodes... Done. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -182,12 +182,12 @@
 <context>
     <name>BuildGraph::Debug</name>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="106"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="154"/>
         <source>---mod index message slot---</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="131"/>
+        <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="179"/>
         <source>---build graph message slot---</source>
         <translation type="unfinished"></translation>
     </message>
@@ -200,47 +200,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="354"/>
+        <location filename="../../CoreOperations/__init__.py" line="364"/>
         <source>Select a folder to unpack to:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="317"/>
+        <location filename="../../CoreOperations/__init__.py" line="321"/>
         <source>Select an MDB1 archive:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="326"/>
+        <location filename="../../CoreOperations/__init__.py" line="333"/>
         <source>Select an unpacked MDB1 archive:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="368"/>
+        <location filename="../../CoreOperations/__init__.py" line="381"/>
         <source>Select an AFS2 archive:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="377"/>
+        <location filename="../../CoreOperations/__init__.py" line="393"/>
         <source>Select an unpacked AFS2 archive:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="408"/>
+        <location filename="../../CoreOperations/__init__.py" line="428"/>
         <source>Select a folder containing packed MBEs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="427"/>
+        <location filename="../../CoreOperations/__init__.py" line="450"/>
         <source>Select a folder containing unpacked MBEs:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="454"/>
+        <location filename="../../CoreOperations/__init__.py" line="480"/>
         <source>Select a folder containing compiled scripts:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="473"/>
+        <location filename="../../CoreOperations/__init__.py" line="502"/>
         <source>Select a folder containing script source codes:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -264,27 +264,26 @@
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>Common::ListElementsSeparator</name>
     <message>
-        <location filename="../../UI/Design.py" line="187"/>
-        <source>, </source>
+        <location filename="../../CoreOperations/__init__.py" line="551"/>
+        <source>Select a folder containing HCA files:</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>Common::OkButton</name>
     <message>
-        <location filename="../../UI/CustomWidgets.py" line="237"/>
-        <source>Ok</source>
+        <location filename="../../CoreOperations/__init__.py" line="542"/>
+        <source>Select a folder containing WAV files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="590"/>
+        <source>Select a WAV file:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CoreOps::AddMod</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="65"/>
+        <location filename="../../CoreOperations/__init__.py" line="67"/>
         <source>Select a mod archive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -292,22 +291,22 @@
 <context>
     <name>CoreOps::ExceptionHandling</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="173"/>
+        <location filename="../../CoreOperations/__init__.py" line="175"/>
         <source>Exception handling changed to &quot;Log&quot; mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="176"/>
+        <location filename="../../CoreOperations/__init__.py" line="178"/>
         <source>Exception handling changed to &quot;CTD + Make Crashlog&quot; mode. Logs will be written to {filepath}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="194"/>
+        <location filename="../../CoreOperations/__init__.py" line="196"/>
         <source>UI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="194"/>
+        <location filename="../../CoreOperations/__init__.py" line="196"/>
         <source>CTD + Logfile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -315,7 +314,7 @@
 <context>
     <name>CoreOps::GameLaunch</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="71"/>
+        <location filename="../../CoreOperations/__init__.py" line="73"/>
         <source>Launching game...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -323,22 +322,22 @@
 <context>
     <name>CoreOps::GameLaunchPopup</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="181"/>
+        <location filename="../../CoreOperations/__init__.py" line="183"/>
         <source>Popup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="181"/>
+        <location filename="../../CoreOperations/__init__.py" line="183"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="186"/>
+        <location filename="../../CoreOperations/__init__.py" line="188"/>
         <source>Window blocking changed to &quot;Popup&quot; mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="189"/>
+        <location filename="../../CoreOperations/__init__.py" line="191"/>
         <source>Window blocking changed to &quot;Quit&quot; mode.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,75 +345,135 @@
 <context>
     <name>CoreOps::LogMessage</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="353"/>
+        <location filename="../../CoreOperations/__init__.py" line="550"/>
         <source>Asking for output path...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="475"/>
+        <location filename="../../CoreOperations/__init__.py" line="594"/>
         <source>Operation cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="309"/>
+        <location filename="../../CoreOperations/__init__.py" line="314"/>
         <source>Extraction complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="333"/>
+        <location filename="../../CoreOperations/__init__.py" line="343"/>
         <source>Packing MDB1 to {filepath}...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="335"/>
+        <location filename="../../CoreOperations/__init__.py" line="345"/>
         <source>Packing MDB1 to {filepath}... MDB1 packed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="361"/>
+        <location filename="../../CoreOperations/__init__.py" line="374"/>
         <source>Unpacking AFS2 to {filepath}...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="363"/>
+        <location filename="../../CoreOperations/__init__.py" line="376"/>
         <source>Extracting AFS2 to {filepath}... AFS2 extracted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="472"/>
+        <location filename="../../CoreOperations/__init__.py" line="589"/>
         <source>Asking for input path...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="384"/>
+        <location filename="../../CoreOperations/__init__.py" line="404"/>
         <source>Packing AFS2 to {filepath}...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="386"/>
+        <location filename="../../CoreOperations/__init__.py" line="406"/>
         <source>Packing AFS2 to {filepath}... AFS2 packed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="556"/>
+        <source>Output path is not a directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="597"/>
+        <source>Input path is not a file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="547"/>
+        <source>Input path is not a directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="535"/>
+        <source>Converting HCAs to WAVs into {filepath}...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="537"/>
+        <source>Converting HCAs to WAVs into {filepath}... Done.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="560"/>
+        <source>Converting WAVs to HCAs into {filepath}...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="562"/>
+        <source>Converting WAVs to HCAs into {filepath}... Done.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="606"/>
+        <source>No Start Sample provided, aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="609"/>
+        <source>No End Sample provided, aborting.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="612"/>
+        <source>Start Sample must be before the End Sample.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="618"/>
+        <source>Converting {in_filepath} to {out_filepath}...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/__init__.py" line="620"/>
+        <source>Converting {in_filepath} to {out_filepath}... Done.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CoreOps::PathFinding</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="215"/>
+        <location filename="../../CoreOperations/__init__.py" line="217"/>
         <source>Game not found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="210"/>
+        <location filename="../../CoreOperations/__init__.py" line="212"/>
         <source>Game resources were not found. Please select the game resources folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="215"/>
+        <location filename="../../CoreOperations/__init__.py" line="217"/>
         <source>Game resources were not found in the location {filepath}. Please select the game resources folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="221"/>
+        <location filename="../../CoreOperations/__init__.py" line="223"/>
         <source>Select your game location:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -422,47 +481,47 @@
 <context>
     <name>CoreOps::PurgeCache</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="101"/>
+        <location filename="../../CoreOperations/__init__.py" line="103"/>
         <source>Purging cache...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="114"/>
+        <location filename="../../CoreOperations/__init__.py" line="116"/>
         <source>Purging cache... purge complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="116"/>
+        <location filename="../../CoreOperations/__init__.py" line="118"/>
         <source>Purging cache... cached files purged, no index found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="118"/>
+        <location filename="../../CoreOperations/__init__.py" line="120"/>
         <source>Purging cache... index purged, no cached files found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="120"/>
+        <location filename="../../CoreOperations/__init__.py" line="122"/>
         <source>Purging cache... cache is already empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="130"/>
+        <location filename="../../CoreOperations/__init__.py" line="132"/>
         <source>Purging mod manager resources...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="135"/>
+        <location filename="../../CoreOperations/__init__.py" line="137"/>
         <source>Purging mod manager resources... purge complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="137"/>
+        <location filename="../../CoreOperations/__init__.py" line="139"/>
         <source>Purging mod manager resources... no resources to purge.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="156"/>
+        <location filename="../../CoreOperations/__init__.py" line="158"/>
         <source>Purging softcode cache... purge complete.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -470,22 +529,22 @@
 <context>
     <name>CoreOps::PurgeModIndices</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="78"/>
+        <location filename="../../CoreOperations/__init__.py" line="80"/>
         <source>Purging mod indices...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="81"/>
+        <location filename="../../CoreOperations/__init__.py" line="83"/>
         <source>Purging mod indices... no mods folder detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="90"/>
+        <location filename="../../CoreOperations/__init__.py" line="92"/>
         <source>Purging mod indices... purge complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="92"/>
+        <location filename="../../CoreOperations/__init__.py" line="94"/>
         <source>Purging mod indices... no indices found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -493,32 +552,32 @@
 <context>
     <name>CoreOps::PurgeSoftcodeCache</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="145"/>
+        <location filename="../../CoreOperations/__init__.py" line="147"/>
         <source>Purging softcode cache...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="146"/>
+        <location filename="../../CoreOperations/__init__.py" line="148"/>
         <source>Attempting to delete softcode cache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="146"/>
+        <location filename="../../CoreOperations/__init__.py" line="148"/>
         <source>Warning: you are attemtping to clear your softcode cache.&lt;br&gt;&lt;br&gt;&lt;b&gt;Do not proceed unless you know exactly what you are doing.&lt;/b&gt;&lt;br&gt;&lt;br&gt;This action is virtually guaranteed to break any existing savegames that use mods with softcodes. Do not proceed unless you have a very good reason.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="158"/>
+        <location filename="../../CoreOperations/__init__.py" line="160"/>
         <source>Purging softcode cache... softcode cache is already empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="165"/>
+        <location filename="../../CoreOperations/__init__.py" line="167"/>
         <source>Purging softcode cache... action cancelled by user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="167"/>
+        <location filename="../../CoreOperations/__init__.py" line="169"/>
         <source>Something has gone horribly wrong with the softcode warning box!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -526,17 +585,17 @@
 <context>
     <name>CoreOps::UninstallMods</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="50"/>
+        <location filename="../../CoreOperations/__init__.py" line="52"/>
         <source>Removing modded files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="53"/>
+        <location filename="../../CoreOperations/__init__.py" line="55"/>
         <source>Something is horribly wrong with the plugins path: {plugins_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="59"/>
+        <location filename="../../CoreOperations/__init__.py" line="61"/>
         <source>Vanilla files restored, plugins removed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -544,15 +603,20 @@
 <context>
     <name>Filepacks::3DModels</name>
     <message>
-        <location filename="../../plugins/filepacks/Model.py" line="40"/>
-        <source>Building model files</source>
+        <location filename="../../plugins/filepacks/Model.py" line="74"/>
+        <source>Building Model files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/filepacks/Model.py" line="78"/>
+        <source>Model files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Filepacks::CSV</name>
     <message>
-        <location filename="../../plugins/filepacks/CSV.py" line="50"/>
+        <location filename="../../plugins/filepacks/CSV.py" line="49"/>
         <source>Building CSV files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,32 +624,32 @@
 <context>
     <name>Filepacks::MBE</name>
     <message>
-        <location filename="../../plugins/filepacks/MBE.py" line="42"/>
+        <location filename="../../plugins/filepacks/MBE.py" line="41"/>
         <source>Input path {file} is not a file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/MBE.py" line="58"/>
+        <location filename="../../plugins/filepacks/MBE.py" line="57"/>
         <source>Attempted to pack a non-mbe path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/MBE.py" line="59"/>
+        <location filename="../../plugins/filepacks/MBE.py" line="58"/>
         <source>Error packing MBE: &apos;{mbe_path}&apos; is not a directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/MBE.py" line="60"/>
+        <location filename="../../plugins/filepacks/MBE.py" line="59"/>
         <source>Not all files in {mbe_path} are .csv files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/MBE.py" line="66"/>
+        <location filename="../../plugins/filepacks/MBE.py" line="65"/>
         <source>MBEs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/MBE.py" line="70"/>
+        <location filename="../../plugins/filepacks/MBE.py" line="69"/>
         <source>Building MBE tables</source>
         <translation type="unfinished"></translation>
     </message>
@@ -593,12 +657,12 @@
 <context>
     <name>Filepacks::Scripts</name>
     <message>
-        <location filename="../../plugins/filepacks/Script.py" line="54"/>
+        <location filename="../../plugins/filepacks/Script.py" line="53"/>
         <source>Building Squirrel source files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/Script.py" line="58"/>
+        <location filename="../../plugins/filepacks/Script.py" line="57"/>
         <source>scripts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,12 +670,12 @@
 <context>
     <name>Filepacks::TextureAtlas</name>
     <message>
-        <location filename="../../plugins/filepacks/TextureAtlas.py" line="36"/>
+        <location filename="../../plugins/filepacks/TextureAtlas.py" line="35"/>
         <source>texture atlases</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/filepacks/TextureAtlas.py" line="40"/>
+        <location filename="../../plugins/filepacks/TextureAtlas.py" line="39"/>
         <source>Extending texture atlases</source>
         <translation type="unfinished"></translation>
     </message>
@@ -619,7 +683,7 @@
 <context>
     <name>Filepacks::Unhandled</name>
     <message>
-        <location filename="../../CoreOperations/PluginLoaders/FilePacksPluginLoader.py" line="190"/>
+        <location filename="../../CoreOperations/PluginLoaders/FilePacksPluginLoader.py" line="189"/>
         <source>Building miscellaneous files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -627,13 +691,31 @@
 <context>
     <name>GameRunningPopup</name>
     <message>
-        <location filename="../../MainWindow.py" line="199"/>
+        <location filename="../../MainWindow.py" line="202"/>
         <source>Game Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../MainWindow.py" line="199"/>
+        <location filename="../../MainWindow.py" line="202"/>
         <source>The game is currently running. Click the button below to unlock the mod manager once the game has been quit.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Indexing</name>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/Indexing.py" line="162"/>
+        <source>Could not read ALIASES.json, error was &quot;{error_msg}&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/Indexing.py" line="172"/>
+        <source>Could not read BUILD.json, error was &quot;{error_msg}&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/Indexing.py" line="305"/>
+        <source>Unable to locate source file &apos;{filepath}&apos; referenced in BUILD.json.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -647,11 +729,6 @@
     <message>
         <location filename="../../MainWindow.py" line="41"/>
         <source>If you&apos;re encountering issues installing mods, remember to use SimpleDSCSModManager in a non-protected location (e.g. not Desktop, Documents, etc.) and run it in Admin mode.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../MainWindow.py" line="42"/>
-        <source>Script errors can be caused by your anti-virus program. If you encounter issues installing scripts, click &apos;Clear Cache&apos; and disable your AV when installing mods.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -679,6 +756,11 @@
         <source>Translation file for {language} was not found.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../MainWindow.py" line="42"/>
+        <source>Script patching errors can be caused by your anti-virus program. If this happens, you will need to use &quot;Purge Mod Cache&quot; and &quot;Purge Mod Resources&quot; before attempting again.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModInstall</name>
@@ -703,88 +785,98 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="17"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="18"/>
         <source>[Step {ratio}]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="59"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="65"/>
         <source>{curr_step_message} Generating build graph...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="88"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="143"/>
         <source>Looking for cached mod files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="150"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="205"/>
         <source>Looking for cached mod files... found {ratio} in cache.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="192"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="247"/>
         <source>{curr_step_msg} Checking required resources...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="234"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="289"/>
         <source>{curr_step_message} Checking required resources... found missing resources.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="244"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="299"/>
         <source>{curr_step_message} Checking required resources... no additional resources required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="281"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="336"/>
         <source>{curr_step_message} Creating modded assets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="309"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="364"/>
         <source>{curr_step_message} Creating modded assets... no files to build.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="447"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="505"/>
         <source>{curr_step_message} Installing mod files...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="494"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="554"/>
         <source>Mods successfully installed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="500"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="560"/>
         <source>[!] Preparing to install... [!]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="566"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="627"/>
         <source>[!] Starting mod installation... [!]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="335"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="390"/>
         <source>{curr_step_message} Sorting Field Guide...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="367"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="422"/>
         <source>{curr_step_message} Sorting Field Guide... sort complete.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="369"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="424"/>
         <source>{curr_step_message} Sorting Field Guide... no edits required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="56"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="62"/>
         <source>Installing {count} mods...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="59"/>
+        <source>No mods selected, nothing to install. Use &apos;Restore Backups&apos; if you want to remove all mods.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="459"/>
+        <source>ID {name_id} is not defined in charnames; did you remember to enter a 4-character ID code?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -799,47 +891,27 @@
 <context>
     <name>ModMetadataParsing</name>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="11"/>
-        <source>&apos;{metadata_item}&apos; Metadata error: Target {os.path.join(mod_path, target_path)} is not a subdirectory of {parent_path}!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="12"/>
-        <source>Cannot refer to parent paths in &apos;{metadata_item}&apos;: {target_path}.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="13"/>
-        <source>Cannot refer to drive paths in &apos;{metadata_item}&apos;: {target_path}.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="15"/>
-        <source>Cannot make absolute paths in &apos;{metadata_item}&apos;: {target_path}.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="33"/>
+        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="26"/>
         <source>&apos;Archive&apos; for file {file} was not a string: {archive}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="34"/>
+        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="27"/>
         <source>&apos;Archive&apos; for file {file} cannot be an AFS2 archive: {archive}&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="59"/>
+        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="56"/>
         <source>&apos;Targets&apos; for file {file} was not a list or string.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="64"/>
+        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="61"/>
         <source>Cannot refer to parent paths in TargetSub.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="89"/>
+        <location filename="../../CoreOperations/ModRegistry/ModFormatVersions.py" line="86"/>
         <source>&apos;Rule&apos; for file {file} was not a string.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -857,73 +929,147 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="79"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="81"/>
         <source>Attempting to register {mod_name}...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="135"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="137"/>
         <source>Did not register {mod_name}: wizard was cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="101"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="103"/>
         <source>{mod_name} is not in a recognised mod format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="182"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="184"/>
         <source>Error creating the registry wizard for {mod_name}: {error}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="107"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="109"/>
         <source>The mod manager encountered an unhandled error when attempting to register {mod_name}: {error}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="110"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="112"/>
         <source>The following error occured when trying to register {mod_name}: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="117"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="119"/>
         <source>Removed {mod_name}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="119"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="121"/>
         <source>The following error occured when trying to delete {mod_name}: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="149"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="151"/>
         <source>Successfully re-registered {mod_name}.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="152"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="154"/>
         <source>Registering mod...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="157"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="159"/>
         <source>The following error occured when trying to re-register {mod_name}: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="173"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="175"/>
         <source>An error occured when reading {mod_path}/METADATA.json: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="188"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="190"/>
         <source>An unhandled error occured when reading {mod_name} data: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="201"/>
+        <location filename="../../CoreOperations/ModRegistry/__init__.py" line="203"/>
         <source>An unknown error occured during mod detection: {error}</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ModRegistry::BuildScript</name>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="18"/>
+        <source>Regex Pattern is not a string, is type &apos;{0}&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="38"/>
+        <source>ModRegistry::BuildScript</source>
+        <comment>Range Variable is not a list, is type &apos;{0}&apos;.</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="41"/>
+        <source>Range Variable contains &apos;{0}&apos; entries, should contain 3 (Start, Stop, Step): {1}.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="56"/>
+        <source>Parent directory token {0} is not allowed in paths: &apos;{1}&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="72"/>
+        <source>&apos;Rules&apos; for Mod File &apos;{0}&apos; of Target File &apos;{1}&apos; is a list, but not all rules are strings: {2}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="76"/>
+        <source>&apos;Rules&apos; for Mod File &apos;{0}&apos; of Target File &apos;{1}&apos; is a dict, but not all rule pairs are strings: {2}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="79"/>
+        <source>&apos;Rules&apos; for Mod File &apos;{0}&apos; of Target File &apos;{1}&apos; is not a string, list, or dict: {2}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="95"/>
+        <source>File Target &apos;{0}&apos; produced more than once by Build Script entry &apos;{1}&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="98"/>
+        <source>File Target &apos;{0}&apos; already defined by Build Script entry &apos;{1}&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="110"/>
+        <source>Build Steps list for File Target &apos;{0}&apos; is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="120"/>
+        <source>Invalid type for Build Steps of Target File &apos;{0}&apos;: &apos;{1}&apos;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="160"/>
+        <source>Invalid argument list provided to Variable of type &apos;{0}&apos; in the Variables for File Target &apos;{1}&apos;; error was: {2}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="174"/>
+        <source>Encountered error when inserting Variables into File Target &apos;{0}&apos;; error was: {1}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="186"/>
+        <source>Encountered error when inserting Variables into Build Step Source File &apos;{0}&apos; for Target File &apos;{1}&apos;; error was: {2}</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -937,16 +1083,6 @@
     <message>
         <location filename="../../CoreOperations/PluginLoaders/ModInstallersPluginLoader.py" line="51"/>
         <source>Error parsing CYMIS INSTALL.JSON script: {msg}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/CymisWizard.py" line="26"/>
-        <source>Cymis Installer Wizard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/CymisWizard.py" line="38"/>
-        <source>Updating flag table.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1015,26 +1151,16 @@
         <source>Unrecognised installation condition type: {data_type}. Should be a string, dict, or not present.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../UI/CymisWizard.py" line="40"/>
-        <source>{flag_name} is now {_bool}.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/CymisWizard.py" line="86"/>
-        <source>Flipping {flag_name} to {_bool}.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PathManager</name>
     <message>
-        <location filename="../../CoreOperations/PathManager.py" line="58"/>
+        <location filename="../../CoreOperations/PathManager.py" line="56"/>
         <source>{path} does not exist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/PathManager.py" line="81"/>
+        <location filename="../../CoreOperations/PathManager.py" line="79"/>
         <source>{path} is not a subitem of {root}!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1069,6 +1195,14 @@
     <message>
         <location filename="../../CoreOperations/ProfileManager.py" line="85"/>
         <source>The following error occured when loading the profile {profile_name}: {error}</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SoftcodeManager</name>
+    <message>
+        <location filename="../../CoreOperations/SoftcodeManager.py" line="127"/>
+        <source>Softcode Category &quot;{category_name}&quot; does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1153,12 +1287,12 @@
 <context>
     <name>Tools::Scripts</name>
     <message>
-        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="43"/>
+        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="42"/>
         <source>{compile_or_decompile_verb} scripts from {filepath}... </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="57"/>
+        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="48"/>
         <source>{compile_or_decompile_verb} scripts from {filepath}... Done. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1166,7 +1300,7 @@
 <context>
     <name>Tools::Scripts::CompileVerb</name>
     <message>
-        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="105"/>
+        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="89"/>
         <source>Compiling</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1174,7 +1308,7 @@
 <context>
     <name>Tools::Scripts::Debug</name>
     <message>
-        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="83"/>
+        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="67"/>
         <source>---script extractor message---</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1182,206 +1316,8 @@
 <context>
     <name>Tools::Scripts::DecompileVerb</name>
     <message>
-        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="100"/>
+        <location filename="../../CoreOperations/Tools/DSCSToolsHandler/ScriptMultithreaded.py" line="84"/>
         <source>Decompiling</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::CrashMethodBox</name>
-    <message>
-        <location filename="../../UI/Design.py" line="717"/>
-        <source>Crash method: </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::Credits</name>
-    <message>
-        <location filename="../../UI/Design.py" line="174"/>
-        <source>Special Thanks</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="179"/>
-        <source>Bugtesting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="184"/>
-        <source>Translations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="172"/>
-        <source>The people on this list have all significantly contributed to SimpleDSCSModManager in some way. They have my deepest thanks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::Credts</name>
-    <message>
-        <location filename="../../UI/Design.py" line="170"/>
-        <source>Credits</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::DeleteProfileButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="281"/>
-        <source>Delete Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::ExtractTab</name>
-    <message>
-        <location filename="../../UI/Design.py" line="874"/>
-        <source>Auto-Extract Database Files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="888"/>
-        <source>Extract {item}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="878"/>
-        <source>Auto-Extract SFX Files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="882"/>
-        <source>Auto-Extract BGM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="886"/>
-        <source>Auto-Extract Voice Lines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="890"/>
-        <source>General Data Extraction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="891"/>
-        <source>Extract MDB1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="892"/>
-        <source>Pack MDB1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="893"/>
-        <source>Extract AFS2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="894"/>
-        <source>Pack AFS2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="895"/>
-        <source>Extract MBEs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="896"/>
-        <source>Pack MBEs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="898"/>
-        <source>Scripts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="899"/>
-        <source>Decompile scripts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="900"/>
-        <source>Compile scripts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="902"/>
-        <source>Sounds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="903"/>
-        <source>Convert HCA to WAV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="904"/>
-        <source>Convert WAV to HCA</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::FileMenu</name>
-    <message>
-        <location filename="../../UI/Design.py" line="150"/>
-        <source>Add Mod...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::GameLaunchMethodBox</name>
-    <message>
-        <location filename="../../UI/Design.py" line="718"/>
-        <source>Game launch method: </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::GameLocationLabel</name>
-    <message>
-        <location filename="../../UI/Design.py" line="709"/>
-        <source>Game Location: </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::HelpMenu</name>
-    <message>
-        <location filename="../../UI/Design.py" line="151"/>
-        <source>Support Digimon Game Research...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="152"/>
-        <source>Credits</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="153"/>
-        <source>About Qt</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::InstallModsButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="416"/>
-        <source>Install Mods</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::LaunchGameButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="417"/>
-        <source>Launch Game</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1404,195 +1340,10 @@
     </message>
 </context>
 <context>
-    <name>UI::MenuBar</name>
-    <message>
-        <location filename="../../UI/Design.py" line="147"/>
-        <source>&amp;File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="148"/>
-        <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="149"/>
-        <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::ModInfo</name>
-    <message>
-        <location filename="../../UI/Design.py" line="612"/>
-        <source>Mod Name: {string}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="613"/>
-        <source>Mod Folder: {string}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="614"/>
-        <source>Author(s): {string}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="615"/>
-        <source>Version: {string}</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::ModInfo::NoSelection</name>
-    <message>
-        <location filename="../../UI/Design.py" line="599"/>
-        <source>[None Selected]</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>UI::ModInfo::UnknownSelection</name>
     <message>
-        <location filename="../../CoreOperations/__init__.py" line="199"/>
+        <location filename="../../CoreOperations/__init__.py" line="201"/>
         <source>[Unknown]</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::ModInfoTab</name>
-    <message>
-        <location filename="../../UI/Design.py" line="536"/>
-        <source>Mod Info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="537"/>
-        <source>Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="538"/>
-        <source>Extract</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="539"/>
-        <source>Conflicts</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::ModRightClickMenu</name>
-    <message>
-        <location filename="../../UI/Design.py" line="345"/>
-        <source>Re-register...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="346"/>
-        <source>Delete Mod</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::ModsDisplay</name>
-    <message>
-        <location filename="../../UI/Design.py" line="344"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="344"/>
-        <source>Author</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="344"/>
-        <source>Version</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/Design.py" line="344"/>
-        <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::NewProfileButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="279"/>
-        <source>New Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::PurgeModCacheButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="714"/>
-        <source>Purge mod cache</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::PurgeModIndicesButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="713"/>
-        <source>Purge mod indices</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::PurgeResourcesButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="715"/>
-        <source>Purge mod resources</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::PurgeSoftcodes</name>
-    <message>
-        <location filename="../../UI/Design.py" line="712"/>
-        <source>Purge softcodes</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::RenameProfileButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="280"/>
-        <source>Rename Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::TriedToDeleteFinalProfilePopup</name>
-    <message>
-        <location filename="../../UI/CustomWidgets.py" line="233"/>
-        <source>Delete Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../UI/CustomWidgets.py" line="235"/>
-        <source>There is only one profile, will not delete.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::UninstallModsButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="418"/>
-        <source>Restore Backups</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UI::UpdateDSCSToolsButton</name>
-    <message>
-        <location filename="../../UI/Design.py" line="711"/>
-        <source>Update DSCSTools</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
