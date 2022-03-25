@@ -169,7 +169,10 @@ class MainWindow(QtWidgets.QMainWindow):
                                  self.ops.extract_MBEs,
                                  self.ops.pack_MBEs,
                                  self.ops.extract_scripts,
-                                 self.ops.pack_scripts)
+                                 self.ops.pack_scripts,
+                                 self.ops.convert_HCAs_to_WAVs,
+                                 self.ops.convert_WAVs_to_HCAs,
+                                 self.ops.convert_WAV_to_looped_HCA)
         self.ui.mods_display.model().itemChanged.connect(self.ops.profile_manager.save_profile)
         
         self.ui.createLanguageMenu(self.loadLanguageOptions())
