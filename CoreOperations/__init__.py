@@ -371,7 +371,7 @@ class CoreOperations:
             self.main_window.ui.log(translate("CoreOps::LogMessage", "Output path is not a directory."))
             return
 
-        extract_path = os.path.join(extract_path, os.path.split(archive_path)[1])
+        extract_path = os.path.join(extract_path, os.path.split(archive_path)[1].partition(os.path.extsep)[0])
         thrd = ThreadRunner(self.main_window)
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Unpacking AFS2 to {filepath}...").format(filepath=extract_path))
         self.main_window.ui.disable_gui()
