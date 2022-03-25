@@ -4,12 +4,11 @@ import os
 from CoreOperations.PluginLoaders.PluginLoad import load_sorted_plugins_in
 from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
 
-rules = get_rule_plugins()
 
 def get_patcher_plugins():
     plugin_dir = os.path.join('plugins', 'patchers')
     
-    return [patcher for patcher in [*load_sorted_plugins_in(plugin_dir, inspect.isclass), UncategorisedPatcher]]
+    return load_sorted_plugins_in(plugin_dir, lambda x: issubclass(x, BasePatcher) and type(x) != BasePatcher if inspect.isclass(x) else False)
 
 
 def get_patcher_plugins_dict():
