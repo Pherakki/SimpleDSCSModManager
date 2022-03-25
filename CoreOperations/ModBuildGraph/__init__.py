@@ -42,8 +42,46 @@ def get_interned_mod_index(path):
     with open(os.path.join(path, "INDEX.json"), 'r') as F:
         return json.load(F, object_hook=make_interned_buildstep)
 
+def trim_dead_nodes(build_pipeline, rules):
+    debug_n_thrown = 0
     
+    # Get rid of anything that is overwritten
+    steps = list(build_pipeline)[::-1]
+    for i, build_step in enumerate(steps):
+        rule = rules[build_step.rule]
+        if rule.overrides_all_previous:
+            build_pipeline = steps[:i+1][::-1]
+            debug_n_thrown += len(steps) - (i+1)
     
+    # Find the first build step that provides enough data to initialise the
+    # build, throw away anything that comes before
+    steps = list(build_pipeline)
+    for build_step in steps:
+        rule = rules[build_step.rule]
+        if rule.is_anchor: break
+        build_pipeline.pop(0)
+        debug_n_thrown += 1
+        
+    # Next check if any of the remaining rules are only allowed to exist if
+    # they are unique
+    n_discarded = 0
+    steps = list(build_pipeline)
+    n_steps = len(steps)
+    anchor_already_found = False
+    for i, build_step in enumerate(steps):
+        rule = rules[build_step.rule]
+        
+        if getattr(rule, "is_weak_anchor", False) and anchor_already_found:
+            steps.pop(i - n_discarded)
+            n_discarded += 1
+            
+        
+        anchor_already_found = anchor_already_found or rule.is_anchor
+            
+    debug_n_thrown += n_discarded
+    
+    return list(steps)
+
 def categorise_build_targets(build_graphs, ops, log, updateLog):
     filetypes = get_targettable_filetypes()
     filepacks = get_filepack_plugins_dict()
