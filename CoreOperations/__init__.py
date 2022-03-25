@@ -341,7 +341,7 @@ class CoreOperations:
         dst = archive_path + ".steam.mvgl"
         self.main_window.ui.log(translate("CoreOps::LogMessage", "Packing MDB1 to {filepath}...").format(filepath=dst))
         self.main_window.ui.disable_gui()
-        thrd.runInThread(self.main_window, lambda : self.logThreadedOperationComplete(translate("CoreOps::LogMessage", "Packing MDB1 to {filepath}... MDB1 packed.").format(filepath=dst)), DSCSTools.packMDB1, archive_path, dst, DSCSTools.CompressMode.normal, False)
+        thrd.runInThread(self.main_window, lambda : self.logThreadedOperationComplete(translate("CoreOps::LogMessage", "Packing MDB1 to {filepath}... MDB1 packed.").format(filepath=dst)), DSCSTools.packMDB1, archive_path, dst, DSCSTools.CompressMode.normal, True, False)
 
 
     ################
