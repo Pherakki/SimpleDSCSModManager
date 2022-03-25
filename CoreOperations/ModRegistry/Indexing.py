@@ -50,8 +50,6 @@ def index_mod_contents(modpath, filetypes):
             
     return retval, last_edit_time, paths_hash.hexdigest()
 
-def index_mod_softcodes(modpath, filetypes, mod_contents_index):
-    softcodable_filetypes = sorted(list(set([filetype.group for filetype in filetypes if getattr(filetype, "enable_softcodes", False)])))
 def register_softcode(softcode_list, all_softcodes, aliased_match, aliases, offset):
     match = find_softcode_alias(aliased_match, aliases)
     if match not in softcode_list:
@@ -65,25 +63,28 @@ def find_softcode_alias(match, aliases):
             return identity + match[len(alias):]
     return match
     
+def index_mod_softcodes(modpath, filetypes, mod_contents_index, aliases):
+    softcodable_filetypes = sorted(list(set([be.get_identifier() for filetype in filetypes for be in filetype.get_build_elements() if getattr(be, "enable_softcodes", False)])))
     softcodes = {}
     all_softcodes = set()
     for filetype in softcodable_filetypes:
         files = mod_contents_index[filetype]
         for file in files:
+
             file_softcodes = {}
             with open(file, 'rb') as F:
                 line = F.readline()
-                line_offset = F.tell()
+                line_offset = 0
                 while line:
                     for match in search_bytestring_for_softcodes(line):
                         code_offset = match.start() - 1
                         match = match.group(0)
                         print(match)
                         match = match.decode('utf8')
-                        if match not in file_softcodes:
-                            file_softcodes[match] = []
-                        file_softcodes[match].append(line_offset + code_offset)
-                        all_softcodes.add(match)
+                        register_softcode(file_softcodes, 
+                                          all_softcodes, 
+                                          match, aliases, 
+                                          line_offset + code_offset)
                     line_offset = F.tell()
                     line = F.readline()
             softcodes[file] = file_softcodes
@@ -106,9 +107,9 @@ def get_targets_softcodes(filetargets):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
     
-    contents_softcodes, all_softcodes = index_mod_softcodes(filepath, filetypes, contents)
 def build_index(config_path, filepath, filetypes, archive_getter, archive_from_path_getter, targets_getter, rules_getter, filepath_getter):
     contents, last_edit_time, contents_hash = index_mod_contents(filepath, filetypes)
+    contents_softcodes, all_softcodes = index_mod_softcodes(filepath, filetypes, contents, aliases)
     archives = archive_getter(filepath, contents)
     targets = targets_getter(filepath, contents, archives)
     rules = rules_getter(filepath, contents)
