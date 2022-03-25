@@ -8,8 +8,7 @@ translate = QtCore.QCoreApplication.translate
 
 class MBEFilepack(BaseFilepack):
     __slots__ = ('file_target', 'pack_target', 'build_pipeline', 'hash')
-    packgroup = "CSV"
-    groups = ("csv",)
+    filepack = "CSV"
     
     def __init__(self, pack_target):
         super().__init__()
