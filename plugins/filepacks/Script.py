@@ -14,8 +14,7 @@ translate = QtCore.QCoreApplication.translate
 
 class Script(BaseFilepack):
     __slots__ = ('file_target', 'pack_target', 'build_pipeline', 'hash')
-    packgroup = "Script"
-    groups = ("script_src", 'sqmod')
+    filepack = "Script"
     
     def __init__(self, pack_target):
         super().__init__()
@@ -29,7 +28,7 @@ class Script(BaseFilepack):
         self.build_pipeline = build_pipeline
         
     def get_source_filenames(self):
-        return (self.pack_target,)
+        return (os.path.splitext(self.file_target)[0] + ".nut",)
     
     def get_resource_targets(self):
         return (self.file_target,)
