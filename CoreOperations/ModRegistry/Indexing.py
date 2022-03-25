@@ -229,18 +229,32 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
             archive_index = archive_type_index[archive]
                 
             # Build File Target Level
-            for target in file_targets:
+            # Make an entry for each Target the source file builds to
+            for build_element in file_targets:
+                target = build_element.get_target(build_element.filepath)
                 new_target = filepath_getter(target, archive)
                 if new_target not in archive_index:
                     archive_index[new_target] = {"build_steps": []}
                     if target in target_softcodes:
                         archive_index[new_target]["softcodes"] = target_softcodes[target]
-                target_info = archive_index[new_target]["build_steps"]
-                
-                # Now build the index entry
-                path_elements = splitpath(file)
-                mod_path_sec = sys.intern(os.path.join(*path_elements[:3]))
-                file_path_sec = sys.intern(os.path.join(*path_elements[3:]))
+            
+            target_info = archive_index[new_target]["build_steps"]
+            
+            # Now build the index entry
+            path_elements = splitpath(file)
+            mod_path_sec = sys.intern(os.path.join(*path_elements[:3]))
+            file_path_sec = sys.intern(os.path.join(*path_elements[3:]))
+            entry = {mod_key: mod_path_sec, src_key: file_path_sec}
+            file_softcodes = contents_softcodes.get(file, {}) # {softcode_map[key]: value for key, value in contents_softcodes.get(file, {}).items()}
+            if len(file_softcodes):
+                entry[softcode_key] = file_softcodes
+
+            if file in rules:
+                entry[rule_key] = rules[file]
+            else:
+                entry[rule_key] = build_element.get_rule(file)
+            target_info.append(entry)
+       
                 entry = {mod_key: mod_path_sec, src_key: file_path_sec}
                 file_softcodes = contents_softcodes.get(file, {}) # {softcode_map[key]: value for key, value in contents_softcodes.get(file, {}).items()}
                 if len(file_softcodes):
