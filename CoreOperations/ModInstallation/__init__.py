@@ -79,6 +79,23 @@ class BuildGraphRunner(QtCore.QObject):
         except Exception as e:
             self.raise_exception.emit(e)
 
+    def get_blocking_hardcodes(self, build_graphs):
+        pass
+        # path = os.path.join("data", "shop_para.mbe", "shop.csv")
+        
+        # # Need to figure out how to find this path
+        # pack_for_path = build_graphs["MDB1"]["DSDBP"].build_graph["MBE"][os.path.join("data", "shop_para.mbe")]
+        
+        # idx = pack_for_path.get_file_targets().index(path)
+        # build_pipeline = pack_for_path.get_build_pipelines()[idx]["build_steps"]
+        
+        # # Here, need to get the values out of the file
+        
+        # for buildstep in build_pipeline:
+        #     print(buildstep.src)
+        
+        # assert 0
+
     def process_graph(self, build_graphs, softcode_lookup):
         self.sendLog(translate("ModInstall", "Looking for cached mod files..."))
         
