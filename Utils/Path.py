@@ -1,3 +1,4 @@
+import hashlib
 import os
 from PyQt5 import QtCore
 
@@ -7,13 +8,21 @@ def splitpath(path):
     return os.path.normpath(path).split(os.path.sep)
 
 
-def calc_most_recent_file_edit_time(path):
+def calc_has_dir_changed_info(path):
     max_time = 0
+    contents_hash = hashlib.sha256()
     for root, subdirs, files in os.walk(path):
         for file in files:
             path = os.path.join(root, file)
             max_time = max([os.path.getmtime(path), max_time])
-    return max_time
+            contents_hash.update(path.encode("utf8"))
+
+    bonus_files = ["METADATA.json", "BUILD.json", "ALIASES.json"]
+    for file in bonus_files:
+        filepath = os.path.join(path, file)
+        if os.path.exists(filepath):
+            max_time = max([os.path.getmtime(filepath), max_time])
+    return max_time, contents_hash.hexdigest()
 
 def path_is_parent(parent_path, child_path):
     """https://stackoverflow.com/a/37095733"""

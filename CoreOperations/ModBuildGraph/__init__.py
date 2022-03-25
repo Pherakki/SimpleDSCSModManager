@@ -9,7 +9,7 @@ from CoreOperations.ModBuildGraph.graphHash import hashFilepack
 from CoreOperations.PluginLoaders.FiletypesPluginLoader import get_filetype_plugins
 from CoreOperations.PluginLoaders.ArchivesPluginLoader import get_archivetype_plugins_dict
 from CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins, get_filetype_to_filepack_plugins_map
-from Utils.Path import calc_most_recent_file_edit_time
+from Utils.Path import calc_has_dir_changed_info
 
 
 translate = QtCore.QCoreApplication.translate
@@ -114,9 +114,9 @@ class ModBuildGraphCreator:
             updateLog(translate("BuildGraph", "Creating missing mod indices... Done. ") + f"[{i+1}/{n_missing_mods}]")
             
     def regenerate_index_if_out_of_date(self, index, path, updateLog, msg):
-        latest_edit_time = calc_most_recent_file_edit_time(os.path.join(path, "modfiles"))
 
         if latest_edit_time != index["last_edit_time"]:
+        latest_edit_time, contents_hash = calc_has_dir_changed_info(os.path.relpath(os.path.join(path, "modfiles")))
             updateLog(translate("BuildGraph", "{msg} [Regenerating index...]").format(msg=msg))
             self.ops.mod_registry.save_index(path, self.ops.mod_registry.index_mod(path))
             return get_interned_mod_index(path)
