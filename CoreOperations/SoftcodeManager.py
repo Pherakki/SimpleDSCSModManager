@@ -146,6 +146,13 @@ class SoftcodeManager(SoftcodeKey):
         self.paths = paths
         self.category_defs = []
         super().__init__(None, self.category_defs, {})
+        
+    
+    def load_softcode_data(self):
+        # Variables
+        self.category_defs.append(SoftcodeListVariableCategory.definition)
+        self.subcategories[sys.intern("VarLists")] = SoftcodeListVariableCategory()
+        
         for file in os.listdir(self.paths.softcodes_loc):
             self.load_subcategory_from_json(file)
     
