@@ -37,6 +37,14 @@ class BaseFiletype:
     def get_build_elements(cls):
         return cls.build_elements
         
+class BaseBuildElement:
+    __slots__ = ("filepath",)
+    
+    rule_index = 0
+    
+    def __init__(self, filepath):
+        self.filepath = filepath
+    
     @staticmethod
     def get_target(filepath):
         raise NotImplementedError()
