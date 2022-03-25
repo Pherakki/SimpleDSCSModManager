@@ -29,6 +29,10 @@ class ModFormatVersion1:
         return out
 
     @staticmethod
+    def get_archive_from_path(path, a, b):
+        return ("MDB1", "DSDBP")
+
+    @staticmethod
     def get_targets(modpath, contents, archives):
         modpath_rel = os.path.join(*splitpath(modpath)[-3:])
         out = {}
@@ -89,13 +93,13 @@ class ModFormatVersion1:
     
 class ModFormatVersion2(ModFormatVersion1):
     version = 2
+    default_mdb1s = {'DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP',
+             'DSDBse', 'DSDBPse'}
+    default_afs2 = {'DSDBbgm', 'DSDBPDSEbgm', 'DSDBvo', 'DSDBPvo', 'DSDBPvous'}
     
     @staticmethod
     def get_archives( modpath, contents):
         out = {}
-        default_mdb1s = {'DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP',
-                 'DSDBse', 'DSDBPse'}
-        default_afs2 = {'DSDBbgm', 'DSDBPDSEbgm', 'DSDBvo', 'DSDBPvo', 'DSDBPvous'}
 
         with open(os.path.split(modpath)[0] + os.sep + "METADATA.json", 'r') as F:
             metadata = json.load(F)
@@ -105,24 +109,29 @@ class ModFormatVersion2(ModFormatVersion1):
         
         for filetype in contents:
             for file in contents[filetype]:
-                splitpoint = 4
-                splitpath = file.split(os.sep, splitpoint) # mods / name / filetype / archive
-                
-                # Find the name of what might be a folder containing the file
-                archive = splitpath[splitpoint-1]
-                
-                # Match that up to an archive type
-                if    archive in default_mdb1s or archive in mod_MDB1s: archive_type = "MDB1"
-                elif  archive in default_afs2  or archive in mod_AFS2s: archive_type = "AFS2"
-                else:                                                   archive_type = None
-                
-                # Return the archive classification and archive name
-                if archive_type is not None: out[file] = (archive_type, splitpath[splitpoint-1])
-                else:                        out[file] = ("LooseFiles", "loose")
+                out[file] = ModFormatVersion2.get_archive_from_path(file, mod_MDB1s, mod_AFS2s)
         return out
     
     @staticmethod
+    def get_archive_from_path(file, mod_MDB1s, mod_AFS2s):
+        splitpoint = 4
+        splitpath = file.split(os.sep, splitpoint) # mods / name / filetype / archive
+        
+        # Find the name of what might be a folder containing the file
+        archive = splitpath[splitpoint-1]
+        
+        # Match that up to an archive type
+        if    archive in ModFormatVersion2.default_mdb1s or archive in mod_MDB1s: archive_type = "MDB1"
+        elif  archive in ModFormatVersion2.default_afs2  or archive in mod_AFS2s: archive_type = "AFS2"
+        else:                                                                     archive_type = None
+        
+        # Return the archive classification and archive name
+        if archive_type is not None: return (archive_type, splitpath[splitpoint-1])
+        else:                        return ("LooseFiles", "loose")
+    
+    @staticmethod
     def get_filepath(filepath, archive):
+        # Cuts off the Archive folder from the filepath if the Archive name is not 'loose'
         if archive == "loose":
             return filepath
         else:
