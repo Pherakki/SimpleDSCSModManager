@@ -27,8 +27,7 @@ class PathManager:
         self.__profiles_loc            = self.__clean_path(os.path.join(modmanager_directory, "profiles"))
         self.__resources_loc           = self.__clean_path(os.path.join(modmanager_directory, "resources"))
         self.__softcodes_loc           = self.__clean_path(os.path.join(modmanager_directory, "softcodes"))
-        self.__compiler_loc            = self.__clean_path(os.path.join(modmanager_directory, "tools", "squirrel"))
-
+        
         self.__patch_build_loc         = self.__clean_path(os.path.join(self.__output_loc, "build"))
         self.__patch_cache_loc         = self.__clean_path(os.path.join(self.__output_loc, "cache"))
         self.__softcode_cache_loc      = self.__clean_path(os.path.join(self.__output_loc, "softcode_cache"))
@@ -44,7 +43,6 @@ class PathManager:
         os.makedirs(self.__profiles_loc, exist_ok=True)
         os.makedirs(self.__resources_loc, exist_ok=True)
         os.makedirs(self.__softcodes_loc, exist_ok=True)
-        os.makedirs(self.__compiler_loc, exist_ok=True)
         
         os.makedirs(self.__patch_build_loc, exist_ok=True)
         os.makedirs(self.__patch_cache_loc, exist_ok=True)
@@ -92,10 +90,6 @@ class PathManager:
     @property
     def config_loc(self):
         return self.__safe_path_return(self.__config_loc, self.mm_root)
-    
-    @property
-    def compiler_loc(self):
-        return self.__safe_path_return(self.__compiler_loc, self.mm_root)
         
     @property
     def logs_loc(self):
