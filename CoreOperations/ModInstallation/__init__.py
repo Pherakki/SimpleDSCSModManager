@@ -7,6 +7,7 @@ from PyQt5 import QtCore
 from CoreOperations.ModBuildGraph import ModBuildGraphCreator
 from CoreOperations.ModBuildGraph.graphHash import hashFilepack
 from CoreOperations.ModInstallation.PipelineRunners import ArchivePipelineCollection
+from CoreOperations.ModInstallation.VariableParser import parse_mod_variables, scan_variables_for_softcodes
 from CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict
 from sdmmlib.dscstools import DSCSTools
 from Utils.MBE import mbetable_to_dict, dict_to_mbetable
