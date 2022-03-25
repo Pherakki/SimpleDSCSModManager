@@ -10,8 +10,8 @@ from PyQt5 import QtCore, QtWidgets
 
 from MainWindow import MainWindow
 
-
 translate = QtCore.QCoreApplication.translate
+
 
 def get_issue_tracker():
     return translate("Application", "{hyperlink_open}issue tracker{hyperlink_close}").format(hyperlink_open="<a href=\"https://github.com/Pherakki/SimpleDSCSModManager/issues\">", hyperlink_close="</a>")
@@ -109,7 +109,7 @@ def CTD_popup(e, tb=None):
 
     msgBox = QtWidgets.QMessageBox(QtWidgets.QMessageBox.Question, 
                                    translate("Application::FatalErrorPopup", "Fatal Error"), 
-                                   translate("Application::FatalErrorPopup", "SimpleDSCSModManager has encounted an issue and needs to close. The error is:<br><br>{error_message}<br><br>Please check whether this bug is already an open issue at the {issue_tracker}, and if not, open a new issue. Please include your crashlog.txt (found in the logs folder of SimpleDSCSModManager), and the <b><i>precise</i></b> step-by-step instructions required to reproduce the issue, alongside as much information as you can provide that may be relevant, including installed mods, and anything you have tried that <i>e.g.</i> prevents the bug or changes what happens. The more detail you can include, the easier it is to fix.").format(error_message=e, issue_tracker=get_issue_tracker), buttons, None)
+                                   translate("Application::FatalErrorPopup", "SimpleDSCSModManager has encounted an issue and needs to close. The error is:<br><br>{error_message}<br><br>Please check whether this bug is already an open issue at the {issue_tracker}, and if not, open a new issue. Please include your crashlog.txt (found in the logs folder of SimpleDSCSModManager), and the <b><i>precise</i></b> step-by-step instructions required to reproduce the issue, alongside as much information as you can provide that may be relevant, including installed mods, and anything you have tried that <i>e.g.</i> prevents the bug or changes what happens. The more detail you can include, the easier it is to fix.").format(error_message=e, issue_tracker=get_issue_tracker()), buttons, None)
     msgBox.setTextInteractionFlags(QtCore.Qt.TextSelectableByMouse | QtCore.Qt.LinksAccessibleByMouse)
     msgBox.setTextFormat(QtCore.Qt.RichText)
     msgBox.exec_()
