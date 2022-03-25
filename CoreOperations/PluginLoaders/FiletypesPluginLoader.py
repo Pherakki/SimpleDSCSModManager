@@ -60,6 +60,14 @@ class BaseBuildElement:
 class UnhandledFiletype(BaseFiletype):
     group = 'other'
     default_rule = 'overwrite'
+        
+    @classmethod
+    def get_filetype_cls(cls):
+        raise NotImplementedError()
+    
+    @classmethod
+    def get_identifier(cls):
+        return (cls.get_filetype_cls().filetype_id, cls.build_element_id)
     
     @staticmethod
     def checkIfMatch(path, filename):
