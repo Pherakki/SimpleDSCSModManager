@@ -6,9 +6,10 @@ import sys
 from PyQt5 import QtCore
 
 from CoreOperations.ModBuildGraph.graphHash import hashFilepack
-from CoreOperations.PluginLoaders.FiletypesPluginLoader import get_filetype_plugins
+from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from CoreOperations.PluginLoaders.FiletypesPluginLoader import get_targettable_filetypes
 from CoreOperations.PluginLoaders.ArchivesPluginLoader import get_archivetype_plugins_dict
-from CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins, get_filetype_to_filepack_plugins_map
+from CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict, get_filetype_to_filepack_plugins_map
 from Utils.Path import calc_has_dir_changed_info
 
 
