@@ -33,6 +33,10 @@ class BaseFiletype:
     def checkIfMatch(path, filename):
         raise NotImplementedError()
     
+    @classmethod
+    def get_build_elements(cls):
+        return cls.build_elements
+        
     @staticmethod
     def get_target(filepath):
         raise NotImplementedError()
