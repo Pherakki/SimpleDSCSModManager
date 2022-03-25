@@ -195,7 +195,8 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
     rule_key = sys.intern("rule")
     rule_args_key = sys.intern("rule_args")
         
-    
+    include_autorequests(config_path, contents, archives)
+
     # Do a pass over the contents of the file to figure out how they should
     # be categorised
     index = {}
