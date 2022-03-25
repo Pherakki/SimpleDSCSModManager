@@ -193,6 +193,7 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
     src_key = sys.intern("src")
     softcode_key = sys.intern("softcodes")
     rule_key = sys.intern("rule")
+    rule_args_key = sys.intern("rule_args")
         
     filetype_map = {f.group : f for f in filetypes}
     
