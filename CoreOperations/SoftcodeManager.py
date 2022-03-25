@@ -156,6 +156,9 @@ class SoftcodeManager(SoftcodeKey):
         for file in os.listdir(self.paths.softcodes_loc):
             self.load_subcategory_from_json(file)
     
+        
+    def unload_softcode_data(self):
+        self.subcategories = {}
     
     def add_subcategory(self, subcategory, data):
         self.category_defs.append(subcategory)
