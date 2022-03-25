@@ -27,6 +27,7 @@ class BuildGraphRunner(QtCore.QObject):
     sendBuildGraphs = QtCore.pyqtSignal(dict)
     sendSoftcodes = QtCore.pyqtSignal(dict)
     raise_exception = QtCore.pyqtSignal(Exception)
+    early_exit = QtCore.pyqtSignal()
     
     def __init__(self, ops, parent=None):
         super().__init__(None)
@@ -48,6 +49,10 @@ class BuildGraphRunner(QtCore.QObject):
         try:
             # Get all mods to be installed
             active_mods = self.ops.profile_manager.get_active_mods()
+            if not len(active_mods):
+                self.log.emit(translate("ModInstall", "No mods selected, nothing to install. Use \'Restore Backups\' if you want to remove all mods."))
+                self.early_exit.emit()
+                return
             self.log.emit(translate("ModInstall", "Installing {count} mods...").format(count=len(active_mods)))
             for mod in active_mods:
                 self.log.emit(f"> {mod.name}")
@@ -524,6 +529,7 @@ class ModInstaller(QtCore.QObject):
             self.build_graph_runner.init_signals(self.ui)
             self.build_graph_runner.raise_exception.connect(self.raise_exception.emit)
             self.build_graph_runner.finished.connect(self.build_graph_runner.deleteLater)
+            self.build_graph_runner.early_exit.connect(self.finished.emit)
             installer_steps.append(self.build_graph_runner)
             
             # Another step: resolve softcodes + other IDs?
