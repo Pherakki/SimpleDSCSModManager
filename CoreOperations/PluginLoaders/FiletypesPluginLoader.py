@@ -14,6 +14,8 @@ def get_build_element_plugins():
     
     return [*load_sorted_plugins_in(plugin_dir, lambda x: issubclass(x, BaseBuildElement) if inspect.isclass(x) else False), UnhandledFiletypeBuildElement]
 
+def get_targettable_filetypes():
+    return [plugin for plugin in get_filetype_plugins() if hasattr(plugin, "filepack")]
 
 def get_type_of_file(path, filename):
     for plugin in get_filetype_plugins():
