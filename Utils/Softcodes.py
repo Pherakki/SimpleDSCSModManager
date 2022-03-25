@@ -7,8 +7,7 @@ def replace_softcodes(text_bytes, text_softcodes, softcode_lookup):
         all_replacements = []
         for match, offsets in text_softcodes.items():
             value = softcode_lookup[match]
-            softcode_length = len(match) + 2 # For [ and ]
-            for offset in offsets:
+            for offset, softcode_length in offsets:
                 all_replacements.append((offset, value, softcode_length))
         all_replacements = sorted(all_replacements, key=lambda x : x[0])
         
