@@ -28,6 +28,12 @@ class SoftcodeCategoryDefinition:
         
         return cls(name, dct["min"], dct["max"], dct["value"], dct.get("methods", {}), subcategory_defs)
 
+    def get_category_sources(self, *names):
+        out = {}
+        out[self.name] = self.src
+        for subcat in self.subcategory_defs:
+            out.update(subcat.get_category_sources())
+        
     def call_formatting_func(self, func_def_dict, value, parent_value):
         # Handle other vars
         arglist = [None]*(len(func_def_dict))
