@@ -19,23 +19,36 @@ def make_buildgraph_path(filepath):
 
 def index_mod_contents(modpath, filetypes):
     last_edit_time = 0
-    retval = {filetype.group: {} for filetype in filetypes}
+    paths_hash = hashlib.sha256()
+    
+    retval = {be.get_identifier(): {} for filetype in filetypes for be in filetype.get_build_elements()}
+
     for path, directories, files in os.walk(os.path.relpath(modpath)):
         for file in files:
+            filepath = os.path.join(path, file)
+            truncated_path = make_buildgraph_path(filepath)
+            paths_hash.update(filepath.encode("utf8"))
             for filetype in filetypes:
-                category = filetype.group
                 if filetype.checkIfMatch(path, file):
-                    filepath = os.path.join(path, file)
                     last_edit_time = max([os.path.getmtime(filepath), last_edit_time])
-                    try:
-                        retval[category][filepath] = filetype.get_target(os.path.join(*splitpath(filepath)[3:]))
-                    except Exception as e:
-                        raise IndexFileException(e.__str__(), filepath)
+                    
+                    for be in filetype.get_build_elements():
+                        category = be.get_identifier()
+                        try:
+                            retval[category][filepath] = be(truncated_path)
+                            
+                        except Exception as e:
+                            raise IndexFileException(e.__str__(), filepath)
                     break
                 
+    bonus_files = ["METADATA.json", "BUILD.json", "ALIASES.json"]
+    for file in bonus_files:
+        filepath = os.path.join(modpath, file)
+        if os.path.exists(filepath):
+            last_edit_time = max([os.path.getmtime(filepath), last_edit_time])
+                
             
-    return retval, last_edit_time
-
+    return retval, last_edit_time, paths_hash.hexdigest()
 
 def index_mod_softcodes(modpath, filetypes, mod_contents_index):
     softcodable_filetypes = sorted(list(set([filetype.group for filetype in filetypes if getattr(filetype, "enable_softcodes", False)])))
@@ -80,9 +93,9 @@ def get_targets_softcodes(filetargets):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
     
-    contents, last_edit_time = index_mod_contents(filepath, filetypes)
     contents_softcodes, all_softcodes = index_mod_softcodes(filepath, filetypes, contents)
 def build_index(config_path, filepath, filetypes, archive_getter, archive_from_path_getter, targets_getter, rules_getter, filepath_getter):
+    contents, last_edit_time, contents_hash = index_mod_contents(filepath, filetypes)
     archives = archive_getter(filepath, contents)
     targets = targets_getter(filepath, contents, archives)
     rules = rules_getter(filepath, contents)
