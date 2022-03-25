@@ -20,6 +20,9 @@ def get_type_of_file(path, filename):
         if plugin.checkIfMatch(path, filename):
             return plugin
     return None
+def get_build_element_plugins_dict():
+    return {plugin.get_identifier(): plugin for plugin in get_build_element_plugins()}
+
         
 class BaseFiletype:
     __slots__ = tuple()
