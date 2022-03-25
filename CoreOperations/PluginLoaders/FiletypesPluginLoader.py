@@ -22,6 +22,8 @@ def get_type_of_file(path, filename):
     return None
         
 class BaseFiletype:
+    __slots__ = tuple()
+    
     @staticmethod
     def checkIfMatch(path, filename):
         raise NotImplementedError()
