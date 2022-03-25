@@ -58,6 +58,13 @@ def register_softcode(softcode_list, all_softcodes, aliased_match, aliases, offs
         softcode_list[match] = []
     softcode_list[match].append([offset, len(aliased_match) + 2]) # + 2 For [ and ]
     all_softcodes.add(match)
+    
+def find_softcode_alias(match, aliases):
+    for alias, identity in aliases.items():
+        if match[:len(alias)] == alias:
+            return identity + match[len(alias):]
+    return match
+    
     softcodes = {}
     all_softcodes = set()
     for filetype in softcodable_filetypes:
