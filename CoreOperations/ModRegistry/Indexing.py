@@ -227,7 +227,7 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
             if archive not in archive_type_index:
                 archive_type_index[archive] = {}
             archive_index = archive_type_index[archive]
-                
+            
             # Build File Target Level
             # Make an entry for each Target the source file builds to
             for build_element in file_targets:
@@ -255,16 +255,58 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
                 entry[rule_key] = build_element.get_rule(file)
             target_info.append(entry)
        
+    # Now add in the buildscript
+    if buildscript:
+        mod_path_sec = os.path.join(*splitpath(filepath)[-3:])
+        for target, build_pipeline in buildscript.target_dict.items():
+            target = os.path.normpath(target)
+            full_target = os.path.join(mod_path_sec, os.path.normpath(target))
+            archive_type, archive = archive_from_path_getter(full_target, {}, {})
+            
+            # Build Archive Type Level
+            if archive_type not in index:
+                index[archive_type] = {}
+            archive_type_index = index[archive_type]
+            
+            # Build Archive Level
+            if archive not in archive_type_index:
+                archive_type_index[archive] = {}
+            archive_index = archive_type_index[archive]
+            
+            new_target = filepath_getter(target, archive)
+            archive_index[new_target] = {"build_steps": []}
+            
+            build_data = archive_index[new_target]["build_steps"]
+            
+            
+            for buildstep in build_pipeline.buildsteps:
+                file_path_sec = os.path.normpath(buildstep.src_file)
+                file = os.path.join(mod_path_sec, file_path_sec)
                 entry = {mod_key: mod_path_sec, src_key: file_path_sec}
-                file_softcodes = contents_softcodes.get(file, {}) # {softcode_map[key]: value for key, value in contents_softcodes.get(file, {}).items()}
+                file_softcodes = contents_softcodes.get(file, {})
+                
                 if len(file_softcodes):
                     entry[softcode_key] = file_softcodes
-                if file in rules:
-                    entry[rule_key] = rules[file]
+                    
+                if buildstep.rules:
+                    entry[rule_key] = buildstep.rules[0]
                 else:
-                    entry[rule_key] = filetype_map[filetype].get_rule(file)
-                target_info.append(entry)
-
+                    build_element = None
+                    for filetype in contents:
+                        if file in contents[filetype]:
+                            build_element = contents[filetype][file]
+                            break
+                    if not build_element:
+                        raise Exception(translate("Indexing", "Unable to locate source file \'{filepath}\' referenced in BUILD.json.").format(filepath=file_path_sec))
+                    entry[rule_key] = build_element.get_rule(file)
+                build_data.append(entry)
+                
+                if buildstep.rule_args:
+                    entry[rule_args_key] = buildstep.rule_args[0]
+                
+            if target in target_softcodes:
+                archive_index[new_target]["softcodes"] = target_softcodes[target]
+                
     # Cull the index of any empty groups... makes it a bit smaller on disk
     # and in memory
     # Since these groups are mostly added dynamically inside the main indexing
