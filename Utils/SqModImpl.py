@@ -1,4 +1,5 @@
 # Could include a "limit_to" term here to limit operations to a single scope
+import re
 
 ####################
 # PARSER UTILITIES #
@@ -41,6 +42,32 @@ def parse_and_replace_arg(arg, function_arg_map):
     for item, value in function_arg_map.items():
         arg.replace(item, value)
     return arg
+
+
+function_start_pattern = re.compile(r"\s*function\s(.*)\s*\(")
+
+def get_end_of_scope(s):
+    idx = 0
+    scope = 0
+    
+    for char in s:
+        if char == '{':
+            break
+        else:
+            idx += 1
+            
+    for char in s[idx:]:
+        if char == '{':
+            scope += 1
+        elif char == '}':
+            scope -= 1
+        
+        if scope == 0:
+            return idx
+        
+        idx += 1
+    return -1
+
    
 #################
 # MODIFICATIONS #
@@ -123,10 +150,76 @@ def replace_call_in_funcs(source_code, kwargs):
             source_code_lines[i] = line[:start_pos] + new_function_call + ", ".join(new_fn_args) + ");"
     return "\n".join(source_code_lines)
 
+def extend_function(source_code, kwargs):
+    func_name = kwargs["extend_function"]
+    add_text  = kwargs["with"]
+    
+    all_matches = function_start_pattern.finditer(source_code)
+    out_code = ""
+    last_copy_point = 0
+    try:
+        curr_match = next(all_matches)
+    except StopIteration:
+        return source_code
+            
+    for next_match in all_matches:
+        if curr_match.group(1) == func_name:
+            end_of_match = curr_match.end()
+            start_of_next_match = next_match.start()
+            
+            
+            # Slice out a string between the opening bracket of the arg list
+            # for the current function def, and the whitespace preceeding the
+            # next function def
+            chunk_to_find_func_def_in = source_code[end_of_match:start_of_next_match]
+            # Locate the end of the function definition inside that chunk
+            end_of_func_idx = get_end_of_scope(chunk_to_find_func_def_in)
+            
+            # Copy over everything we've skipped so far, up to the final bracket
+            # in the current function
+            out_code += source_code[last_copy_point:end_of_match+end_of_func_idx]
+            
+            # Inject the mod code at the end of the function
+            for line in add_text:
+                out_code += f"\t{line}\n"
+                
+            # Close out by copying over everything up the start of the next function
+            # This also contains that final close-bracket
+            out_code += source_code[end_of_match+end_of_func_idx:start_of_next_match]
+            last_copy_point = start_of_next_match
+            
+        curr_match = next_match
+        
+    # Handle the final function
+    if curr_match.group(1) == func_name:
+        end_of_match = curr_match.end()
+
+        chunk_to_find_func_def_in = source_code[end_of_match:]
+        end_of_func_idx = get_end_of_scope(chunk_to_find_func_def_in)
+        
+        # Copy over everything we've skipped so far, up to the final bracket
+        # in the current function
+        out_code += source_code[last_copy_point:end_of_match+end_of_func_idx]
+        
+        # Inject the mod code at the end of the function
+        for line in add_text:
+            out_code += f"    {line}\n"
+            
+        last_copy_point = end_of_match+end_of_func_idx
+            
+    # Copy in the rest of the script
+    out_code += source_code[last_copy_point:]
+    
+    return out_code
+        
+    
+    
+
 modification_table = {'add_preamble': add_preamble,
                       'replace': replace,
                       'replace_call': replace_call,
-                      'replace_call_in_funcs': replace_call_in_funcs}
+                      'replace_call_in_funcs': replace_call_in_funcs,
+                      'extend_function': extend_function}
 
 
 def modify_squirrel_source(source_code, modifications): 
