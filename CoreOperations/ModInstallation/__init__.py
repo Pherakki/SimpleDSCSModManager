@@ -19,6 +19,11 @@ def generate_step_message(cur_items, cur_total):
 def generate_prefixed_message(cur_items, cur_total, msg):
     return f">> {generate_step_message(cur_items, cur_total)} {msg}"
     
+import sys
+def format_exception(exception):
+    return type(exception)(f"Error on line {sys.exc_info()[-1].tb_lineno} in file {__file__}:" + f" {exception}")
+
+
 class BuildGraphRunner(QtCore.QObject):
     log = QtCore.pyqtSignal(str)
     updateLog = QtCore.pyqtSignal(str)
@@ -100,7 +105,6 @@ class BuildGraphRunner(QtCore.QObject):
             # Execute the delayed VarList evaluations
             for match in varlist_calls:
                 softcode_lookup[match] = self.ops.softcode_manager.lookup_softcode(match)
-            
             # Now cull the graph depending on the hash of each pack target,
             # which requests are required, etc.
             self.process_graph(build_graphs, softcode_lookup)
