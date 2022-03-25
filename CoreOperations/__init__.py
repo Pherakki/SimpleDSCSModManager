@@ -480,3 +480,113 @@ class CoreOperations:
         
         self.pack_scripts_from(script_folder)
         
+    ######################
+    # AUDIO MANIPULATION #
+    ######################
+    def convert_HCAs_to_WAVs(self):
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
+        audio_file_folder = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing HCA files:")))
+        if (audio_file_folder == '' or audio_file_folder == '.'):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(audio_file_folder):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
+            return
+        
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for output path..."))
+        output_folder = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing WAV files:")))
+        if (output_folder == '' or output_folder == '.'):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(output_folder):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Output path is not a directory."))
+            return
+        
+        thrd = ThreadRunner(self.main_window)
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Converting HCAs to WAVs into {filepath}...").format(filepath=output_folder))
+        self.main_window.ui.disable_gui()
+        thrd.runInThread(self.main_window, lambda : self.logThreadedOperationComplete(translate("CoreOps::LogMessage", "Converting HCAs to WAVs into {filepath}... Done.").format(filepath=output_folder)), self.vgaudio.HCAs_to_WAVs, audio_file_folder, output_folder)
+
+        
+    def convert_WAVs_to_HCAs(self):
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
+        audio_file_folder = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing WAV files:")))
+        if (audio_file_folder == '' or audio_file_folder == '.'):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(audio_file_folder):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
+            return
+        
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for output path..."))
+        output_folder = os.path.normpath(QtWidgets.QFileDialog.getExistingDirectory(self.main_window, translate("Common", "Select a folder containing HCA files:")))
+        if (output_folder == '' or output_folder == '.'):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isdir(output_folder):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Output path is not a directory."))
+            return
+            
+        thrd = ThreadRunner(self.main_window)
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Converting WAVs to HCAs into {filepath}...").format(filepath=output_folder))
+        self.main_window.ui.disable_gui()
+        thrd.runInThread(self.main_window, lambda : self.logThreadedOperationComplete(translate("CoreOps::LogMessage", "Converting WAVs to HCAs into {filepath}... Done.").format(filepath=output_folder)), self.vgaudio.WAVs_to_HCAs, audio_file_folder, output_folder)
+
+    class SampleInputDialog(QtWidgets.QDialog):
+        def __init__(self, parent=None):
+            super().__init__(parent)
+    
+            self.start_loop_entry = QtWidgets.QLineEdit(self)
+            self.start_loop_entry.setValidator(QtGui.QIntValidator(0, (2**31) - 1, self))
+            self.end_loop_entry = QtWidgets.QLineEdit(self)
+            self.end_loop_entry.setValidator(QtGui.QIntValidator(0, (2**31) - 1, self))
+            buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel, self);
+    
+            layout = QtWidgets.QFormLayout(self)
+            layout.addRow("Start Loop Sample:", self.start_loop_entry)
+            layout.addRow("End Loop Sample:", self.end_loop_entry)
+            layout.addWidget(buttonBox)
+    
+            buttonBox.accepted.connect(self.accept)
+            buttonBox.rejected.connect(self.reject)
+    
+        def getInputs(self):
+            start_text = self.start_loop_entry.text()
+            end_text   = self.end_loop_entry.text()
+            return (int(start_text) if len(start_text) else None, 
+                    int(end_text) if len(end_text) else None)
+    
+    def convert_WAV_to_looped_HCA(self):
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Asking for input path..."))
+        path = QtWidgets.QFileDialog.getOpenFileName(self.main_window, translate("Common", "Select a WAV file:"), "", "WAV File (*.wav)")[0]
+
+        audio_file = os.path.normpath(path)
+        if (audio_file == '' or audio_file == '.'):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Operation cancelled."))
+            return
+        if not os.path.isfile(audio_file):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a file."))
+            return
+        
+        loop_inputs = CoreOperations.SampleInputDialog()
+        start_sample, end_sample = None, None
+        if loop_inputs.exec():
+            start_sample, end_sample = loop_inputs.getInputs()
+
+        if start_sample is None:
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "No Start Sample provided, aborting."))
+            return
+        if end_sample is None:
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "No End Sample provided, aborting."))
+            return
+        if end_sample < start_sample:
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Start Sample must be before the End Sample."))
+            return
+            
+        out_path = os.path.extsep.join((os.path.splitext(audio_file)[0], "hca"))
+               
+        thrd = ThreadRunner(self.main_window)
+        self.main_window.ui.log(translate("CoreOps::LogMessage", "Converting {in_filepath} to {out_filepath}...").format(in_filepath=audio_file, out_filepath=out_path))
+        self.main_window.ui.disable_gui()
+        thrd.runInThread(self.main_window, lambda : self.logThreadedOperationComplete(translate("CoreOps::LogMessage", "Converting {in_filepath} to {out_filepath}... Done.").format(in_filepath=audio_file, out_filepath=out_path)), self.vgaudio.WAV_to_HCA_looped, audio_file, out_path, start_sample, end_sample)
+     
