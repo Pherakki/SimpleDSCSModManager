@@ -15,7 +15,7 @@ def get_filepack_plugins():
     return [*load_sorted_plugins_in(plugin_dir, lambda x: issubclass(x, BaseFilepack) if inspect.isclass(x) else False), UnhandledFilepack]
 
 def get_filepack_plugins_dict():
-    return {plugin.packgroup: plugin for plugin in get_filepack_plugins()}
+    return {plugin.filepack: plugin for plugin in get_filepack_plugins()}
 
 def get_filetype_to_filepack_plugins_map():
     out = {}
@@ -157,7 +157,7 @@ class BaseFilepack:
                 match = match.group(0)
                 if match not in pack_softcodes:
                     pack_softcodes[match] = []
-                pack_softcodes[match].append(code_offset)
+                pack_softcodes[match].append((code_offset, len(match) + 2))
             pack_target = replace_softcodes(pack_target.encode('utf8'), pack_softcodes, softcodes).decode('utf8')
             new_pack_targets.append(sys.intern(pack_target))
         
@@ -167,8 +167,7 @@ class BaseFilepack:
 
 class UnhandledFilepack(BaseFilepack):
     __slots__ = ('target', 'pack_target', 'build_pipeline', "hash")
-    packgroup = "Uncategorised"
-    groups = ("other",)
+    filepack = "Uncategorised"
     
     def __init__(self, pack_name):
         super().__init__()
