@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
                 
         win.ops.check_for_game_exe()
-        expectation_management_popup(win)
+        #expectation_management_popup(win)
         error_code = app.exec_()
         
     except Exception as e:
