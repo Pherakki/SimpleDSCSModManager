@@ -56,10 +56,6 @@ class BaseBuildElement:
     @staticmethod
     def get_pack_name(filepath):
         raise NotImplementedError()
-
-class UnhandledFiletype(BaseFiletype):
-    group = 'other'
-    default_rule = 'overwrite'
         
     @classmethod
     def get_filetype_cls(cls):
@@ -85,3 +81,15 @@ class UnhandledFiletype(BaseFiletype):
     @staticmethod
     def get_pack_name(filepath):
         return filepath
+class UnhandledFiletype(BaseFiletype):
+    __slots__ = tuple()
+    
+    filetype_id = "other"
+    build_elements = [UnhandledFiletypeBuildElement]
+    filepack = "Uncategorised"
+    
+    @staticmethod
+    def checkIfMatch(path, filename):
+        if os.path.isfile(os.path.join(path, filename)):
+            return True
+    
