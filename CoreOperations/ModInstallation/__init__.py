@@ -119,7 +119,7 @@ class BuildGraphRunner(QtCore.QObject):
                         # Check is pack is in the cache #
                         #################################
                         # 1. Make a hash of the filepack
-                        pack.hash = hashFilepack(self.ops.paths.mm_root, pack)
+                        pack.hash = hashFilepack(self.ops.paths.mm_root, pack, softcode_lookup)
                         pack_is_in_cache = True
                         pack_targets = pack.get_pack_targets()
                         n_total += len(pack_targets)
