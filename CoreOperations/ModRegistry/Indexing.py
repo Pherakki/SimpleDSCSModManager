@@ -85,7 +85,6 @@ def index_mod_softcodes(modpath, filetypes, mod_contents_index, aliases):
                     for match in search_bytestring_for_softcodes(line):
                         code_offset = match.start() - 1
                         match = match.group(0)
-                        print(match)
                         match = match.decode('utf8')
                         register_softcode(file_softcodes, 
                                           all_softcodes, 
