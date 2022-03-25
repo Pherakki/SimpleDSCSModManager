@@ -106,6 +106,13 @@ def get_targets_softcodes(filetargets):
             if not len(target_softcodes[target]):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
+def alias_decoder(obj):
+    if type(obj) == dict:
+        return {k.rstrip(":") + "::" : v.rstrip(":") + "::" for k, v in obj.items()}
+    elif type(obj) == str:
+        return obj
+    else:
+        assert 0, "ALIASES.json must be a dict of strings."
     
 def build_index(config_path, filepath, filetypes, archive_getter, archive_from_path_getter, targets_getter, rules_getter, filepath_getter):
     contents, last_edit_time, contents_hash = index_mod_contents(filepath, filetypes)
