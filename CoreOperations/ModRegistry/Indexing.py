@@ -334,4 +334,4 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
 
     softcode_dump = [sys.intern(key) for key in sorted(all_softcodes)]
 
-    return {'data': index, 'softcodes': softcode_dump, "last_edit_time": last_edit_time}
+    return {'data': index, 'softcodes': softcode_dump, "last_edit_time": last_edit_time, "contents_hash": contents_hash}
