@@ -12,8 +12,7 @@ translate = QtCore.QCoreApplication.translate
 
 class MBEFilepack(BaseFilepack):
     __slots__ = ('file_targets', 'pack_target', 'build_pipelines', 'hash')
-    packgroup = "MBE"
-    groups = ("mbe",)
+    filepack = "MBE"
     
     def __init__(self, pack_target):
         super().__init__()
