@@ -66,9 +66,11 @@ class BaseBuildElement:
         return (cls.get_filetype_cls().filetype_id, cls.build_element_id)
     
     @staticmethod
-    def checkIfMatch(path, filename):
-        if os.path.isfile(os.path.join(path, filename)):
-            return True
+class UnhandledFiletypeBuildElement(BaseBuildElement):
+    __slots__ = tuple()
+    
+    build_element_id = 'other'
+    default_rule = 'overwrite'
     
     @staticmethod
     def get_target(filepath):
@@ -81,6 +83,11 @@ class BaseBuildElement:
     @staticmethod
     def get_pack_name(filepath):
         return filepath
+    
+    @classmethod
+    def get_filetype_cls(cls):
+        return UnhandledFiletype
+
 class UnhandledFiletype(BaseFiletype):
     __slots__ = tuple()
     
