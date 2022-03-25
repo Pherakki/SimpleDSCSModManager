@@ -106,6 +106,38 @@ def get_targets_softcodes(filetargets):
             if not len(target_softcodes[target]):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
+
+def include_autorequests(config_path, contents, archive_lookup):
+    request_build_element = get_build_element_plugins_dict()[("request", "request")]
+    with open(os.path.join(config_path, "filelist.json"), 'r') as F:
+        filelist = json.load(F)
+    out = {}
+    
+    for filetype in contents:
+        for file, build_element in contents[filetype].items():
+            key = archive_lookup[file]
+            if key not in out:
+                out[key] = set()
+            archive_requests = out[key]
+            archive_requests.update(build_element.get_autorequests(file))
+                
+    contents["autorequests"] = {}
+    for archive, entries in out.items():
+        for entry in sorted(entries):
+            # If the file isn't a vanilla file, just ignore it
+            # Fine since it's an autorequest; if it's a full request it will
+            # error on another code path
+            
+            # Cut off the mods/modname/modfiles bit
+            trunc_entry = os.path.sep.join(os.path.normpath(entry).split(os.path.sep)[3:])
+            trunc_entry = os.path.splitext(trunc_entry)[0] # Split off the "request" bit
+
+            if trunc_entry not in filelist:
+                continue
+            archive_lookup[entry] = archive
+            contents["autorequests"][entry] = request_build_element(make_buildgraph_path(entry))
+
+
 def alias_decoder(obj):
     if type(obj) == dict:
         return {k.rstrip(":") + "::" : v.rstrip(":") + "::" for k, v in obj.items()}
