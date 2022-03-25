@@ -164,7 +164,6 @@ class SoftcodeManager(SoftcodeKey):
     
     def add_subcategory(self, subcategory, data):
         self.category_defs.append(subcategory)
-        print(subcategory.name, subcategory)
         self.subcategories[sys.intern(subcategory.name)] = SoftcodeCategory(subcategory, data)
         
     def load_subcategory_from_json(self, main_filename):
