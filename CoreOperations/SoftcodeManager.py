@@ -133,6 +133,12 @@ class SoftcodeKey:
         else:
             return next_softcode.lookup_softcode(remaining_key)
         
+    def get_data_as_serialisable(self):
+        res = [self.value]
+        if len(self.subcategories):
+            res.append({cat_name: cat.get_data_as_serialisable() for cat_name, cat in self.subcategories.items()})
+        return res
+        
 class SoftcodeManager(SoftcodeKey):
     __slots__ = ("category_defs", "paths")
     
