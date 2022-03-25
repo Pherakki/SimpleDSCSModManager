@@ -14,6 +14,8 @@ class IndexFileException(Exception):
     def __str__(self):
         return f"{self.modfile_name}: {self.base_msg}"
     
+def make_buildgraph_path(filepath):
+    return os.path.join(*splitpath(filepath)[3:])
 
 def index_mod_contents(modpath, filetypes):
     last_edit_time = 0
