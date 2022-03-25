@@ -2,7 +2,7 @@ import inspect
 import os
 
 from CoreOperations.PluginLoaders.PluginLoad import load_sorted_plugins_in
-from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from plugins.patchers import BasePatcher
 
 
 def get_patcher_plugins():
