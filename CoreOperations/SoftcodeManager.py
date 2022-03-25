@@ -8,13 +8,14 @@ from PyQt5 import QtCore
 translate = QtCore.QCoreApplication.translate
 
 class SoftcodeCategoryDefinition:
-    __slots__ = ("name", "min", "max", "span", "value_lambda", "methods", "subcategory_defs")
+    __slots__ = ("name", "min", "max", "span", "src", "value_lambda", "methods", "subcategory_defs")
     
-    def __init__(self, name, _min, _max, value_lambda, methods, subcategory_defs):
+    def __init__(self, name, _min, _max, src, value_lambda, methods, subcategory_defs):
         self.name = name
         self.min = _min
         self.max = _max
         self.span = _max - _min
+        self.src = src
         self.subcategory_defs = subcategory_defs
         self.value_lambda = value_lambda
         self.methods = methods
@@ -26,7 +27,7 @@ class SoftcodeCategoryDefinition:
         subcategory_defs = [SoftcodeCategoryDefinition.init_from_dict(child_name, child_def)
                             for child_name, child_def in children.items()]
         
-        return cls(name, dct["min"], dct["max"], dct["value"], dct.get("methods", {}), subcategory_defs)
+        return cls(name, dct["min"], dct["max"], dct.get("src"), dct["value"], dct.get("methods", {}), subcategory_defs)
 
     def get_category_sources(self, *names):
         out = {}
@@ -65,7 +66,6 @@ class SoftcodeCategory:
         values = sorted([sk.value for sk in self.keys.values()])[::-1]
         
         if len(values):
-            in_gap = False
             current_val = values[0]
             self.key_gaps = array.array('H')
             for val in values[1:]:
@@ -121,7 +121,10 @@ class SoftcodeKey:
         # Remove () from method
         method_name = method_name[:-2]
 
-        subcat = self.subcategories[category]
+        try:
+            subcat = self.subcategories[category]
+        except KeyError as e:
+            raise KeyError(translate("SoftcodeManager", "Softcode Category \"{category_name}\" does not exist.").format(category_name=category)) from e
         next_softcode = subcat.get(key)
         if remaining_key == '':
             if method_name == '':
@@ -155,7 +158,6 @@ class SoftcodeManager(SoftcodeKey):
         
         for file in os.listdir(self.paths.softcodes_loc):
             self.load_subcategory_from_json(file)
-    
         
     def unload_softcode_data(self):
         self.subcategories = {}
