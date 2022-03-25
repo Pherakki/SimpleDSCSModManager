@@ -193,6 +193,98 @@ class SoftcodeManager(SoftcodeKey):
     #     category_defs = [SoftcodeCategoryDefinition.init_from_dict(category_name, dct["definition"])]
 
     #     return cls(category_defs, {"Digimon": dct["codes"]})
+        
+    def dump_codes_to_json(self):
+        for subcat_name, subcat in self.subcategories.items():
+            if hasattr(subcat, "get_data_as_serialisable"):
+                filepath = os.path.join(self.paths.softcode_cache_loc, os.path.extsep.join((subcat_name, "json")))
+                parent_path = os.path.split(filepath)[0]
+                if not os.path.isdir(parent_path):
+                    os.makedirs(parent_path)
+                with open(filepath, 'w', encoding="utf8") as F:
+                    json.dump(subcat.get_data_as_serialisable(), F, separators=(',', ':'))
 
-        return cls(category_defs, {"Digimon": dct["codes"]})
+
+    
+def wrap_strings(values):
+    return ("\"{var}\"" for var in values)
+
+def splat(values):
+    return ",".join(values)
+
+def splat_strings(values):
+    return ",".join(wrap_strings(values))
+
+def as_list(values):
+    return f"[{','.join(values)}]"
+
+def as_list_strings(values):
+    return f"[{','.join(wrap_strings(values))}]"
+
+def as_braced_list(values):
+    return f"{{{','.join(values)}}}"
+
+def as_braced_list_strings(values):
+    return f"{{{','.join(wrap_strings(values))}}}"
+    
+class SoftcodeListVariableCategoryDefinition:
+    methods = {
+            "splat": splat, 
+            "splat_strings": splat_strings, 
+            "as_list": as_list,
+            "as_list_strings": as_list_strings,
+            "as_braced_list": as_braced_list,
+            "as_braced_list_strings": as_braced_list_strings
+        }
+        
+    @staticmethod
+    def call_formatting_func( func_def, values, parent_value):
+        return func_def(values)
+        
+    @staticmethod
+    def value_lambda(values):
+        return f"[{','.join(wrap_strings(values))}]"
+    
+class SoftcodeListVariableCategory:
+    __slots__ = ("keys",)
+    definition = SoftcodeListVariableCategoryDefinition
+    
+    def __init__(self):
+        self.keys = {}
+    
+    def get(self, key):
+        try:
+            return self.keys[key]
+        except KeyError as e:
+            raise KeyError(f"No Variable List \'{key}\' is defined.") from e
+            
+    def add_variable(self, name):
+        self.keys[name] = SoftcodeListVariable()
+
+class SoftcodeListVariable:
+    __slots__ = ("value", "opcodes")
+    
+    def __init__(self):
+        self.value = []
+        
+        self.opcodes = {
+            "++": self.add,
+            "--": self.remove
+        }
+        
+    def call_opcode(self, opcode, arg):
+        op = self.opcodes.get(opcode)
+        if op:
+            op(arg)
+        else:
+            raise Exception(f"Unknown operator \'{opcode}\' for SoftcodeListVariable.")
+        
+    def add(self, value):
+        self.value.append(value)
+        
+    def remove(self, value):
+        try:
+            self.value.remove(value)
+        except Exception:
+            pass
         
