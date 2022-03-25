@@ -1,9 +1,15 @@
+import hashlib
+import json
 import os
 import sys
 
+from PyQt5 import QtCore
 from CoreOperations.ModRegistry.Softcoding import search_string_for_softcodes, search_bytestring_for_softcodes
 from Utils.Path import splitpath
+from CoreOperations.PluginLoaders.FiletypesPluginLoader import get_build_element_plugins_dict
+from CoreOperations.ModRegistry.BuildScript import BuildScript
 
+translate = QtCore.QCoreApplication.translate
 
 class IndexFileException(Exception):
     def __init__(self, base_msg, modfile_name):
