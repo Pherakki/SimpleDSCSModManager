@@ -3,17 +3,10 @@ import os
 
 from PyQt5 import QtCore
 
-from Utils.Path import splitpath, path_is_parent
+from Utils.Path import splitpath, check_path_is_safe
 
 translate = QtCore.QCoreApplication.translate
 
-def check_path_is_safe(parent_path, target_path, rt, src):
-    assert path_is_parent(parent_path, os.path.join(rt, target_path)), translate("ModMetadataParsing", "'{metadata_item}' Metadata error: Target {os.path.join(mod_path, target_path)} is not a subdirectory of {parent_path}!").format(metadata_item=src, mod_path=rt, target_path=target_path, parent_path=parent_path)
-    assert '..' not in target_path, translate("ModMetadataParsing", "Cannot refer to parent paths in '{metadata_item}': {target_path}.").format(metadata_item=src, target_path=target_path)
-    assert target_path[1] != ":", translate("ModMetadataParsing", "Cannot refer to drive paths in '{metadata_item}': {target_path}.").format(metadata_item=src, target_path=target_path)
-    assert target_path[0] != "/", translate("ModMetadataParsing", "Cannot make absolute paths in '{metadata_item}': {target_path}.").format(metadata_item=src, target_path=target_path)
-    assert target_path[0] != "\\", translate("ModMetadataParsing", "Cannot make absolute paths in '{metadata_item}': {target_path}.").format(metadata_item=src, target_path=target_path)
-    
 class ModFormatVersion1:
     version = 1
     
