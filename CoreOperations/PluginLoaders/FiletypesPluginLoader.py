@@ -17,14 +17,14 @@ def get_build_element_plugins():
 def get_targettable_filetypes():
     return [plugin for plugin in get_filetype_plugins() if hasattr(plugin, "filepack")]
 
-def get_type_of_file(path, filename):
-    for plugin in get_filetype_plugins():
-        if plugin.checkIfMatch(path, filename):
-            return plugin
-    return None
 def get_build_element_plugins_dict():
     return {plugin.get_identifier(): plugin for plugin in get_build_element_plugins()}
 
+# def get_type_of_file(path, filename):
+#     for plugin in get_filetype_plugins():
+#         if plugin.checkIfMatch(path, filename):
+#             return plugin
+#     return None
         
 class BaseFiletype:
     __slots__ = tuple()
