@@ -148,6 +148,15 @@ def alias_decoder(obj):
         assert 0, "ALIASES.json must be a dict of strings."
     
 def build_index(config_path, filepath, filetypes, archive_getter, archive_from_path_getter, targets_getter, rules_getter, filepath_getter):
+    alias_path = os.path.join(os.path.split(filepath)[0], "ALIASES.json")
+    if os.path.isfile(alias_path):
+        try:
+            with open(alias_path, 'r') as F:
+                aliases = json.load(F, object_hook=alias_decoder)
+        except Exception as e:
+            raise Exception(translate("Indexing", "Could not read ALIASES.json, error was \"{error_msg}\".").format(error_msg=e.__str__()))
+    else:
+        aliases = {}
     contents, last_edit_time, contents_hash = index_mod_contents(filepath, filetypes)
     contents_softcodes, all_softcodes = index_mod_softcodes(filepath, filetypes, contents, aliases)
     archives = archive_getter(filepath, contents)
