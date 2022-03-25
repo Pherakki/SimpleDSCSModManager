@@ -415,7 +415,10 @@ class FieldGuideSorter(QtCore.QObject):
     
     def name_getter(self, id_, charnames, lang):
         name_id = '1' + str(id_).rjust(3, '0')
-        names = charnames[(name_id,)]
+        try:
+            names = charnames[(name_id,)]
+        except KeyError as e:
+            raise KeyError(translate("ModInstall", "ID {name_id} is not defined in charnames; did you remember to enter a 4-character ID code?").format(name_id=name_id)) from e
         jp_name = names[0]
         lang_name = names[lang]
         return (jp_name, lang_name)
