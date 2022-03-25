@@ -3,6 +3,9 @@ import json
 import os
 import sys
 
+from PyQt5 import QtCore
+
+translate = QtCore.QCoreApplication.translate
 
 class SoftcodeCategoryDefinition:
     __slots__ = ("name", "min", "max", "span", "value_lambda", "methods", "subcategory_defs")
