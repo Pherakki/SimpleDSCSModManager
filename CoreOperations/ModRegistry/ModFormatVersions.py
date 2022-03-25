@@ -61,7 +61,7 @@ class ModFormatVersion1:
         if "TargetSub" in metadata:
             patterns = metadata["TargetSub"].items()
             for old, new in patterns:
-                assert ".." not in new, translate("ModMetadataParsing", "Cannot refer to parent paths in TargetSub.")
+                assert os.path.pardir not in new, translate("ModMetadataParsing", "Cannot refer to parent paths in TargetSub.")
                 
             for rt, _, files in os.walk(modpath_rel):
                 if rt == modpath_rel:
