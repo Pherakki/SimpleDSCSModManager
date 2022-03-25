@@ -56,7 +56,7 @@ class CoreOperations:
         if os.path.isdir(plugins_path):
             for file in os.listdir(plugins_path):
                 os.remove(os.path.join(plugins_path, file))
-        self.main_window.ui.log(translate("CoreOps::UninstallMods", "Vanilla files restored, plugins removed.")            )
+        self.main_window.ui.log(translate("CoreOps::UninstallMods", "Vanilla files restored, plugins removed."))
 
     def register_mod_filedialog(self):
         """
@@ -65,7 +65,7 @@ class CoreOperations:
         file = QtWidgets.QFileDialog.getOpenFileUrl(self.main_window, translate("CoreOps::AddMod", "Select a mod archive"))[0].toLocalFile()
         if file != '' and file != '.':
             self.mod_registry.register_mod(file)
-            
+    
     def launch_game(self):
         if not self.check_for_game_exe(): return
         self.main_window.ui.log(translate("CoreOps::GameLaunch", "Launching game..."))
