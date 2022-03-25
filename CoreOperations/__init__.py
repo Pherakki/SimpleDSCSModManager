@@ -3,6 +3,7 @@ import shutil
 import gc
 
 from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from CoreOperations.BackupsManager import BackupsManager
 from CoreOperations.ConfigManager import ConfigManager
@@ -13,6 +14,7 @@ from CoreOperations.ModInstallation import ModInstaller
 from CoreOperations.ModRegistry import ModRegistry
 from CoreOperations.SoftcodeManager import SoftcodeManager
 from CoreOperations.Tools.DSCSToolsHandler import DSCSToolsHandler
+from CoreOperations.Tools.VGAudioHandler import VGAudioHandler
 from sdmmlib.dscstools import DSCSTools
 from Utils.Threading import ThreadRunner, UIAccessThreadRunner
 
@@ -33,6 +35,7 @@ class CoreOperations:
         self.softcode_manager = SoftcodeManager(self.paths)
         self.mod_registry = ModRegistry(main_window.ui, self.paths, self.profile_manager, self.main_window.raise_exception.emit)
         self.dscstools = DSCSToolsHandler()
+        self.vgaudio = VGAudioHandler(self.paths.mm_root)
 
     def __dispose_workers(self):
         self.__worker = None
