@@ -165,14 +165,23 @@ class SoftcodeManager(SoftcodeKey):
         print(subcategory.name, subcategory)
         self.subcategories[sys.intern(subcategory.name)] = SoftcodeCategory(subcategory, data)
         
-    def load_subcategory_from_json(self, main_filename, cache_filename=None):
+    def load_subcategory_from_json(self, main_filename):
         try:
-            with open(os.path.join(self.paths.softcodes_loc, main_filename), 'r') as F:
+            with open(os.path.join(self.paths.softcodes_loc, main_filename), 'r', encoding="utf8") as F:
                 dct = json.load(F)
         except Exception as e:
             raise Exception(f"Attempted to read Softcode definition \'{main_filename}\', encountered error: {e}") from e
         category_name = os.path.splitext(main_filename)[0]
         category_def = SoftcodeCategoryDefinition.init_from_dict(category_name, dct["definition"])
+        
+        
+        cache_loc = os.path.join(self.paths.softcode_cache_loc, main_filename)
+        if os.path.exists(cache_loc):
+            try:
+                with open(cache_loc, 'r', encoding="utf8") as F:
+                    dct["codes"] = json.load(F)
+            except Exception as e:
+                raise Exception(f"Attempted to read cached Softcode definitions \'{main_filename}\', encountered error: {e}") from e
         
         self.add_subcategory(category_def, dct["codes"])
         
