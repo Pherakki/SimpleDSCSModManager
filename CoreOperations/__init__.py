@@ -62,7 +62,7 @@ class CoreOperations:
         """
         Opens a file dialog and passes the path on to register_mod.
         """
-        file = QtWidgets.QFileDialog.getOpenFileUrl(self.main_window, translate("CoreOps::AddMod", "Select a mod archive"))[0].toLocalFile()
+        file = QtWidgets.QFileDialog.getOpenFileUrl(self.main_window, translate("CoreOps::AddMod", "Select a mod archive"), filter="Zip Files (*.zip)")[0].toLocalFile()
         if file != '' and file != '.':
             self.mod_registry.register_mod(file)
     
