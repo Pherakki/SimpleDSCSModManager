@@ -157,6 +157,17 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
             raise Exception(translate("Indexing", "Could not read ALIASES.json, error was \"{error_msg}\".").format(error_msg=e.__str__()))
     else:
         aliases = {}
+        
+    buildscript_path = os.path.join(os.path.split(filepath)[0], "BUILD.json")
+    if os.path.isfile(buildscript_path):
+        try:
+            buildscript = BuildScript.from_json(buildscript_path, filepath)
+        except Exception as e:
+            raise e
+            raise Exception(translate("Indexing", "Could not read BUILD.json, error was \"{error_msg}\".").format(error_msg=e.__str__()))
+    else:
+        buildscript = None
+    
     contents, last_edit_time, contents_hash = index_mod_contents(filepath, filetypes)
     contents_softcodes, all_softcodes = index_mod_softcodes(filepath, filetypes, contents, aliases)
     archives = archive_getter(filepath, contents)
