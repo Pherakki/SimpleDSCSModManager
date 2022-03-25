@@ -42,13 +42,15 @@ def get_interned_mod_index(path):
     with open(os.path.join(path, "INDEX.json"), 'r') as F:
         return json.load(F, object_hook=make_interned_buildstep)
 
+    
+    
 def categorise_build_targets(build_graphs, ops, log, updateLog):
-    filetypes = get_filetype_plugins()
-    filepacks = get_filepack_plugins()
-    filepack_lookup = get_filetype_to_filepack_plugins_map()
-    
+    filetypes = get_targettable_filetypes()
+    filepacks = get_filepack_plugins_dict()
+    rules = get_rule_plugins()
+
     log(translate("BuildGraph", "Categorising install graph pipelines..."))
-    
+
     total_pipes = 0
     for archive_type in build_graphs:
         for archive in build_graphs[archive_type]:
@@ -58,19 +60,26 @@ def categorise_build_targets(build_graphs, ops, log, updateLog):
     for archive_type in build_graphs:
         for archive in build_graphs[archive_type]:
             archive_build_graph = build_graphs[archive_type][archive].build_graph
-            retval = {plugin.packgroup: {} for plugin in filepacks}
+            retval = {filepack: {} for filepack in filepacks}
             
             # Collect file targets into filepacks
             for target in list(archive_build_graph.keys()):
                 total += 1
-                group = 'other'
+                group = 'Uncategorised'
                 for filetype in filetypes:
                     if filetype.checkIfMatch(*os.path.split(target)):
-                        group = filetype.group
+                        group = filetype.filepack
                         break
+                    
+                # Remove any build steps that require pre-existing data that
+                # doesn't exist
+                archive_build_graph[target]["build_steps"] = trim_dead_nodes(archive_build_graph[target]["build_steps"], rules)
+                # If that means no build steps are left, don't build that target
+                if not len(archive_build_graph[target]["build_steps"]):
+                    continue
             
-                pack = filepack_lookup[group]
-                packgroup = pack.packgroup
+                pack = filepacks[group]
+                packgroup = pack.filepack
                 filepack_name = sys.intern(pack.make_packname(target))
                 
                 if filepack_name not in retval[packgroup]:
