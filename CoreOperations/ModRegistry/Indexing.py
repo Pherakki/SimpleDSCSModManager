@@ -90,7 +90,7 @@ def index_mod_softcodes(modpath, filetypes, mod_contents_index, aliases):
             softcodes[file] = file_softcodes
     return softcodes, all_softcodes
          
-def get_targets_softcodes(filetargets):
+def get_targets_softcodes(filetargets, aliases):
     target_softcodes = {}
     all_softcodes = set()
     for filepath, targets in filetargets.items():
@@ -99,10 +99,11 @@ def get_targets_softcodes(filetargets):
             for match in search_string_for_softcodes(target):
                 code_offset = match.start() - 1
                 code = match.group(0)
-                if code not in target_softcodes[target]:
-                    target_softcodes[target][code] = []
-                target_softcodes[target][code].append(code_offset)
-                all_softcodes.add(code)
+                register_softcode(target_softcodes[target], 
+                                  all_softcodes, 
+                                  code, aliases,
+                                  code_offset)
+
             if not len(target_softcodes[target]):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
@@ -153,7 +154,8 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
     targets = targets_getter(filepath, contents, archives)
     rules = rules_getter(filepath, contents)
     
-    target_softcodes, all_target_softcodes = get_targets_softcodes(targets)
+    target_softcodes, all_target_softcodes = get_targets_softcodes({**targets, **buildscript_targets}, aliases)
+
 
     all_softcodes = all_softcodes.union(all_target_softcodes)
     
