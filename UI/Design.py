@@ -171,6 +171,11 @@ class creditsPopup:
         
         msgBoxText = translate("UI::Credits", "The people on this list have all significantly contributed to SimpleDSCSModManager in some way. They have my deepest thanks.")
         msgBoxText += "<br><br>"
+        msgBoxText += "<b>" + translate("UI::Credits", "Programming Contributions") + "</b>"
+        msgBoxText += "<br>"
+        msgBoxText += " " + translate("Common::ListElementsSeparator", ", ").join(["Pherakki"])
+        msgBoxText += "<br>"
+        msgBoxText += "<br>"
         msgBoxText += "<b>" + translate("UI::Credits", "Special Thanks") + "</b>"
         msgBoxText += "<br>"
         msgBoxText += " " + translate("Common::ListElementsSeparator", ", ").join(["Romsstar", "SydMontague"])
@@ -475,7 +480,7 @@ class uiLogHistory(QtCore.QObject):
         
         self.logview = QtWidgets.QListWidget()
         self.logview.setAlternatingRowColors(True)
-        self.logview.setWordWrap(False) 
+        self.logview.setWordWrap(True) 
         self.logview.setMinimumHeight(110)
         
         
