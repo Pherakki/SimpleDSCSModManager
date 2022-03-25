@@ -185,12 +185,14 @@ class SoftcodeManager(SoftcodeKey):
         
         self.add_subcategory(category_def, dct["codes"])
         
-    @classmethod
-    def init_from_json(cls, main_filepath, cache_filepath=None):
-        with open(main_filepath, 'r') as F:
-            dct = json.load(F)
-        category_name = os.path.splitext(os.path.split(main_filepath)[1])[0]
-        category_defs = [SoftcodeCategoryDefinition.init_from_dict(category_name, dct["definition"])]
+    # @classmethod
+    # def init_from_json(cls, main_filepath, cache_filepath=None):
+    #     with open(main_filepath, 'r', encoding="utf8") as F:
+    #         dct = json.load(F)
+    #     category_name = os.path.splitext(os.path.split(main_filepath)[1])[0]
+    #     category_defs = [SoftcodeCategoryDefinition.init_from_dict(category_name, dct["definition"])]
+
+    #     return cls(category_defs, {"Digimon": dct["codes"]})
 
         return cls(category_defs, {"Digimon": dct["codes"]})
         
