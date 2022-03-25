@@ -123,9 +123,9 @@ class ModBuildGraphCreator:
             updateLog(translate("BuildGraph", "Creating missing mod indices... Done. ") + f"[{i+1}/{n_missing_mods}]")
             
     def regenerate_index_if_out_of_date(self, index, path, updateLog, msg):
-
-        if latest_edit_time != index["last_edit_time"]:
         latest_edit_time, contents_hash = calc_has_dir_changed_info(os.path.relpath(os.path.join(path, "modfiles")))
+        
+        if latest_edit_time != index["last_edit_time"] or contents_hash != index["contents_hash"]:
             updateLog(translate("BuildGraph", "{msg} [Regenerating index...]").format(msg=msg))
             self.ops.mod_registry.save_index(path, self.ops.mod_registry.index_mod(path))
             return get_interned_mod_index(path)
@@ -160,6 +160,7 @@ class ModBuildGraphCreator:
                     archive_build_graph = archive_type_build_graph[archive].build_graph
                     for target, target_data in index_data[archive_type][archive].items():
                         build_steps = target_data["build_steps"]
+                        
                         sys.intern(target)
                         if target not in archive_build_graph:
                             archive_build_graph[target] = {'build_steps': []}
