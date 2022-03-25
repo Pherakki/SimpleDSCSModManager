@@ -39,29 +39,13 @@ class BaseScriptRunner(QtCore.QObject):
         
     @QtCore.pyqtSlot()
     def logCurrentJob(self):
-        self.updateLog.emit
-        (
-            translate("Tools::Scripts", "{compile_or_decompile_verb} scripts from {filepath}... ").format
-            (
-                compile_or_decompile_verb=self.packmsg,
-                filepath=self.pre_message
-            )
-            + f"[{self.completed_jobs+1}/{self.njobs}] [{self.curJob}]"
-        )
+        self.updateLog.emit(translate("Tools::Scripts", "{compile_or_decompile_verb} scripts from {filepath}... ").format(compile_or_decompile_verb=self.packmsg, filepath=self.pre_message)+ f"[{self.completed_jobs+1}/{self.njobs}] [{self.curJob}]")
     
     @QtCore.pyqtSlot()
     def checkIfComplete(self):
         self.completed_jobs += 1
         if self.completed_jobs == self.njobs:
-            self.updateLog.emit
-            (
-                translate("Tools::Scripts", "{compile_or_decompile_verb} scripts from {filepath}... Done. ").format
-                (
-                    compile_or_decompile_verb=self.packmsg,
-                    filepath=self.pre_message
-                )
-                + f"[{self.completed_jobs+1}/{self.njobs}]"
-            )
+            self.updateLog.emit(translate("Tools::Scripts", "{compile_or_decompile_verb} scripts from {filepath}... Done. ").format(compile_or_decompile_verb=self.packmsg, filepath=self.pre_message) + f"[{self.completed_jobs+1}/{self.njobs}]")
             self.success.emit()
             
     @QtCore.pyqtSlot(Exception)
