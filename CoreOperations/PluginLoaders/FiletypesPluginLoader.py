@@ -66,6 +66,9 @@ class BaseBuildElement:
         return (cls.get_filetype_cls().filetype_id, cls.build_element_id)
     
     @staticmethod
+    def get_autorequests(filepath):
+        return set()
+
 class UnhandledFiletypeBuildElement(BaseBuildElement):
     __slots__ = tuple()
     
