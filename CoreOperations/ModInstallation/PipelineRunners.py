@@ -30,7 +30,7 @@ class PipelineRunner(QtCore.QRunnable):
     def run(self):
         try:
             self.signals.started.emit(self.target)
-            patcher = patchers[self.filepack.packgroup](self.filepack, self.paths, self.path_prefix, self.softcodes, post_action=self.archive_postaction)
+            patcher = patchers[self.filepack.filepack](self.filepack, self.paths, self.path_prefix, self.softcodes, post_action=self.archive_postaction)
             patcher.execute()
             for pack_target in self.filepack.get_pack_targets():
                 self.cache_index[pack_target] = self.filepack.hash
