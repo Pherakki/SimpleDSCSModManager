@@ -202,8 +202,17 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
     index = {}
     for filetype in contents:
         for file, _target in contents[filetype].items():
+            # If the file is used by the buildscript, then skip it
+            # The buildscript overrides whatever it was originally going to build
+            if file in buildscript_targets:
+                continue
+            
+            # Redirect the target files of a source file if necessary
             if file in targets:
-                file_targets = targets[file]
+                targetpaths = targets[file]
+                #assert type(targetpath) == list, "Invalid targetpath, not a list"
+                #assert len(targetpath) == 1, "Invalid targetpath, length != 1"
+                file_targets = [type(_target)(targetpath) for targetpath in targetpaths]
             else:
                 file_targets = [_target]
                 
