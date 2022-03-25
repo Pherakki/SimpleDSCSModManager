@@ -52,6 +52,12 @@ def index_mod_contents(modpath, filetypes):
 
 def index_mod_softcodes(modpath, filetypes, mod_contents_index):
     softcodable_filetypes = sorted(list(set([filetype.group for filetype in filetypes if getattr(filetype, "enable_softcodes", False)])))
+def register_softcode(softcode_list, all_softcodes, aliased_match, aliases, offset):
+    match = find_softcode_alias(aliased_match, aliases)
+    if match not in softcode_list:
+        softcode_list[match] = []
+    softcode_list[match].append([offset, len(aliased_match) + 2]) # + 2 For [ and ]
+    all_softcodes.add(match)
     softcodes = {}
     all_softcodes = set()
     for filetype in softcodable_filetypes:
