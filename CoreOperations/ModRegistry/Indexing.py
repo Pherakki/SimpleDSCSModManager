@@ -78,9 +78,9 @@ def get_targets_softcodes(filetargets):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
     
-def build_index(filepath, filetypes, archive_getter, targets_getter, rules_getter, filepath_getter):
     contents, last_edit_time = index_mod_contents(filepath, filetypes)
     contents_softcodes, all_softcodes = index_mod_softcodes(filepath, filetypes, contents)
+def build_index(config_path, filepath, filetypes, archive_getter, archive_from_path_getter, targets_getter, rules_getter, filepath_getter):
     archives = archive_getter(filepath, contents)
     targets = targets_getter(filepath, contents, archives)
     rules = rules_getter(filepath, contents)

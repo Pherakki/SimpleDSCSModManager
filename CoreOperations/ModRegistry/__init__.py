@@ -61,9 +61,11 @@ class ModRegistry:
     
     def index_mod(self, modpath):
         mod_format_version = mod_format_versions[get_mod_version(modpath)]
-        index = build_index(os.path.join(modpath, "modfiles"), 
+        index = build_index(self.paths.config_loc,
+                            os.path.join(modpath, "modfiles"), 
                             get_filetype_plugins(), 
                             mod_format_version.get_archives, 
+                            mod_format_version.get_archive_from_path, 
                             mod_format_version.get_targets, 
                             mod_format_version.get_rules,
                             mod_format_version.get_filepath)
