@@ -148,7 +148,7 @@ class MDB1Extractor(QtCore.QObject):
         self.completed_jobs += 1
         if self.completed_jobs == self.njobs:
             self.updateLog.emit(translate("Tools::MDB1", "Extracting {archive_name} to {filepath}... Done. ").format(archive_name=self.pre_message,filepath=self.extract_dir) + f"[{self.completed_jobs}/{self.njobs}] [{self.curJob}]")
-        self.success.emit()
+            self.success.emit()
 
     @QtCore.pyqtSlot()
     def execute(self):

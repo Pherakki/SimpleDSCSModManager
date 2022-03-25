@@ -27,7 +27,7 @@ class BaseMBERunner(QtCore.QObject):
         self.curJob = ""
         
         self.success.connect(self.finished)
-        self.raise_exception.connect(self.finished)
+        #self.raise_exception.connect(self.finished)
         
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.logCurrentJob)
