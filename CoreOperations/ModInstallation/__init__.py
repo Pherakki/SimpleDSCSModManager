@@ -67,19 +67,52 @@ class BuildGraphRunner(QtCore.QObject):
 
             # Get the values of all softcodes mentioned in the mods to be installed
             softcode_lookup = {}
+            self.ops.softcode_manager.load_softcode_data()
+            # Get all hardcoded values that softcodes need to consider in the build graph, 
+            # see if any conflict with cached softcodes
+            self.get_blocking_hardcodes(build_graphs)
+            
+            # Evaluate all softcodes that should not have their evaluations
+            # delayed
+            varlist_calls = []
+            variables_softcodes = []
+            for mod in active_mods:
+                variables_softcodes.append(scan_variables_for_softcodes(mod.path, self.ops.softcode_manager))
             for match in softcodes:
+                for delay_item in ["VarLists"]:
+                    if match.startswith(delay_item):
+                        varlist_calls.append(match)
+                    else:
+                        softcode_lookup[match] = self.ops.softcode_manager.lookup_softcode(match)
+            for mod_codes in variables_softcodes:
+                for match in mod_codes: 
+                    for delay_item in ["VarLists"]:
+                        if match.startswith(delay_item):
+                            varlist_calls.append(match)
+                        else:
+                            softcode_lookup[match] = self.ops.softcode_manager.lookup_softcode(match)
+                        
+                
+            # Now put in the Variables
+            for mod, mod_codes in zip(active_mods, variables_softcodes):
+                parse_mod_variables(mod.path, self.ops.softcode_manager, softcode_lookup, mod_codes)
+
+            # Execute the delayed VarList evaluations
+            for match in varlist_calls:
                 softcode_lookup[match] = self.ops.softcode_manager.lookup_softcode(match)
             
             # Now cull the graph depending on the hash of each pack target,
             # which requests are required, etc.
             self.process_graph(build_graphs, softcode_lookup)
-            # Save any newly-generated softcode values to the cache
-            #self.ops.softcode_manager.dump_cached_softcodes()
+            
             
             # Forward the culled graph and required softcodes to the next
             # stage in the install process
             self.sendBuildGraphs.emit(build_graphs)
             self.sendSoftcodes.emit(softcode_lookup)
+            # Save any newly-generated softcode values to the cache
+            self.ops.softcode_manager.dump_codes_to_json()
+            self.ops.softcode_manager.unload_softcode_data()
             self.finished.emit()
         except Exception as e:
             self.raise_exception.emit(e)
