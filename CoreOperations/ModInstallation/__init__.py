@@ -480,6 +480,7 @@ class ArchiveBuilder(QtCore.QObject):
        
 
 class ModInstaller(QtCore.QObject):
+    success = QtCore.pyqtSignal()
     finished = QtCore.pyqtSignal()
     clean_up = QtCore.pyqtSignal()
     exiting = QtCore.pyqtSignal()
@@ -501,6 +502,7 @@ class ModInstaller(QtCore.QObject):
         
         
         # Link final step to the thread destructor
+        self.success.connect(self.finished.emit)
         self.finished.connect(self.clean_up.emit)
         self.raise_exception.connect(self.clean_up.emit)
         self.clean_up.connect(self.thread.quit)
@@ -508,7 +510,7 @@ class ModInstaller(QtCore.QObject):
         self.thread.finished.connect(self.exiting.emit)
         self.exiting.connect(self.ui.enable_gui)
         
-        self.finished.connect(lambda: self.ui.log(translate("ModInstall", "Mods successfully installed.")))
+        self.success.connect(lambda: self.ui.log(translate("ModInstall", "Mods successfully installed.")))
         
     @QtCore.pyqtSlot()
     def install(self):
@@ -578,7 +580,7 @@ class ModInstaller(QtCore.QObject):
             # Link up final step
             last_istep = installer_steps[-1]
             last_istep.set_message_info(generate_step_message(n_steps, n_steps))
-            last_istep.finished.connect(self.finished.emit)
+            last_istep.finished.connect(self.success.emit)
             
             # Green light! Go go go!
             self.ui.updateLog(translate("ModInstall", "[!] Starting mod installation... [!]"))
