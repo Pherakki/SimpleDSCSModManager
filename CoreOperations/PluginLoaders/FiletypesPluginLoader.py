@@ -7,10 +7,13 @@ from CoreOperations.PluginLoaders.PluginLoad import load_sorted_plugins_in
 def get_filetype_plugins():
     plugin_dir = os.path.join('plugins', 'filetypes')
     
-    return [*load_sorted_plugins_in(plugin_dir, inspect.isclass), UnhandledFiletype]
+    return [*load_sorted_plugins_in(plugin_dir, lambda x: issubclass(x, BaseFiletype) if inspect.isclass(x) else False), UnhandledFiletype]
 
-def get_filetype_plugins_dict():
-    return {plugin.group: plugin for plugin in get_filetype_plugins()}
+def get_build_element_plugins():
+    plugin_dir = os.path.join('plugins', 'filetypes')
+    
+    return [*load_sorted_plugins_in(plugin_dir, lambda x: issubclass(x, BaseBuildElement) if inspect.isclass(x) else False), UnhandledFiletypeBuildElement]
+
 
 def get_type_of_file(path, filename):
     for plugin in get_filetype_plugins():
