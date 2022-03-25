@@ -336,6 +336,9 @@ class CoreOperations:
         if (archive_path == '' or archive_path == '.') or not os.path.isdir(archive_path):
             self.main_window.ui.log("Operation cancelled.")
             return
+        if not os.path.isdir(archive_path):
+            self.main_window.ui.log(translate("CoreOps::LogMessage", "Input path is not a directory."))
+            return
         
         thrd = ThreadRunner(self.main_window)
         dst = archive_path + ".steam.mvgl"
