@@ -1,7 +1,7 @@
 {
   "effect": {
     "id": "int",
-    "unk1": "string",
+    "skillEffModel": "string",
     "unk2": "int",
     "unk3": "int",
     "unk4": "int",
@@ -14,6 +14,6 @@
     "unk11": "int",
     "unk12": "string",
     "unk14": "int",
-    "unk15": "int"
+    "skillSFX": "int"
   }
 }
