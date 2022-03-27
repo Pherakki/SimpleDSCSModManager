@@ -110,3 +110,22 @@ class mberecord_remove:
             result[key] = nonzero_data[:max_records]
         
         build_data.csv_data = result
+        
+class mbetable_overwrite:
+    overrides_all_previous = False
+    is_anchor = True
+    is_solitary = False
+    
+    group = "CSV"
+    
+    def __call__(self, build_data):
+        filepath        = build_data.source
+        id_len          = build_data.id_len
+        softcodes       = build_data.softcodes
+        softcode_lookup = build_data.softcode_lookup
+        encoding        = build_data.encoding
+        
+        header, data = mbetable_to_dict({}, filepath, id_len, softcodes, softcode_lookup, encoding)
+
+        build_data.csv_data = data
+        
