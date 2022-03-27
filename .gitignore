@@ -135,3 +135,12 @@ Documentation/*.log
 Documentation/*.out
 Documentation/*.synctex.gz
 Documentation/*.toc
+
+# SDMM locations
+config/config.json
+config/notes.txt
+logs/*
+mods/*
+output/*
+profiles/*
+resources/*
