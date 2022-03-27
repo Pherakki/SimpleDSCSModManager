@@ -26,6 +26,17 @@ def load_plugins_in(directory, predicate):
         results.extend([getattr(module, class_) for class_ in classes_in_module])
     return results
 
+def load_plugins_from(directory, file, predicate):
+    file, ext = os.path.splitext(file)
+    if ext != '.py':
+        return []
+    module_name = ".".join([*splitpath(directory), file])
+    importlib.import_module(module_name)
+    module = sys.modules[module_name]
+    classes_in_module = [m[0] for m in inspect.getmembers(module, predicate) if m[1].__module__ == module.__name__]
+    return [getattr(module, class_) for class_ in classes_in_module]
+
+
 def get_plugin_sort_order(directory):
     priority_file = os.path.join(directory, "_priorities.json")
     if os.path.exists(priority_file):
