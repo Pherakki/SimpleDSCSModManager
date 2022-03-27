@@ -366,7 +366,12 @@ class BuildGraphExecutor(QtCore.QObject):
         except Exception as e:
             self.raise_exception.emit(e)
 
-class FieldGuideSorter(QtCore.QObject):
+# 1) Skip sort if data isn't in the build graph
+# 2) Enumerate the sorts
+# 3) Make it work for all MDB1 archives
+# 4) Unify some sorters?
+# 5) Do Item order, Digimon Market order
+class DataSorter(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     log = QtCore.pyqtSignal(str)
     updateLog = QtCore.pyqtSignal(str)
@@ -386,6 +391,14 @@ class FieldGuideSorter(QtCore.QObject):
         
     @QtCore.pyqtSlot()
     def execute(self):
+        self.sort_field_guide()
+        self.sort_voicelines()
+        self.finished.emit()
+    
+    ########################
+    # FIELD GUIDE SORTING
+    ########################
+    def sort_field_guide(self):
         try:
             self.log.emit(translate("ModInstall", "{curr_step_message} Sorting Field Guide...").format(curr_step_message=self.pre_message))
             cache_loc = self.ops.paths.patch_cache_loc
@@ -422,8 +435,6 @@ class FieldGuideSorter(QtCore.QObject):
                 self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Field Guide... sort complete.").format(curr_step_message=self.pre_message))
             else:
                 self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Field Guide... no edits required.").format(curr_step_message=self.pre_message))
-                
-            self.finished.emit()
         except Exception as e:
             self.raise_exception.emit(e)
             
@@ -473,6 +484,39 @@ class FieldGuideSorter(QtCore.QObject):
     
     def gojuonjun_order(self):
         pass
+    
+
+    ########################
+    # VOICELINES SORTING
+    ########################
+    def sort_voicelines(self):
+        try:
+            for table, game_name in [("battle_voice.mbe", "CS"), ("battle_voice_add.mbe", "HM")]:
+                self.log.emit(translate("ModInstall", "{curr_step_message} Sorting Battle Voices ({game_name})...").format(curr_step_message=self.pre_message, game_name=game_name))
+                cache_loc = self.ops.paths.patch_cache_loc
+                if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", table)): 
+                    # Get the required data
+                    hdr, build_voice_data = self.get_resource_table("DSDBP", ["data", table], "voice.csv")
+    
+                    build_voice_data = {key: value for key, value in sorted(build_voice_data.items(), key=lambda x: x[0][0])}
+
+                    # Save back to the cache
+                    build_table = os.path.join(self.ops.paths.patch_build_loc, "data", table)
+                    dict_to_mbetable(os.path.join(build_table, "voice.csv"), hdr, build_voice_data)
+                    os.remove(cache_table)
+                    
+                    mbe_filepack = get_filepack_plugins_dict()["MBE"]
+                    cache_table_decomp = cache_table + ".decomp"
+                    mbe_filepack.pack(build_table, cache_table_decomp)
+                    DSCSTools.dobozCompress(cache_table_decomp, cache_table)
+                    os.remove(cache_table_decomp)
+                    self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Battle Voices ({game_name})... sort complete.").format(curr_step_message=self.pre_message, game_name=game_name))
+                else:
+                    self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Battle Voices ({game_name})... no edits required.").format(curr_step_message=self.pre_message, game_name=game_name))
+
+        except Exception as e:
+            self.raise_exception.emit(e)
+            
         
             
 class ArchiveBuilder(QtCore.QObject):
@@ -539,6 +583,7 @@ class ModInstaller(QtCore.QObject):
         self.build_graph_runner = None
         self.resource_bootstrapper = None
         self.build_graph_executor = None
+        self.data_sorter = None
         self.archive_builder = None
         
         
@@ -591,12 +636,12 @@ class ModInstaller(QtCore.QObject):
             installer_steps.append(self.build_graph_executor)
             
             # Optional step: Sort the field guide order
-            self.field_guide_sorter = FieldGuideSorter(self.ops, parent=self)
-            self.field_guide_sorter.moveToThread(self.thread)
-            self.field_guide_sorter.init_signals(self.ui)
-            self.field_guide_sorter.raise_exception.connect(self.raise_exception.emit)
-            self.field_guide_sorter.finished.connect(self.field_guide_sorter.deleteLater)
-            installer_steps.append(self.field_guide_sorter)
+            self.data_sorter = DataSorter(self.ops, parent=self)
+            self.data_sorter.moveToThread(self.thread)
+            self.data_sorter.init_signals(self.ui)
+            self.data_sorter.raise_exception.connect(self.raise_exception.emit)
+            self.data_sorter.finished.connect(self.data_sorter.deleteLater)
+            installer_steps.append(self.data_sorter)
             
             # Step 4: Build and install any archives and loose files
             self.archive_builder = ArchiveBuilder(self.ops, parent=self)
