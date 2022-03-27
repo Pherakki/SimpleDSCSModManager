@@ -878,37 +878,37 @@
         <translation>{curr_step_message} Creando materiales modificados... No es necesario compilar ningún archivo.</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="390"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="403"/>
         <source>{curr_step_message} Sorting Field Guide...</source>
         <translation type="unfinished">{curr_step_message} Ordenando Field Guide/Digipedia...</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="422"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="435"/>
         <source>{curr_step_message} Sorting Field Guide... sort complete.</source>
         <translation type="unfinished">{curr_step_message} Ordenando Field Guide/Digipedia... Ordenación finalizada.</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="424"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="437"/>
         <source>{curr_step_message} Sorting Field Guide... no edits required.</source>
         <translation type="unfinished">{curr_step_message} Ordenando Field Guide/Digipedia... No es necesario hacer cambios.</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="505"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="549"/>
         <source>{curr_step_message} Installing mod files...</source>
         <translation>{curr_step_message} Instalando archivos del mod...</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="554"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="599"/>
         <source>Mods successfully installed.</source>
         <translation>Los mods han sido instalados con éxito.</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="560"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="605"/>
         <source>[!] Preparing to install... [!]</source>
         <translation>[!] Preparando instalación... [!]</translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="627"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="672"/>
         <source>[!] Starting mod installation... [!]</source>
         <translation>[!] Iniciando instalación del mod... [!]</translation>
     </message>
@@ -923,8 +923,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="459"/>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="470"/>
         <source>ID {name_id} is not defined in charnames; did you remember to enter a 4-character ID code?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="495"/>
+        <source>{curr_step_message} Sorting Battle Voices ({game_name})...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="513"/>
+        <source>{curr_step_message} Sorting Battle Voices ({game_name})... sort complete.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../CoreOperations/ModInstallation/__init__.py" line="515"/>
+        <source>{curr_step_message} Sorting Battle Voices ({game_name})... no edits required.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
