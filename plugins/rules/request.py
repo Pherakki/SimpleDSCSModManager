@@ -58,6 +58,8 @@ class request_file:
             outpath = os.path.normpath(os.path.join(cache_loc, target + "_request"))
             os.makedirs(outpath, exist_ok=True)
             DSCSTools.extractMDB1File(get_path, outpath, request_src, True)
+        except FileNotFoundError as e:
+            raise e
         except Exception as e:
             raise ValueError(f"Request file \'{request_src}\' not in vanilla archive \'{archive}.steam.mvgl\', source file is \'{source}\'.") from e
         
