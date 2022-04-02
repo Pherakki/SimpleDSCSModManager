@@ -528,7 +528,7 @@ class DataSorter(QtCore.QObject):
         try:
             self.log.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Items...").format(step_no=step_no, max_steps=self.max_steps))
             cache_loc = self.ops.paths.patch_cache_loc
-            if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "digimon_common_para.mbe")): 
+            if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "item_para.mbe")): 
                 # Get the required data
                 hdr, build_common_para_digimon = self.get_resource_table("DSDBP", ["data", "item_para.mbe"], "table.csv")
                 _, build_charname = self.get_resource_table("DSDB", ["text", "item_name.mbe"], "Sheet1.csv")
