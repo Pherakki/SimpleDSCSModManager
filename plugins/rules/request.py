@@ -48,8 +48,10 @@ class request_file:
             archive_path = os.path.join(archive_loc, archive + ".steam.mvgl")
             if os.path.exists(backup_archive):
                 get_path = backup_archive
-            else:
+            elif os.path.exists(archive_path):
                 get_path = archive_path
+            else:
+                raise FileNotFoundError(f"Unable to locate {archive}.steam.mvgl. Have you deleted it?")
                 
             # In case a the same request gets pulled twice..
             # extract to a folder unique to the target
