@@ -3,25 +3,23 @@
 
 **Executables can be found in the "Releases" tab on the right-hand side of this page.**
 
-A basic mod manager for Digimon Story: Cyber Sleuth.
-Currently in an early release state, which means that not all desired features are complete and bugs are not completely unexpected. Although the source code should in principle be cross-platform, only Windows releases are currently supported. Other operating systems are untested and, therefore, may suffer from more bugs.
+A poorly-named mod manager for Digimon Story: Cyber Sleuth.
 
 ## Features
 - Automatic patching of database and script edits
 - Profile system for switching between sets of mods
 - GUI for several tools that extract and re-pack most game files
 - Caching of pre-built mod files to improve install times
+- A "request" file that installs vanilla dependencies
+- Softcoding database IDs to increase inter-mod compatibility
+- Language options for the GUI
 
 ## Future Plans and Ideas
-- A "request" file that installs vanilla dependencies
 - Improvements to database patching
-- Softcoding database IDs to increase inter-mod compatibility
-- Audio conversion support
 - More powerful script editing
 - Colour schemes (dark mode)
 - List of installed plugins
 - Graphing/reporting of mod conflicts
-- Language options for the GUI
 
 ## Installation
 You can run the mod manager in one of two ways:
@@ -34,7 +32,7 @@ You can run the mod manager in one of two ways:
 2. Alternatively, Windows users can download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer and run `SimpleDSCSModManager.exe`. This may or may not work on your particular system.
 
 ## Usage
-A guide to usage can be found in the accompanying documentation in the file `user_guide.pdf`.
+A guide to usage can be found in the accompanying documentation in the file `user_guide.pdf`. Detailed guidance on creating mods for SimpleDSCSModManager is found in `modders_guide.pdf`.
 
 ## Mod File Format
 There are several options for creating a mod compatible with the mod manager, which are detailed in the accompanying user guide and CYMIS specification documents. The most basic format will consist of a zip file contain the folder "modfiles" and a JSON file called "METADATA.json", where "modfiles" contains the files to be installed and "METADATA.json" contains a JSON dictionary with entries for a "Name", "Version", "Author", "Category", and "Description".
