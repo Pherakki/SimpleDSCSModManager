@@ -546,7 +546,7 @@ class DataSorter(QtCore.QObject):
                 # generate the sort order indices for them
                 for i, key in enumerate(to_sort):
                     # Index 3 is the Item Sort Value
-                    build_common_para_digimon[key][3] = i+1
+                    build_common_para_digimon[key][2] = i+1
    
                     
                 # Save back to the cache
@@ -567,7 +567,7 @@ class DataSorter(QtCore.QObject):
                     
     def sortmode_compress_keygen_items(self, item_id, build_item_para, build_item_name):
         # Remember that item_id is a tuple, despite having one element
-        item_sort_id = build_item_para[item_id][3]
+        item_sort_id = build_item_para[item_id][2]
         name = build_item_name[item_id][2]
         return (int(item_sort_id), name.encode('utf8'))
                 
@@ -596,7 +596,7 @@ class DataSorter(QtCore.QObject):
                 # generate the sort order indices for them
                 for i, key in enumerate(to_sort):
                     # Index 3 is the Item Sort Value
-                    build_common_para_digimon[key][2] = i+1
+                    build_common_para_digimon[key][1] = i+1
    
                     
                 # Save back to the cache
@@ -617,8 +617,8 @@ class DataSorter(QtCore.QObject):
                     
     def sortmode_compress_keygen_digimarket(self, item_id, build_item_para, build_item_name):
         # Remember that item_id is a tuple, despite having one element
-        item_sort_id = build_item_para[item_id][2]
-        name = build_item_name[item_id][2]
+        item_sort_id = build_item_para[item_id][1]
+        name = self.name_getter(item_id[0], build_item_name, 1)[1]
         return (int(item_sort_id), name.encode('utf8'))
     
 class ArchiveBuilder(QtCore.QObject):
