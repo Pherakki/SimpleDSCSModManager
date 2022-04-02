@@ -4,8 +4,9 @@ from Utils.Softcodes import replace_softcodes
 
 add_operator = "++"
 remove_operator = "--"
+constructor_operator = "::"
 
-opcodes = set([add_operator, remove_operator])
+opcodes = set([add_operator, remove_operator, constructor_operator])
 
 def scan_variables_for_softcodes(path, softcode_manager):
     text_softcodes = {}

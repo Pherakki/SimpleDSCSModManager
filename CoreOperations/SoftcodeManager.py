@@ -263,12 +263,14 @@ class SoftcodeListVariableCategory:
         self.keys[name] = SoftcodeListVariable()
 
 class SoftcodeListVariable:
-    __slots__ = ("value", "opcodes")
+    __slots__ = ("value", "opcodes", "is_default")
     
     def __init__(self):
+        self.is_default = True
         self.value = []
         
         self.opcodes = {
+            "::": self.set_default,
             "++": self.add,
             "--": self.remove
         }
@@ -280,12 +282,23 @@ class SoftcodeListVariable:
         else:
             raise Exception(f"Unknown operator \'{opcode}\' for SoftcodeListVariable.")
         
+    def set_default(self, value):
+        if self.is_default:
+            self.value = [item.strip() for item in value.split(',')]
+        
     def add(self, value):
+        if self.is_default:
+            self.value = []
         self.value.append(value)
+        self.is_default = False
         
     def remove(self, value):
+        if self.is_default:
+            self.value = []
         try:
             self.value.remove(value)
         except Exception:
             pass
+        
+        self.is_default = False
         
