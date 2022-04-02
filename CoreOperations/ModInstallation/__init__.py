@@ -381,6 +381,7 @@ class DataSorter(QtCore.QObject):
         super().__init__()
         self.ops = ops
         self.pre_message = None
+        self.max_steps = 5
         
     def set_message_info(self, msg):
         self.pre_message = msg
@@ -391,16 +392,19 @@ class DataSorter(QtCore.QObject):
         
     @QtCore.pyqtSlot()
     def execute(self):
-        self.sort_field_guide()
-        self.sort_voicelines()
+        self.log.emit(translate("ModInstall", "{curr_step_message} Sorting Game Database...").format(curr_step_message=self.pre_message))
+        self.sort_field_guide(1)
+        self.sort_voicelines(2)
+        self.sort_items(4)
+        self.sort_digimarket(5)
         self.finished.emit()
     
     ########################
     # FIELD GUIDE SORTING
     ########################
-    def sort_field_guide(self):
+    def sort_field_guide(self, step_no):
         try:
-            self.log.emit(translate("ModInstall", "{curr_step_message} Sorting Field Guide...").format(curr_step_message=self.pre_message))
+            self.log.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Field Guide...").format(step_no=step_no, max_steps=self.max_steps))
             cache_loc = self.ops.paths.patch_cache_loc
             if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "digimon_common_para.mbe")): 
                 # Get the required data
@@ -432,9 +436,9 @@ class DataSorter(QtCore.QObject):
                 mbe_filepack.pack(build_table, cache_table_decomp)
                 DSCSTools.dobozCompress(cache_table_decomp, cache_table)
                 os.remove(cache_table_decomp)
-                self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Field Guide... sort complete.").format(curr_step_message=self.pre_message))
+                self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Field Guide... sort complete.").format(curr_step_message=self.pre_message, step_no=step_no, max_steps=self.max_steps))
             else:
-                self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Field Guide... no edits required.").format(curr_step_message=self.pre_message))
+                self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Field Guide... no edits required.").format(curr_step_message=self.pre_message, step_no=step_no, max_steps=self.max_steps))
         except Exception as e:
             self.raise_exception.emit(e)
             
@@ -489,10 +493,10 @@ class DataSorter(QtCore.QObject):
     ########################
     # VOICELINES SORTING
     ########################
-    def sort_voicelines(self):
+    def sort_voicelines(self, step_no):
         try:
-            for table, game_name in [("battle_voice.mbe", "CS"), ("battle_voice_add.mbe", "HM")]:
-                self.log.emit(translate("ModInstall", "{curr_step_message} Sorting Battle Voices ({game_name})...").format(curr_step_message=self.pre_message, game_name=game_name))
+            for table, game_name, step_add in [("battle_voice.mbe", "CS", 0), ("battle_voice_add.mbe", "HM", 1)]:
+                self.log.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Battle Voices ({game_name})...").format(game_name=game_name, step_no=step_no+step_add, max_steps=self.max_steps))
                 cache_loc = self.ops.paths.patch_cache_loc
                 if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", table)): 
                     # Get the required data
@@ -510,15 +514,113 @@ class DataSorter(QtCore.QObject):
                     mbe_filepack.pack(build_table, cache_table_decomp)
                     DSCSTools.dobozCompress(cache_table_decomp, cache_table)
                     os.remove(cache_table_decomp)
-                    self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Battle Voices ({game_name})... sort complete.").format(curr_step_message=self.pre_message, game_name=game_name))
+                    self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Battle Voices ({game_name})... sort complete.").format(game_name=game_name, step_no=step_no+step_add, max_steps=self.max_steps))
                 else:
-                    self.updateLog.emit(translate("ModInstall", "{curr_step_message} Sorting Battle Voices ({game_name})... no edits required.").format(curr_step_message=self.pre_message, game_name=game_name))
+                    self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Battle Voices ({game_name})... no edits required.").format(game_name=game_name, step_no=step_no+step_add, max_steps=self.max_steps))
 
         except Exception as e:
             self.raise_exception.emit(e)
             
-        
-            
+    #################
+    # ITEMS SORTING #
+    #################
+    def sort_items(self, step_no):
+        try:
+            self.log.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Items...").format(step_no=step_no, max_steps=self.max_steps))
+            cache_loc = self.ops.paths.patch_cache_loc
+            if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "digimon_common_para.mbe")): 
+                # Get the required data
+                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", ["data", "item_para.mbe"], "table.csv")
+                _, build_charname = self.get_resource_table("DSDB", ["text", "item_name.mbe"], "Sheet1.csv")
+
+                # Now do the sorting
+                to_sort = []
+                for key, val in build_common_para_digimon.items():
+                    to_sort.append(key)
+                        
+                to_sort = sorted(to_sort, key=lambda x: self.sortmode_compress_keygen_items(x, 
+                                                                                      build_common_para_digimon,
+                                                                                      build_charname))
+                
+                # Now that we have an order for the keys,
+                # generate the sort order indices for them
+                for i, key in enumerate(to_sort):
+                    # Index 3 is the Item Sort Value
+                    build_common_para_digimon[key][3] = i+1
+   
+                    
+                # Save back to the cache
+                build_table = os.path.join(self.ops.paths.patch_build_loc, "data", "item_para.mbe")
+                dict_to_mbetable(os.path.join(build_table, "table.csv"), hdr, build_common_para_digimon)
+                os.remove(cache_table)
+                
+                mbe_filepack = get_filepack_plugins_dict()["MBE"]
+                cache_table_decomp = cache_table + ".decomp"
+                mbe_filepack.pack(build_table, cache_table_decomp)
+                DSCSTools.dobozCompress(cache_table_decomp, cache_table)
+                os.remove(cache_table_decomp)
+                self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Items... sort complete.").format(step_no=step_no, max_steps=self.max_steps))
+            else:
+                self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Items... no edits required.").format(step_no=step_no, max_steps=self.max_steps))
+        except Exception as e:
+            self.raise_exception.emit(e)
+                    
+    def sortmode_compress_keygen_items(self, item_id, build_item_para, build_item_name):
+        # Remember that item_id is a tuple, despite having one element
+        item_sort_id = build_item_para[item_id][3]
+        name = build_item_name[item_id][2]
+        return (int(item_sort_id), name.encode('utf8'))
+                
+    ######################
+    # DIGIMARKET SORTING #
+    ######################
+    def sort_digimarket(self, step_no):
+        try:
+            self.log.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Digimon Market...").format(step_no=step_no, max_steps=self.max_steps))
+            cache_loc = self.ops.paths.patch_cache_loc
+            if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "digimon_market_para.mbe")): 
+                # Get the required data
+                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", ["data", "digimon_market_para.mbe"], "table.csv")
+                _, build_charname = self.get_resource_table("DSDB", ["text", "charname.mbe"], "Sheet1.csv")
+
+                # Now do the sorting
+                to_sort = []
+                for key, val in build_common_para_digimon.items():
+                    to_sort.append(key)
+                        
+                to_sort = sorted(to_sort, key=lambda x: self.sortmode_compress_keygen_digimarket(x, 
+                                                                                      build_common_para_digimon,
+                                                                                      build_charname))
+                
+                # Now that we have an order for the keys,
+                # generate the sort order indices for them
+                for i, key in enumerate(to_sort):
+                    # Index 3 is the Item Sort Value
+                    build_common_para_digimon[key][2] = i+1
+   
+                    
+                # Save back to the cache
+                build_table = os.path.join(self.ops.paths.patch_build_loc, "data", "digimon_market_para.mbe")
+                dict_to_mbetable(os.path.join(build_table, "table.csv"), hdr, build_common_para_digimon)
+                os.remove(cache_table)
+                
+                mbe_filepack = get_filepack_plugins_dict()["MBE"]
+                cache_table_decomp = cache_table + ".decomp"
+                mbe_filepack.pack(build_table, cache_table_decomp)
+                DSCSTools.dobozCompress(cache_table_decomp, cache_table)
+                os.remove(cache_table_decomp)
+                self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Digimon Market... sort complete.").format(step_no=step_no, max_steps=self.max_steps))
+            else:
+                self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Digimon Market... no edits required.").format(step_no=step_no, max_steps=self.max_steps))
+        except Exception as e:
+            self.raise_exception.emit(e)
+                    
+    def sortmode_compress_keygen_digimarket(self, item_id, build_item_para, build_item_name):
+        # Remember that item_id is a tuple, despite having one element
+        item_sort_id = build_item_para[item_id][2]
+        name = build_item_name[item_id][2]
+        return (int(item_sort_id), name.encode('utf8'))
+    
 class ArchiveBuilder(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     clean_up = QtCore.pyqtSignal()
