@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="es_ES" sourcelanguage="en_US">
+<!DOCTYPE TS>
+<TS version="2.1" language="es_ES" sourcelanguage="en_US">
 <context>
     <name>Application</name>
     <message>
@@ -56,12 +57,12 @@
     <message>
         <location filename="../../SimpleDSCSModManager.py" line="35"/>
         <source>Permissions Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Advertencia de permisos</translation>
     </message>
     <message>
         <location filename="../../SimpleDSCSModManager.py" line="36"/>
         <source>You are running SimpleDSCSModManager from&lt;br&gt;&lt;br&gt;{path}&lt;br&gt;&lt;br&gt;which appears to be a protected location. You may encounter errors when trying to install mods because of this. It is &lt;b&gt;highly recommended&lt;/b&gt; to either &lt;b&gt;move SimpleDSCSModManager to a non-protected location&lt;/b&gt;, or &lt;b&gt;run the program in Admin mode&lt;/b&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Estás ejecutando SimpleDSCSModManager desde:&lt;br&gt;&lt;br&gt;{path}&lt;br&gt;&lt;br&gt;Esta ubicación parece estar protegida. Es posible que haya errores al intentar instalar mods. Se &lt;b&gt;recomienda encarecidamente&lt;/b&gt; hacer lo siguiente: &lt;b&gt;mover SimpleDSCSModManager a una ubicación no protegida&lt;/b&gt; o &lt;b&gt;ejecutar el programa en el modo Administrador&lt;/b&gt;.</translation>
     </message>
 </context>
 <context>
@@ -173,7 +174,7 @@
     <message>
         <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="137"/>
         <source>Categorising install graph pipelines... Done. </source>
-        <translation>Clasificando procesos de gráficos de instalación... Listo.</translation>
+        <translation>Clasificando procesos de gráficos de instalación... Listo. </translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="159"/>
@@ -183,7 +184,7 @@
     <message>
         <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="162"/>
         <source>Creating missing mod indices... Done. </source>
-        <translation>Creando índices de mods que faltan... Listo.</translation>
+        <translation>Creando índices de mods que faltan... Listo. </translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModBuildGraph/__init__.py" line="168"/>
@@ -289,17 +290,17 @@
     <message>
         <location filename="../../CoreOperations/__init__.py" line="551"/>
         <source>Select a folder containing HCA files:</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona una carpeta que contenga archivos HCA:</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="542"/>
         <source>Select a folder containing WAV files:</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona una carpeta que contenga archivos WAV:</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="590"/>
         <source>Select a WAV file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona un archivo WAV:</translation>
     </message>
 </context>
 <context>
@@ -435,62 +436,62 @@
     <message>
         <location filename="../../CoreOperations/__init__.py" line="556"/>
         <source>Output path is not a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>La ruta de salida no es un directorio.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="597"/>
         <source>Input path is not a file.</source>
-        <translation type="unfinished"></translation>
+        <translation>La ruta de entrada no es un archivo.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="547"/>
         <source>Input path is not a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>La ruta de entrada no es un directorio.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="535"/>
         <source>Converting HCAs to WAVs into {filepath}...</source>
-        <translation type="unfinished"></translation>
+        <translation>Convirtiendo archivos HCA a WAV dentro de {filepath}...</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="537"/>
         <source>Converting HCAs to WAVs into {filepath}... Done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Convirtiendo archivos HCA a WAV dentro de {filepath}... Listo.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="560"/>
         <source>Converting WAVs to HCAs into {filepath}...</source>
-        <translation type="unfinished"></translation>
+        <translation>Convirtiendo archivos WAV a HCA dentro de {filepath}...</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="562"/>
         <source>Converting WAVs to HCAs into {filepath}... Done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Convirtiendo archivos WAV a HCA dentro de {filepath}... Listo.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="606"/>
         <source>No Start Sample provided, aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha indicado la muestra de inicio, abortando.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="609"/>
         <source>No End Sample provided, aborting.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha indicado la muestra de fin, abortando.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="612"/>
         <source>Start Sample must be before the End Sample.</source>
-        <translation type="unfinished"></translation>
+        <translation>La muestra de inicio debe situarse antes de la muestra de fin.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="618"/>
         <source>Converting {in_filepath} to {out_filepath}...</source>
-        <translation type="unfinished"></translation>
+        <translation>Convirtiendo {in_filepath} a {out_filepath}...</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/__init__.py" line="620"/>
         <source>Converting {in_filepath} to {out_filepath}... Done.</source>
-        <translation type="unfinished"></translation>
+        <translation>Convirtiendo {in_filepath} a {out_filepath}... Listo.</translation>
     </message>
 </context>
 <context>
@@ -648,12 +649,12 @@
     <message>
         <location filename="../../plugins/filepacks/Model.py" line="74"/>
         <source>Building Model files</source>
-        <translation type="unfinished"></translation>
+        <translation>Generando archivos de modelos</translation>
     </message>
     <message>
         <location filename="../../plugins/filepacks/Model.py" line="78"/>
         <source>Model files</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivos de modelos</translation>
     </message>
 </context>
 <context>
@@ -749,17 +750,17 @@
     <message>
         <location filename="../../CoreOperations/ModRegistry/Indexing.py" line="162"/>
         <source>Could not read ALIASES.json, error was &quot;{error_msg}&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido leer el archivo ALIASES.json, el error es «{error_msg}».</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/Indexing.py" line="172"/>
         <source>Could not read BUILD.json, error was &quot;{error_msg}&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido leer el archivo BUILD.json, el error es «{error_msg}».</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/Indexing.py" line="305"/>
         <source>Unable to locate source file &apos;{filepath}&apos; referenced in BUILD.json.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha podido localizar el archivo de origen «{filepath}» referenciado en el archivo BUILD.json.</translation>
     </message>
 </context>
 <context>
@@ -807,7 +808,7 @@
     <message>
         <location filename="../../MainWindow.py" line="42"/>
         <source>Script patching errors can be caused by your anti-virus program. If this happens, you will need to use &quot;Purge Mod Cache&quot; and &quot;Purge Mod Resources&quot; before attempting again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu programa antivirus podría provocar errores al parchear los scripts. En caso de que esto ocurra, tendrás que utilizar las opciones «Purgar caché de mods» y «Purgar recursos de mods» antes de volver a intentarlo.</translation>
     </message>
 </context>
 <context>
@@ -880,17 +881,17 @@
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="403"/>
         <source>{curr_step_message} Sorting Field Guide...</source>
-        <translation type="unfinished">{curr_step_message} Ordenando Field Guide/Digipedia...</translation>
+        <translation>{curr_step_message} Ordenando Field Guide/Digipedia...</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="435"/>
         <source>{curr_step_message} Sorting Field Guide... sort complete.</source>
-        <translation type="unfinished">{curr_step_message} Ordenando Field Guide/Digipedia... Ordenación finalizada.</translation>
+        <translation>{curr_step_message} Ordenando Field Guide/Digipedia... Ordenación finalizada.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="437"/>
         <source>{curr_step_message} Sorting Field Guide... no edits required.</source>
-        <translation type="unfinished">{curr_step_message} Ordenando Field Guide/Digipedia... No es necesario hacer cambios.</translation>
+        <translation>{curr_step_message} Ordenando Field Guide/Digipedia... No es necesario hacer cambios.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="549"/>
@@ -915,32 +916,32 @@
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="62"/>
         <source>Installing {count} mods...</source>
-        <translation type="unfinished"></translation>
+        <translation>Instalando {count} mods...</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="59"/>
         <source>No mods selected, nothing to install. Use &apos;Restore Backups&apos; if you want to remove all mods.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se ha seleccionado ningún mod, así que no hay nada que instalar. Si lo que quieres es quitar todos los mods, utiliza la opción «Restaurar copias de seguridad».</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="470"/>
         <source>ID {name_id} is not defined in charnames; did you remember to enter a 4-character ID code?</source>
-        <translation type="unfinished"></translation>
+        <translation>El ID {name_id} no está definido en los «charnames», ¿has introducido un código ID de cuatro caracteres?</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="495"/>
         <source>{curr_step_message} Sorting Battle Voices ({game_name})...</source>
-        <translation type="unfinished"></translation>
+        <translation>{curr_step_message} Ordenando voces de batalla ({game_name})...</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="513"/>
         <source>{curr_step_message} Sorting Battle Voices ({game_name})... sort complete.</source>
-        <translation type="unfinished"></translation>
+        <translation>{curr_step_message} Ordenando voces de batalla ({game_name})... Ordenación finalizada.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModInstallation/__init__.py" line="515"/>
         <source>{curr_step_message} Sorting Battle Voices ({game_name})... no edits required.</source>
-        <translation type="unfinished"></translation>
+        <translation>{curr_step_message} Ordenando voces de batalla ({game_name})... No es necesario hacer cambios.</translation>
     </message>
 </context>
 <context>
@@ -1087,73 +1088,73 @@
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="18"/>
         <source>Regex Pattern is not a string, is type &apos;{0}&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>El patrón regex no es una cadena, sino el tipo «{0}».</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="38"/>
         <source>ModRegistry::BuildScript</source>
         <comment>Range Variable is not a list, is type &apos;{0}&apos;.</comment>
-        <translation type="unfinished"></translation>
+        <translation>ModRegistry::BuildScript</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="41"/>
         <source>Range Variable contains &apos;{0}&apos; entries, should contain 3 (Start, Stop, Step): {1}.</source>
-        <translation type="unfinished"></translation>
+        <translation>La variable de rangos contiene {0} entradas y debería tener 3 (inicio, fin, paso): {1}.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="56"/>
         <source>Parent directory token {0} is not allowed in paths: &apos;{1}&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>El token del directorio principal {0} no está permitido en las rutas: «{1}»</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="72"/>
         <source>&apos;Rules&apos; for Mod File &apos;{0}&apos; of Target File &apos;{1}&apos; is a list, but not all rules are strings: {2}</source>
-        <translation type="unfinished"></translation>
+        <translation>Las reglas del archivo de mod «{0}» del archivo de destino «{1}» son una lista, pero no todas las reglas son cadenas: {2}</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="76"/>
         <source>&apos;Rules&apos; for Mod File &apos;{0}&apos; of Target File &apos;{1}&apos; is a dict, but not all rule pairs are strings: {2}</source>
-        <translation type="unfinished"></translation>
+        <translation>Las reglas del archivo de mod «{0}» del archivo de destino «{1}» son un diccionario, pero no todos los pares de reglas son cadenas: {2}</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="79"/>
         <source>&apos;Rules&apos; for Mod File &apos;{0}&apos; of Target File &apos;{1}&apos; is not a string, list, or dict: {2}</source>
-        <translation type="unfinished"></translation>
+        <translation>Las reglas del archivo de mod «{0}» del archivo de destino «{1}» no son una cadena, lista o diccionario: {2}</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="95"/>
         <source>File Target &apos;{0}&apos; produced more than once by Build Script entry &apos;{1}&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>El archivo de destino «{0}» se ha producido más de una vez por la entrada «{1}» del script de generación.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="98"/>
         <source>File Target &apos;{0}&apos; already defined by Build Script entry &apos;{1}&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>El archivo de destino «{0}» ya está definido en la entrada «{1}» del script de generación.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="110"/>
         <source>Build Steps list for File Target &apos;{0}&apos; is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>La lista de los pasos de generación del archivo de destino «{0}» está en blanco.</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="120"/>
         <source>Invalid type for Build Steps of Target File &apos;{0}&apos;: &apos;{1}&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Los pasos de generación del archivo de destino «{0}» tienen un tipo no válido: «{1}».</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="160"/>
         <source>Invalid argument list provided to Variable of type &apos;{0}&apos; in the Variables for File Target &apos;{1}&apos;; error was: {2}</source>
-        <translation type="unfinished"></translation>
+        <translation>Se ha indicado una lista de argumentos no válida a la variable del tipo «{0}» en las variables del archivo de destino «{1}»; el error ha sido «{2}»</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="174"/>
         <source>Encountered error when inserting Variables into File Target &apos;{0}&apos;; error was: {1}</source>
-        <translation type="unfinished"></translation>
+        <translation>Se ha producido un error al introducir las variables en el archivo de destino «{0}», el error ha sido «{1}»</translation>
     </message>
     <message>
         <location filename="../../CoreOperations/ModRegistry/BuildScript.py" line="186"/>
         <source>Encountered error when inserting Variables into Build Step Source File &apos;{0}&apos; for Target File &apos;{1}&apos;; error was: {2}</source>
-        <translation type="unfinished"></translation>
+        <translation>Se ha producido un error al insertar las variables en el paso de generación del archivo de origen «{0}» para el archivo de destino «{1}»; el error ha sido «{2}»</translation>
     </message>
 </context>
 <context>
@@ -1306,7 +1307,7 @@
     <message>
         <location filename="../../CoreOperations/SoftcodeManager.py" line="127"/>
         <source>Softcode Category &quot;{category_name}&quot; does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>La categoría de «softcodes» «{category_name}» no existe.</translation>
     </message>
 </context>
 <context>
