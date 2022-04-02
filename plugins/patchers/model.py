@@ -69,7 +69,8 @@ class ModelPatcher(BasePatcher):
             self.build_generic("name", targets["name"], build_pipelines["name"], fetched_data)
             
         for target, build_pipeline in zip(targets.get("anim", []), build_pipelines.get("anim", [])):
-            if "skel" in build_pipelines:
+            requires_open_file = any([getattr(self.rules[mod.rule], "requires_open_file", False) for mod in build_pipeline])
+            if ("skel" in build_pipelines) and requires_open_file:
                 first_step = build_pipelines["skel"][0]
                 src = os.path.join(first_step.mod, first_step.src)
                 resource_file = os.path.join(self.paths.base_resources_loc, os.path.extsep.join((os.path.splitext(target)[0], "skel")))
