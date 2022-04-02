@@ -106,6 +106,9 @@ class uiMenu:
         self.addModAction = QtWidgets.QAction(parentWidget)
         self.fileMenu.addAction(self.addModAction)
         
+        self.docsAction = QtWidgets.QAction(parentWidget)
+        self.helpMenu.addAction(self.docsAction)
+        
         self.donateAction = QtWidgets.QAction(parentWidget)
         self.helpMenu.addAction(self.donateAction)
         
@@ -120,8 +123,8 @@ class uiMenu:
     def lay_out(self):
         pass
     
-    def hook(self, open_patreon):
-        self.donateAction.triggered.connect(open_patreon)
+    def hook(self, ops):
+        self.donateAction.triggered.connect(lambda : supportPopup(self.parentWidget, ops.paths))
         
     def hook_filemenu(self, register_mod_dialog):
         self.addModAction.triggered.connect(register_mod_dialog)
@@ -214,6 +217,25 @@ class creditsPopup:
         msgBox.setText(msgBoxText)
         
         msgBox.exec_()
+        
+class supportPopup:
+    def __init__(self, win, paths):
+        msgBox = QtWidgets.QMessageBox(win)
+        msgBox.setWindowTitle(translate("UI::Support", "Support"))
+        
+        msgBoxText = "<b>Pherakki</b>"
+        msgBoxText += "<br>"
+        msgBoxText += translate("UI::Support", "The author of SimpleDSCSModManager. Does not currently accept donations.")
+        
+        msgBoxText += "<br><br>"
+        msgBoxText += "<b>SydMontague</b>"
+        msgBoxText += "<br>"
+        msgBoxText += translate("UI::Support", "Produces lots of cool Digimon modding tools, and frequently discusses SimpleDSCSModManager feature development with me. Creator of DSCSTools, which the mod manager could not exist without. You can support SydMontague's projects on {hyperlink_open}Patreon{hyperlink_close}, which are not paywalled.").format(hyperlink_open=f"<a href=\"{paths.syd_patreon}\">", hyperlink_close="</a>")
+        
+        msgBox.setText(msgBoxText)
+        
+        msgBox.exec_()
+        
 
 
 class uiMainArea:

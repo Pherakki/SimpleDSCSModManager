@@ -36,7 +36,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ops.init = True
         
         self.ui.log(translate("MainWindow", "SimpleDSCSModManager initialised."))
-        self.ui.loglink(translate("MainWindow", "Enjoying Cyber Sleuth modding? Consider supporting more projects like this on {hyperlink_open}Patreon{hyperlink_close}!").format(hyperlink_open=f"<a href=\"{self.ops.paths.syd_patreon}\">", hyperlink_close="</a>"))
         self.ui.loglink(translate("MainWindow", "Want to contribute to modding tools or develop mods? Consider joining the {hyperlink_open}Digimon Modding Community discord server{hyperlink_close}.").format(hyperlink_open="<a href=\"{self.ops.paths.discord_invite}\">", hyperlink_close="</a>"))
         self.ui.log(translate("MainWindow","If you're encountering issues installing mods, remember to use SimpleDSCSModManager in a non-protected location (e.g. not Desktop, Documents, etc.) and run it in Admin mode."))
         self.ui.log(translate("MainWindow","Script patching errors can be caused by your anti-virus program. If this happens, you will need to use \"Purge Mod Cache\" and \"Purge Mod Resources\" before attempting again."))
@@ -139,7 +138,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
 
     def __init_ui_hooks(self):
-        self.ui.hook_menu(self.ops.paths.open_patreon)
+        self.ui.hook_menu(self.ops)
         self.ui.hook_filemenu(self.ops.register_mod_filedialog)
         self.ui.hook_languageaction(self.loggedChangedLanguage)
         self.ui.hook_mod_registry(self.ops.mod_registry.register_mod)
