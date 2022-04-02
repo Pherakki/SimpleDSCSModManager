@@ -38,7 +38,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.log(translate("MainWindow", "SimpleDSCSModManager initialised."))
         self.ui.loglink(translate("MainWindow", "Want to contribute to modding tools or develop mods? Consider joining the {hyperlink_open}Digimon Modding Community discord server{hyperlink_close}.").format(hyperlink_open="<a href=\"{self.ops.paths.discord_invite}\">", hyperlink_close="</a>"))
         self.ui.log(translate("MainWindow","If you're encountering issues installing mods, remember to use SimpleDSCSModManager in a non-protected location (e.g. not Desktop, Documents, etc.) and run it in Admin mode."))
-        self.ui.log(translate("MainWindow","Script patching errors can be caused by your anti-virus program. If this happens, you will need to use \"Purge Mod Cache\" and \"Purge Mod Resources\" before attempting again."))
         
     def closeEvent(self, event):
         try:
