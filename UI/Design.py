@@ -125,6 +125,7 @@ class uiMenu:
     
     def hook(self, ops):
         self.donateAction.triggered.connect(lambda : supportPopup(self.parentWidget, ops.paths))
+        self.docsAction.triggered.connect(ops.paths.open_docs)
         
     def hook_filemenu(self, register_mod_dialog):
         self.addModAction.triggered.connect(register_mod_dialog)
@@ -151,7 +152,8 @@ class uiMenu:
         self.languageMenu.setTitle(translate("UI::MenuBar", "&Language"))
         self.helpMenu.setTitle(translate("UI::MenuBar", "&Help"))
         self.addModAction.setText(translate("UI::FileMenu", "Add Mod..."))
-        self.donateAction.setText(translate("UI::HelpMenu", "Support Digimon Game Research..."))
+        self.docsAction.setText(translate("UI::HelpMenu", "Help and Modding Guides..."))
+        self.donateAction.setText(translate("UI::HelpMenu", "Support Digimon Modding Tools"))
         self.creditsAction.setText(translate("UI::HelpMenu", "Credits"))
         self.aboutQtAction.setText(translate("UI::HelpMenu", "About Qt"))
         

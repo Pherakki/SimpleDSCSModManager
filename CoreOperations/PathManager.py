@@ -63,6 +63,13 @@ class PathManager:
         webbrowser.open_new_tab(self.syd_patreon)
     
     @property
+    def docs_site(self):
+        return r'https://github.com/Pherakki/SimpleDSCSModManager/tree/develop/Documentation'
+    
+    def open_docs(self):
+        webbrowser.open_new_tab(self.docs_site)
+        
+    @property
     def discord_invite(self):
         return r'https://discord.gg/cb5AuxU6su'
     
