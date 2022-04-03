@@ -3,7 +3,7 @@
 
 **Executables can be found in the "Releases" tab on the right-hand side of this page.**
 
-A poorly-named mod manager for Digimon Story: Cyber Sleuth.
+A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Complete Edition.
 
 ## Features
 - Automatic patching of database and script edits
