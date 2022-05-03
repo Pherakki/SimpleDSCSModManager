@@ -338,6 +338,8 @@ class BuildGraphExecutor(QtCore.QObject):
             archive_pipes = []
             for archive_type, archives in self.build_graphs.items():
                 for archive_name, archive in archives.items():
+                    # Make the cache location
+                    os.makedirs(os.path.join(self.ops.paths.patch_cache_loc, archive_name), exist_ok=True)
                     if not len(archive.build_graph):
                         continue
                     # Softcodes get baked in here!
