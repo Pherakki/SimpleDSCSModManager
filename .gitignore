@@ -137,6 +137,7 @@ Documentation/*.synctex.gz
 Documentation/*.toc
 
 # SDMM locations
+bkp/*
 config/config.json
 config/notes.txt
 logs/*
