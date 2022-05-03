@@ -21,6 +21,8 @@ def mbetable_to_dict(result, filepath, id_size, softcodes, softcode_lookup, enco
             csvreader_data = iter(csvreader)
             header = next(csvreader_data)
             for line in csvreader_data:
+                if not(line):
+                    continue
                 data = line
                 # Might have to go careful that there are no duplicates
                 record_id = tuple(data[:id_size])
