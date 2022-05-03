@@ -461,7 +461,7 @@ class DataSorter(QtCore.QObject):
         elif os.path.exists(resource_file := os.path.join(resource_loc, *table_path)):
             shutil.copytree(resource_file, build_file)
         else:
-            DSCSTools.extractMDB1File(os.path.join((self.ops.paths.game_resources_loc, f"{archive}.steam.mvgl"), build_loc, "/".join(*table_path)))
+            DSCSTools.extractMDB1File(os.path.join(self.ops.paths.game_resources_loc, f"{archive}.steam.mvgl"), build_loc, "/".join(table_path))
         
         os.rmdir(working_loc)
         
