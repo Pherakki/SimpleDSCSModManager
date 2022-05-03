@@ -2,7 +2,7 @@
   "table": {
     "id": "int",
     "digimonId": "int",
-    "sortOrder": "int",
+    "unknown1": "int",
     "price": "int",
     "level": "int",
     "unknown3": "int"

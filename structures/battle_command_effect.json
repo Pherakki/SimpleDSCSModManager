@@ -1,12 +1,12 @@
 {
   "effect": {
-    "skillID": "int",
-    "casterSkillEffectIDs": "int array",
+    "id": "int",
+    "casterEffects": "int array",
     "unk2": "int",
     "unk3": "int",
     "unk4": "int",
     "unk5": "int",
-    "targetSkillEffectIDs": "int array",
+    "targetEffects": "int array",
     "unk7": "int array"
   },
   "item": {

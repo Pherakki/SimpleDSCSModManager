@@ -1,7 +1,7 @@
 {
   "Command": {
-    "skillID": "int",
-    "skillTextId": "int",
+    "ID": "int",
+    "TextId": "int",
     "pad1": "short",
     "Icon": "short",
     "Animation": "int",
