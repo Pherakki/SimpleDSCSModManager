@@ -114,7 +114,13 @@ def CTD_popup(e, tb=None):
     msgBox.setTextFormat(QtCore.Qt.RichText)
     msgBox.exec_()
     
+# Fix UI scaling for High DPI monitors
+if hasattr(QtCore.Qt, 'AA_EnableHighDpiScaling'):
+    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
 
+if hasattr(QtCore.Qt, 'AA_UseHighDpiPixmaps'):
+    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+    
 if __name__ == '__main__':
     error_code = 0
     try:
