@@ -126,7 +126,8 @@ if __name__ == '__main__':
     try:
         app = QtWidgets.QApplication([]) 
     
-        win = MainWindow()
+        app.setStyle("Fusion")
+        win = MainWindow(app)
             
         def excepthook(exc_type, exc_value, exc_tb):
             win.close()
@@ -136,8 +137,6 @@ if __name__ == '__main__':
             
         sys.excepthook = excepthook
         
-        # win.style_sheet_changed.connect(lambda: win.ss.set_stylesheet_on(app))
-        # win.style_sheet_changed.emit()
         win.show()
         
         if not check_windows_UAC_permissions(win.directory):
