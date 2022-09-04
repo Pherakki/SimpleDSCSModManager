@@ -909,7 +909,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         
         self.sounds_label = QtWidgets.QLabel()
         self.sounds_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.hca_to_wav = self.new_button("", parentWidget)
+        #self.hca_to_wav = self.new_button("", parentWidget)
         self.wav_to_hca = self.new_button("", parentWidget)
         self.wav_to_hca_looped = self.new_button("", parentWidget)
         
@@ -948,7 +948,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.compile_scripts_button.setText(translate("UI::ExtractTab", "Compile scripts"))
         
         self.sounds_label.setText(translate("UI::ExtractTab", "Sounds"))
-        self.hca_to_wav.setText(translate("UI::ExtractTab", "Convert HCA to WAV"))
+        #self.hca_to_wav.setText(translate("UI::ExtractTab", "Convert HCA to WAV"))
         self.wav_to_hca.setText(translate("UI::ExtractTab", "Convert WAV to HCA"))
         self.wav_to_hca_looped.setText(translate("UI::ExtractTab", "Convert WAV to Looped HCA"))
     
@@ -1047,7 +1047,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.pack_mbes_button.clicked.connect(pack_mbes)
         self.decompile_scripts_button.clicked.connect(decompile_scripts)
         self.compile_scripts_button.clicked.connect(compile_scripts)
-        self.hca_to_wav.clicked.connect(convert_hca_to_wav)
+        #self.hca_to_wav.clicked.connect(convert_hca_to_wav)
         self.wav_to_hca.clicked.connect(convert_wav_to_hca)
         self.wav_to_hca_looped.clicked.connect(convert_wav_to_hca_looped)
                 
@@ -1074,7 +1074,7 @@ class uiExtractTab(QtWidgets.QScrollArea):
         self.pack_mbes_button.setEnabled(active)
         self.decompile_scripts_button.setEnabled(active)
         self.compile_scripts_button.setEnabled(active)
-        self.hca_to_wav.setEnabled(active)
+        #self.hca_to_wav.setEnabled(active)
         self.wav_to_hca.setEnabled(active)
         self.wav_to_hca_looped.setEnabled(active)
             
