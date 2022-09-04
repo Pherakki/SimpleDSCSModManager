@@ -169,14 +169,14 @@ class PathManager:
     
     @property
     def game_app_digister_loc(self):
-        assert os.path.isdir(self.__game_app_digister_loc), self.__standard_error_message(self.self.__game_app_digister_loc)
+        assert os.path.isdir(self.__game_app_digister_loc), self.__standard_error_message(self.__game_app_digister_loc)
         return self.__safe_path_return(self.__game_app_digister_loc, self.game_loc)
     
     @property
     def game_executable_loc(self):
         if self.__game_executable_loc is None:
             return None
-        assert os.path.isfile(self.__game_executable_loc), self.__standard_error_message(self.self.__game_executable_loc)
+        assert os.path.isfile(self.__game_executable_loc), self.__standard_error_message(self.__game_executable_loc)
         return self.__safe_path_return(self.__game_executable_loc, self.game_loc)
 
     def game_executable_loc_is_valid(self):
