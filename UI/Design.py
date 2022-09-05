@@ -195,26 +195,23 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         self.theme_select = QtWidgets.QComboBox(self)
         
         self.new_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Create New Theme"), self)
-        self.copy_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Copy Theme"), self)
-        self.edit_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Edit Theme"), self)
+        self.delete_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Delete Theme"), self)
         
         width = 0
         width = max(width, self.new_theme_button.width())
-        width = max(width, self.copy_theme_button.width())
-        width = max(width, self.edit_theme_button.width())
+        #width = max(width, self.edit_theme_button.width())
+        width = max(width, self.delete_theme_button.width())
         
         self.theme_select.setFixedWidth(width + 30)
         self.new_theme_button.setFixedWidth(width)
-        self.copy_theme_button.setFixedWidth(width)
-        self.edit_theme_button.setFixedWidth(width)
+        self.delete_theme_button.setFixedWidth(width)
         
         self.setFixedSize(3*width,200)
         
         layout.addStretch(1)
         layout.addWidget(self.theme_select, alignment = QtCore.Qt.AlignCenter)
         layout.addWidget(self.new_theme_button, alignment = QtCore.Qt.AlignCenter)
-        layout.addWidget(self.copy_theme_button, alignment = QtCore.Qt.AlignCenter)
-        layout.addWidget(self.edit_theme_button, alignment = QtCore.Qt.AlignCenter)
+        layout.addWidget(self.delete_theme_button, alignment = QtCore.Qt.AlignCenter)
         layout.addStretch(1)
         
         layout.setAlignment(QtCore.Qt.AlignCenter)
@@ -228,29 +225,36 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         self.setLayout(layout)
         
         self.set_available_themes()
-        self.theme_select.currentTextChanged.connect(self.select_theme)
         self.new_theme_button.clicked.connect(self.create_theme)
+        self.delete_theme_button.clicked.connect(self.delete_theme)
+        
+        self.delete_theme_button.setEnabled(False)
         
     def set_available_themes(self):
+        try:
+            self.theme_select.currentTextChanged.disconnect()
+        except:
+            pass
         self.theme_select.clear()
         self.theme_select.addItem("Light")
         self.theme_select.addItem("Dark")
         for theme in self.style_engine.styles:
             self.theme_select.addItem(theme)
+        self.theme_select.currentTextChanged.connect(self.select_theme)
     
     def select_theme(self, item):
         if item == "Light":
             self.style_engine.apply_style(self.style_engine.light_style)
             #self.edit_theme_button.disable()
-            #self.delete_theme_button.disable()
+            self.delete_theme_button.setEnabled(False)
         elif item == "Dark":
             self.style_engine.apply_style(self.style_engine.dark_style)
             #self.edit_theme_button.disable()
-            #self.delete_theme_button.disable()
+            self.delete_theme_button.setEnabled(False)
         else:
             self.style_engine.apply_style(self.style_engine.styles[item])
             #self.edit_theme_button.enable()
-            #self.delete_theme_button.disable()
+            self.delete_theme_button.setEnabled(True)
                 
     @QtCore.pyqtSlot(str)
     def receive_name(self, name):
@@ -268,6 +272,12 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
             self.set_available_themes()
         else:
             self.select_theme(start_style)
+            
+    def delete_theme(self):
+        style_name = self.theme_select.currentText()
+        self.style_engine.delete_style(style_name)
+        self.set_available_themes()
+        
             
         
         

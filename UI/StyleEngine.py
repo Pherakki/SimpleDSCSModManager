@@ -97,6 +97,13 @@ class StyleEngine:
     def new_style(self, name, from_name):
         self.styles[name] = copy.deepcopy(self.styles[from_name])
         return name
+    
+    def delete_style(self, name):
+        if name in self.styles:
+            del self.styles[name]
+        filepath = os.path.join(self.__paths.themes_loc, os.extsep.join((name, "json")))
+        if os.path.isfile(filepath):
+            os.remove(filepath)
         
     def apply_style(self, colour_map):
         default = self.light_style
