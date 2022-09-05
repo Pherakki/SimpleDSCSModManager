@@ -23,7 +23,6 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(parent)
         
         self.__app = app
-        self.style_engine = StyleEngine(app)
         
         self.threadpool = QtCore.QThreadPool()
         self.translator = QtCore.QTranslator(self)
@@ -38,7 +37,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.main_area.action_tabs.configTab.block_handle_box.setCurrentIndex(self.ops.config_manager.get_block_pref())
         self.ops.init = True
 
-        self.style_engine.apply_style(self.style_engine.light_style)
+        self.style_engine = StyleEngine(app, self.ops.paths)
+        self.style_engine.apply_style(self.style_engine.dark_style)
         
         self.ui.log(translate("MainWindow", "SimpleDSCSModManager initialised."))
         self.ui.loglink(translate("MainWindow", "Want to contribute to modding tools or develop mods? Consider joining the {hyperlink_open}Digimon Modding Community discord server{hyperlink_close}.").format(hyperlink_open="<a href=\"{self.ops.paths.discord_invite}\">", hyperlink_close="</a>"))

@@ -1,11 +1,21 @@
-from PyQt5 import QtCore, QtGui
+import copy
+import json
+import os
+
+from PyQt5 import QtGui, QtWidgets
+
 
 class StyleEngine:
     """
-    Colours from https://stackoverflow.com/a/56851493
+    Dark Colours from https://stackoverflow.com/a/56851493
     """
-    def __init__(self, app_ref):
+    def __init__(self, app_ref, paths):
         self.__app = app_ref
+        self.__paths = paths
+        self.styles = {}
+        
+        for theme in sorted(os.listdir(self.__paths.themes_loc)):
+            self.load_theme(theme)
         
     @property
     def light_style(self):
@@ -54,6 +64,35 @@ class StyleEngine:
             "dark"            : [160, 160, 160],
             "shadow"          : [105, 105, 105]  
         }
+    
+    def load_style(self, file):
+        filepath = os.path.join(self.__paths.themes_loc, file)
+        filename, ext = os.path.splitext(file)
+        if os.path.isfile(filepath) and ext.lstrip(os.extsep) == "json":
+            with open(filepath, 'r') as F:
+                style_def = json.load(F)
+            name = filename
+            
+            self.styles[name] = style_def
+        
+    def save_style(self, name):
+        filepath = os.path.join(self.__paths.themes_loc, os.extsep.join((name, "json")))
+        with open(filepath, 'w') as F:
+            json.dump(self.styles[name], F)
+            
+    def generate_style_name(self, name):
+        stem, tail = name.rsplit(" ", 1)
+        if tail.isdigit():
+            number = int(tail)
+            number += 1
+            return stem + " " + str(number)
+        else:
+            return name + " 2"
+
+    def copy_style(self, name):
+        new_name = self.generate_style_name(name)
+        self.styles[new_name] = copy.deepcopy(self.styles[name])
+        return new_name
         
     def apply_style(self, colour_map):
         default = self.light_style
