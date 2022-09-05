@@ -80,3 +80,36 @@ class StyleEngine:
         palette.setColor(QtGui.QPalette.Shadow,          QtGui.QColor(*colour_map.get("shadow",           default["shadow"])))
         
         self.__app.setPalette(palette)
+        
+    def get_active_style(self):
+        return self.__extract_style()
+        
+    def __extract_style(self):
+        palette = QtWidgets.QApplication.palette()
+        
+        style = {}
+        style["window"]           = self.__extract_colour(palette.window())
+        style["window text"]      = self.__extract_colour(palette.windowText())
+        style["base"]             = self.__extract_colour(palette.base())
+        style["alt base"]         = self.__extract_colour(palette.alternateBase())
+        style["tooltip base"]     = self.__extract_colour(palette.toolTipBase())
+        style["tooltip text"]     = self.__extract_colour(palette.toolTipText())
+        style["text"]             = self.__extract_colour(palette.text())
+        style["button"]           = self.__extract_colour(palette.button())
+        style["button text"]      = self.__extract_colour(palette.buttonText())
+        style["bright text"]      = self.__extract_colour(palette.brightText())
+        style["link"]             = self.__extract_colour(palette.link())
+        style["link visited"]     = self.__extract_colour(palette.linkVisited())
+        style["highlight"]        = self.__extract_colour(palette.highlight())
+        style["highlighted text"] = self.__extract_colour(palette.highlightedText())
+        style["light"]            = self.__extract_colour(palette.light())
+        style["midlight"]         = self.__extract_colour(palette.midlight())
+        style["mid"]              = self.__extract_colour(palette.mid())
+        style["dark"]             = self.__extract_colour(palette.dark())
+        style["shadow"]           = self.__extract_colour(palette.shadow())
+        
+        return style
+        
+    def __extract_colour(self, brush):
+        bcol = brush.color()
+        return [bcol.red(), bcol.green(), bcol.blue()]

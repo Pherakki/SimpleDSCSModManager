@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from datetime import datetime
+import os
 
 from .CustomWidgets import ClickEmitComboBox, DragDropTreeView, LinkItem
 
@@ -98,13 +99,22 @@ class uiMenu:
         self.language_actions = []
         self.fileMenu = QtWidgets.QMenu(parentWidget)
         self.languageMenu = QtWidgets.QMenu(parentWidget)
+        self.preferencesMenu = QtWidgets.QMenu(parentWidget)
         self.helpMenu = QtWidgets.QMenu(parentWidget)
         parentWidget.menuBar().addMenu(self.fileMenu)
         parentWidget.menuBar().addMenu(self.languageMenu)
+        parentWidget.menuBar().addMenu(self.preferencesMenu)
         parentWidget.menuBar().addMenu(self.helpMenu)
                 
         self.addModAction = QtWidgets.QAction(parentWidget)
         self.fileMenu.addAction(self.addModAction)
+        
+        self.colourThemeAction = QtWidgets.QAction(parentWidget)
+        def popup_colours():
+            ctsp = ColourThemeSelectionPopup(self.parentWidget)
+            ctsp.exec_()
+        self.colourThemeAction.triggered.connect(popup_colours)
+        self.preferencesMenu.addAction(self.colourThemeAction)
         
         self.docsAction = QtWidgets.QAction(parentWidget)
         self.helpMenu.addAction(self.docsAction)
@@ -150,8 +160,10 @@ class uiMenu:
     def retranslateUi(self):
         self.fileMenu.setTitle(translate("UI::MenuBar", "&File"))
         self.languageMenu.setTitle(translate("UI::MenuBar", "&Language"))
+        self.preferencesMenu.setTitle(translate("UI::MenuBar", "&Preferences"))
         self.helpMenu.setTitle(translate("UI::MenuBar", "&Help"))
         self.addModAction.setText(translate("UI::FileMenu", "Add Mod..."))
+        self.colourThemeAction.setText(translate("UI::PrefsMenu", "Edit Appearance..."))
         self.docsAction.setText(translate("UI::HelpMenu", "Help and Modding Guides..."))
         self.donateAction.setText(translate("UI::HelpMenu", "Support Digimon Modding Tools"))
         self.creditsAction.setText(translate("UI::HelpMenu", "Credits"))
@@ -168,6 +180,68 @@ class uiMenu:
             self.language_actions.append(act)
             
             self.languageMenu.addAction(act)
+     
+class ColourThemeSelectionPopup(QtWidgets.QDialog):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.themes = []
+        
+        self.mainwindow = parent
+        self.style_engine = self.mainwindow.style_engine
+        self.setWindowTitle(translate("UI::ColorThemePopup", "Colour Preferences"))
+        
+        layout = QtWidgets.QVBoxLayout()
+        self.theme_select = QtWidgets.QComboBox(self)
+        
+        self.new_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Create New Theme"), self)
+        self.copy_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Copy Theme"), self)
+        self.edit_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Edit Theme"), self)
+        
+        width = 0
+        width = max(width, self.new_theme_button.width())
+        width = max(width, self.copy_theme_button.width())
+        width = max(width, self.edit_theme_button.width())
+        
+        self.theme_select.setFixedWidth(width + 30)
+        self.new_theme_button.setFixedWidth(width)
+        self.copy_theme_button.setFixedWidth(width)
+        self.edit_theme_button.setFixedWidth(width)
+        
+        self.setFixedSize(3*width,200)
+        
+        layout.addStretch(1)
+        layout.addWidget(self.theme_select, alignment = QtCore.Qt.AlignCenter)
+        layout.addWidget(self.new_theme_button, alignment = QtCore.Qt.AlignCenter)
+        layout.addWidget(self.copy_theme_button, alignment = QtCore.Qt.AlignCenter)
+        layout.addWidget(self.edit_theme_button, alignment = QtCore.Qt.AlignCenter)
+        layout.addStretch(1)
+        
+        layout.setAlignment(QtCore.Qt.AlignCenter)
+        
+        # Put in centre of the screen
+        rect = self.frameGeometry()
+        centre = QtWidgets.QDesktopWidget().availableGeometry().center()
+        rect.moveCenter(centre)
+        self.move(rect.topLeft())
+        
+        self.setLayout(layout)
+        
+        self.set_available_themes()
+        self.theme_select.currentTextChanged.connect(self.select_theme)
+        
+    def set_available_themes(self):
+        self.theme_select.clear()
+        self.theme_select.addItem("Light")
+        self.theme_select.addItem("Dark")
+    
+    def select_theme(self, item):
+        if item == "Light":
+            self.style_engine.apply_style(self.style_engine.light_style)
+        elif item == "Dark":
+            self.style_engine.apply_style(self.style_engine.dark_style)
+        else:
+            self.style_engine.apply_style(self.style_engine.styles[item])
+                
             
 class creditsPopup:
     def __init__(self, win):
