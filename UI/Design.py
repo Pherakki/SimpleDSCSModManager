@@ -185,6 +185,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         self.themes = []
+        self.name_buf = None
         
         self.mainwindow = parent
         self.style_engine = self.mainwindow.style_engine
@@ -228,21 +229,153 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         
         self.set_available_themes()
         self.theme_select.currentTextChanged.connect(self.select_theme)
+        self.new_theme_button.clicked.connect(self.create_theme)
         
     def set_available_themes(self):
         self.theme_select.clear()
         self.theme_select.addItem("Light")
         self.theme_select.addItem("Dark")
+        for theme in self.style_engine.styles:
+            self.theme_select.addItem(theme)
     
     def select_theme(self, item):
         if item == "Light":
             self.style_engine.apply_style(self.style_engine.light_style)
+            #self.edit_theme_button.disable()
+            #self.delete_theme_button.disable()
         elif item == "Dark":
             self.style_engine.apply_style(self.style_engine.dark_style)
+            #self.edit_theme_button.disable()
+            #self.delete_theme_button.disable()
         else:
             self.style_engine.apply_style(self.style_engine.styles[item])
+            #self.edit_theme_button.enable()
+            #self.delete_theme_button.disable()
                 
+    @QtCore.pyqtSlot(str)
+    def receive_name(self, name):
+        self.name_buf = name
             
+    def create_theme(self):
+        start_style = self.theme_select.currentText()
+        proposed_name = self.style_engine.generate_new_style_name("New Theme")
+        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name)
+        cctp.communicate_name_change.connect(self.receive_name)
+        if cctp.exec_():
+            nm = self.name_buf # This gets set when the Ok button is pressed on cctp
+            self.style_engine.styles[nm] = self.style_engine.get_active_style()
+            self.style_engine.save_style(nm)
+            self.set_available_themes()
+        else:
+            self.select_theme(start_style)
+            
+        
+        
+        
+class CreateColourThemePopup(QtWidgets.QDialog):
+    communicate_name_change = QtCore.pyqtSignal(str)
+    
+    def __init__(self, parent, mainwindow, initial_name):
+        super().__init__(parent)
+        self.mainwindow = mainwindow
+        self.setGeometry(100,100,400,600)
+        self.setWindowTitle(translate("UI::ColorThemePopup", "New Colour Theme"))
+        self.buildColourEdits(initial_name)
+        
+    def hexcolour(self, colour):
+        return f"{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
+        
+    def open_colour_dialog(self, key, button):
+        def func():
+            active_style = self.mainwindow.style_engine.get_active_style()
+            original_colour = active_style[key]
+            dialog = QtWidgets.QColorDialog(self)
+            dialog.currentColorChanged.connect(lambda: self.update_style(key, dialog, button))
+            dialog.setCurrentColor(QtGui.QColor(*active_style[key]))
+            if not dialog.exec_():
+                active_style[key] = original_colour
+                self.mainwindow.style_engine.apply_style(active_style)
+            
+        return func
+        
+    def update_style(self, key, dialog, button):
+        style = self.mainwindow.style_engine.get_active_style()
+        col = dialog.currentColor()
+        style[key] = [col.red(), col.green(), col.blue()]
+        self.mainwindow.style_engine.apply_style(style)
+        self.set_button_style(button, style[key])
+    
+    def set_button_style(self, button, colour):
+        button.setStyleSheet(f"background-color:#{self.hexcolour(colour)};\
+                        border: 2px solid #222222")
+    
+    def buildColourEdits(self, initial_name):
+        active_style = self.mainwindow.style_engine.get_active_style()
+        
+        layout = QtWidgets.QGridLayout()
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(2, 1)
+        
+        namebox_layout = QtWidgets.QHBoxLayout()
+        self.name_box = QtWidgets.QLineEdit(self)
+        self.name_box.setText(initial_name)
+        namebox_layout.addStretch(1)
+        namebox_layout.addWidget(self.name_box)
+        namebox_layout.addStretch(1)
+        
+        
+        settings_layout = QtWidgets.QGridLayout()
+        settings_layout.setColumnStretch(0, 1)
+        settings_layout.setColumnStretch(3, 1)
+        for i, (label_text, lookup_key) in enumerate([
+                    ["Window",           "window"          ],
+                    ["Window Text",      "window text"     ],
+                    ["Base",             "base"            ],
+                    ["Alternate Base",   "alt base"        ],
+                    ["ToolTip Base",     "tooltip base"    ],
+                    ["ToolTip Text",     "tooltip text"    ],
+                    ["Text",             "text"            ],
+                    ["Button",           "button"          ],
+                    ["Button Text",      "button text"     ],
+                    ["Bright Text",      "bright text"     ],
+                    ["Link",             "link"            ],
+                    ["Link Visited",     "link visited"    ],
+                    ["Highlight",        "highlight"       ],
+                    ["Highlighted Text", "highlighted text"],
+                    ["Light",            "light"           ],
+                    ["MidLight",         "midlight"        ],
+                    ["Mid",              "mid"             ],
+                    ["Dark",             "dark"            ],
+                    ["Shadow",           "shadow"          ]
+                ]):
+            label  = QtWidgets.QLabel(label_text, self)
+            button = QtWidgets.QPushButton("", self)
+            self.set_button_style(button, active_style[lookup_key])
+            label.setFixedWidth(label.width())
+            button.setFixedWidth(40)
+            button.clicked.connect(self.open_colour_dialog(lookup_key, button))
+            settings_layout.addWidget(label, i, 1)
+            settings_layout.addWidget(button, i, 2)
+        
+        button_layout = QtWidgets.QHBoxLayout()
+        ok_button = QtWidgets.QPushButton("Accept", self)
+        cancel_button = QtWidgets.QPushButton("Cancel", self)
+        ok_button.clicked.connect(self.handle_ok)
+        cancel_button.clicked.connect(lambda: self.done(0))
+        button_layout.addWidget(ok_button)
+        button_layout.addWidget(cancel_button)
+        
+        layout.addLayout(namebox_layout, 0, 1)
+        layout.addLayout(settings_layout, 1, 1)
+        layout.addLayout(button_layout,   2, 1)
+        
+        self.setLayout(layout)
+        
+    def handle_ok(self):
+        self.communicate_name_change.emit(self.name_box.text())
+        self.done(1)
+            
+     
 class creditsPopup:
     def __init__(self, win):
         msgBox = QtWidgets.QMessageBox(win)

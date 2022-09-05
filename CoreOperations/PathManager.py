@@ -27,6 +27,7 @@ class PathManager:
         self.__profiles_loc            = self.__clean_path(os.path.join(modmanager_directory, "profiles"))
         self.__resources_loc           = self.__clean_path(os.path.join(modmanager_directory, "resources"))
         self.__softcodes_loc           = self.__clean_path(os.path.join(modmanager_directory, "softcodes"))
+        self.__themes_loc              = self.__clean_path(os.path.join(modmanager_directory, "themes"))
         
         self.__patch_build_loc         = self.__clean_path(os.path.join(self.__output_loc, "build"))
         self.__patch_cache_loc         = self.__clean_path(os.path.join(self.__output_loc, "cache"))
@@ -43,6 +44,7 @@ class PathManager:
         os.makedirs(self.__profiles_loc, exist_ok=True)
         os.makedirs(self.__resources_loc, exist_ok=True)
         os.makedirs(self.__softcodes_loc, exist_ok=True)
+        os.makedirs(self.__themes_loc, exist_ok=True)
         
         os.makedirs(self.__patch_build_loc, exist_ok=True)
         os.makedirs(self.__patch_cache_loc, exist_ok=True)
@@ -145,6 +147,10 @@ class PathManager:
     @property
     def softcodes_loc(self):
         return self.__safe_path_return(self.__softcodes_loc, self.mm_root)
+    
+    @property
+    def themes_loc(self):
+        return self.__safe_path_return(self.__themes_loc, self.mm_root)
     
     @property
     def base_resources_loc(self):

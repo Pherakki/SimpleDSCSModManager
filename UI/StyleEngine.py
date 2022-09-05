@@ -15,7 +15,7 @@ class StyleEngine:
         self.styles = {}
         
         for theme in sorted(os.listdir(self.__paths.themes_loc)):
-            self.load_theme(theme)
+            self.load_style(theme)
         
     @property
     def light_style(self):
@@ -88,11 +88,15 @@ class StyleEngine:
             return stem + " " + str(number)
         else:
             return name + " 2"
+        
+    def generate_new_style_name(self, name):
+        if name in self.styles:
+            name = self.generate_style_name(name)
+        return name
 
-    def copy_style(self, name):
-        new_name = self.generate_style_name(name)
-        self.styles[new_name] = copy.deepcopy(self.styles[name])
-        return new_name
+    def new_style(self, name, from_name):
+        self.styles[name] = copy.deepcopy(self.styles[from_name])
+        return name
         
     def apply_style(self, colour_map):
         default = self.light_style
