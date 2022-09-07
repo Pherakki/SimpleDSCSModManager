@@ -295,6 +295,7 @@ class CreateColourThemePopup(QtWidgets.QDialog):
     def __init__(self, parent, mainwindow, initial_name):
         super().__init__(parent)
         self.mainwindow = mainwindow
+        self.style_engine = mainwindow.style_engine
         self.setGeometry(100,100,400,600)
         self.setWindowTitle(translate("UI::ColorThemePopup", "New Colour Theme"))
         self.buildColourEdits(initial_name)
@@ -389,7 +390,16 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         self.setLayout(layout)
         
     def handle_ok(self):
-        self.communicate_name_change.emit(self.name_box.text())
+        name = self.name_box.text()
+        if name in self.style_engine.styles or name in self.style_engine.builtin_styles:
+            err = QtWidgets.QMessageBox()
+            err.setIcon(QtWidgets.QMessageBox.Warning)
+            err.setWindowTitle("Name already defined")
+            err.setText(f"Error: '{name}' is already defined. Choose another name.")
+            err.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            err.exec_()
+            return
+        self.communicate_name_change.emit(name)
         self.done(1)
             
      
