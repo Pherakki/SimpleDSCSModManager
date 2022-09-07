@@ -318,9 +318,10 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             original_colour = active_style[key]
             dialog = QtWidgets.QColorDialog(self)
             dialog.currentColorChanged.connect(lambda: self.update_style(key, dialog, button))
-            dialog.setCurrentColor(QtGui.QColor(*active_style[key]))
+            dialog.setCurrentColor(QtGui.QColor(*original_colour))
             if not dialog.exec_():
                 active_style[key] = original_colour
+                self.set_button_style(button, original_colour)
                 self.mainwindow.style_engine.apply_style(active_style)
             
         return func
