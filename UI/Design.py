@@ -236,6 +236,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
             self.theme_select.currentTextChanged.disconnect()
         except:
             pass
+        self.theme_indices.clear()
         self.theme_select.clear()
         self.theme_indices["Light"] = len(self.theme_indices)
         self.theme_select.addItem("Light")
@@ -277,11 +278,19 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
             self.style_engine.styles = {k: v for k, v in sorted(self.style_engine.styles.items())}
             self.style_engine.save_style(nm)
             self.set_available_themes()
+            self.theme_select.setCurrentIndex(self.theme_indices[nm])
         else:
             self.select_theme(start_style)
             
     def delete_theme(self):
+        # First switch the style to a different one...
         style_name = self.theme_select.currentText()
+        active_style_idx = self.theme_indices[style_name]
+        # Will always have built-ins, so we're ok to go to the previous idx
+        new_style = list(self.theme_indices.keys())[active_style_idx - 1]
+        self.select_theme(new_style)
+        
+        # Now it's safe to delete the theme we intended to delete
         self.style_engine.delete_style(style_name)
         self.set_available_themes()
         
