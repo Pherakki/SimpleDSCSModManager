@@ -51,7 +51,7 @@ class MainWindow(QtWidgets.QMainWindow):
         finally:
             # close window
             event.accept()
-            self.__app.quit()
+            #self.__app.quit()
             
         
     @QtCore.pyqtSlot(str)
