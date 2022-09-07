@@ -270,7 +270,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
     def create_theme(self):
         start_style = self.theme_select.currentText()
         proposed_name = self.style_engine.generate_new_style_name("New Theme")
-        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name)
+        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name, translate("UI::ColorThemePopup", "New Colour Theme"))
         cctp.communicate_name_change.connect(self.receive_name)
         if cctp.exec_():
             nm = self.name_buf # This gets set when the Ok button is pressed on cctp
@@ -301,12 +301,12 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
 class CreateColourThemePopup(QtWidgets.QDialog):
     communicate_name_change = QtCore.pyqtSignal(str)
     
-    def __init__(self, parent, mainwindow, initial_name):
+    def __init__(self, parent, mainwindow, initial_name, window_name):
         super().__init__(parent)
         self.mainwindow = mainwindow
         self.style_engine = mainwindow.style_engine
         self.setGeometry(100,100,400,600)
-        self.setWindowTitle(translate("UI::ColorThemePopup", "New Colour Theme"))
+        self.setWindowTitle(window_name)
         self.buildColourEdits(initial_name)
         
     def hexcolour(self, colour):
