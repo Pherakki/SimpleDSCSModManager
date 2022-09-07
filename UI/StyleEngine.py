@@ -100,7 +100,7 @@ class StyleEngine:
             return name + " 2"
         
     def generate_new_style_name(self, name):
-        if name in self.styles:
+        if name in self.styles or name in self.builtin_styles:
             name = self.generate_style_name(name)
         return name
 
