@@ -9,13 +9,23 @@ class StyleEngine:
     """
     Dark Colours from https://stackoverflow.com/a/56851493
     """
-    def __init__(self, app_ref, paths):
+    def __init__(self, app_ref, paths, initial_style=None):
         self.__app = app_ref
         self.__paths = paths
+        self.builtin_styles = {"Light": self.light_style, "Dark": self.dark_style}
         self.styles = {}
+        self.active_style = None
         
         for theme in sorted(os.listdir(self.__paths.themes_loc)):
             self.load_style(theme)
+            
+        if initial_style is None:
+            initial_style = "Light"
+        try:
+            self.set_style(initial_style)
+        except Exception as e:
+            # Raise a log error
+            self.set_style("Light")
         
     @property
     def light_style(self):
@@ -104,6 +114,13 @@ class StyleEngine:
         filepath = os.path.join(self.__paths.themes_loc, os.extsep.join((name, "json")))
         if os.path.isfile(filepath):
             os.remove(filepath)
+        
+    def set_style(self, name):
+        if name in self.builtin_styles:
+            self.apply_style(self.builtin_styles[name])
+        else:
+            self.apply_style(self.styles[name])
+        self.active_style = name
         
     def apply_style(self, colour_map):
         default = self.light_style
