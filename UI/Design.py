@@ -185,6 +185,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
     def __init__(self, parent):
         super().__init__(parent)
         self.themes = []
+        self.theme_indices = {}
         self.name_buf = None
         
         self.mainwindow = parent
@@ -236,25 +237,33 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         except:
             pass
         self.theme_select.clear()
+        self.theme_indices["Light"] = len(self.theme_indices)
         self.theme_select.addItem("Light")
+        self.theme_indices["Dark"] = len(self.theme_indices)
         self.theme_select.addItem("Dark")
         for theme in self.style_engine.styles:
+            self.theme_indices[theme] = len(self.theme_indices)
             self.theme_select.addItem(theme)
+        self.theme_select.setCurrentIndex(self.theme_indices[self.style_engine.active_style])
         self.theme_select.currentTextChanged.connect(self.select_theme)
     
     def select_theme(self, item):
         if item == "Light":
             self.style_engine.apply_style(self.style_engine.light_style)
+            self.style_engine.set_style("Light")
             #self.edit_theme_button.disable()
             self.delete_theme_button.setEnabled(False)
         elif item == "Dark":
             self.style_engine.apply_style(self.style_engine.dark_style)
+            self.style_engine.set_style("Dark")
             #self.edit_theme_button.disable()
             self.delete_theme_button.setEnabled(False)
         else:
             self.style_engine.apply_style(self.style_engine.styles[item])
+            self.style_engine.set_style(item)
             #self.edit_theme_button.enable()
             self.delete_theme_button.setEnabled(True)
+        self.mainwindow.ops.config_manager.set_style_pref(item)
                 
     @QtCore.pyqtSlot(str)
     def receive_name(self, name):
@@ -268,6 +277,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         if cctp.exec_():
             nm = self.name_buf # This gets set when the Ok button is pressed on cctp
             self.style_engine.styles[nm] = self.style_engine.get_active_style()
+            self.style_engine.styles = {k: v for k, v in sorted(self.style_engine.styles.items())}
             self.style_engine.save_style(nm)
             self.set_available_themes()
         else:
