@@ -31,19 +31,24 @@ class StyleEngine:
     def light_style(self):
         return {
             "window"          : [240, 240, 240],
-            "window text"     : [  0,   0,   0],
             "base"            : [255, 255, 255],
             "alt base"        : [233, 231, 227],
+            "button"          : [240, 240, 240],
+            
             "tooltip base"    : [255, 255, 220],
             "tooltip text"    : [  0,   0,   0],
+            
             "text"            : [  0,   0,   0],
-            "button"          : [240, 240, 240],
+            "window text"     : [  0,   0,   0],
             "button text"     : [  0,   0,   0],
             "bright text"     : [255, 255, 255],
+            
             "link"            : [  0,   0, 255],
             "link visited"    : [255,   0, 255],
+            
             "highlight"       : [  0, 120, 215],
             "highlighted text": [240, 240, 240],
+            
             "light"           : [255, 255, 255],
             "midlight"        : [227, 227, 227],
             "mid"             : [160, 160, 160],
@@ -55,19 +60,24 @@ class StyleEngine:
     def dark_style(self):
         return {
             "window"          : [ 53,  53,  53],
-            "window text"     : [255, 255, 255],
             "base"            : [ 25,  25,  25],
             "alt base"        : [ 53,  53,  53],
+            "button"          : [ 53,  53,  53],
+            
             "tooltip base"    : [  0,   0,   0],
             "tooltip text"    : [255, 255, 255],
+            
             "text"            : [255, 255, 255],
-            "button"          : [ 53,  53,  53],
+            "window text"     : [255, 255, 255],
             "button text"     : [255, 255, 255],
             "bright text"     : [255,   0,   0],
+            
             "link"            : [ 42, 130, 218],
             "link visited"    : [255,   0, 255],
+            
             "highlight"       : [ 42, 130, 218],
             "highlighted text": [  0,   0,   0],
+            
             "light"           : [255, 255, 255],
             "midlight"        : [227, 227, 227],
             "mid"             : [160, 160, 160],
