@@ -249,17 +249,14 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
     
     def select_theme(self, item):
         if item == "Light":
-            self.style_engine.apply_style(self.style_engine.light_style)
             self.style_engine.set_style("Light")
             #self.edit_theme_button.disable()
             self.delete_theme_button.setEnabled(False)
         elif item == "Dark":
-            self.style_engine.apply_style(self.style_engine.dark_style)
             self.style_engine.set_style("Dark")
             #self.edit_theme_button.disable()
             self.delete_theme_button.setEnabled(False)
         else:
-            self.style_engine.apply_style(self.style_engine.styles[item])
             self.style_engine.set_style(item)
             #self.edit_theme_button.enable()
             self.delete_theme_button.setEnabled(True)
