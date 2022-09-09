@@ -341,8 +341,6 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         active_style = self.mainwindow.style_engine.get_active_style()
         
         layout = QtWidgets.QGridLayout()
-        layout.setColumnStretch(0, 1)
-        layout.setColumnStretch(2, 1)
         
         namebox_layout = QtWidgets.QHBoxLayout()
         self.name_box = QtWidgets.QLineEdit(self)
@@ -355,27 +353,51 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         settings_layout = QtWidgets.QGridLayout()
         settings_layout.setColumnStretch(0, 1)
         settings_layout.setColumnStretch(3, 1)
+        groupbox = QtWidgets.QGroupBox(translate("UI::ColorThemePopup", "Base Colours"), self)
+        gbox_layout = QtWidgets.QGridLayout()
         for i, (label_text, lookup_key) in enumerate([
                     ["Window",           "window"          ],
-                    ["Window Text",      "window text"     ],
                     ["Base",             "base"            ],
-                    ["Alternate Base",   "alt base"        ],
-                    ["ToolTip Base",     "tooltip base"    ],
-                    ["ToolTip Text",     "tooltip text"    ],
-                    ["Text",             "text"            ],
                     ["Button",           "button"          ],
+                    ["Alternate Base",   "alt base"        ]]):
+
+            label  = QtWidgets.QLabel(label_text, self)
+            button = QtWidgets.QPushButton("", self)
+            self.set_button_style(button, active_style[lookup_key])
+            label.setFixedWidth(label.width())
+            button.setFixedWidth(40)
+            button.clicked.connect(self.open_colour_dialog(lookup_key, button))
+            gbox_layout.addWidget(label, i+1, 0)
+            gbox_layout.addWidget(button, i+1, 1)
+            
+        gbox_layout.setRowStretch(0, 1)
+        gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
+        groupbox.setLayout(gbox_layout)
+        settings_layout.addWidget(groupbox, 0, 1, 1, 2)
+            
+                    
+        for i, (label_text, lookup_key) in enumerate([
+                    ["Text",             "text"            ],
+                    ["Window Text",      "window text"     ],
                     ["Button Text",      "button text"     ],
                     ["Bright Text",      "bright text"     ],
+                    
                     ["Link",             "link"            ],
                     ["Link Visited",     "link visited"    ],
+                    
                     ["Highlight",        "highlight"       ],
                     ["Highlighted Text", "highlighted text"],
+                    
+                    ["ToolTip Base",     "tooltip base"    ],
+                    ["ToolTip Text",     "tooltip text"    ],
+                    
                     ["Light",            "light"           ],
                     ["MidLight",         "midlight"        ],
                     ["Mid",              "mid"             ],
                     ["Dark",             "dark"            ],
                     ["Shadow",           "shadow"          ]
                 ]):
+            i += 1
             label  = QtWidgets.QLabel(label_text, self)
             button = QtWidgets.QPushButton("", self)
             self.set_button_style(button, active_style[lookup_key])
@@ -393,9 +415,13 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         button_layout.addWidget(ok_button)
         button_layout.addWidget(cancel_button)
         
-        layout.addLayout(namebox_layout, 0, 1)
-        layout.addLayout(settings_layout, 1, 1)
-        layout.addLayout(button_layout,   2, 1)
+        layout.addLayout(namebox_layout, 1, 1)
+        layout.addLayout(settings_layout, 2, 1)
+        layout.addLayout(button_layout,   3, 1)
+        layout.setColumnStretch(0, 1)
+        layout.setColumnStretch(2, 1)
+        layout.setRowStretch(0, 1)
+        layout.setRowStretch(layout.rowCount(), 1)
         
         self.setLayout(layout)
         
