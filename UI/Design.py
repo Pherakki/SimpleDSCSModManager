@@ -352,61 +352,22 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         
         settings_layout = QtWidgets.QGridLayout()
         settings_layout.setColumnStretch(0, 1)
-        settings_layout.setColumnStretch(3, 1)
-        groupbox = QtWidgets.QGroupBox(translate("UI::ColorThemePopup", "Base Colours"), self)
-        gbox_layout = QtWidgets.QGridLayout()
-        for i, (label_text, lookup_key) in enumerate([
-                    ["Window",           "window"          ],
-                    ["Base",             "base"            ],
-                    ["Button",           "button"          ],
-                    ["Alternate Base",   "alt base"        ]]):
-
-            label  = QtWidgets.QLabel(label_text, self)
-            button = QtWidgets.QPushButton("", self)
-            self.set_button_style(button, active_style[lookup_key])
-            label.setFixedWidth(label.width())
-            button.setFixedWidth(40)
-            button.clicked.connect(self.open_colour_dialog(lookup_key, button))
-            gbox_layout.addWidget(label, i+1, 0)
-            gbox_layout.addWidget(button, i+1, 1)
-            
-        gbox_layout.setRowStretch(0, 1)
-        gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
-        groupbox.setLayout(gbox_layout)
-        settings_layout.addWidget(groupbox, 0, 1, 1, 2)
-            
-                    
-        for i, (label_text, lookup_key) in enumerate([
-                    ["Text",             "text"            ],
-                    ["Window Text",      "window text"     ],
-                    ["Button Text",      "button text"     ],
-                    ["Bright Text",      "bright text"     ],
-                    
-                    ["Link",             "link"            ],
-                    ["Link Visited",     "link visited"    ],
-                    
-                    ["Highlight",        "highlight"       ],
-                    ["Highlighted Text", "highlighted text"],
-                    
-                    ["ToolTip Base",     "tooltip base"    ],
-                    ["ToolTip Text",     "tooltip text"    ],
-                    
-                    ["Light",            "light"           ],
-                    ["MidLight",         "midlight"        ],
-                    ["Mid",              "mid"             ],
-                    ["Dark",             "dark"            ],
-                    ["Shadow",           "shadow"          ]
-                ]):
-            i += 1
-            label  = QtWidgets.QLabel(label_text, self)
-            button = QtWidgets.QPushButton("", self)
-            self.set_button_style(button, active_style[lookup_key])
-            label.setFixedWidth(label.width())
-            button.setFixedWidth(40)
-            button.clicked.connect(self.open_colour_dialog(lookup_key, button))
-            settings_layout.addWidget(label, i, 1)
-            settings_layout.addWidget(button, i, 2)
+        settings_layout.setColumnStretch(2, 1)
         
+        base_groupbox = self.buildBaseGroupBox(active_style)
+        settings_layout.addWidget(base_groupbox,      0, 1)
+        text_groupbox = self.buildTextGroupBox(active_style)
+        settings_layout.addWidget(text_groupbox,      1, 1)
+        links_groupbox = self.buildLinksGroupBox(active_style)
+        settings_layout.addWidget(links_groupbox,     2, 1)
+        highlight_groupbox = self.buildHighlightGroupBox(active_style)
+        settings_layout.addWidget(highlight_groupbox, 3, 1)
+        tooltips_groupbox = self.buildTooltipGroupBox(active_style)
+        settings_layout.addWidget(tooltips_groupbox,  4, 1)
+        shading_groupbox = self.buildShadingGroupBox(active_style)
+        settings_layout.addWidget(shading_groupbox,   5, 1)
+        
+        # Buttons
         button_layout = QtWidgets.QHBoxLayout()
         ok_button = QtWidgets.QPushButton("Accept", self)
         cancel_button = QtWidgets.QPushButton("Cancel", self)
@@ -425,6 +386,103 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         
         self.setLayout(layout)
         
+    def addColorSelector(self, label_text,row, lookup_key, style, layout):
+        label  = QtWidgets.QLabel(label_text, self)
+        button = QtWidgets.QPushButton("", self)
+        self.set_button_style(button, style[lookup_key])
+        label.setFixedWidth(label.width())
+        button.setFixedWidth(40)
+        button.clicked.connect(self.open_colour_dialog(lookup_key, button))
+        layout.addWidget(label, row, 0)
+        layout.addWidget(button, row, 1)
+        
+    def buildBasicGroupBox(self, style, name, contents):
+        groupbox = QtWidgets.QGroupBox(name, self)
+        gbox_layout = QtWidgets.QGridLayout()
+        for i, (label_text, lookup_key) in enumerate(contents):
+            self.addColorSelector(label_text, i, lookup_key, style, gbox_layout)
+            
+        gbox_layout.setRowStretch(0, 1)
+        gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
+        groupbox.setLayout(gbox_layout)
+        return groupbox
+        
+    def buildBaseGroupBox(self, style):
+        return self.buildBasicGroupBox(
+            style, 
+            translate("UI::ColorThemePopup", "Base Colours"), 
+            [
+                [ translate("UI::ColorThemePopup", "Window"        ), "window"   ],
+                [ translate("UI::ColorThemePopup", "Base"          ), "base"     ],
+                [ translate("UI::ColorThemePopup", "Button"        ), "button"   ],
+                [ translate("UI::ColorThemePopup", "Alternate Base"), "alt base" ]
+            ]
+        )
+        
+    def buildTextGroupBox(self, style):
+        groupbox = QtWidgets.QGroupBox(translate("UI::ColorThemePopup", "Text"), self)
+        gbox_layout = QtWidgets.QGridLayout()
+        self.addColorSelector("Text",        1, "text",        style, gbox_layout)
+        
+        checkbox_layout = QtWidgets.QHBoxLayout()
+        checkbox = QtWidgets.QCheckBox(self)
+        label = QtWidgets.QLabel(translate("UI::ColorThemePopup", "Unified Colours"))
+        checkbox_layout.addWidget(checkbox)
+        checkbox_layout.addWidget(label)
+        checkbox_layout.addStretch(1)
+        gbox_layout.addLayout(checkbox_layout, 2, 0, 1, 2)
+        
+        self.addColorSelector("Window Text", 3, "window text", style, gbox_layout)
+        self.addColorSelector("Button Text", 4, "button text", style, gbox_layout)
+        self.addColorSelector("Bright Text", 5, "bright text", style, gbox_layout)
+        gbox_layout.setRowStretch(0, 1)
+        gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
+        groupbox.setLayout(gbox_layout)
+        return groupbox
+        
+    def buildLinksGroupBox(self, style):
+        return self.buildBasicGroupBox(
+            style, 
+            translate("UI::ColorThemePopup", "Links"), 
+            [
+                [ translate("UI::ColorThemePopup", "Link"),         "link"         ],
+                [ translate("UI::ColorThemePopup", "Link Visited"), "link visited" ]
+            ]
+        )
+        
+    def buildHighlightGroupBox(self, style):
+        return self.buildBasicGroupBox(
+            style, 
+            translate("UI::ColorThemePopup", "Highlight"), 
+            [
+                [ translate("UI::ColorThemePopup", "Highlight"),        "highlight"        ],
+                [ translate("UI::ColorThemePopup", "Highlighted Text"), "highlighted text" ]
+            ]
+        )
+           
+    def buildTooltipGroupBox(self, style):
+        return self.buildBasicGroupBox(
+            style, 
+            translate("UI::ColorThemePopup", "ToolTips"), 
+            [
+                [ translate("UI::ColorThemePopup", "ToolTip Base"), "tooltip base" ],
+                [ translate("UI::ColorThemePopup", "ToolTip Text"), "tooltip text" ]
+            ]
+        )
+               
+    def buildShadingGroupBox(self, style):
+        return self.buildBasicGroupBox(
+            style, 
+            translate("UI::ColorThemePopup", "Shading"), 
+            [
+                [ translate("UI::ColorThemePopup", "Light"),    "light"    ],
+                [ translate("UI::ColorThemePopup", "MidLight"), "midlight" ],
+                [ translate("UI::ColorThemePopup", "Mid"),      "mid"      ],
+                [ translate("UI::ColorThemePopup", "Dark"),     "dark"     ],
+                [ translate("UI::ColorThemePopup", "Shadow"),   "shadow"   ]
+            ]
+        )
+    
     def handle_ok(self):
         name = self.name_box.text()
         if name in self.style_engine.styles or name in self.style_engine.builtin_styles:
