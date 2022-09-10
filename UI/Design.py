@@ -265,7 +265,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
                 
     @QtCore.pyqtSlot(str)
     def receive_name(self, name):
-        self.name_buf = name
+        self.name_buf = name.strip()
             
     def create_theme(self):
         start_style = self.theme_select.currentText()
