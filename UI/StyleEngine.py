@@ -4,6 +4,48 @@ import os
 
 from PyQt5 import QtGui, QtWidgets
 
+class PaletteColour:
+    __slots__ = ("c", "mirror_inactive")
+    
+    def __init__(self):
+        self.c = None
+        self.mirror_inactive = False
+
+class SubPalette:
+    def __init__(self):
+        self.window           = PaletteColour()
+        self.base             = PaletteColour()
+        self.alt_base         = PaletteColour()
+        self.button           = PaletteColour()
+        
+        self.bright_text      = PaletteColour()
+        self.text             = PaletteColour()
+        self.window_text      = PaletteColour()
+        self.button_text      = PaletteColour()
+        
+        self.link             = PaletteColour()
+        self.link_visited     = PaletteColour()
+        
+        self.highlight        = PaletteColour()
+        self.highlighted_text = PaletteColour()
+        
+        self.tooltip_base     = PaletteColour()
+        self.tooltip_text     = PaletteColour()
+        
+        self.light            = PaletteColour()
+        self.midlight         = PaletteColour()
+        self.mid              = PaletteColour()
+        self.dark             = PaletteColour()
+        self.shadow           = PaletteColour()
+        
+        self.unified_text = False
+        
+class PaletteMap:
+    def __init__(self):
+        self.active   = SubPalette()
+        self.inactive = SubPalette()
+        self.disabled = SubPalette()
+
 
 class StyleEngine:
     """
@@ -29,6 +71,123 @@ class StyleEngine:
         
     @property
     def light_style(self):
+        pmap = PaletteMap()
+        
+        c = QtGui.QColor
+        pmap.active  .window.c = c(240, 240, 240)
+        pmap.inactive.window.c = c(240, 240, 240)
+        pmap.disabled.window.c = c(240, 240, 240)
+        pmap.active  .window.mirror_inactive = True
+        pmap.disabled.window.mirror_inactive = True
+        
+        pmap.active  .base.c   = c(255, 255, 255)
+        pmap.inactive.base.c   = c(255, 255, 255)
+        pmap.disabled.base.c   = c(240, 240, 240)
+        pmap.active  .base.mirror_inactive = True
+        pmap.disabled.base.mirror_inactive = False
+        
+        pmap.active  .alt_base.c   = c(233, 231, 227)
+        pmap.inactive.alt_base.c   = c(233, 231, 227)
+        pmap.disabled.alt_base.c   = c(247, 247, 247)
+        pmap.active  .alt_base.mirror_inactive = True
+        pmap.disabled.alt_base.mirror_inactive = False
+        
+        pmap.active  .button.c   = c(240, 240, 240)
+        pmap.inactive.button.c   = c(240, 240, 240)
+        pmap.disabled.button.c   = c(240, 240, 240)
+        pmap.active  .button.mirror_inactive = True
+        pmap.disabled.button.mirror_inactive = True
+        
+        pmap.active  .bright_text.c   = c(255, 255, 255)
+        pmap.inactive.bright_text.c   = c(255, 255, 255)
+        pmap.disabled.bright_text.c   = c(255, 255, 255)
+        pmap.active  .bright_text.mirror_inactive = True
+        pmap.disabled.bright_text.mirror_inactive = True
+        
+        pmap.active  .text.c   = c(  0,   0,   0)
+        pmap.inactive.text.c   = c(  0,   0,   0)
+        pmap.disabled.text.c   = c(120, 120, 120)
+        pmap.active  .text.mirror_inactive = True
+        pmap.disabled.text.mirror_inactive = False
+        
+        pmap.active  .button_text.c   = c(  0,   0,   0)
+        pmap.inactive.button_text.c   = c(  0,   0,   0)
+        pmap.disabled.button_text.c   = c(120, 120, 120)
+        pmap.active  .button_text.mirror_inactive = True
+        pmap.disabled.button_text.mirror_inactive = False
+        
+        pmap.active  .window_text.c   = c(  0,   0,   0)
+        pmap.inactive.window_text.c   = c(  0,   0,   0)
+        pmap.disabled.window_text.c   = c(120, 120, 120)
+        pmap.active  .window_text.mirror_inactive = True
+        pmap.disabled.window_text.mirror_inactive = False
+        
+        pmap.active  .link.c   = c(  0,   0, 255)
+        pmap.inactive.link.c   = c(  0,   0, 255)
+        pmap.disabled.link.c   = c(  0,   0, 255)
+        pmap.active  .link.mirror_inactive = True
+        pmap.disabled.link.mirror_inactive = True
+        
+        pmap.active  .link_visited.c   = c(255,   0, 255)
+        pmap.inactive.link_visited.c   = c(255,   0, 255)
+        pmap.disabled.link_visited.c   = c(255,   0, 255)
+        pmap.active  .link_visited.mirror_inactive = True
+        pmap.disabled.link_visited.mirror_inactive = True
+        
+        pmap.active  .highlight.c   = c(  0, 120, 215)
+        pmap.inactive.highlight.c   = c(240, 240, 240)
+        pmap.disabled.highlight.c   = c(  0, 120, 215)
+        pmap.active  .highlight.mirror_inactive = False
+        pmap.disabled.highlight.mirror_inactive = False
+        
+        pmap.active  .highlighted_text.c   = c(255, 255, 255)
+        pmap.inactive.highlighted_text.c   = c(  0,   0,   0)
+        pmap.disabled.highlighted_text.c   = c(255, 255, 255)
+        pmap.active  .highlighted_text.mirror_inactive = False
+        pmap.disabled.highlighted_text.mirror_inactive = False
+        
+        pmap.active  .tooltip_base.c   = c(255, 255, 220)
+        pmap.inactive.tooltip_base.c   = c(255, 255, 220)
+        pmap.disabled.tooltip_base.c   = c(255, 255, 220)
+        pmap.active  .tooltip_base.mirror_inactive = True
+        pmap.disabled.tooltip_base.mirror_inactive = True
+        
+        pmap.active  .tooltip_text.c   = c(  0,   0,   0)
+        pmap.inactive.tooltip_text.c   = c(  0,   0,   0)
+        pmap.disabled.tooltip_text.c   = c(  0,   0,   0)
+        pmap.active  .tooltip_text.mirror_inactive = True
+        pmap.disabled.tooltip_text.mirror_inactive = True
+        
+        pmap.active  .light.c   = c(255, 255, 255)
+        pmap.inactive.light.c   = c(255, 255, 255)
+        pmap.disabled.light.c   = c(255, 255, 255)
+        pmap.active  .light.mirror_inactive = True
+        pmap.disabled.light.mirror_inactive = True
+        
+        pmap.active  .midlight.c   = c(227, 227, 227)
+        pmap.inactive.midlight.c   = c(227, 227, 227)
+        pmap.disabled.midlight.c   = c(247, 247, 247)
+        pmap.active  .midlight.mirror_inactive = True
+        pmap.disabled.midlight.mirror_inactive = False
+        
+        pmap.active  .mid.c   = c(160, 160, 160)
+        pmap.inactive.mid.c   = c(160, 160, 160)
+        pmap.disabled.mid.c   = c(160, 160, 160)
+        pmap.active  .mid.mirror_inactive = True
+        pmap.disabled.mid.mirror_inactive = True
+        
+        pmap.active  .dark.c   = c(160, 160, 160)
+        pmap.inactive.dark.c   = c(160, 160, 160)
+        pmap.disabled.dark.c   = c(160, 160, 160)
+        pmap.active  .dark.mirror_inactive = True
+        pmap.disabled.dark.mirror_inactive = True
+        
+        pmap.active  .shadow.c   = c(105, 105, 105)
+        pmap.inactive.shadow.c   = c(105, 105, 105)
+        pmap.disabled.shadow.c   = c(  0,   0,   0)
+        pmap.active  .shadow.mirror_inactive = True
+        pmap.disabled.shadow.mirror_inactive = False
+        
         return {
             "window"          : [240, 240, 240],
             "base"            : [255, 255, 255],
@@ -58,6 +217,123 @@ class StyleEngine:
 
     @property
     def dark_style(self):
+        pmap = PaletteMap()
+        
+        c = QtGui.QColor
+        pmap.active  .window.c = c( 53,  53,  53)
+        pmap.inactive.window.c = c( 53,  53,  53)
+        pmap.disabled.window.c = c( 53,  53,  53)
+        pmap.active  .window.mirror_inactive = True
+        pmap.disabled.window.mirror_inactive = True
+        
+        pmap.active  .base.c   = c( 25,  25,  25)
+        pmap.inactive.base.c   = c( 25,  25,  25)
+        pmap.disabled.base.c   = c(240, 240, 240)
+        pmap.active  .base.mirror_inactive = True
+        pmap.disabled.base.mirror_inactive = False
+        
+        pmap.active  .alt_base.c   = c( 53,  53,  53)
+        pmap.inactive.alt_base.c   = c( 53,  53,  53)
+        pmap.disabled.alt_base.c   = c(247, 247, 247)
+        pmap.active  .alt_base.mirror_inactive = True
+        pmap.disabled.alt_base.mirror_inactive = False
+        
+        pmap.active  .button.c   = c( 53,  53,  53)
+        pmap.inactive.button.c   = c( 53,  53,  53)
+        pmap.disabled.button.c   = c( 53,  53,  53)
+        pmap.active  .button.mirror_inactive = True
+        pmap.disabled.button.mirror_inactive = True
+        
+        pmap.active  .bright_text.c   = c(255,   0,   0)
+        pmap.inactive.bright_text.c   = c(255,   0,   0)
+        pmap.disabled.bright_text.c   = c(255,   0,   0)
+        pmap.active  .bright_text.mirror_inactive = True
+        pmap.disabled.bright_text.mirror_inactive = True
+        
+        pmap.active  .text.c   = c(255, 255, 255)
+        pmap.inactive.text.c   = c(255, 255, 255)
+        pmap.disabled.text.c   = c(120, 120, 120)
+        pmap.active  .text.mirror_inactive = True
+        pmap.disabled.text.mirror_inactive = False
+        
+        pmap.active  .button_text.c   = c(255, 255, 255)
+        pmap.inactive.button_text.c   = c(255, 255, 255)
+        pmap.disabled.button_text.c   = c(120, 120, 120)
+        pmap.active  .button_text.mirror_inactive = True
+        pmap.disabled.button_text.mirror_inactive = False
+        
+        pmap.active  .window_text.c   = c(255, 255, 255)
+        pmap.inactive.window_text.c   = c(255, 255, 255)
+        pmap.disabled.window_text.c   = c(120, 120, 120)
+        pmap.active  .window_text.mirror_inactive = True
+        pmap.disabled.window_text.mirror_inactive = False
+        
+        pmap.active  .link.c   = c(  0,   0, 218)
+        pmap.inactive.link.c   = c(  0,   0, 218)
+        pmap.disabled.link.c   = c(  0,   0, 218)
+        pmap.active  .link.mirror_inactive = True
+        pmap.disabled.link.mirror_inactive = True
+        
+        pmap.active  .link_visited.c   = c(255,   0, 255)
+        pmap.inactive.link_visited.c   = c(255,   0, 255)
+        pmap.disabled.link_visited.c   = c(255,   0, 255)
+        pmap.active  .link_visited.mirror_inactive = True
+        pmap.disabled.link_visited.mirror_inactive = True
+        
+        pmap.active  .highlight.c   = c( 42, 130, 218)
+        pmap.inactive.highlight.c   = c(240, 240, 240)
+        pmap.disabled.highlight.c   = c( 42, 130, 218)
+        pmap.active  .highlight.mirror_inactive = False
+        pmap.disabled.highlight.mirror_inactive = False
+        
+        pmap.active  .highlighted_text.c   = c(  0,   0,   0)
+        pmap.inactive.highlighted_text.c   = c(255, 255, 255)
+        pmap.disabled.highlighted_text.c   = c(  0,   0,   0)
+        pmap.active  .highlighted_text.mirror_inactive = False
+        pmap.disabled.highlighted_text.mirror_inactive = False
+        
+        pmap.active  .tooltip_base.c   = c(  0,   0,   0)
+        pmap.inactive.tooltip_base.c   = c(  0,   0,   0)
+        pmap.disabled.tooltip_base.c   = c(  0,   0,   0)
+        pmap.active  .tooltip_base.mirror_inactive = True
+        pmap.disabled.tooltip_base.mirror_inactive = True
+        
+        pmap.active  .tooltip_text.c   = c(255, 255, 255)
+        pmap.inactive.tooltip_text.c   = c(255, 255, 255)
+        pmap.disabled.tooltip_text.c   = c(255, 255, 255)
+        pmap.active  .tooltip_text.mirror_inactive = True
+        pmap.disabled.tooltip_text.mirror_inactive = True
+        
+        pmap.active  .light.c   = c(255, 255, 255)
+        pmap.inactive.light.c   = c(255, 255, 255)
+        pmap.disabled.light.c   = c(255, 255, 255)
+        pmap.active  .light.mirror_inactive = True
+        pmap.disabled.light.mirror_inactive = True
+        
+        pmap.active  .midlight.c   = c(227, 227, 227)
+        pmap.inactive.midlight.c   = c(227, 227, 227)
+        pmap.disabled.midlight.c   = c(247, 247, 247)
+        pmap.active  .midlight.mirror_inactive = True
+        pmap.disabled.midlight.mirror_inactive = False
+        
+        pmap.active  .mid.c   = c(160, 160, 160)
+        pmap.inactive.mid.c   = c(160, 160, 160)
+        pmap.disabled.mid.c   = c(160, 160, 160)
+        pmap.active  .mid.mirror_inactive = True
+        pmap.disabled.mid.mirror_inactive = True
+        
+        pmap.active  .dark.c   = c(160, 160, 160)
+        pmap.inactive.dark.c   = c(160, 160, 160)
+        pmap.disabled.dark.c   = c(160, 160, 160)
+        pmap.active  .dark.mirror_inactive = True
+        pmap.disabled.dark.mirror_inactive = True
+        
+        pmap.active  .shadow.c   = c(105, 105, 105)
+        pmap.inactive.shadow.c   = c(105, 105, 105)
+        pmap.disabled.shadow.c   = c(  0,   0,   0)
+        pmap.active  .shadow.mirror_inactive = True
+        pmap.disabled.shadow.mirror_inactive = False
+        
         return {
             "window"          : [ 53,  53,  53],
             "base"            : [ 25,  25,  25],
