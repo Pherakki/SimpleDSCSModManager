@@ -10,8 +10,28 @@ class PaletteColour:
     def __init__(self):
         self.c = None
         self.mirror_inactive = False
-
+        
+    @classmethod
+    def from_dict(cls, dct):
+        instance = cls()
+        instance.c = QtGui.QColor(*dct["c"])
+        instance.mirror_inactive = dct["mirror_inactive"]
+        return instance
+    
+    def to_dict(self):
+        return {
+            "c": [self.c.red(), self.c.green(), self.c.blue()],
+            "mirror_inactive": self.mirror_inactive
+        }
+    
 class SubPalette:
+    __slots__ = ("window", "base", "alt_base", "button", 
+                 "bright_text", "text", "window_text", "button_text",
+                 "link", "link_visited", 
+                 "highlight", "highlighted_text",
+                 "tooltip_base", "tooltip_text",
+                 "light", "midlight", "mid", "dark", "shadow",
+                 "unified_text")
     def __init__(self):
         self.window           = PaletteColour()
         self.base             = PaletteColour()
@@ -39,13 +59,46 @@ class SubPalette:
         self.shadow           = PaletteColour()
         
         self.unified_text = False
-        
+          
+    @classmethod
+    def from_dict(cls, dct):
+        instance = cls()
+        for key in cls.__slots__:
+            if key not in dct:
+                raise ValueError(f"Dictionary contains no key '{key}':\n{dct}")
+                
+            if key == "unified_text":
+                instance.unified_text = dct[key]
+            else:
+                setattr(instance, key, PaletteColour.from_dict(dct[key]))
+        return instance
+    
+    def to_dict(self):
+        return {key: 
+                getattr(self, key).to_dict() 
+                if hasattr(getattr(self, key), "to_dict")
+                else getattr(self, key)
+                
+                for key in self.__slots__}
+      
 class PaletteMap:
+    __slots__ = ("active", "inactive", "disabled")
     def __init__(self):
         self.active   = SubPalette()
         self.inactive = SubPalette()
         self.disabled = SubPalette()
-
+        
+    @classmethod
+    def from_dict(cls, dct):
+        instance = cls()
+        for key in cls.__slots__:
+            if key not in dct:
+                raise ValueError(f"Dictionary contains no key '{key}':\n{dct}")
+            setattr(instance, key, SubPalette.from_dict(dct[key]))
+        return instance
+    
+    def to_dict(self):
+        return {key: getattr(self, key).to_dict() for key in self.__slots__}
 
 class StyleEngine:
     """
@@ -68,6 +121,7 @@ class StyleEngine:
         except Exception as e:
             # Raise a log error
             self.set_style("Light")
+
         
     @property
     def light_style(self):
@@ -188,32 +242,7 @@ class StyleEngine:
         pmap.active  .shadow.mirror_inactive = True
         pmap.disabled.shadow.mirror_inactive = False
         
-        return {
-            "window"          : [240, 240, 240],
-            "base"            : [255, 255, 255],
-            "alt base"        : [233, 231, 227],
-            "button"          : [240, 240, 240],
-            
-            "tooltip base"    : [255, 255, 220],
-            "tooltip text"    : [  0,   0,   0],
-            
-            "text"            : [  0,   0,   0],
-            "window text"     : [  0,   0,   0],
-            "button text"     : [  0,   0,   0],
-            "bright text"     : [255, 255, 255],
-            
-            "link"            : [  0,   0, 255],
-            "link visited"    : [255,   0, 255],
-            
-            "highlight"       : [  0, 120, 215],
-            "highlighted text": [240, 240, 240],
-            
-            "light"           : [255, 255, 255],
-            "midlight"        : [227, 227, 227],
-            "mid"             : [160, 160, 160],
-            "dark"            : [160, 160, 160],
-            "shadow"          : [105, 105, 105]  
-        }
+        return pmap
 
     @property
     def dark_style(self):
@@ -334,32 +363,7 @@ class StyleEngine:
         pmap.active  .shadow.mirror_inactive = True
         pmap.disabled.shadow.mirror_inactive = False
         
-        return {
-            "window"          : [ 53,  53,  53],
-            "base"            : [ 25,  25,  25],
-            "alt base"        : [ 53,  53,  53],
-            "button"          : [ 53,  53,  53],
-            
-            "tooltip base"    : [  0,   0,   0],
-            "tooltip text"    : [255, 255, 255],
-            
-            "text"            : [255, 255, 255],
-            "window text"     : [255, 255, 255],
-            "button text"     : [255, 255, 255],
-            "bright text"     : [255,   0,   0],
-            
-            "link"            : [ 42, 130, 218],
-            "link visited"    : [255,   0, 255],
-            
-            "highlight"       : [ 42, 130, 218],
-            "highlighted text": [  0,   0,   0],
-            
-            "light"           : [255, 255, 255],
-            "midlight"        : [227, 227, 227],
-            "mid"             : [160, 160, 160],
-            "dark"            : [160, 160, 160],
-            "shadow"          : [105, 105, 105]  
-        }
+        return pmap
     
     def load_style(self, file):
         filepath = os.path.join(self.__paths.themes_loc, file)
@@ -369,12 +373,12 @@ class StyleEngine:
                 style_def = json.load(F)
             name = filename
             
-            self.styles[name] = style_def
+            self.styles[name] = PaletteMap.from_dict(style_def)
         
     def save_style(self, name):
         filepath = os.path.join(self.__paths.themes_loc, os.extsep.join((name, "json")))
         with open(filepath, 'w') as F:
-            json.dump(self.styles[name], F)
+            json.dump(self.styles[name].to_dict(), F, indent=4)
             
     def generate_style_name(self, name):
         stem, tail = name.rsplit(" ", 1)
@@ -409,61 +413,70 @@ class StyleEngine:
         self.active_style = name
         
     def apply_style(self, colour_map):
-        default = self.light_style
         
         palette = QtWidgets.QApplication.palette()#QtGui.QPalette()
-        for group in (QtGui.QPalette.Active, QtGui.QPalette.Inactive):
-            palette.setColor(group, QtGui.QPalette.Window,          QtGui.QColor(*colour_map.get("window",           default["window"])))
-            palette.setColor(group, QtGui.QPalette.WindowText,      QtGui.QColor(*colour_map.get("window text",      default["window text"])))
-            palette.setColor(group, QtGui.QPalette.Base,            QtGui.QColor(*colour_map.get("base",             default["base"])))
-            palette.setColor(group, QtGui.QPalette.AlternateBase,   QtGui.QColor(*colour_map.get("alt base",         default["alt base"])))
-            palette.setColor(group, QtGui.QPalette.ToolTipBase,     QtGui.QColor(*colour_map.get("tooltip base",     default["tooltip base"])))
-            palette.setColor(group, QtGui.QPalette.ToolTipText,     QtGui.QColor(*colour_map.get("tooltip text",     default["tooltip text"])))
-            palette.setColor(group, QtGui.QPalette.Text,            QtGui.QColor(*colour_map.get("text",             default["text"])))
-            palette.setColor(group, QtGui.QPalette.Button,          QtGui.QColor(*colour_map.get("button",           default["button"])))
-            palette.setColor(group, QtGui.QPalette.ButtonText,      QtGui.QColor(*colour_map.get("button text",      default["button text"])))
-            palette.setColor(group, QtGui.QPalette.BrightText,      QtGui.QColor(*colour_map.get("bright text",      default["bright text"])))
-            palette.setColor(group, QtGui.QPalette.Link,            QtGui.QColor(*colour_map.get("link",             default["link"])))
-            palette.setColor(group, QtGui.QPalette.LinkVisited,     QtGui.QColor(*colour_map.get("link visited",     default["link visited"])))
-            palette.setColor(group, QtGui.QPalette.Highlight,       QtGui.QColor(*colour_map.get("highlight",        default["highlight"])))
-            palette.setColor(group, QtGui.QPalette.HighlightedText, QtGui.QColor(*colour_map.get("highlighted text", default["highlighted text"])))
-            palette.setColor(group, QtGui.QPalette.Light,           QtGui.QColor(*colour_map.get("light",            default["light"])))
-            palette.setColor(group, QtGui.QPalette.Midlight,        QtGui.QColor(*colour_map.get("midlight",         default["midlight"])))
-            palette.setColor(group, QtGui.QPalette.Mid,             QtGui.QColor(*colour_map.get("mid",              default["mid"])))
-            palette.setColor(group, QtGui.QPalette.Dark,            QtGui.QColor(*colour_map.get("dark",             default["dark"])))
-            palette.setColor(group, QtGui.QPalette.Shadow,          QtGui.QColor(*colour_map.get("shadow",           default["shadow"])))
+        for group, accessor in ((QtGui.QPalette.Active,   colour_map.active  ),
+                                (QtGui.QPalette.Inactive, colour_map.inactive),
+                                (QtGui.QPalette.Disabled, colour_map.disabled)):
+            palette.setColor(group, QtGui.QPalette.Window,          accessor.window.c)
+            palette.setColor(group, QtGui.QPalette.Base,            accessor.base.c)
+            palette.setColor(group, QtGui.QPalette.AlternateBase,   accessor.alt_base.c)
+            palette.setColor(group, QtGui.QPalette.Button,          accessor.button.c)
+            
+            palette.setColor(group, QtGui.QPalette.BrightText,      accessor.bright_text.c)
+            palette.setColor(group, QtGui.QPalette.Text,            accessor.text.c)
+            palette.setColor(group, QtGui.QPalette.WindowText,      accessor.window_text.c)
+            palette.setColor(group, QtGui.QPalette.ButtonText,      accessor.button_text.c)
+            
+            palette.setColor(group, QtGui.QPalette.Link,            accessor.link.c)
+            palette.setColor(group, QtGui.QPalette.LinkVisited,     accessor.link_visited.c)
+            
+            palette.setColor(group, QtGui.QPalette.Highlight,       accessor.highlight.c)
+            palette.setColor(group, QtGui.QPalette.HighlightedText, accessor.highlighted_text.c)
+            
+            palette.setColor(group, QtGui.QPalette.ToolTipBase,     accessor.tooltip_base.c)
+            palette.setColor(group, QtGui.QPalette.ToolTipText,     accessor.tooltip_text.c)
+            
+            palette.setColor(group, QtGui.QPalette.Light,           accessor.light.c)
+            palette.setColor(group, QtGui.QPalette.Midlight,        accessor.midlight.c)
+            palette.setColor(group, QtGui.QPalette.Mid,             accessor.mid.c)
+            palette.setColor(group, QtGui.QPalette.Dark,            accessor.dark.c)
+            palette.setColor(group, QtGui.QPalette.Shadow,          accessor.shadow.c)
             
         self.__app.setPalette(palette)
         
     def get_active_style(self):
-        return self.__extract_style()
+        if self.active_style in self.builtin_styles:
+            return self.builtin_styles[self.active_style]
+        else:
+            return self.styles[self.active_style]
         
-    def __extract_style(self):
-        palette = QtWidgets.QApplication.palette()
+    # def __extract_style(self):
+    #     palette = QtWidgets.QApplication.palette()
         
-        style = {}
-        style["window"]           = self.__extract_colour(palette.window())
-        style["window text"]      = self.__extract_colour(palette.windowText())
-        style["base"]             = self.__extract_colour(palette.base())
-        style["alt base"]         = self.__extract_colour(palette.alternateBase())
-        style["tooltip base"]     = self.__extract_colour(palette.toolTipBase())
-        style["tooltip text"]     = self.__extract_colour(palette.toolTipText())
-        style["text"]             = self.__extract_colour(palette.text())
-        style["button"]           = self.__extract_colour(palette.button())
-        style["button text"]      = self.__extract_colour(palette.buttonText())
-        style["bright text"]      = self.__extract_colour(palette.brightText())
-        style["link"]             = self.__extract_colour(palette.link())
-        style["link visited"]     = self.__extract_colour(palette.linkVisited())
-        style["highlight"]        = self.__extract_colour(palette.highlight())
-        style["highlighted text"] = self.__extract_colour(palette.highlightedText())
-        style["light"]            = self.__extract_colour(palette.light())
-        style["midlight"]         = self.__extract_colour(palette.midlight())
-        style["mid"]              = self.__extract_colour(palette.mid())
-        style["dark"]             = self.__extract_colour(palette.dark())
-        style["shadow"]           = self.__extract_colour(palette.shadow())
+    #     style = {}
+    #     style["window"]           = self.__extract_colour(palette.window())
+    #     style["window text"]      = self.__extract_colour(palette.windowText())
+    #     style["base"]             = self.__extract_colour(palette.base())
+    #     style["alt base"]         = self.__extract_colour(palette.alternateBase())
+    #     style["tooltip base"]     = self.__extract_colour(palette.toolTipBase())
+    #     style["tooltip text"]     = self.__extract_colour(palette.toolTipText())
+    #     style["text"]             = self.__extract_colour(palette.text())
+    #     style["button"]           = self.__extract_colour(palette.button())
+    #     style["button text"]      = self.__extract_colour(palette.buttonText())
+    #     style["bright text"]      = self.__extract_colour(palette.brightText())
+    #     style["link"]             = self.__extract_colour(palette.link())
+    #     style["link visited"]     = self.__extract_colour(palette.linkVisited())
+    #     style["highlight"]        = self.__extract_colour(palette.highlight())
+    #     style["highlighted text"] = self.__extract_colour(palette.highlightedText())
+    #     style["light"]            = self.__extract_colour(palette.light())
+    #     style["midlight"]         = self.__extract_colour(palette.midlight())
+    #     style["mid"]              = self.__extract_colour(palette.mid())
+    #     style["dark"]             = self.__extract_colour(palette.dark())
+    #     style["shadow"]           = self.__extract_colour(palette.shadow())
         
-        return style
+    #     return style
         
-    def __extract_colour(self, brush):
-        bcol = brush.color()
-        return [bcol.red(), bcol.green(), bcol.blue()]
+    # def __extract_colour(self, brush):
+    #     bcol = brush.color()
+    #     return [bcol.red(), bcol.green(), bcol.blue()]

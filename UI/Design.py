@@ -229,8 +229,6 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         self.new_theme_button.clicked.connect(self.create_theme)
         self.delete_theme_button.clicked.connect(self.delete_theme)
         
-        self.delete_theme_button.setEnabled(False)
-        
     def set_available_themes(self):
         try:
             self.theme_select.currentTextChanged.disconnect()
@@ -246,6 +244,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
             self.theme_indices[theme] = len(self.theme_indices)
             self.theme_select.addItem(theme)
         self.theme_select.setCurrentIndex(self.theme_indices[self.style_engine.active_style])
+        self.select_theme(self.style_engine.active_style)
         self.theme_select.currentTextChanged.connect(self.select_theme)
     
     def select_theme(self, item):
@@ -312,28 +311,28 @@ class CreateColourThemePopup(QtWidgets.QDialog):
     def hexcolour(self, colour):
         return f"{colour[0]:02x}{colour[1]:02x}{colour[2]:02x}"
         
-    def open_colour_dialog(self, key, button):
+    def open_colour_dialog(self, accessor, button):
         def func():
             active_style = self.mainwindow.style_engine.get_active_style()
-            original_colour = active_style[key]
+            original_colour = accessor(active_style).c
             dialog = QtWidgets.QColorDialog(self)
-            dialog.currentColorChanged.connect(lambda: self.update_style(key, dialog, button))
-            dialog.setCurrentColor(QtGui.QColor(*original_colour))
+            dialog.currentColorChanged.connect(lambda: self.update_style(accessor, dialog, button))
+            dialog.setCurrentColor(original_colour)
             if not dialog.exec_():
-                active_style[key] = original_colour
+                accessor(active_style).c = original_colour
                 self.set_button_style(button, original_colour)
                 self.mainwindow.style_engine.apply_style(active_style)
             
         return func
         
-    def update_style(self, key, dialog, button):
+    def update_style(self, accessor, dialog, button):
         style = self.mainwindow.style_engine.get_active_style()
-        col = dialog.currentColor()
-        style[key] = [col.red(), col.green(), col.blue()]
+        accessor(style).c = dialog.currentColor()
         self.mainwindow.style_engine.apply_style(style)
-        self.set_button_style(button, style[key])
+        self.set_button_style(button, accessor(style).c)
     
-    def set_button_style(self, button, colour):
+    def set_button_style(self, button, c):
+        colour = [c.red(), c.green(), c.blue()]
         button.setStyleSheet(f"background-color:#{self.hexcolour(colour)};\
                         border: 2px solid #222222")
     
@@ -386,21 +385,21 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         
         self.setLayout(layout)
         
-    def addColorSelector(self, label_text,row, lookup_key, style, layout):
+    def addColorSelector(self, label_text, row, accessor, style, layout):
         label  = QtWidgets.QLabel(label_text, self)
         button = QtWidgets.QPushButton("", self)
-        self.set_button_style(button, style[lookup_key])
+        self.set_button_style(button, accessor(style).c)
         label.setFixedWidth(label.width())
         button.setFixedWidth(40)
-        button.clicked.connect(self.open_colour_dialog(lookup_key, button))
+        button.clicked.connect(self.open_colour_dialog(accessor, button))
         layout.addWidget(label, row, 0)
         layout.addWidget(button, row, 1)
         
     def buildBasicGroupBox(self, style, name, contents):
         groupbox = QtWidgets.QGroupBox(name, self)
         gbox_layout = QtWidgets.QGridLayout()
-        for i, (label_text, lookup_key) in enumerate(contents):
-            self.addColorSelector(label_text, i, lookup_key, style, gbox_layout)
+        for i, (label_text, accessor) in enumerate(contents):
+            self.addColorSelector(label_text, i, accessor, style, gbox_layout)
             
         gbox_layout.setRowStretch(0, 1)
         gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
@@ -412,17 +411,17 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             style, 
             translate("UI::ColorThemePopup", "Base Colours"), 
             [
-                [ translate("UI::ColorThemePopup", "Window"        ), "window"   ],
-                [ translate("UI::ColorThemePopup", "Base"          ), "base"     ],
-                [ translate("UI::ColorThemePopup", "Button"        ), "button"   ],
-                [ translate("UI::ColorThemePopup", "Alternate Base"), "alt base" ]
+                [ translate("UI::ColorThemePopup", "Window"        ), lambda x: x.active.window   ],
+                [ translate("UI::ColorThemePopup", "Base"          ), lambda x: x.active.base     ],
+                [ translate("UI::ColorThemePopup", "Button"        ), lambda x: x.active.button   ],
+                [ translate("UI::ColorThemePopup", "Alternate Base"), lambda x: x.active.alt_base ]
             ]
         )
         
     def buildTextGroupBox(self, style):
         groupbox = QtWidgets.QGroupBox(translate("UI::ColorThemePopup", "Text"), self)
         gbox_layout = QtWidgets.QGridLayout()
-        self.addColorSelector("Text",        1, "text",        style, gbox_layout)
+        self.addColorSelector("Text",        1, lambda x: x.active.text, style, gbox_layout)
         
         checkbox_layout = QtWidgets.QHBoxLayout()
         checkbox = QtWidgets.QCheckBox(self)
@@ -432,9 +431,9 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         checkbox_layout.addStretch(1)
         gbox_layout.addLayout(checkbox_layout, 2, 0, 1, 2)
         
-        self.addColorSelector("Window Text", 3, "window text", style, gbox_layout)
-        self.addColorSelector("Button Text", 4, "button text", style, gbox_layout)
-        self.addColorSelector("Bright Text", 5, "bright text", style, gbox_layout)
+        self.addColorSelector("Window Text", 3, lambda x: x.active.window_text, style, gbox_layout)
+        self.addColorSelector("Button Text", 4, lambda x: x.active.button_text, style, gbox_layout)
+        self.addColorSelector("Bright Text", 5, lambda x: x.active.bright_text, style, gbox_layout)
         gbox_layout.setRowStretch(0, 1)
         gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
         groupbox.setLayout(gbox_layout)
@@ -445,8 +444,8 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             style, 
             translate("UI::ColorThemePopup", "Links"), 
             [
-                [ translate("UI::ColorThemePopup", "Link"),         "link"         ],
-                [ translate("UI::ColorThemePopup", "Link Visited"), "link visited" ]
+                [ translate("UI::ColorThemePopup", "Link"),         lambda x: x.active.link         ],
+                [ translate("UI::ColorThemePopup", "Link Visited"), lambda x: x.active.link_visited ]
             ]
         )
         
@@ -455,8 +454,8 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             style, 
             translate("UI::ColorThemePopup", "Highlight"), 
             [
-                [ translate("UI::ColorThemePopup", "Highlight"),        "highlight"        ],
-                [ translate("UI::ColorThemePopup", "Highlighted Text"), "highlighted text" ]
+                [ translate("UI::ColorThemePopup", "Highlight"),        lambda x: x.active.highlight        ],
+                [ translate("UI::ColorThemePopup", "Highlighted Text"), lambda x: x.active.highlighted_text ]
             ]
         )
            
@@ -465,8 +464,8 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             style, 
             translate("UI::ColorThemePopup", "ToolTips"), 
             [
-                [ translate("UI::ColorThemePopup", "ToolTip Base"), "tooltip base" ],
-                [ translate("UI::ColorThemePopup", "ToolTip Text"), "tooltip text" ]
+                [ translate("UI::ColorThemePopup", "ToolTip Base"), lambda x: x.active.tooltip_base ],
+                [ translate("UI::ColorThemePopup", "ToolTip Text"), lambda x: x.active.tooltip_text ]
             ]
         )
                
@@ -475,11 +474,11 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             style, 
             translate("UI::ColorThemePopup", "Shading"), 
             [
-                [ translate("UI::ColorThemePopup", "Light"),    "light"    ],
-                [ translate("UI::ColorThemePopup", "MidLight"), "midlight" ],
-                [ translate("UI::ColorThemePopup", "Mid"),      "mid"      ],
-                [ translate("UI::ColorThemePopup", "Dark"),     "dark"     ],
-                [ translate("UI::ColorThemePopup", "Shadow"),   "shadow"   ]
+                [ translate("UI::ColorThemePopup", "Light"),    lambda x: x.active.light    ],
+                [ translate("UI::ColorThemePopup", "MidLight"), lambda x: x.active.midlight ],
+                [ translate("UI::ColorThemePopup", "Mid"),      lambda x: x.active.mid      ],
+                [ translate("UI::ColorThemePopup", "Dark"),     lambda x: x.active.dark     ],
+                [ translate("UI::ColorThemePopup", "Shadow"),   lambda x: x.active.shadow   ]
             ]
         )
     
