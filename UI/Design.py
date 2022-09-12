@@ -348,23 +348,33 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         namebox_layout.addWidget(self.name_box)
         namebox_layout.addStretch(1)
         
+        all_settings_layout = QtWidgets.QHBoxLayout()
+        all_settings_layout.addSpacing(1)
         
-        settings_layout = QtWidgets.QGridLayout()
-        settings_layout.setColumnStretch(0, 1)
-        settings_layout.setColumnStretch(2, 1)
-        
-        base_groupbox = self.buildBaseGroupBox(lambda x: x.active, active_style)
-        settings_layout.addWidget(base_groupbox,      0, 1)
-        text_groupbox = self.buildTextGroupBox(lambda x: x.active, active_style)
-        settings_layout.addWidget(text_groupbox,      1, 1)
-        links_groupbox = self.buildLinksGroupBox(lambda x: x.active, active_style)
-        settings_layout.addWidget(links_groupbox,     2, 1)
-        highlight_groupbox = self.buildHighlightGroupBox(lambda x: x.active, active_style)
-        settings_layout.addWidget(highlight_groupbox, 3, 1)
-        tooltips_groupbox = self.buildTooltipGroupBox(lambda x: x.active, active_style)
-        settings_layout.addWidget(tooltips_groupbox,  4, 1)
-        shading_groupbox = self.buildShadingGroupBox(lambda x: x.active, active_style)
-        settings_layout.addWidget(shading_groupbox,   5, 1)
+        for group_name, group_accessor in [("Main",     lambda x: x.inactive),
+                                           ("Active",   lambda x: x.active),
+                                           ("Disabled", lambda x: x.disabled)]:
+            groupbox = QtWidgets.QGroupBox(group_name, self)
+            settings_layout = QtWidgets.QGridLayout()
+            settings_layout.setColumnStretch(0, 1)
+            settings_layout.setColumnStretch(2, 1)
+            
+            base_groupbox      = self.buildBaseGroupBox     (group_accessor, active_style)
+            text_groupbox      = self.buildTextGroupBox     (group_accessor, active_style)
+            links_groupbox     = self.buildLinksGroupBox    (group_accessor, active_style)
+            highlight_groupbox = self.buildHighlightGroupBox(group_accessor, active_style)
+            tooltips_groupbox  = self.buildTooltipGroupBox  (group_accessor, active_style)
+            shading_groupbox   = self.buildShadingGroupBox  (group_accessor, active_style)
+            settings_layout.addWidget(base_groupbox,      0, 1)
+            settings_layout.addWidget(text_groupbox,      1, 1)
+            settings_layout.addWidget(links_groupbox,     2, 1)
+            settings_layout.addWidget(highlight_groupbox, 3, 1)
+            settings_layout.addWidget(tooltips_groupbox,  4, 1)
+            settings_layout.addWidget(shading_groupbox,   5, 1)
+            groupbox.setLayout(settings_layout)
+            all_settings_layout.addWidget(groupbox)
+            
+        all_settings_layout.addSpacing(1)
         
         # Buttons
         button_layout = QtWidgets.QHBoxLayout()
@@ -376,7 +386,7 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         button_layout.addWidget(cancel_button)
         
         layout.addLayout(namebox_layout, 1, 1)
-        layout.addLayout(settings_layout, 2, 1)
+        layout.addLayout(all_settings_layout, 2, 1)
         layout.addLayout(button_layout,   3, 1)
         layout.setColumnStretch(0, 1)
         layout.setColumnStretch(2, 1)
