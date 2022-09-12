@@ -353,17 +353,17 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         settings_layout.setColumnStretch(0, 1)
         settings_layout.setColumnStretch(2, 1)
         
-        base_groupbox = self.buildBaseGroupBox(active_style)
+        base_groupbox = self.buildBaseGroupBox(lambda x: x.active, active_style)
         settings_layout.addWidget(base_groupbox,      0, 1)
-        text_groupbox = self.buildTextGroupBox(active_style)
+        text_groupbox = self.buildTextGroupBox(lambda x: x.active, active_style)
         settings_layout.addWidget(text_groupbox,      1, 1)
-        links_groupbox = self.buildLinksGroupBox(active_style)
+        links_groupbox = self.buildLinksGroupBox(lambda x: x.active, active_style)
         settings_layout.addWidget(links_groupbox,     2, 1)
-        highlight_groupbox = self.buildHighlightGroupBox(active_style)
+        highlight_groupbox = self.buildHighlightGroupBox(lambda x: x.active, active_style)
         settings_layout.addWidget(highlight_groupbox, 3, 1)
-        tooltips_groupbox = self.buildTooltipGroupBox(active_style)
+        tooltips_groupbox = self.buildTooltipGroupBox(lambda x: x.active, active_style)
         settings_layout.addWidget(tooltips_groupbox,  4, 1)
-        shading_groupbox = self.buildShadingGroupBox(active_style)
+        shading_groupbox = self.buildShadingGroupBox(lambda x: x.active, active_style)
         settings_layout.addWidget(shading_groupbox,   5, 1)
         
         # Buttons
@@ -406,22 +406,22 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         groupbox.setLayout(gbox_layout)
         return groupbox
         
-    def buildBaseGroupBox(self, style):
+    def buildBaseGroupBox(self, group_accessor, style):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Base Colours"), 
             [
-                [ translate("UI::ColorThemePopup", "Window"        ), lambda x: x.active.window   ],
-                [ translate("UI::ColorThemePopup", "Base"          ), lambda x: x.active.base     ],
-                [ translate("UI::ColorThemePopup", "Button"        ), lambda x: x.active.button   ],
-                [ translate("UI::ColorThemePopup", "Alternate Base"), lambda x: x.active.alt_base ]
+                [ translate("UI::ColorThemePopup", "Window"        ), lambda x: group_accessor(x).window   ],
+                [ translate("UI::ColorThemePopup", "Base"          ), lambda x: group_accessor(x).base     ],
+                [ translate("UI::ColorThemePopup", "Button"        ), lambda x: group_accessor(x).button   ],
+                [ translate("UI::ColorThemePopup", "Alternate Base"), lambda x: group_accessor(x).alt_base ]
             ]
         )
         
-    def buildTextGroupBox(self, style):
+    def buildTextGroupBox(self, group_accessor, style):
         groupbox = QtWidgets.QGroupBox(translate("UI::ColorThemePopup", "Text"), self)
         gbox_layout = QtWidgets.QGridLayout()
-        self.addColorSelector("Text",        1, lambda x: x.active.text, style, gbox_layout)
+        self.addColorSelector("Text",        1, lambda x: group_accessor(x).text, style, gbox_layout)
         
         checkbox_layout = QtWidgets.QHBoxLayout()
         checkbox = QtWidgets.QCheckBox(self)
@@ -431,54 +431,54 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         checkbox_layout.addStretch(1)
         gbox_layout.addLayout(checkbox_layout, 2, 0, 1, 2)
         
-        self.addColorSelector("Window Text", 3, lambda x: x.active.window_text, style, gbox_layout)
-        self.addColorSelector("Button Text", 4, lambda x: x.active.button_text, style, gbox_layout)
-        self.addColorSelector("Bright Text", 5, lambda x: x.active.bright_text, style, gbox_layout)
+        self.addColorSelector("Window Text", 3, lambda x: group_accessor(x).window_text, style, gbox_layout)
+        self.addColorSelector("Button Text", 4, lambda x: group_accessor(x).button_text, style, gbox_layout)
+        self.addColorSelector("Bright Text", 5, lambda x: group_accessor(x).bright_text, style, gbox_layout)
         gbox_layout.setRowStretch(0, 1)
         gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
         groupbox.setLayout(gbox_layout)
         return groupbox
         
-    def buildLinksGroupBox(self, style):
+    def buildLinksGroupBox(self, group_accessor, style):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Links"), 
             [
-                [ translate("UI::ColorThemePopup", "Link"),         lambda x: x.active.link         ],
-                [ translate("UI::ColorThemePopup", "Link Visited"), lambda x: x.active.link_visited ]
+                [ translate("UI::ColorThemePopup", "Link"),         lambda x: group_accessor(x).link         ],
+                [ translate("UI::ColorThemePopup", "Link Visited"), lambda x: group_accessor(x).link_visited ]
             ]
         )
         
-    def buildHighlightGroupBox(self, style):
+    def buildHighlightGroupBox(self, group_accessor, style):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Highlight"), 
             [
-                [ translate("UI::ColorThemePopup", "Highlight"),        lambda x: x.active.highlight        ],
-                [ translate("UI::ColorThemePopup", "Highlighted Text"), lambda x: x.active.highlighted_text ]
+                [ translate("UI::ColorThemePopup", "Highlight"),        lambda x: group_accessor(x).highlight        ],
+                [ translate("UI::ColorThemePopup", "Highlighted Text"), lambda x: group_accessor(x).highlighted_text ]
             ]
         )
            
-    def buildTooltipGroupBox(self, style):
+    def buildTooltipGroupBox(self, group_accessor, style):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "ToolTips"), 
             [
-                [ translate("UI::ColorThemePopup", "ToolTip Base"), lambda x: x.active.tooltip_base ],
-                [ translate("UI::ColorThemePopup", "ToolTip Text"), lambda x: x.active.tooltip_text ]
+                [ translate("UI::ColorThemePopup", "ToolTip Base"), lambda x: group_accessor(x).tooltip_base ],
+                [ translate("UI::ColorThemePopup", "ToolTip Text"), lambda x: group_accessor(x).tooltip_text ]
             ]
         )
                
-    def buildShadingGroupBox(self, style):
+    def buildShadingGroupBox(self, group_accessor, style):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Shading"), 
             [
-                [ translate("UI::ColorThemePopup", "Light"),    lambda x: x.active.light    ],
-                [ translate("UI::ColorThemePopup", "MidLight"), lambda x: x.active.midlight ],
-                [ translate("UI::ColorThemePopup", "Mid"),      lambda x: x.active.mid      ],
-                [ translate("UI::ColorThemePopup", "Dark"),     lambda x: x.active.dark     ],
-                [ translate("UI::ColorThemePopup", "Shadow"),   lambda x: x.active.shadow   ]
+                [ translate("UI::ColorThemePopup", "Light"),    lambda x: group_accessor(x).light    ],
+                [ translate("UI::ColorThemePopup", "MidLight"), lambda x: group_accessor(x).midlight ],
+                [ translate("UI::ColorThemePopup", "Mid"),      lambda x: group_accessor(x).mid      ],
+                [ translate("UI::ColorThemePopup", "Dark"),     lambda x: group_accessor(x).dark     ],
+                [ translate("UI::ColorThemePopup", "Shadow"),   lambda x: group_accessor(x).shadow   ]
             ]
         )
     
