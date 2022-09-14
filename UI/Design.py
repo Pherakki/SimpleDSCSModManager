@@ -274,7 +274,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
             
     def create_theme(self):
         start_style = self.theme_select.currentText()
-        proposed_name = self.style_engine.generate_new_style_name("New Theme")
+        proposed_name = self.style_engine.generate_new_style_name(translate("UI::ColorThemePopup", "New Theme"))
         new_style = self.style_engine.new_style(start_style)
         cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name, translate("UI::ColorThemePopup", "New Colour Theme"), new_style, renames_not_allowed=True)
         cctp.communicate_name_change.connect(self.receive_name)
@@ -381,9 +381,9 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         all_settings_layout = QtWidgets.QHBoxLayout()
         all_settings_layout.addSpacing(1)
         
-        for group_name, group_accessor, mergeable in [("Main",     lambda x: x.inactive, False),
-                                                      ("Active",   lambda x: x.active,   True ),
-                                                      ("Disabled", lambda x: x.disabled, True )]:
+        for group_name, group_accessor, mergeable in [(translate("UI::ColorThemePopup", "Main"),     lambda x: x.inactive, False),
+                                                      (translate("UI::ColorThemePopup", "Active"),   lambda x: x.active,   True ),
+                                                      (translate("UI::ColorThemePopup", "Disabled"), lambda x: x.disabled, True )]:
             groupbox = QtWidgets.QGroupBox(group_name, self)
             settings_layout = QtWidgets.QGridLayout()
             settings_layout.setColumnStretch(0, 1)
@@ -408,8 +408,8 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         
         # Buttons
         button_layout = QtWidgets.QHBoxLayout()
-        ok_button = QtWidgets.QPushButton("Accept", self)
-        cancel_button = QtWidgets.QPushButton("Cancel", self)
+        ok_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Accept"), self)
+        cancel_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Cancel"), self)
         ok_button.clicked.connect(self.handle_ok)
         cancel_button.clicked.connect(lambda: self.done(0))
         button_layout.addWidget(ok_button)
