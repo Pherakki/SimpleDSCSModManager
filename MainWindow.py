@@ -37,7 +37,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.main_area.action_tabs.configTab.block_handle_box.setCurrentIndex(self.ops.config_manager.get_block_pref())
         self.ops.init = True
 
-        self.style_engine = StyleEngine(app, self.ops.paths, self.ops.config_manager.get_style_pref())
+        self.style_engine = StyleEngine(app, self.ops.paths, self.ui.log, self.ops.config_manager.get_style_pref())
         
         self.ui.log(translate("MainWindow", "SimpleDSCSModManager initialised."))
         self.ui.loglink(translate("MainWindow", "Want to contribute to modding tools or develop mods? Consider joining the {hyperlink_open}Digimon Modding Community discord server{hyperlink_close}.").format(hyperlink_open="<a href=\"{self.ops.paths.discord_invite}\">", hyperlink_close="</a>"))

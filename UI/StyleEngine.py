@@ -2,7 +2,9 @@ import copy
 import json
 import os
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+translate = QtCore.QCoreApplication.translate
 
 class PaletteColour:
     __slots__ = ("c", "mirror_inactive")
@@ -14,8 +16,30 @@ class PaletteColour:
     @classmethod
     def from_dict(cls, dct):
         instance = cls()
-        instance.c = QtGui.QColor(*dct["c"])
-        instance.mirror_inactive = dct["mirror_inactive"]
+        
+        # COLOUR VALIDATION
+        if "c" not in dct:
+            raise Exception(translate("UI:StyleEngine", "No member 'c' found."))
+        colour = dct["c"]
+        if len(colour) != 3:
+            raise Exception(translate("UI:StyleEngine", "Colour 'c' contains {n_elements} colours; 3 required")
+                            .format(n_elements=len(colour)))
+        try:
+            instance.c = QtGui.QColor(*colour)
+        except Exception as e:
+            raise Exception(translate("UI:StyleEngine", "An unexpected error occurred when initialising colour: {error_msg}")
+                            .format(error_msg=e))
+            
+        # mirror_inactive VALIDATION
+        if "mirror_inactive" not in dct:
+            raise Exception(translate("UI:StyleEngine", "No member 'mirror_inactive' found"))
+            
+        try:
+            instance.mirror_inactive = bool(dct["mirror_inactive"])
+        except Exception:
+            raise Exception(translate("UI::StyleEngine", 
+                                      "'mirror_inactive' value '{value}' cannot be converted to bool")
+                            .format(value=dct["mirror_inactive"]))
         return instance
     
     def to_dict(self):
@@ -70,7 +94,11 @@ class SubPalette:
             if key == "unified_text":
                 instance.unified_text = dct[key]
             else:
-                setattr(instance, key, PaletteColour.from_dict(dct[key]))
+                try:
+                    setattr(instance, key, PaletteColour.from_dict(dct[key]))
+                except Exception as e:
+                    raise Exception(translate("UI::StyleEngine", "colour definition '{name}': {error_msg}")
+                                    .format(name=key, error_msg=e))
         return instance
     
     def to_dict(self):
@@ -94,7 +122,11 @@ class PaletteMap:
         for key in cls.__slots__:
             if key not in dct:
                 raise ValueError(f"Dictionary contains no key '{key}':\n{dct}")
-            setattr(instance, key, SubPalette.from_dict(dct[key]))
+            try:
+                setattr(instance, key, SubPalette.from_dict(dct[key]))
+            except Exception as e:
+                raise Exception(translate("UI::StyleEngine", "Attempted to load palette '{name}', {error_msg}")
+                                .format(name=key, error_msg=e))
         return instance
     
     def to_dict(self):
@@ -104,12 +136,13 @@ class StyleEngine:
     """
     Dark Colours from https://stackoverflow.com/a/56851493
     """
-    def __init__(self, app_ref, paths, initial_style=None):
+    def __init__(self, app_ref, paths, log, initial_style=None):
         self.__app = app_ref
         self.__paths = paths
         self.builtin_styles = {"Light": self.light_style, "Dark": self.dark_style}
         self.styles = {}
         self.active_style = None
+        self.log = log
         
         for theme in sorted(os.listdir(self.__paths.themes_loc)):
             self.load_style(theme)
@@ -118,9 +151,12 @@ class StyleEngine:
             initial_style = "Light"
         try:
             self.set_style(initial_style)
-        except Exception as e:
-            # Raise a log error
-            self.set_style("Light")
+        except Exception:
+            default_theme = "Light"
+            self.log(translate("UI::StyleEngine", 
+                               "Error: Failed to set style '{initial_style}.json'; defaulting to '{default_theme}'.")
+                            .format(initial_style=initial_style, default_theme=default_theme))
+            self.set_style(default_theme)
 
         
     @property
@@ -369,11 +405,16 @@ class StyleEngine:
         filepath = os.path.join(self.__paths.themes_loc, file)
         filename, ext = os.path.splitext(file)
         if os.path.isfile(filepath) and ext.lstrip(os.extsep) == "json":
-            with open(filepath, 'r') as F:
-                style_def = json.load(F)
-            name = filename
+            try:
+                with open(filepath, 'r') as F:
+                    style_def = json.load(F)
+                name = filename
+                self.styles[name] = PaletteMap.from_dict(style_def)
+            except Exception as e:
+                self.log(translate("UI::StyleEngine", 
+                                   "WARNING: Failed to load style file '{name}.json'. Error is: {error_msg}.")
+                         .format(name=filename, error_msg=e))
             
-            self.styles[name] = PaletteMap.from_dict(style_def)
         
     def save_style(self, name):
         filepath = os.path.join(self.__paths.themes_loc, os.extsep.join((name, "json")))
