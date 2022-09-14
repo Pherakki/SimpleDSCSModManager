@@ -1,4 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+import copy
 from datetime import datetime
 import os
 
@@ -196,6 +198,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         self.theme_select = QtWidgets.QComboBox(self)
         
         self.new_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Create New Theme"), self)
+        self.edit_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Edit Theme"), self)
         self.delete_theme_button = QtWidgets.QPushButton(translate("UI::ColorThemePopup", "Delete Theme"), self)
         
         width = 0
@@ -205,6 +208,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         
         self.theme_select.setFixedWidth(width + 30)
         self.new_theme_button.setFixedWidth(width)
+        self.edit_theme_button.setFixedWidth(width)
         self.delete_theme_button.setFixedWidth(width)
         
         self.setFixedSize(3*width,200)
@@ -212,6 +216,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         layout.addStretch(1)
         layout.addWidget(self.theme_select, alignment = QtCore.Qt.AlignCenter)
         layout.addWidget(self.new_theme_button, alignment = QtCore.Qt.AlignCenter)
+        layout.addWidget(self.edit_theme_button, alignment = QtCore.Qt.AlignCenter)
         layout.addWidget(self.delete_theme_button, alignment = QtCore.Qt.AlignCenter)
         layout.addStretch(1)
         
@@ -227,6 +232,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         
         self.set_available_themes()
         self.new_theme_button.clicked.connect(self.create_theme)
+        self.edit_theme_button.clicked.connect(self.edit_theme)
         self.delete_theme_button.clicked.connect(self.delete_theme)
         
     def set_available_themes(self):
@@ -270,13 +276,30 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         start_style = self.theme_select.currentText()
         proposed_name = self.style_engine.generate_new_style_name("New Theme")
         new_style = self.style_engine.new_style(start_style)
-        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name, translate("UI::ColorThemePopup", "New Colour Theme"), new_style)
+        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name, translate("UI::ColorThemePopup", "New Colour Theme"), new_style, renames_not_allowed=True)
         cctp.communicate_name_change.connect(self.receive_name)
         if cctp.exec_():
             nm = self.name_buf # This gets set when the Ok button is pressed on cctp
             self.style_engine.styles[nm] = new_style
             self.style_engine.styles = {k: v for k, v in sorted(self.style_engine.styles.items())}
             self.style_engine.save_style(nm)
+            self.set_available_themes()
+            self.theme_select.setCurrentIndex(self.theme_indices[nm])
+        else:
+            self.select_theme(start_style)
+            
+    def edit_theme(self):
+        start_style = self.theme_select.currentText()
+        edit_style = copy.deepcopy(self.style_engine.styles[start_style])
+        cctp = CreateColourThemePopup(self, self.mainwindow, start_style, translate("UI::ColorThemePopup", "Edit Colour Theme"), edit_style, renames_not_allowed=False)
+        cctp.communicate_name_change.connect(self.receive_name)
+        if cctp.exec_():
+            nm = self.name_buf # This gets set when the Ok button is pressed on cctp
+            self.style_engine.styles[start_style] = edit_style
+            self.style_engine.rename_style(start_style, nm)
+            self.style_engine.styles = {k: v for k, v in sorted(self.style_engine.styles.items())}
+            self.style_engine.save_style(nm)
+            self.select_theme(nm)
             self.set_available_themes()
             self.theme_select.setCurrentIndex(self.theme_indices[nm])
         else:
@@ -301,9 +324,10 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
 class CreateColourThemePopup(QtWidgets.QDialog):
     communicate_name_change = QtCore.pyqtSignal(str)
     
-    def __init__(self, parent, mainwindow, initial_name, window_name, new_style):
+    def __init__(self, parent, mainwindow, initial_name, window_name, new_style, renames_not_allowed):
         super().__init__(parent)
         self.working_style = new_style
+        self.renames_not_allowed = renames_not_allowed
         self.mainwindow = mainwindow
         self.style_engine = mainwindow.style_engine
         self.setGeometry(100,100,400,600)
@@ -515,7 +539,16 @@ class CreateColourThemePopup(QtWidgets.QDialog):
     
     def handle_ok(self):
         name = self.name_box.text()
-        if name in self.style_engine.styles or name in self.style_engine.builtin_styles:
+        if name in name in self.style_engine.builtin_styles:
+            err = QtWidgets.QMessageBox()
+            err.setIcon(QtWidgets.QMessageBox.Warning)
+            err.setWindowTitle(translate("UI::ColorThemePopup", "Name already defined"))
+            err.setText(translate("UI::ColorThemePopup", "Error: '{name}' the name of a built-in style. Choose another name.")
+                        .format(name=name))
+            err.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            err.exec_()
+            return
+        if name in self.style_engine.styles and self.renames_not_allowed:
             err = QtWidgets.QMessageBox()
             err.setIcon(QtWidgets.QMessageBox.Warning)
             err.setWindowTitle("Name already defined")
@@ -530,7 +563,7 @@ class CreateColourThemePopup(QtWidgets.QDialog):
 class creditsPopup:
     def __init__(self, win):
         msgBox = QtWidgets.QMessageBox(win)
-        msgBox.setWindowTitle(translate("UI::Credts", "Credits"))
+        msgBox.setWindowTitle(translate("UI::Credits", "Credits"))
         
         msgBoxText = translate("UI::Credits", "The people on this list have all significantly contributed to SimpleDSCSModManager in some way. They have my deepest thanks.")
         msgBoxText += "<br><br>"

@@ -438,6 +438,12 @@ class StyleEngine:
     def new_style(self, from_name):
         return copy.deepcopy(self.styles[from_name])
     
+    def rename_style(self, from_name, to_name):
+        if from_name != to_name:
+            self.styles[to_name] = self.styles[from_name]
+            self.delete_style(from_name)
+            self.save_style(to_name)
+    
     def delete_style(self, name):
         if name in self.styles:
             del self.styles[name]
