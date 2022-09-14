@@ -417,9 +417,6 @@ class StyleEngine:
         palette.setColor(group, element, accessor(group_attr).c)
         
     def apply_style(self, colour_map):
-        print("Applying style:")
-        col = self.styles["New Theme"].inactive.window.c
-        print(col.red(), col.green(), col.blue())
         palette = QtWidgets.QApplication.palette()#QtGui.QPalette()
         for group, group_attr in ((QtGui.QPalette.Active,   colour_map.active  ),
                                   (QtGui.QPalette.Inactive, colour_map.inactive),
