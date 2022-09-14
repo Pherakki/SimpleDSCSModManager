@@ -412,36 +412,45 @@ class StyleEngine:
             self.apply_style(self.styles[name])
         self.active_style = name
         
+    def apply_colour(self, palette, group, group_attr, element, accessor, colour_map):
+        if accessor(group_attr).mirror_inactive:
+            group_attr = colour_map.inactive
+        palette.setColor(group, element, accessor(group_attr).c)
+        
     def apply_style(self, colour_map):
         
         palette = QtWidgets.QApplication.palette()#QtGui.QPalette()
-        for group, accessor in ((QtGui.QPalette.Active,   colour_map.active  ),
-                                (QtGui.QPalette.Inactive, colour_map.inactive),
-                                (QtGui.QPalette.Disabled, colour_map.disabled)):
-            palette.setColor(group, QtGui.QPalette.Window,          accessor.window.c)
-            palette.setColor(group, QtGui.QPalette.Base,            accessor.base.c)
-            palette.setColor(group, QtGui.QPalette.AlternateBase,   accessor.alt_base.c)
-            palette.setColor(group, QtGui.QPalette.Button,          accessor.button.c)
+        for group, group_attr in ((QtGui.QPalette.Active,   colour_map.active  ),
+                                  (QtGui.QPalette.Inactive, colour_map.inactive),
+                                  (QtGui.QPalette.Disabled, colour_map.disabled)):
             
-            palette.setColor(group, QtGui.QPalette.BrightText,      accessor.bright_text.c)
-            palette.setColor(group, QtGui.QPalette.Text,            accessor.text.c)
-            palette.setColor(group, QtGui.QPalette.WindowText,      accessor.window_text.c)
-            palette.setColor(group, QtGui.QPalette.ButtonText,      accessor.button_text.c)
+            def apply_colour(element, accessor):
+                self.apply_colour(palette, group, group_attr, element, accessor, colour_map)
             
-            palette.setColor(group, QtGui.QPalette.Link,            accessor.link.c)
-            palette.setColor(group, QtGui.QPalette.LinkVisited,     accessor.link_visited.c)
+            apply_colour(QtGui.QPalette.Window,          lambda x: x.window)
+            apply_colour(QtGui.QPalette.Base,            lambda x: x.base)
+            apply_colour(QtGui.QPalette.AlternateBase,   lambda x: x.alt_base)
+            apply_colour(QtGui.QPalette.Button,          lambda x: x.button)
             
-            palette.setColor(group, QtGui.QPalette.Highlight,       accessor.highlight.c)
-            palette.setColor(group, QtGui.QPalette.HighlightedText, accessor.highlighted_text.c)
+            apply_colour(QtGui.QPalette.BrightText,      lambda x: x.bright_text)
+            apply_colour(QtGui.QPalette.Text,            lambda x: x.text)
+            apply_colour(QtGui.QPalette.WindowText,      lambda x: x.window_text)
+            apply_colour(QtGui.QPalette.ButtonText,      lambda x: x.button_text)
             
-            palette.setColor(group, QtGui.QPalette.ToolTipBase,     accessor.tooltip_base.c)
-            palette.setColor(group, QtGui.QPalette.ToolTipText,     accessor.tooltip_text.c)
+            apply_colour(QtGui.QPalette.Link,            lambda x: x.link)
+            apply_colour(QtGui.QPalette.LinkVisited,     lambda x: x.link_visited)
             
-            palette.setColor(group, QtGui.QPalette.Light,           accessor.light.c)
-            palette.setColor(group, QtGui.QPalette.Midlight,        accessor.midlight.c)
-            palette.setColor(group, QtGui.QPalette.Mid,             accessor.mid.c)
-            palette.setColor(group, QtGui.QPalette.Dark,            accessor.dark.c)
-            palette.setColor(group, QtGui.QPalette.Shadow,          accessor.shadow.c)
+            apply_colour(QtGui.QPalette.Highlight,       lambda x: x.highlight)
+            apply_colour(QtGui.QPalette.HighlightedText, lambda x: x.highlighted_text)
+            
+            apply_colour(QtGui.QPalette.ToolTipBase,     lambda x: x.tooltip_base)
+            apply_colour(QtGui.QPalette.ToolTipText,     lambda x: x.tooltip_text)
+            
+            apply_colour(QtGui.QPalette.Light,           lambda x: x.light)
+            apply_colour(QtGui.QPalette.Midlight,        lambda x: x.midlight)
+            apply_colour(QtGui.QPalette.Mid,             lambda x: x.mid)
+            apply_colour(QtGui.QPalette.Dark,            lambda x: x.dark)
+            apply_colour(QtGui.QPalette.Shadow,          lambda x: x.shadow)
             
         self.__app.setPalette(palette)
         

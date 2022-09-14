@@ -326,10 +326,14 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         return func
         
     def update_style(self, accessor, dialog, button):
-        style = self.mainwindow.style_engine.get_active_style()
+        style = self.style_engine.get_active_style()
         accessor(style).c = dialog.currentColor()
-        self.mainwindow.style_engine.apply_style(style)
+        self.style_engine.apply_style(style)
         self.set_button_style(button, accessor(style).c)
+    
+    def refresh_style(self):
+        style = self.style_engine.get_active_style()
+        self.style_engine.apply_style(style)
     
     def set_button_style(self, button, c):
         colour = [c.red(), c.green(), c.blue()]
@@ -351,20 +355,20 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         all_settings_layout = QtWidgets.QHBoxLayout()
         all_settings_layout.addSpacing(1)
         
-        for group_name, group_accessor in [("Main",     lambda x: x.inactive),
-                                           ("Active",   lambda x: x.active),
-                                           ("Disabled", lambda x: x.disabled)]:
+        for group_name, group_accessor, mergeable in [("Main",     lambda x: x.inactive, False),
+                                                      ("Active",   lambda x: x.active,   True ),
+                                                      ("Disabled", lambda x: x.disabled, True )]:
             groupbox = QtWidgets.QGroupBox(group_name, self)
             settings_layout = QtWidgets.QGridLayout()
             settings_layout.setColumnStretch(0, 1)
             settings_layout.setColumnStretch(2, 1)
             
-            base_groupbox      = self.buildBaseGroupBox     (group_accessor, active_style)
-            text_groupbox      = self.buildTextGroupBox     (group_accessor, active_style)
-            links_groupbox     = self.buildLinksGroupBox    (group_accessor, active_style)
-            highlight_groupbox = self.buildHighlightGroupBox(group_accessor, active_style)
-            tooltips_groupbox  = self.buildTooltipGroupBox  (group_accessor, active_style)
-            shading_groupbox   = self.buildShadingGroupBox  (group_accessor, active_style)
+            base_groupbox      = self.buildBaseGroupBox     (group_accessor, active_style, mergeable)
+            text_groupbox      = self.buildTextGroupBox     (group_accessor, active_style, mergeable)
+            links_groupbox     = self.buildLinksGroupBox    (group_accessor, active_style, mergeable)
+            highlight_groupbox = self.buildHighlightGroupBox(group_accessor, active_style, mergeable)
+            tooltips_groupbox  = self.buildTooltipGroupBox  (group_accessor, active_style, mergeable)
+            shading_groupbox   = self.buildShadingGroupBox  (group_accessor, active_style, mergeable)
             settings_layout.addWidget(base_groupbox,      0, 1)
             settings_layout.addWidget(text_groupbox,      1, 1)
             settings_layout.addWidget(links_groupbox,     2, 1)
@@ -395,28 +399,43 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         
         self.setLayout(layout)
         
-    def addColorSelector(self, label_text, row, accessor, style, layout):
+    def update_mergeable(self, checkbox, accessor, style, label, button):
+        is_mirroring = checkbox.checkState() > 0
+        accessor(style).mirror_inactive = is_mirroring
+        self.refresh_style()
+        label.setEnabled(not is_mirroring)
+        button.setEnabled(not is_mirroring)
+        
+        
+    def addColorSelector(self, label_text, row, accessor, style, layout, mergeable):
         label  = QtWidgets.QLabel(label_text, self)
         button = QtWidgets.QPushButton("", self)
         self.set_button_style(button, accessor(style).c)
         label.setFixedWidth(label.width())
         button.setFixedWidth(40)
         button.clicked.connect(self.open_colour_dialog(accessor, button))
-        layout.addWidget(label, row, 0)
-        layout.addWidget(button, row, 1)
+        idx = 0
+        if mergeable:
+            checkbox = QtWidgets.QCheckBox(translate("UI::ColorThemePopup", "Merge"), self)
+            layout.addWidget(checkbox, row, 0)
+            idx += 1
+            checkbox.stateChanged.connect(lambda: self.update_mergeable(checkbox, accessor, style, label, button))
+            checkbox.setChecked(accessor(style).mirror_inactive)
+        layout.addWidget(label, row, idx)
+        layout.addWidget(button, row, idx+1)
         
-    def buildBasicGroupBox(self, style, name, contents):
+    def buildBasicGroupBox(self, style, name, contents, mergeable):
         groupbox = QtWidgets.QGroupBox(name, self)
         gbox_layout = QtWidgets.QGridLayout()
         for i, (label_text, accessor) in enumerate(contents):
-            self.addColorSelector(label_text, i, accessor, style, gbox_layout)
+            self.addColorSelector(label_text, i, accessor, style, gbox_layout, mergeable)
             
         gbox_layout.setRowStretch(0, 1)
         gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
         groupbox.setLayout(gbox_layout)
         return groupbox
         
-    def buildBaseGroupBox(self, group_accessor, style):
+    def buildBaseGroupBox(self, group_accessor, style, mergeable):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Base Colours"), 
@@ -425,61 +444,60 @@ class CreateColourThemePopup(QtWidgets.QDialog):
                 [ translate("UI::ColorThemePopup", "Base"          ), lambda x: group_accessor(x).base     ],
                 [ translate("UI::ColorThemePopup", "Button"        ), lambda x: group_accessor(x).button   ],
                 [ translate("UI::ColorThemePopup", "Alternate Base"), lambda x: group_accessor(x).alt_base ]
-            ]
+            ],
+            mergeable
         )
         
-    def buildTextGroupBox(self, group_accessor, style):
+    def buildTextGroupBox(self, group_accessor, style, mergeable):
         groupbox = QtWidgets.QGroupBox(translate("UI::ColorThemePopup", "Text"), self)
         gbox_layout = QtWidgets.QGridLayout()
-        self.addColorSelector("Text",        1, lambda x: group_accessor(x).text, style, gbox_layout)
+        self.addColorSelector("Text",        1, lambda x: group_accessor(x).text, style, gbox_layout, mergeable)
         
-        checkbox_layout = QtWidgets.QHBoxLayout()
-        checkbox = QtWidgets.QCheckBox(self)
-        label = QtWidgets.QLabel(translate("UI::ColorThemePopup", "Unified Colours"))
-        checkbox_layout.addWidget(checkbox)
-        checkbox_layout.addWidget(label)
-        checkbox_layout.addStretch(1)
-        gbox_layout.addLayout(checkbox_layout, 2, 0, 1, 2)
+        # checkbox = QtWidgets.QCheckBox(translate("UI::ColorThemePopup", "Unified Colours"), self)
+        # gbox_layout.addWidget(checkbox, 2, 0, 1, 2)
         
-        self.addColorSelector("Window Text", 3, lambda x: group_accessor(x).window_text, style, gbox_layout)
-        self.addColorSelector("Button Text", 4, lambda x: group_accessor(x).button_text, style, gbox_layout)
-        self.addColorSelector("Bright Text", 5, lambda x: group_accessor(x).bright_text, style, gbox_layout)
+        self.addColorSelector("Window Text", 3, lambda x: group_accessor(x).window_text, style, gbox_layout, mergeable)
+        self.addColorSelector("Button Text", 4, lambda x: group_accessor(x).button_text, style, gbox_layout, mergeable)
+        self.addColorSelector("Bright Text", 5, lambda x: group_accessor(x).bright_text, style, gbox_layout, mergeable)
         gbox_layout.setRowStretch(0, 1)
         gbox_layout.setRowStretch(gbox_layout.columnCount(), 1)
         groupbox.setLayout(gbox_layout)
         return groupbox
         
-    def buildLinksGroupBox(self, group_accessor, style):
+    def buildLinksGroupBox(self, group_accessor, style, mergeable):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Links"), 
             [
                 [ translate("UI::ColorThemePopup", "Link"),         lambda x: group_accessor(x).link         ],
                 [ translate("UI::ColorThemePopup", "Link Visited"), lambda x: group_accessor(x).link_visited ]
-            ]
+            ],
+            mergeable
         )
         
-    def buildHighlightGroupBox(self, group_accessor, style):
+    def buildHighlightGroupBox(self, group_accessor, style, mergeable):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Highlight"), 
             [
                 [ translate("UI::ColorThemePopup", "Highlight"),        lambda x: group_accessor(x).highlight        ],
                 [ translate("UI::ColorThemePopup", "Highlighted Text"), lambda x: group_accessor(x).highlighted_text ]
-            ]
+            ],
+            mergeable
         )
            
-    def buildTooltipGroupBox(self, group_accessor, style):
+    def buildTooltipGroupBox(self, group_accessor, style, mergeable):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "ToolTips"), 
             [
                 [ translate("UI::ColorThemePopup", "ToolTip Base"), lambda x: group_accessor(x).tooltip_base ],
                 [ translate("UI::ColorThemePopup", "ToolTip Text"), lambda x: group_accessor(x).tooltip_text ]
-            ]
+            ],
+            mergeable
         )
                
-    def buildShadingGroupBox(self, group_accessor, style):
+    def buildShadingGroupBox(self, group_accessor, style, mergeable):
         return self.buildBasicGroupBox(
             style, 
             translate("UI::ColorThemePopup", "Shading"), 
@@ -489,7 +507,8 @@ class CreateColourThemePopup(QtWidgets.QDialog):
                 [ translate("UI::ColorThemePopup", "Mid"),      lambda x: group_accessor(x).mid      ],
                 [ translate("UI::ColorThemePopup", "Dark"),     lambda x: group_accessor(x).dark     ],
                 [ translate("UI::ColorThemePopup", "Shadow"),   lambda x: group_accessor(x).shadow   ]
-            ]
+            ],
+            mergeable
         )
     
     def handle_ok(self):
