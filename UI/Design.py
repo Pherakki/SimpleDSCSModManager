@@ -269,11 +269,12 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
     def create_theme(self):
         start_style = self.theme_select.currentText()
         proposed_name = self.style_engine.generate_new_style_name("New Theme")
-        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name, translate("UI::ColorThemePopup", "New Colour Theme"))
+        new_style = self.style_engine.new_style(start_style)
+        cctp = CreateColourThemePopup(self, self.mainwindow, proposed_name, translate("UI::ColorThemePopup", "New Colour Theme"), new_style)
         cctp.communicate_name_change.connect(self.receive_name)
         if cctp.exec_():
             nm = self.name_buf # This gets set when the Ok button is pressed on cctp
-            self.style_engine.styles[nm] = self.style_engine.get_active_style()
+            self.style_engine.styles[nm] = new_style
             self.style_engine.styles = {k: v for k, v in sorted(self.style_engine.styles.items())}
             self.style_engine.save_style(nm)
             self.set_available_themes()
@@ -300,8 +301,9 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
 class CreateColourThemePopup(QtWidgets.QDialog):
     communicate_name_change = QtCore.pyqtSignal(str)
     
-    def __init__(self, parent, mainwindow, initial_name, window_name):
+    def __init__(self, parent, mainwindow, initial_name, window_name, new_style):
         super().__init__(parent)
+        self.working_style = new_style
         self.mainwindow = mainwindow
         self.style_engine = mainwindow.style_engine
         self.setGeometry(100,100,400,600)
@@ -313,7 +315,7 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         
     def open_colour_dialog(self, accessor, button):
         def func():
-            active_style = self.mainwindow.style_engine.get_active_style()
+            active_style = self.working_style
             original_colour = accessor(active_style).c
             dialog = QtWidgets.QColorDialog(self)
             dialog.currentColorChanged.connect(lambda: self.update_style(accessor, dialog, button))
@@ -321,18 +323,18 @@ class CreateColourThemePopup(QtWidgets.QDialog):
             if not dialog.exec_():
                 accessor(active_style).c = original_colour
                 self.set_button_style(button, original_colour)
-                self.mainwindow.style_engine.apply_style(active_style)
+                self.style_engine.apply_style(active_style)
             
         return func
         
     def update_style(self, accessor, dialog, button):
-        style = self.style_engine.get_active_style()
+        style = self.working_style
         accessor(style).c = dialog.currentColor()
         self.style_engine.apply_style(style)
         self.set_button_style(button, accessor(style).c)
     
     def refresh_style(self):
-        style = self.style_engine.get_active_style()
+        style = self.working_style
         self.style_engine.apply_style(style)
     
     def set_button_style(self, button, c):
@@ -341,7 +343,7 @@ class CreateColourThemePopup(QtWidgets.QDialog):
                         border: 2px solid #222222")
     
     def buildColourEdits(self, initial_name):
-        active_style = self.mainwindow.style_engine.get_active_style()
+        active_style = self.working_style
         
         layout = QtWidgets.QGridLayout()
         
