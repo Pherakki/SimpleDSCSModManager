@@ -415,6 +415,12 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         button_layout.addWidget(ok_button)
         button_layout.addWidget(cancel_button)
         
+        ok_width = ok_button.width()
+        cancel_width = cancel_button.width()
+        width = max(ok_width, cancel_width)
+        ok_button.setFixedWidth(width)
+        cancel_button.setFixedWidth(width)
+        
         layout.addLayout(namebox_layout, 1, 1)
         layout.addLayout(all_settings_layout, 2, 1)
         layout.addLayout(button_layout,   3, 1)
