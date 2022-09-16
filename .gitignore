@@ -146,3 +146,8 @@ output/*
 profiles/*
 resources/*
 themes/*
+
+# Cython
+sdmmlib/squirrel/sq.cpp
+sdmmlib/NutCracker/NutCracker.cpp
+sdmmlib/dscstools/DSCSTools.cpp
