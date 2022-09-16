@@ -148,6 +148,7 @@ resources/*
 themes/*
 
 # Cython
+./structures/*
 sdmmlib/squirrel/sq.cpp
 sdmmlib/NutCracker/NutCracker.cpp
 sdmmlib/dscstools/DSCSTools.cpp

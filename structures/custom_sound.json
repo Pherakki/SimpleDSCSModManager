@@ -1,7 +1,0 @@
-{
-  "table": {
-    "id": "int",
-    "name": "string",
-    "unk1": "int"
-  }
-}
