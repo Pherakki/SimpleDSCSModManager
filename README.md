@@ -3,7 +3,7 @@
 
 **Executables can be found in the "Releases" tab on the right-hand side of this page.**
 
-A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Complete Edition. Windows binaries are provided, and you will have to build the mod manager yourself if you are running a different operating system. Instructions on how to do this are provided in [Building Dependencies](#building_dependencies). Note that, since the mod manager uses [VGAudio](https://github.com/Thealexbarney/VGAudio) for its WAV->HCA conversion utility for mod authors, this feature is unavailable on non-Windows platforms.
+A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Complete Edition. Windows binaries are provided, and you will have to build the mod manager yourself if you are running a different operating system. Instructions on how to do this are provided in [Building Dependencies](#building-dependencies). Note that, since the mod manager uses [VGAudio](https://github.com/Thealexbarney/VGAudio) for its WAV->HCA conversion utility for mod authors, this feature is unavailable on non-Windows platforms.
 
 ## Features
 - Automatic patching of database and script edits
