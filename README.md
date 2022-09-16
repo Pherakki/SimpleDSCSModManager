@@ -3,7 +3,7 @@
 
 **Executables can be found in the "Releases" tab on the right-hand side of this page.**
 
-A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Complete Edition.
+A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Complete Edition. Windows binaries are provided, and you will have to build the mod manager yourself if you are running a different operating system. Instructions on how to do this are provided in [Building Dependencies](#building_dependencies). Note that, since the mod manager uses [VGAudio](https://github.com/Thealexbarney/VGAudio) for its WAV->HCA conversion utility for mod authors, this feature is unavailable on non-Windows platforms.
 
 ## Features
 - Automatic patching of database and script edits
@@ -52,11 +52,16 @@ These mod files can be installed by dragging-and-dropping them into the left pan
 
 ## Building from source
 ### Building dependencies
-1. Download the source code for the latest release of [DSCSTools](https://github.com/SydMontague/DSCSTools) and move the `.pyd` file to `tools/dscstools/`. Move the `structures` folder to the same directory as the mod manager executable.
-2. Build this [64-bit fork of NutCracker](https://github.com/SydMontague/NutCracker) and move the executable to `tools/nutcracker/`.
-3. Build the 64-bit version of the [Squirrel 2.2.4 compiler](https://sourceforge.net/projects/squirrel/files/squirrel2/squirrel%202.2.4%20stable/) and move the executable to `tools/squirrel/`.
+1. Install [Boost](https://www.boost.org/) for your operating system. In the SimpleDSCSModManager source code, edit `sdmmlib/dscstools/setup.py` such that the `include_dirs` and `library_dirs` point to the include dir and library dirs of your Boost install. If you are using Windows, these might be automatically detected for you.
+2. Install [Python 3.8 or greater](https://www.python.org/).
+3. Install Cython via `pip` with `pip install cython`.
+4. Install PyQt5 via `pip` with `pip install PyQt5`
+5. In the root directory of the SimpleDSCSModManager source, open a terminal and execute `python setup.py`.
+
+You can now run the mod manager from the source code root directory with `python SimpleDSCSModManager.py`.
+
 ### Building PyInstaller
-It is recommended to freeze the Python source into an executable with PyInstaller. However, the official distribution often triggers anti-virus protection software. Building PyInstaller yourself tends to alleviate this issue.
+You may also want to freeze the program into an executable with a tool such as PyInstaller. However, the official distribution of PyInstaller often triggers anti-virus protection software. Building PyInstaller yourself tends to alleviate this issue.
 1. Clone the PyInstaller source with `git clone https://github.com/pyinstaller/pyinstaller`
 2. In the `pyinstaller/bootloader` directory of the repository, run `python3 ./waf distclean all`. This will build PyInstaller.
 3. In the `pyinstaller` directory of the repository, run `python3 setup.py install`. This will install PyInstaller to your system.
