@@ -1,0 +1,4 @@
+this.Movie.End() -> void
+this.Movie.IsPlay() -> bool
+this.Movie.Play(string movie, string subtitle) -> void
+this.Movie.Start() -> void

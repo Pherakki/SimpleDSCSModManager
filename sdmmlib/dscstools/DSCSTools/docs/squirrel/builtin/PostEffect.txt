@@ -1,0 +1,9 @@
+this.PostEffect.IsEnableBlur() -> bool
+this.PostEffect.IsEnableRadialBlur() -> bool
+this.PostEffect.IsEnableSpecialBlur() -> bool
+this.PostEffect.SetEnableBlur(bool) -> void
+this.PostEffect.SetEnableRadialBlur(bool) -> void
+this.PostEffect.SetEnableSpecialBlur(bool) -> void
+this.PostEffect.SetMonoFilter(bool, float, bool, bool) -> void
+this.PostEffect.SetNegaFilter(bool, bool) -> void
+this.PostEffect.SetSepiaFilter(bool, float, bool, bool) -> void

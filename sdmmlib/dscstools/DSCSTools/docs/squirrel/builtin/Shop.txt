@@ -1,0 +1,3 @@
+this.Shop.Close() -> void
+this.Shop.IsEnd() -> bool
+this.Shop.Open(int shopid) -> void

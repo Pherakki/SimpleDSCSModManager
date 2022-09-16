@@ -1,0 +1,3 @@
+this.Quake.IsQuake() -> bool
+this.Quake.Start(float, float, float, float) -> void
+this.Quake.Stop() -> void

@@ -1,0 +1,60 @@
+this.Window.CloseInfo() -> void
+this.Window.CloseMoneyWindow() -> void
+this.Window.CloseMultiSelect() -> void
+/*
+ * Identical to CloseInfo
+ */
+this.Window.CloseSystemWindow() -> void
+this.Window.CloseTutorial() -> void
+this.Window.CloseYesNoInfo() -> void
+/*
+ * Identical to CloseYesNoInfo
+ */
+this.Window.CloseYesNoSystem() -> void
+this.Window.GetResultMultiSelect() -> int
+this.Window.GetResultYesNoInfo() -> int
+/*
+ * Identical to GetResultYesNoInfo
+ */
+this.Window.GetResultYesNoSystem() -> int
+this.Window.IsEndCloseInfo() -> bool
+this.Window.IsEndCloseMultiSelect() -> bool
+/*
+ * Identical to IsEndCloseInfo
+ */
+this.Window.IsEndCloseSystemWindow() -> bool
+this.Window.IsEndCloseTutorial() -> bool
+this.Window.IsEndCloseYesNoInfo() -> bool
+/*
+ * Identical to IsEndCloseYesNoInfo
+ */
+this.Window.IsEndCloseYesNoSystem() -> bool
+this.Window.IsEndMoneyWindow() -> bool
+this.Window.IsNextInfo() -> bool
+this.Window.IsNextMultiSelect() -> bool
+/*
+ * Identical to IsNextInfo
+ */
+this.Window.IsNextSystemWindow() -> bool
+this.Window.IsNextTutorial() -> bool
+this.Window.IsNextYesNoInfo() -> bool
+/*
+ * Identical to IsNextYesNoInfo
+ */
+this.Window.IsNextYesNoSystem() -> bool
+this.Window.OpenInfo(int) -> void
+this.Window.OpenInfoGetItem(int item, int amount) -> void
+this.Window.OpenInfoGetItemWithTextID(int, int, int, int, int) -> void
+this.Window.OpenInfoGetKeyword(int keyId) -> void
+this.Window.OpenInfoReleaseItem(int item, int amount) -> void
+this.Window.OpenMoneyWindow(int) -> void
+this.Window.OpenMultiSelect(int windowId) -> void
+this.Window.OpenSystemWindow(int windowId) -> void
+this.Window.OpenTutorial(int tutorialId) -> void
+this.Window.OpenYesNoInfo(int yesnoId) -> void
+this.Window.OpenYesNoSystem(int yesnoId) -> void
+this.Window.SetNextInfoGetItemWithTextID(int, int, int, int, int) -> void
+this.Window.SetReplaceNumberInfo(int) -> void
+this.Window.SetReplaceNumberYesNo(int) -> void
+this.Window.SetReplaceStringInfo(string) -> void
+this.Window.SetReplaceStringYesNo(string) -> void

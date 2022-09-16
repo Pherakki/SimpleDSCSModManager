@@ -1,0 +1,12 @@
+this.Quest.AdvanceProgress(int) -> bool
+this.Quest.BBSForceReturnField() -> void
+this.Quest.Cancel(int questId) -> bool
+this.Quest.CloseQuestBoard() -> void
+this.Quest.DebugComplete(int) -> bool
+this.Quest.GetCompleteTalkMessageID() -> int
+this.Quest.GetCompleteTalkModelName() -> string
+this.Quest.GetProgress(int questId) -> int
+this.Quest.GetProgressIgnoreStatus(int) -> int
+this.Quest.GetReceiveStatus(int questId) -> int
+this.Quest.IsNextQuestBoard() -> bool
+this.Quest.OpenQuestBoard() -> void

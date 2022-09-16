@@ -1,0 +1,4 @@
+this.Digimon.GetMemory(int digimonId) -> int
+this.Digimon.IsFullHpSpAllParty() -> bool
+this.Digimon.RestoreAllParty() -> void
+this.Digimon.GetNumFullScan() -> int

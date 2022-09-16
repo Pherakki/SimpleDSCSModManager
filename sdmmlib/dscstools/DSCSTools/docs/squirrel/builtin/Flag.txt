@@ -1,0 +1,3 @@
+this.Flag.Check(int) -> bool
+this.Flag.Clear(int) -> void
+this.Flag.Set(int) -> void

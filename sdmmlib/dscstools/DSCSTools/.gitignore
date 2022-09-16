@@ -1,0 +1,14 @@
+# Build System and IDE Files, add more when necessary
+.vs/
+
+*CMakeFiles/
+CMakeCache.txt
+Makefile
+install_manifest.txt
+
+# Build files
+*.o
+*.a
+/DSCSTools/DSCSTools
+/DSCSTools/DSCSTools.exe
+/target/
