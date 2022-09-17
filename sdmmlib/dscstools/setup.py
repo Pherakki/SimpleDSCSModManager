@@ -4,36 +4,65 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import shutil
 from sys import platform
+import urllib.request
 
 from Cython.Build import cythonize
+
+package_name = "DSCSTools"
+boost_dir = "boost_1_78_0"
+
+# Download and build Boost
+if not any(os.path.isfile(f"{package_name}{os.path.extsep}{ext}") for ext in ["pyd", "dylib", "so"]):
+    if platform == "win32":
+        boost_zip = "boost_1_78_0.zip"
+        if not os.path.isdir(boost_dir):
+            if not os.path.isfile(boost_zip):
+                print("Downloading Boost 1.78.0...")
+                urllib.request.urlretrieve("https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.zip", boost_zip)
+        
+            print(f"Extracting {boost_zip}...")
+            import zipfile
+            with zipfile.ZipFile(boost_zip, 'r') as zip_ref:
+                zip_ref.extractall(os.curdir)
+
+        print("Building boost...")        
+        os.chdir(boost_dir)
+        os.system("./bootstrap.bat")
+        os.system(f"./b2 -j {os.cpu_count()//2}")
+        os.chdir(os.path.pardir)
+    else:
+        boost_zip = "boost_1_78_0.tar.gz"
+        if not os.path.isdir(boost_dir):
+            if not os.path.isfile(boost_zip):
+                print("Downloading Boost 1.78.0...")
+                urllib.request.urlretrieve("https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.gz", boost_zip)
+        
+            print(f"Extracting {boost_zip}...")
+            import tarfile
+            with tarfile.open(boost_zip, "r:gz") as tar:
+                tar.extractall()
+    
+        print("Building boost...")
+        os.chdir(boost_dir)
+        os.system("./bootstrap.sh")
+        os.system(f"./b2 -j {os.cpu_count()//2} cxxflags=-fPIC -a") # Probably going to be required if you use GCC, not just Linux
+        os.chdir(os.path.pardir)
 
 # Link the correct libraries
 if platform == "linux" or platform == "linux2":
     pysobj_suffix = "so"
-    include_dirs = []
-    library_dirs = []
+    extra_objects = [f"./boost_1_78_0/stage/lib/libboost_filesystem.a"]
 elif platform == "darwin":
     pysobj_suffix = "dylib"
-    include_dirs = []
-    library_dirs = []
+    extra_objects = [f"./boost_1_78_0/stage/lib/libboost_filesystem.a"]
 elif platform == "win32":
     pysobj_suffix = "pyd"
-    include_dirs = []
-    library_dirs = []
-    
-    # Try to find boost...
-    boost_root = os.path.join("C:", "local")
-    if os.path.isdir(boost_root):
-        boost_dir = sorted(
-            [d for d in os.listdir(boost_root) 
-             if d.startswith("boost") and os.path.isdir(os.path.join(boost_root, d))]
-        )[-1]
-        boost_dir = os.path.join(boost_root, boost_dir)
-        include_dirs.append(boost_dir)
-        library_dirs.append(os.path.join(boost_dir, "stage", "lib"))
-
+    extra_objects = []
 else:
     raise Exception("Unsupported platform: ", platform)
+    
+include_dirs = ["./boost_1_78_0"]
+library_dirs = ["./boost_1_78_0/stage/lib"]
     
 # Generate dict of compiler args for different compiler versions
 BUILD_ARGS = {}
@@ -75,7 +104,6 @@ class CustomBuildExt(build_ext):
         return get_ext_filename_without_platform_suffix(filename)
 
 # Now compile
-package_name = "DSCSTools"
 setup(
     name=package_name,
     cmdclass={ 'build_ext': CustomBuildExt },
@@ -94,7 +122,7 @@ setup(
        ],
        language="c++",
        include_dirs=[*include_dirs],
-       library_dirs=[*library_dirs]
+       extra_objects=[*extra_objects]
    )]
 )
 
@@ -104,3 +132,8 @@ dest_path = os.path.join("dist", compiled_sobj)
 if os.path.exists(dest_path):
     os.remove(dest_path)
 shutil.copy2(compiled_sobj, dest_path)
+
+# Clean up
+os.remove(boost_zip)
+shutil.rmtree("./boost_1_78_0")
+
