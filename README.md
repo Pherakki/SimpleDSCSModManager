@@ -24,7 +24,7 @@ A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Com
 ## Installation
 You can run the mod manager in one of two ways:
 1. Windows users can download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer and run `SimpleDSCSModManager.exe`.
-2. You can also build the mod manager for source, which will be required for non-Windows systems. Although the mod manager is mostly written in Python, it has several dependencies written in C++ that first require compilation.
+2. You can also build the mod manager from source, which will be required for non-Windows systems. Although the mod manager is mostly written in Python, it has several dependencies written in C++ that first require compilation.
    1. Follow the instructions in the [Building Dependencies](#building-dependencies) section of the readme to build the mod manager C++ extensions.
    2. You can then do one of two things:
       1. Create a text file in the source code folder and type `python SimpleDSCSModManager.py` into the file. If you are on Windows, rename the file so that it has a `.bat` extension; for Linux this should have a `.sh` extension. You can run SimpleDSCSModManager by running the `.bat`/`.sh` file. You can also create a shortcut to this file and run that instead, as long as the working directory is set to the SimpleDSCSModManager.
@@ -68,7 +68,7 @@ These mod files can be installed by dragging-and-dropping them into the left pan
 You can now run the mod manager from the source code root directory with `python SimpleDSCSModManager.py`.
 
 ### Building PyInstaller
-You may also want to freeze the program into an executable with a tool such as PyInstaller. However, the official distribution of PyInstaller often triggers anti-virus protection software. Building PyInstaller yourself tends to alleviate this issue.
+You may also want to freeze the program into an executable with a tool such as PyInstaller. However, the official distribution of PyInstaller often triggers anti-virus protection software because some viruses are packaged with PyInstaller, causing anti-virus software to falsely flag PyInstaller itself as a virus. Building PyInstaller yourself tends to alleviate this issue.
 1. Clone the PyInstaller source with `git clone https://github.com/pyinstaller/pyinstaller`, or download the source code from the webpage using your browser.
 2. In the `pyinstaller/bootloader` directory of the repository, run `python3 ./waf distclean all`. This will build PyInstaller.
 3. In the `pyinstaller` directory of the repository, run `python3 setup.py install`. This will install PyInstaller to your system.
