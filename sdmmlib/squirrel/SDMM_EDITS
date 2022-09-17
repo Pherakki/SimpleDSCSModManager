@@ -1,9 +1,8 @@
 As required by the Squirrel license, the edits made to the Squirrel distribution included in this repository are as follows:
 
-- Most of the repository has been omitted; only the 'sqstdlib' and 'squirrel' source code directories are included alongside the 'COPYRIGHT', 'HISTORY', and 'README' files.
-- The Makefiles have been removed.
-- A "py" directory has been added, containing "python.h" and "python.cpp", providing an alternate compile function "_py_Compile" modified from the "Compile" in squirrel.h
-- A "sq.pyx" Cython file has been added, alongside a "setup.py", to allow Python bindings for Squirrel to be compiled to a "sq.*" shared library. The library extension is platform-dependent.
+- No edits are made the the Squirrel source code or repository
+- A "py" directory has been added above the Squirrel repo, containing "python.h" and "python.cpp", providing an alternate compile function "_py_Compile" modified from the "Compile" in sq/sq.c
+- A "sq.pyx" Cython file has been added above the Squirrel repo, alongside a "setup.py", to allow Python bindings for Squirrel to be compiled to a "sq.*" shared library. The library extension is platform-dependent.
   This module contains the following function definitions:
     - sq.compile(src, dst)
       Asks the Squirrel compiler to turn the source code file at 'src' into compiled file at 'dst'.

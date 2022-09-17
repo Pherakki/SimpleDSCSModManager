@@ -28,11 +28,6 @@ to the following restrictions:
 		altered from any source distribution.
 
 */
-/* 
-Note: This is an altered form of Squirrel intended 
-for use within SimpleDSCSModManager. Edits are listed
-in the SDMM_EDITS file included with this program.
-*/
 #ifndef _SQUIRREL_H_
 #define _SQUIRREL_H_
 

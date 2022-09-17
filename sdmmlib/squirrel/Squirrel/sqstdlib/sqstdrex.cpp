@@ -1,9 +1,9 @@
 /* see copyright notice in squirrel.h */
-#include "../include/squirrel.h"
+#include <squirrel.h>
 #include <string.h>
 #include <ctype.h>
 #include <setjmp.h>
-#include "../include/sqstdstring.h"
+#include "sqstdstring.h"
 
 #ifdef _UINCODE
 #define scisprint iswprint

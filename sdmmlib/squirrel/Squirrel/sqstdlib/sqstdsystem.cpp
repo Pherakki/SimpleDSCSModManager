@@ -1,9 +1,9 @@
 /* see copyright notice in squirrel.h */
-#include "../include/squirrel.h"
+#include <squirrel.h>
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "../include/sqstdsystem.h"
+#include <sqstdsystem.h>
 
 #ifdef SQUNICODE
 #include <wchar.h>

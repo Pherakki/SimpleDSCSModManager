@@ -1,6 +1,6 @@
 /* see copyright notice in squirrel.h */
-#include "../include/squirrel.h"
-#include "../include/sqstdaux.h"
+#include <squirrel.h>
+#include <sqstdaux.h>
 #include <assert.h>
 
 void sqstd_printcallstack(HSQUIRRELVM v)

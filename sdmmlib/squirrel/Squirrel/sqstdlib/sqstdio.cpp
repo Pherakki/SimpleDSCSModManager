@@ -1,8 +1,8 @@
 /* see copyright notice in squirrel.h */
 #include <new>
 #include <stdio.h>
-#include "../include/squirrel.h"
-#include "../include/sqstdio.h"
+#include <squirrel.h>
+#include <sqstdio.h>
 #include "sqstdstream.h"
 
 #define SQSTD_FILE_TYPE_TAG (SQSTD_STREAM_TYPE_TAG | 0x00000001)
