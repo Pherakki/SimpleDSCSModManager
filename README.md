@@ -23,13 +23,13 @@ A poorly-named mod manager for the PC release of Digimon Story: Cyber Sleuth Com
 
 ## Installation
 You can run the mod manager in one of two ways:
-1. The foolproof way of running SimpleDSCSModManager is to install Python 3.8.10 on your system and run the source code directly.
-   1. Install [Python 3.8.10](https://www.python.org/downloads/release/python-3810/). Windows users should select the appropriate installer (one of the final two links in the table  at the bottom of the page).
-   2. Open a Command Prompt and type `pip install PyQt5` to install the dependency of PyQt5. (If you ever want to remove this package from your system, use `pip uninstall PyQt5`)
-   3. Download the SimpleDSCSModManager source code and unzip it. Create a text file in the downloaded folder and type `python SimpleDSCSModManager.py` into the file. If you are on Windows, rename the file so that it has a `.bat` extension.
-   4. In the SimpleDSCSModManager directory, create a folder called "tools". Copy and paste the contents of the "tools" folder from the latest SimpleDSCSModManager release into this folder.
-   5. You can run SimpleDSCSModManager by running the `.bat` file. You can also create a shortcut to this `.bat` file and run that instead.
-2. Alternatively, Windows users can download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer and run `SimpleDSCSModManager.exe`. This may or may not work on your particular system.
+1. Windows users can download the latest release of SimpleDSCSModManager. Extract it somewhere on your computer and run `SimpleDSCSModManager.exe`.
+2. You can also build the mod manager for source, which will be required for non-Windows systems. Although the mod manager is mostly written in Python, it has several dependencies written in C++ that first require compilation.
+   1. Follow the instructions in the [Building Dependencies](#building-dependencies) section of the readme to build the mod manager C++ extensions.
+   2. You can then do one of two things:
+      1. Create a text file in the source code folder and type `python SimpleDSCSModManager.py` into the file. If you are on Windows, rename the file so that it has a `.bat` extension; for Linux this should have a `.sh` extension. You can run SimpleDSCSModManager by running the `.bat`/`.sh` file. You can also create a shortcut to this file and run that instead, as long as the working directory is set to the SimpleDSCSModManager.
+      2. Compile the Python code to an executable file, using PyInstaller or Nuitka. Nuitka instructions are being worked on, but you can see how to create a PyInstaller executable in the [Building PyInstaller](#building-pyinstaller) and [Building The Executable](#building-the-executable) sections.
+      
 
 ## Usage
 A guide to usage can be found in the accompanying documentation in the file `user_guide.pdf`. Detailed guidance on creating mods for SimpleDSCSModManager is found in `modders_guide.pdf`.
@@ -52,17 +52,24 @@ These mod files can be installed by dragging-and-dropping them into the left pan
 
 ## Building from source
 ### Building dependencies
-1. Install [Boost](https://www.boost.org/) for your operating system. In the SimpleDSCSModManager source code, edit `sdmmlib/dscstools/setup.py` such that the `include_dirs` and `library_dirs` point to the include dir and library dirs of your Boost install. If you are using Windows, these might be automatically detected for you.
-2. Install [Python 3.8 or greater](https://www.python.org/).
-3. Install Cython via `pip` with `pip install cython`.
-4. Install PyQt5 via `pip` with `pip install PyQt5`
-5. In the root directory of the SimpleDSCSModManager source, open a terminal and execute `python setup.py`.
+1. You will require a C++ compiler. 
+   - On Windows, MSVC is recommended, which you can obtain by installing [Visual Studio](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2017) on your system with the Visual C++ submodules. 
+   - On Linux, compilation has been tested with GCC 9.
+2. Install [Python 3.8 or greater](https://www.python.org/) for your system. Many people use [Anaconda](https://www.anaconda.com/) alongside or in addition to a system Python install since the `conda` system allows multiple versions of Python to be installed simultaneously, which you are free to do as an alternative.
+3. Install Cython via `pip` with `pip install cython` from a terminal/command prompt. Anaconda users can use `conda install cython`.
+4. Install PyQt5 via `pip` with `pip install PyQt5` from a terminal/command prompt. Anaconda users can use `conda install PyQt5`.
+5. In the root directory of the SimpleDSCSModManager source, open a terminal and execute `python setup.py`. It will do the following:
+    - Download and compile [Boost](https://www.boost.org/) [1.78.0](https://www.boost.org/users/history/version_1_78_0.html), a dependency of DSCSTools. **This will take a significant amount of time**.
+    - Compile Python bindings for [DSCSTools](https://github.com/SydMontague/DSCSTools)
+    - Compile Python bindings for the [Squirrel](http://www.squirrel-lang.org/) [2.2.4](https://sourceforge.net/projects/squirrel/files/squirrel2/squirrel%202.2.4%20stable/) compiler; the scripting language used by Cyber Sleuth
+    - Compile Python bindings for SydMontague's fork of 64-bit [NutCracker](https://github.com/SydMontague/NutCracker), a decompiler for Squirrel scripts so that the original game scripts can be edited
+    - Move the DSCSTools Structure files to the SimpleDSCSModManager root directory, so that DSCSTools can find them when the mod manager tries to unpack and repack the game data
 
 You can now run the mod manager from the source code root directory with `python SimpleDSCSModManager.py`.
 
 ### Building PyInstaller
 You may also want to freeze the program into an executable with a tool such as PyInstaller. However, the official distribution of PyInstaller often triggers anti-virus protection software. Building PyInstaller yourself tends to alleviate this issue.
-1. Clone the PyInstaller source with `git clone https://github.com/pyinstaller/pyinstaller`
+1. Clone the PyInstaller source with `git clone https://github.com/pyinstaller/pyinstaller`, or download the source code from the webpage using your browser.
 2. In the `pyinstaller/bootloader` directory of the repository, run `python3 ./waf distclean all`. This will build PyInstaller.
 3. In the `pyinstaller` directory of the repository, run `python3 setup.py install`. This will install PyInstaller to your system.
 ### Building the executable
