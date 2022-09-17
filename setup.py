@@ -15,7 +15,7 @@ os.system("python setup.py build_ext --inplace")
 os.chdir(os.path.pardir)
 os.chdir(os.path.pardir)
 
-# Build Squirrel
+# Build NutCracker
 os.chdir("sdmmlib")
 os.chdir("nutcracker")
 os.system("python setup.py build_ext --inplace")
