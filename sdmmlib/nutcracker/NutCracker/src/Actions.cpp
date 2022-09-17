@@ -1,5 +1,5 @@
 #include "Actions.h"
-
+#include <cstring>
 
 int Compare(const char* file1, const char* file2, bool general)
 {
@@ -55,7 +55,7 @@ int Decompile(const char* file, const char* debugFunction, std::ostream& out)
 
 		if (debugFunction)
 		{
-			if (0 == strcmp(debugFunction, "main"))
+			if (0 == std::strcmp(debugFunction, "main"))
 			{
 				DebugFunctionPrint(script.GetMain(), out);
 				return 0;
@@ -65,7 +65,7 @@ int Decompile(const char* file, const char* debugFunction, std::ostream& out)
 				const NutFunction* func = script.GetMain().FindFunction(debugFunction);
 				if (!func)
 				{
-					throw std::exception(("Unable to find function \"" + std::string(debugFunction) + "\".").c_str());
+					throw std::runtime_error(("Unable to find function \"" + std::string(debugFunction) + "\".").c_str());
 					return -2;
 				}
 

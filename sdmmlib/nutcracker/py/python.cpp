@@ -5,7 +5,7 @@ void _py_Decompile(const std::string& source, const std::string& dest)
 	std::ofstream stream;
 	stream.open(dest);
 	if (!stream)
-		throw std::exception("Failed to open file");
+		throw std::runtime_error("Failed to open file");
 	Decompile(source.c_str(), NULL, stream);
 }
 
@@ -15,6 +15,6 @@ void _py_DecompileFunction(const std::string& source, const std::string& dest, c
 	std::ofstream stream;
 	stream.open(dest);
 	if (!stream)
-		throw std::exception("Failed to open file");
+		throw std::runtime_error("Failed to open file");
 	Decompile(source.c_str(), debug_function.c_str(), stream);
 }
