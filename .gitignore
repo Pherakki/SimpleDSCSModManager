@@ -146,6 +146,7 @@ output/*
 profiles/*
 resources/*
 themes/*
+sdmmlib/dscstools/boost*
 
 # Cython
 structures/*
