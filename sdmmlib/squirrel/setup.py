@@ -19,14 +19,16 @@ else:
     
 # Generate dict of compiler args for different compiler versions
 BUILD_ARGS = {}
-for compiler, args in [
-        ('msvc', ['/std:c++17']),
-        ('gcc', ['-std=c++17']),
-        ('g++', ['-std=c++17']),
-        ('clang', ['-std=c++17']),
-        ('clang++', ['-std=c++17']),
-        ('unix', ['-std=c++17'])]:
-    BUILD_ARGS[compiler] = args
+EXTRA_COMPILE_ARGS = {}
+for compiler, args, extra_args in [
+        ('msvc',    ['/std:c++17'], []),
+        ('gcc',     ['-std=c++17'], ['-O2', '-D_SQ64', '-fpermissive', '-fno-rtti', '-c']),
+        ('g++',     ['-std=c++17'], ['-O2', '-D_SQ64', '-fpermissive', '-fno-rtti', '-c']),
+        ('clang',   ['-std=c++17'], []),
+        ('clang++', ['-std=c++17'], []),
+        ('unix',    ['-std=c++17'], ['-O2', '-D_SQ64', '-fpermissive', '-fno-rtti', '-c'])]:
+    BUILD_ARGS[compiler] = [*args, *extra_args]
+    EXTRA_COMPILE_ARGS[compiler] = extra_args
     
 # https://stackoverflow.com/a/40193040
 def get_ext_filename_without_platform_suffix(filename):
@@ -43,6 +45,7 @@ def get_ext_filename_without_platform_suffix(filename):
         return filename
     else:
         return name[:idx] + ext
+
 
 class CustomBuildExt(build_ext):
     def build_extensions(self):
@@ -89,7 +92,8 @@ setup(
             "Squirrel/squirrel/sqtable.cpp",
             "Squirrel/squirrel/sqvm.cpp"
        ],
-       language="c++"
+       language="c++",
+       include_dirs=["Squirrel/include"]
    )]
 )
 

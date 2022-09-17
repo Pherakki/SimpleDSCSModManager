@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdexcept>
 
 #if defined(_MSC_VER) && defined(_DEBUG)
 #include <crtdbg.h>
@@ -95,7 +96,7 @@ int _py_Compile(const std::string& src, const std::string& dst)
 		sq_getlasterror(v);
 		if (SQ_SUCCEEDED(sq_getstring(v, -1, &err))) 
 		{
-			throw std::exception((std::string(_SC("Error [%s]\n")) + std::string(err)).c_str());
+			throw std::runtime_error((std::string(_SC("Error [%s]\n")) + std::string(err)).c_str());
 			return _DONE;
 		}
 	}
