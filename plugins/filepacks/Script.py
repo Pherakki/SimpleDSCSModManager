@@ -6,8 +6,8 @@ import subprocess
 from PyQt5 import QtCore
 
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import BaseFilepack
-from sdmmlib.nutcracker import NutCracker
-from sdmmlib.squirrel import sq
+from libs.nutcracker import NutCracker
+from libs.squirrel import sq
 
 translate = QtCore.QCoreApplication.translate
 

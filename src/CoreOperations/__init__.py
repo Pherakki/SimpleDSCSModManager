@@ -14,8 +14,8 @@ from src.CoreOperations.ModRegistry import ModRegistry
 from src.CoreOperations.SoftcodeManager import SoftcodeManager
 from src.CoreOperations.Tools.DSCSToolsHandler import DSCSToolsHandler
 from src.CoreOperations.Tools.VGAudioHandler import VGAudioHandler
-from sdmmlib.dscstools import DSCSTools
 from src.Utils.Threading import ThreadRunner, UIAccessThreadRunner
+from libs.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate
 

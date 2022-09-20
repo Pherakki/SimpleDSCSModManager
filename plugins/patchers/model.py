@@ -4,11 +4,11 @@ import struct
 
 from src.CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
 from plugins.patchers import BasePatcher, UniversalDataPack
-from sdmmlib.dscs_model_tools.FileInterfaces.NameInterface import NameInterface
-from sdmmlib.dscs_model_tools.FileInterfaces.SkelInterface import SkelInterface
-from sdmmlib.dscs_model_tools.FileInterfaces.GeomInterface import GeomInterface
-from sdmmlib.dscs_model_tools.FileInterfaces.AnimInterface import AnimInterface
-#from sdmmlib.dscs_model_tools.FileInterfaces.PhysInterface import PhysInterface 
+from libs.dscs_model_tools.FileInterfaces.NameInterface import NameInterface
+from libs.dscs_model_tools.FileInterfaces.SkelInterface import SkelInterface
+from libs.dscs_model_tools.FileInterfaces.GeomInterface import GeomInterface
+from libs.dscs_model_tools.FileInterfaces.AnimInterface import AnimInterface
+#from libs.dscs_model_tools.FileInterfaces.PhysInterface import PhysInterface 
 
 class ModelFileDataPack(UniversalDataPack):
     __slots__ = ("softcodes", "softcode_lookup", "data", "bone_indices")

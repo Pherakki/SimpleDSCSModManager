@@ -4,7 +4,7 @@ import subprocess
 
 class VGAudioHandler:
     def __init__(self, script_loc):
-        self.exe_path = os.path.join(script_loc, "sdmmlib/vgaudio/VGAudioCLI.exe")
+        self.exe_path = os.path.join(script_loc, "libs/vgaudio/VGAudioCLI.exe")
     
     def HCA_to_WAV(self, input_path, output_path):
         subprocess.run([self.exe_path, 

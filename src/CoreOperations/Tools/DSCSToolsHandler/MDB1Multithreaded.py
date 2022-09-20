@@ -1,11 +1,11 @@
 import os
 import sys
 
-from sdmmlib.dscstools import DSCSTools
 from PyQt5 import QtCore
 
 from src.CoreOperations.Tools.DSCSToolsHandler.Runnables import MDB1FileExtractorRunnable
 from src.Utils.Backups import get_backed_up_filepath_if_exists, default_MBD1s
+from libs.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate
 

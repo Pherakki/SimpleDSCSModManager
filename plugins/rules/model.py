@@ -1,7 +1,7 @@
 import os
 
 from src.Utils.MdlEditImpl import parse_mdledit
-from sdmmlib.dscs_model_tools.Utilities.StringHashing import dscs_name_hash
+from libs.dscs_model_tools.Utilities.StringHashing import dscs_name_hash
 
 
 class mdledit_name:

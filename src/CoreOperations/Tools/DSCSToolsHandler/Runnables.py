@@ -3,10 +3,10 @@ import shutil
 
 from PyQt5 import QtCore
 
-from sdmmlib.dscstools import DSCSTools
-from sdmmlib.nutcracker import NutCracker
-from sdmmlib.squirrel import sq
 from src.Utils.Signals import StandardRunnableSignals
+from libs.dscstools import DSCSTools
+from libs.nutcracker import NutCracker
+from libs.squirrel import sq
 
 
 class MDB1FileExtractorRunnable(QtCore.QRunnable):

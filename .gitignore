@@ -146,10 +146,10 @@ data/output/*
 data/profiles/*
 data/resources/*
 data/themes/*
-sdmmlib/dscstools/boost*
+libs/dscstools/boost*
 
 # Cython
 structures/*
-sdmmlib/squirrel/sq.cpp
-sdmmlib/NutCracker/NutCracker.cpp
-sdmmlib/dscstools/DSCSTools.cpp
+libs/squirrel/sq.cpp
+libs/NutCracker/NutCracker.cpp
+libs/dscstools/DSCSTools.cpp

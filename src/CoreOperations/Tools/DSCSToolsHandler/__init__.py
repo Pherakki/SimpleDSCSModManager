@@ -1,10 +1,10 @@
 import os
 
-from sdmmlib.dscstools import DSCSTools
 
 from src.CoreOperations.Tools.DSCSToolsHandler.MDB1Multithreaded import MDB1FilelistExtractor, MDB1Extractor
 from src.CoreOperations.Tools.DSCSToolsHandler.MBEMultithreaded import MBEExtractor, MBEPacker
 from src.CoreOperations.Tools.DSCSToolsHandler.ScriptMultithreaded import ScriptExtractor, ScriptPacker
+from libs.dscstools import DSCSTools
 
 class DSCSToolsHandler:
     @staticmethod

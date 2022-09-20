@@ -5,7 +5,7 @@ import sys
 from PyQt5 import QtCore
 
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import BaseFilepack
-from sdmmlib.dscstools import DSCSTools
+from libs.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate
 

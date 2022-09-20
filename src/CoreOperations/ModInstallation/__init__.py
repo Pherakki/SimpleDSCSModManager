@@ -10,7 +10,7 @@ from src.CoreOperations.ModInstallation.PipelineRunners import ArchivePipelineCo
 from src.CoreOperations.ModInstallation.VariableParser import parse_mod_variables, scan_variables_for_softcodes
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict
 from src.Utils.MBE import mbetable_to_dict, dict_to_mbetable
-from sdmmlib.dscstools import DSCSTools
+from libs.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate
 
