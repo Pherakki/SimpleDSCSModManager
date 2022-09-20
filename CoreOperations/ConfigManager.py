@@ -3,7 +3,15 @@ import os
 
 
 class ConfigManager:
-    __slots__ = ("init", "__game_loc", "__lang_pref", "__style_pref", "__crash_pref", "__block_pref", "paths", "ui")
+    __slots__ = ("init", 
+                 "__game_loc",
+                 "__lang_pref", 
+                 "__style_pref",
+                 "__crash_pref", 
+                 "__block_pref", 
+                 "__first_time_launch",
+                 "paths",
+                 "ui")
     
     
     def __init__(self, ui):
@@ -14,6 +22,7 @@ class ConfigManager:
         self.__style_pref = None
         self.__crash_pref = 0
         self.__block_pref = 0
+        self.__first_time_launch = False
         self.paths = None
         
         
@@ -53,6 +62,12 @@ class ConfigManager:
         
     def get_block_pref(self):
         return self.__block_pref
+    
+    def get_first_time_launch(self):
+        return self.__first_time_launch
+    
+    def set_first_time_launch(self, val):
+        self.__first_time_launch = val
         
     def init_with_paths(self, paths):
         self.paths = paths  
@@ -71,21 +86,26 @@ class ConfigManager:
             self.__style_pref = None
             self.__crash_pref = 0
             self.__block_pref = 0
+            self.__first_time_launch = False
             
     def read_config(self):
         with open(os.path.join(self.paths.config_loc, "config.json"), 'r') as F:
             config_data = json.load(F)
-            self.__game_loc   = config_data.get("game_loc")
-            self.__lang_pref    = config_data.get("language")
-            self.__style_pref    = config_data.get("style")
-            self.__crash_pref = config_data.get("crash_pref", 0)
-            self.__block_pref = config_data.get("block_pref", 0)
+            self.__game_loc          = config_data.get("game_loc")
+            self.__lang_pref         = config_data.get("language")
+            self.__style_pref        = config_data.get("style")
+            self.__crash_pref        = config_data.get("crash_pref", 0)
+            self.__block_pref        = config_data.get("block_pref", 0)
+            self.__first_time_launch = config_data.get("first_time_launch", False)
             
     def write_config(self):
         with open(os.path.join(self.paths.config_loc, "config.json"), 'w') as F:
-            out_data = {'game_loc'  : self.__game_loc,
-                        'language'  : self.__lang_pref,
-                        'style'     : self.__style_pref,
-                        'crash_pref': self.__crash_pref,
-                        'block_pref': self.__block_pref}
+            out_data = {
+                'game_loc'         : self.__game_loc,
+                'language'         : self.__lang_pref,
+                'style'            : self.__style_pref,
+                'crash_pref'       : self.__crash_pref,
+                'block_pref'       : self.__block_pref,
+                'first_time_launch': self.__first_time_launch
+            }
             json.dump(out_data, F, indent=4)
