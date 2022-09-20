@@ -1,6 +1,6 @@
 import os
 import struct
-from CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
+from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
 
 def make_model_file_elements(ext):
     class MdlFileBuildElement(BaseBuildElement):

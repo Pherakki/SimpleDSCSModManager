@@ -3,8 +3,8 @@ import shutil
 
 from PyQt5 import QtCore
 
-from Utils.Path import splitpath
-from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from src.Utils.Path import splitpath
+from src.CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
 from plugins.patchers import BasePatcher, UniversalDataPack
 
 

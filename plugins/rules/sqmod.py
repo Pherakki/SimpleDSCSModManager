@@ -1,9 +1,9 @@
 import os
 import json
 
-from Utils.Settings import default_encoding
-from Utils.Softcodes import replace_softcodes
-from Utils.SqModImpl import modify_squirrel_source
+from src.Utils.Settings import default_encoding
+from src.Utils.Softcodes import replace_softcodes
+from src.Utils.SqModImpl import modify_squirrel_source
 
 class squirrel_modify:
     overrides_all_previous = False

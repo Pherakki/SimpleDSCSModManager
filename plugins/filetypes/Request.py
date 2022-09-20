@@ -1,5 +1,5 @@
 import os
-from CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype, get_filetype_plugins
+from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype, get_filetype_plugins
 
 class RequestFileBuildElement(BaseBuildElement):
     __slots__ = tuple()

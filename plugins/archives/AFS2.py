@@ -3,7 +3,7 @@ import shutil
 
 from PyQt5 import QtCore
 
-from CoreOperations.PluginLoaders.ArchivesPluginLoader import BaseArchiveType
+from src.CoreOperations.PluginLoaders.ArchivesPluginLoader import BaseArchiveType
 from sdmmlib.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate

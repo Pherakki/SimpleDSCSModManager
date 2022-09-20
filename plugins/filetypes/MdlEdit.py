@@ -1,5 +1,5 @@
 import os
-from CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
+from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
 
 
 def make_build_elem_class(i, ext):

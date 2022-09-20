@@ -1,5 +1,5 @@
 import os
-from CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
+from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
 
 class MBETableBuildElement(BaseBuildElement):
     __slots__ = tuple()

@@ -1,7 +1,7 @@
 import os
 import zipfile
 
-from CoreOperations.ModRegistry.CoreModFormats import ModFile
+from src.CoreOperations.ModRegistry.CoreModFormats import ModFile
 
 
 class ZipMod(ModFile):

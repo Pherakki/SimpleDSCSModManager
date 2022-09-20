@@ -2,7 +2,7 @@ import os
 import shutil
 import struct
 
-from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from src.CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
 from plugins.patchers import BasePatcher, UniversalDataPack
 from sdmmlib.dscs_model_tools.FileInterfaces.NameInterface import NameInterface
 from sdmmlib.dscs_model_tools.FileInterfaces.SkelInterface import SkelInterface

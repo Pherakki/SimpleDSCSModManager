@@ -1,7 +1,7 @@
 import os
 import sys
 
-from CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
+from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import BaseBuildElement, BaseFiletype
 
 
 class UncompiledScriptBuildElement(BaseBuildElement):

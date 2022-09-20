@@ -2,9 +2,9 @@ import json
 import os
 import shutil
 
-from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
-from Utils.MBE import mbetable_to_dict, dict_to_mbetable
-from Utils.Settings import default_encoding
+from src.CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from src.Utils.MBE import mbetable_to_dict, dict_to_mbetable
+from src.Utils.Settings import default_encoding
 
 from plugins.patchers import BasePatcher
 from plugins.patchers.csv import CSVDataPack

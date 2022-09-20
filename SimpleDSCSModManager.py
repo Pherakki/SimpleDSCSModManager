@@ -8,7 +8,7 @@ import traceback
 
 from PyQt5 import QtCore, QtWidgets
 
-from MainWindow import MainWindow
+from src.MainWindow import MainWindow
 
 translate = QtCore.QCoreApplication.translate
 
@@ -127,7 +127,9 @@ if __name__ == '__main__':
         app = QtWidgets.QApplication([]) 
     
         app.setStyle("Fusion")
-        win = MainWindow(app)
+        
+        directory = os.path.normpath(os.path.dirname(os.path.realpath(__file__)))
+        win = MainWindow(app, directory)
             
         def excepthook(exc_type, exc_value, exc_tb):
             win.close()
@@ -139,7 +141,7 @@ if __name__ == '__main__':
         
         win.show()
         
-        if not check_windows_UAC_permissions(win.directory):
+        if not check_windows_UAC_permissions(win.mm_root):
             warning_popup_UAC_error(win)
             
         # Check for the exe in the most likely places

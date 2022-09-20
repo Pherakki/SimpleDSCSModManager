@@ -1,5 +1,5 @@
-from Utils.MBE import mbetable_to_dict
-from Utils.Settings import default_encoding
+from src.Utils.MBE import mbetable_to_dict
+from src.Utils.Settings import default_encoding
 #from CoreOperations.PluginLoaders.RulesPluginLoader import RuleBase
 
                 

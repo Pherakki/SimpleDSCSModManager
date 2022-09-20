@@ -1,7 +1,7 @@
 import os
 
-from Utils.Settings import default_encoding
-from Utils.Softcodes import replace_softcodes
+from src.Utils.Settings import default_encoding
+from src.Utils.Softcodes import replace_softcodes
 # from ModFiles.ScriptPatching import patch_scripts
 
 

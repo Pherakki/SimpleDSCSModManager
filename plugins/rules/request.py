@@ -2,7 +2,7 @@ import json
 import os
 
 from sdmmlib.dscstools import DSCSTools
-from Utils.Settings import default_encoding
+from src.Utils.Settings import default_encoding
 
 with open(os.path.join("config", "filelist.json"), 'r') as F:
     file_list = json.load(F)

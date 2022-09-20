@@ -5,7 +5,7 @@ import subprocess
 
 from PyQt5 import QtCore
 
-from CoreOperations.PluginLoaders.FilePacksPluginLoader import BaseFilepack
+from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import BaseFilepack
 from sdmmlib.nutcracker import NutCracker
 from sdmmlib.squirrel import sq
 

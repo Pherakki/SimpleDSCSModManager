@@ -1,5 +1,5 @@
 import os
-from CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
+from src.CoreOperations.PluginLoaders.RulesPluginLoader import get_rule_plugins
 from plugins.patchers import BasePatcher, UniversalDataPack
 
 
