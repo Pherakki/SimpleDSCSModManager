@@ -17,17 +17,18 @@ class PathManager:
         self.__backups_loc           = None
                 
         self.__modmanager_directory  = modmanager_directory
+        self.__data_directory        = os.path.join(modmanager_directory, "data")
         
-        self.__config_loc              = self.__clean_path(os.path.join(modmanager_directory, "config"))
-        self.__localisations_loc       = os.path.normpath(os.path.join(modmanager_directory, "languages"))
+        self.__config_loc              = self.__clean_path(os.path.join(self.__data_directory, "config"))
+        self.__localisations_loc       = os.path.normpath(os.path.join(self.__data_directory, "languages"))
         self.__localisations_names_loc = os.path.normpath(os.path.join(self.__localisations_loc, "LangNames.json"))
-        self.__logs_loc                = self.__clean_path(os.path.join(modmanager_directory, "logs"))
-        self.__mods_loc                = self.__clean_path(os.path.join(modmanager_directory, "mods"))
-        self.__output_loc              = self.__clean_path(os.path.join(modmanager_directory, "output"))
-        self.__profiles_loc            = self.__clean_path(os.path.join(modmanager_directory, "profiles"))
-        self.__resources_loc           = self.__clean_path(os.path.join(modmanager_directory, "resources"))
-        self.__softcodes_loc           = self.__clean_path(os.path.join(modmanager_directory, "softcodes"))
-        self.__themes_loc              = self.__clean_path(os.path.join(modmanager_directory, "themes"))
+        self.__logs_loc                = self.__clean_path(os.path.join(self.__data_directory, "logs"))
+        self.__mods_loc                = self.__clean_path(os.path.join(self.__data_directory, "mods"))
+        self.__output_loc              = self.__clean_path(os.path.join(self.__data_directory, "output"))
+        self.__profiles_loc            = self.__clean_path(os.path.join(self.__data_directory, "profiles"))
+        self.__resources_loc           = self.__clean_path(os.path.join(self.__data_directory, "resources"))
+        self.__softcodes_loc           = self.__clean_path(os.path.join(self.__data_directory, "softcodes"))
+        self.__themes_loc              = self.__clean_path(os.path.join(self.__data_directory, "themes"))
         
         self.__patch_build_loc         = self.__clean_path(os.path.join(self.__output_loc, "build"))
         self.__patch_cache_loc         = self.__clean_path(os.path.join(self.__output_loc, "cache"))
@@ -95,6 +96,10 @@ class PathManager:
     @property
     def mm_root(self):
         return self.__modmanager_directory
+    
+    @property
+    def data_loc(self):
+        return self.__data_directory
     
     @property
     def config_loc(self):

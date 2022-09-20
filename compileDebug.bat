@@ -1,1 +1,1 @@
-pyinstaller .\SimpleDSCSModManager.py -i .\img\icon_256.ico   
+pyinstaller .\SimpleDSCSModManager.py -i .\data\img\icon_256.ico   

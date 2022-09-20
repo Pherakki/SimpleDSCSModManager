@@ -138,14 +138,14 @@ Documentation/*.toc
 
 # SDMM locations
 bkp/*
-config/config.json
-config/notes.txt
-logs/*
-mods/*
-output/*
-profiles/*
-resources/*
-themes/*
+data/config/config.json
+data/config/notes.txt
+data/logs/*
+data/mods/*
+data/output/*
+data/profiles/*
+data/resources/*
+data/themes/*
 sdmmlib/dscstools/boost*
 
 # Cython
