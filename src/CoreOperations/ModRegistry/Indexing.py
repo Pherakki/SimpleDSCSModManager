@@ -21,7 +21,7 @@ class IndexFileException(Exception):
         return f"{self.modfile_name}: {self.base_msg}"
     
 def make_buildgraph_path(filepath):
-    return os.path.join(*splitpath(filepath)[3:])
+    return os.path.join(*splitpath(filepath)[4:])
 
 def index_mod_contents(modpath, filetypes):
     last_edit_time = 0
@@ -135,7 +135,7 @@ def include_autorequests(config_path, contents, archive_lookup):
             # error on another code path
             
             # Cut off the mods/modname/modfiles bit
-            trunc_entry = os.path.sep.join(os.path.normpath(entry).split(os.path.sep)[3:])
+            trunc_entry = os.path.sep.join(os.path.normpath(entry).split(os.path.sep)[4:])
             trunc_entry = os.path.splitext(trunc_entry)[0] # Split off the "request" bit
 
             if trunc_entry not in filelist:
@@ -181,7 +181,7 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
 
     buildscript_targets = {}
     if buildscript:
-        mod_path_sec = splitpath(filepath)[-3:]
+        mod_path_sec = splitpath(filepath)[-4:]
         for target, buildscript_pipeline in buildscript.target_dict.items():
             for buildstep in buildscript_pipeline.buildsteps:
                 src = os.path.normpath(os.path.join(*mod_path_sec, buildstep.src_file))
@@ -247,8 +247,8 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
             
             # Now build the index entry
             path_elements = splitpath(file)
-            mod_path_sec = sys.intern(os.path.join(*path_elements[:3]))
-            file_path_sec = sys.intern(os.path.join(*path_elements[3:]))
+            mod_path_sec = sys.intern(os.path.join(*path_elements[:4]))
+            file_path_sec = sys.intern(os.path.join(*path_elements[4:]))
             entry = {mod_key: mod_path_sec, src_key: file_path_sec}
             file_softcodes = contents_softcodes.get(file, {}) # {softcode_map[key]: value for key, value in contents_softcodes.get(file, {}).items()}
             if len(file_softcodes):
@@ -262,7 +262,7 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
        
     # Now add in the buildscript
     if buildscript:
-        mod_path_sec = os.path.join(*splitpath(filepath)[-3:])
+        mod_path_sec = os.path.join(*splitpath(filepath)[-4:])
         for target, build_pipeline in buildscript.target_dict.items():
             target = os.path.normpath(target)
             full_target = os.path.join(mod_path_sec, os.path.normpath(target))
@@ -298,6 +298,7 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
                 else:
                     build_element = None
                     for filetype in contents:
+                        print(">", contents[filetype], file)
                         if file in contents[filetype]:
                             build_element = contents[filetype][file]
                             break

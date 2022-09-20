@@ -4,7 +4,7 @@ import os
 from src.Utils.Settings import default_encoding
 from libs.dscstools import DSCSTools
 
-with open(os.path.join("config", "filelist.json"), 'r') as F:
+with open(os.path.join("data", "config", "filelist.json"), 'r') as F:
     file_list = json.load(F)
 
 all_archives = set(["DSDB", "DSDBA", "DSDBS", "DSDBSP", "DSDBP",

@@ -6,7 +6,7 @@ from src.Utils.MBE import mbetable_to_dict, dict_to_mbetable
 from src.Utils.Settings import default_csv_encoding
 from plugins.patchers import BasePatcher, UniversalDataPack
 
-with open(os.path.join("config", "mberecord_idsizes.json"), 'r') as F:
+with open(os.path.join("data", "config", "mberecord_idsizes.json"), 'r') as F:
     id_lengths = json.load(F)
 
 

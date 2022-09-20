@@ -9,7 +9,7 @@ from src.Utils.Settings import default_encoding
 from plugins.patchers import BasePatcher
 from plugins.patchers.csv import CSVDataPack
 
-with open(os.path.join("config", "mberecord_idsizes.json"), 'r') as F:
+with open(os.path.join("data", "config", "mberecord_idsizes.json"), 'r') as F:
     id_lengths = json.load(F)
 
 
