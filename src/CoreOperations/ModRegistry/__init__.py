@@ -2,7 +2,7 @@ import json
 import os
 import shutil
 
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
 
 from src.CoreOperations.ModRegistry.Indexing import build_index
 from src.CoreOperations.ModRegistry.ModFormatVersions import mod_format_versions
@@ -121,7 +121,15 @@ class ModRegistry:
             self.ui.log(translate("ModRegistry", "The following error occured when trying to delete {mod_name}: {error}").format(mod_name=mod_name, error=e))
         finally:
             self.update_mods()
-            
+
+    def open_mod_folder(self, index):
+        full_path = self.profile_manager.mods[index].path
+        try:
+            QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(full_path))
+        except Exception as e:
+            print(e)
+            self.ui.log(translate("ModRegistry", "The following error occured when trying to open folder {mod_name}: {error}").format(mod_name=mod_name, error=e))
+
     def mod_has_wizard(self, index):
         mod = self.profile_manager.mods[index]
 
