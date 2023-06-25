@@ -775,7 +775,7 @@ class uiModsDisplay(QtCore.QObject):
         self.contextMenu = QtWidgets.QMenu()
         self.reinstallModAction = self.contextMenu.addAction("Re-register...")
         self.deleteModAction = self.contextMenu.addAction("Delete Mod")
-        self.openModFolderAction = self.contextMenu.addAction("Open Containing Folder in Explorer")
+        self.openModFolderAction = self.contextMenu.addAction("Open Folder")
 
         self.mods_display.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.mods_display.customContextMenuRequested.connect(self.menuContextTree)

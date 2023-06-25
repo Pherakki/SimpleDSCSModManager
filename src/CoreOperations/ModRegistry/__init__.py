@@ -124,6 +124,8 @@ class ModRegistry:
 
     def open_mod_folder(self, index):
         full_path = self.profile_manager.mods[index].path
+        if not os.path.isdir(full_path):
+            raise ValueError(f"'{full_path}' is not a directory")
         try:
             QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(full_path))
         except Exception as e:
