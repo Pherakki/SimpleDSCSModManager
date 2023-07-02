@@ -151,6 +151,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.hook_game_launch_button(self.ops.launch_game)
         self.ui.hook_update_mod_info_window(self.ops.update_mod_info_window)
         self.ui.hook_delete_mod_menu(self.ops.mod_registry.unregister_mod)
+        self.ui.hook_open_mod_folder_menu(self.ops.mod_registry.open_mod_folder)
         self.ui.hook_wizard_mod_menu(self.ops.mod_registry.mod_has_wizard, self.ops.mod_registry.reregister_mod)
         self.ui.hook_config_tab(self.ops.change_game_location, 
                                 lambda:None,

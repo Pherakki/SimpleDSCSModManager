@@ -52,6 +52,7 @@ class uiMainWidget:
         self.hook_extract_tab                = self.main_area.action_tabs.extractTab.hook
         self.hook_mod_registry               = self.main_area.mod_interaction_area.mods_display_area.mods_display.hook_registry_function
         self.hook_delete_mod_menu            = self.main_area.mod_interaction_area.mods_display_area.hook_delete_mod
+        self.hook_open_mod_folder_menu       = self.main_area.mod_interaction_area.mods_display_area.hook_open_mod_folder
         self.hook_wizard_mod_menu            = self.main_area.mod_interaction_area.mods_display_area.hook_wizard_funcs
         self.hook_update_mod_info_window     = self.main_area.mod_interaction_area.mods_display_area.update_mod_info_window
         self.hook_install_button             = self.main_area.mod_interaction_area.mod_installation_widgets.hook_install_button
@@ -774,13 +775,15 @@ class uiModsDisplay(QtCore.QObject):
         self.contextMenu = QtWidgets.QMenu()
         self.reinstallModAction = self.contextMenu.addAction("Re-register...")
         self.deleteModAction = self.contextMenu.addAction("Delete Mod")
-        
+        self.openModFolderAction = self.contextMenu.addAction("Open Folder")
+
         self.mods_display.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.mods_display.customContextMenuRequested.connect(self.menuContextTree)
         self.deleteModFunction = None
         self.hasWizardFunc = None
         self.reinstallModFunction = None
-        
+        self.openModFolderFunction = None
+
     def changeEvent(self, event):
         if event.type() == QtCore.QEvent.LanguageChange:
             self.retranslateUi()
@@ -808,6 +811,7 @@ class uiModsDisplay(QtCore.QObject):
     def menuContextTree(self, point):
         safe_disconnect(self.deleteModAction.triggered)
         safe_disconnect(self.reinstallModAction.triggered)
+        safe_disconnect(self.openModFolderAction.triggered)
 
         # Infos about the node selected.
         index = self.mods_display.indexAt(point)
@@ -822,12 +826,16 @@ class uiModsDisplay(QtCore.QObject):
 
         self.reinstallModAction.triggered.connect(lambda: self.reinstallModFunction(mod_id))
         self.deleteModAction.triggered.connect(lambda: self.deleteModFunction(mod_id))
+        self.openModFolderAction.triggered.connect(lambda: self.openModFolderFunction(mod_id))
 
         self.contextMenu.exec_(self.mods_display.mapToGlobal(point))
         
     def hook_delete_mod(self, func):
         self.deleteModFunction = func
         
+    def hook_open_mod_folder(self, func):
+        self.openModFolderFunction = func
+
     def hook_wizard_funcs(self, hasWizardFunc, reinstallModFunction):
         self.hasWizardFunc = hasWizardFunc
         self.reinstallModFunction = reinstallModFunction
