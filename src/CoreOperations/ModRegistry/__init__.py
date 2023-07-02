@@ -124,12 +124,19 @@ class ModRegistry:
 
     def open_mod_folder(self, index):
         full_path = self.profile_manager.mods[index].path
+        if not os.path.exists(full_path):
+            self.ui.log(translate("ModRegistry",
+                                  "CRITICAL INTERNAL ERROR: '{mod_path}' does not exist and cannot be opened. Please report this as a bug, with instructions on how to reproduce.".format(
+                                      mod_path=full_path)))
+            return
         if not os.path.isdir(full_path):
-            raise ValueError(f"'{full_path}' is not a directory")
+            self.ui.log(translate("ModRegistry",
+                                  "CRITICAL INTERNAL ERROR: '{mod_path}' is a file and not a directory. Please report this as a bug, with instructions on how to reproduce.".format(
+                                      mod_path=full_path)))
+            return
         try:
             QtGui.QDesktopServices.openUrl(QtCore.QUrl.fromLocalFile(full_path))
         except Exception as e:
-            print(e)
             self.ui.log(translate("ModRegistry", "The following error occured when trying to open folder {mod_name}: {error}").format(mod_name=mod_name, error=e))
 
     def mod_has_wizard(self, index):
