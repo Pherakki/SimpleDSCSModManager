@@ -1145,13 +1145,13 @@ class uiConfigTab(QtWidgets.QWidget):
         self.purge_resources_button = QtWidgets.QPushButton(parentWidget)
         self.purge_resources_button.setFixedWidth(120)
         
-        self.crash_handle_layout = QtWidgets.QHBoxLayout(parentWidget)
+        self.crash_handle_layout = QtWidgets.QHBoxLayout()
         self.crash_handle_label = QtWidgets.QLabel()
         self.crash_handle_label.setFixedWidth(120)
         self.crash_handle_box = QtWidgets.QComboBox(parentWidget)
         self.crash_handle_box.setFixedWidth(120)
         
-        self.block_handle_layout = QtWidgets.QHBoxLayout(parentWidget)
+        self.block_handle_layout = QtWidgets.QHBoxLayout()
         self.block_handle_label = QtWidgets.QLabel()
         self.block_handle_label.setFixedWidth(120)
         self.block_handle_box = QtWidgets.QComboBox(parentWidget)

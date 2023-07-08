@@ -114,7 +114,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init_ui(self):
         self.window = QtWidgets.QWidget() 
         try:
-            self.icon = QtGui.QIcon(os.path.join("img", 'icon_256.png'))
+            self.icon = QtGui.QIcon(os.path.join('data', 'img', 'icon_256.png'))
             self.setWindowIcon(self.icon)
         except:
             pass
