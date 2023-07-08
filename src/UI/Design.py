@@ -8,12 +8,14 @@ from .CustomWidgets import ClickEmitComboBox, DragDropTreeView, LinkItem
 
 translate = QtCore.QCoreApplication.translate
 
+
 def safe_disconnect(func):
     try:
         func.disconnect()
     except TypeError:
         pass
-        
+
+
 ###############################
 # Top-Level Widget Containers #
 ###############################
@@ -184,6 +186,7 @@ class uiMenu:
             
             self.languageMenu.addAction(act)
      
+
 class ColourThemeSelectionPopup(QtWidgets.QDialog):
     def __init__(self, parent):
         super().__init__(parent)
@@ -318,10 +321,7 @@ class ColourThemeSelectionPopup(QtWidgets.QDialog):
         self.style_engine.delete_style(style_name)
         self.set_available_themes()
         
-            
-        
-        
-        
+
 class CreateColourThemePopup(QtWidgets.QDialog):
     communicate_name_change = QtCore.pyqtSignal(str)
     
@@ -438,8 +438,7 @@ class CreateColourThemePopup(QtWidgets.QDialog):
         self.refresh_style()
         label.setEnabled(not is_mirroring)
         button.setEnabled(not is_mirroring)
-        
-        
+
     def addColorSelector(self, label_text, row, accessor, style, layout, mergeable):
         label  = QtWidgets.QLabel(label_text, self)
         button = QtWidgets.QPushButton("", self)
@@ -618,6 +617,7 @@ class creditsPopup:
         
         msgBox.exec_()
         
+
 class supportPopup:
     def __init__(self, win, paths):
         msgBox = QtWidgets.QMessageBox(win)
@@ -637,7 +637,6 @@ class supportPopup:
         msgBox.exec_()
         
 
-
 class uiMainArea:
     def __init__(self, parentWidget):
         self.define(parentWidget)
@@ -652,7 +651,8 @@ class uiMainArea:
     def lay_out(self):
         self.layout.addLayout(self.mod_interaction_area.layout, 0, 0)
         self.layout.addLayout(self.action_tabs.layout, 0, 1)
-        
+
+
 class uiLoggingArea:
     def __init__(self, parentWidget):
         self.define(parentWidget)
@@ -793,8 +793,7 @@ class uiModsDisplay(QtCore.QObject):
         self.md_model.setHorizontalHeaderLabels([translate("UI::ModsDisplay", "Name"), translate("UI::ModsDisplay", "Author"), translate("UI::ModsDisplay", "Version"), translate("UI::ModsDisplay", "Category")])
         self.reinstallModAction.setText(translate("UI::ModRightClickMenu", "Re-register..."))
         self.deleteModAction.setText(translate("UI::ModRightClickMenu", "Delete Mod"))
-        
-        
+
     def lay_out(self):
         self.layout.addWidget(self.mods_display, 0, 0)
     
@@ -845,6 +844,7 @@ class uiModsDisplay(QtCore.QObject):
         
     def hook_itemchanged(self, func):
         self.mods_display.model.itemChanged.connect(func)
+
 
 class uiModInstallationWidgets:
     def __init__(self, parentWidget):
@@ -911,8 +911,7 @@ class uiLogHistory(QtCore.QObject):
         self.logview.setAlternatingRowColors(True)
         self.logview.setWordWrap(True) 
         self.logview.setMinimumHeight(110)
-        
-        
+
     def lay_out(self):
         self.layout.addWidget(self.logview, 0, 0)
         
@@ -953,7 +952,8 @@ class uiLogHistory(QtCore.QObject):
         if self.logview.count() >= self.max_items:
             for i in range(self.logview.count() - self.max_items + 1):
                 self.logview.takeItem(0)
-                
+
+
 ##########################
 # Action Tabs Containers #
 ##########################
@@ -1006,7 +1006,8 @@ class uiActionTabs:
         self.configTab.toggle_active(active)
         self.extractTab.toggle_active(active)
         self.conflictsTab.toggle_active(active)
-    
+
+
 class uiModInfoTab(QtWidgets.QWidget):
     def __init__(self, parentWidget):
         super().__init__()
@@ -1033,7 +1034,8 @@ class uiModInfoTab(QtWidgets.QWidget):
     
     def hook(self):
         pass
-        
+
+
 class ModInfoRegion:
     def __init__(self, parentWidget):
         super().__init__()
@@ -1102,6 +1104,7 @@ class ModInfoRegion:
         self.setModVersion(version)
         self.setModDesc(desc)
         self.retranslateUi()
+
 
 class uiConfigTab(QtWidgets.QWidget):
     
@@ -1214,8 +1217,7 @@ class uiConfigTab(QtWidgets.QWidget):
             self.crash_handle_box.addItem(option)
         for option in block_handler_operations():
             self.block_handle_box.addItem(option)
-            
-        
+
     def enable(self):
         self.toggle_active(True)   
         
@@ -1232,7 +1234,8 @@ class uiConfigTab(QtWidgets.QWidget):
         self.purge_resources_button.setEnabled(active)
         self.crash_handle_box.setEnabled(active)
         self.block_handle_box.setEnabled(active)
-        
+
+
 class uiExtractTab(QtWidgets.QScrollArea):
     def __init__(self, parentWidget):
         self.data_mvgls = ["DSDB", "DSDBA", "DSDBS", "DSDBSP", "DSDBP"]
@@ -1515,5 +1518,3 @@ class uiConflictsTab(QtWidgets.QWidget):
         
     def toggle_active(self, active):
         self.conflicts_graph.setEnabled(active)
-        
-    

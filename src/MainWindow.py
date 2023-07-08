@@ -52,7 +52,6 @@ class MainWindow(QtWidgets.QMainWindow):
             event.accept()
             #self.__app.quit()
             
-        
     @QtCore.pyqtSlot(str)
     def changeLanguage(self, qm_filename):
         if qm_filename:
@@ -127,7 +126,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ops = CoreOperations(self)
         self.ops.mod_registry.update_mods()
         
-        
     def __set_language(self):
         lang = self.ops.config_manager.get_lang_pref()
         if lang is None:
@@ -136,9 +134,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.log(translate("MainWindow", "Translation file for {language} was not found.").format(language=lang))
             lang = "en-US"
         self.changeLanguage(lang + ".qm")
-        
-        
-            
 
     def __init_ui_hooks(self):
         self.ui.hook_menu(self.ops)
@@ -184,7 +179,6 @@ class MainWindow(QtWidgets.QMainWindow):
         try:     self.raise_exception.disconnect() 
         except:  pass
         finally: self.raise_exception.connect(func)
-        
         
     @QtCore.pyqtSlot(Exception)
     def log_exception(self, exception):
