@@ -4,10 +4,12 @@ import os
 import sys
 
 from PyQt5 import QtCore
+
 from src.CoreOperations.ModRegistry.Softcoding import search_string_for_softcodes, search_bytestring_for_softcodes
 from src.Utils.Path import splitpath
 from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import get_build_element_plugins_dict
 from src.CoreOperations.ModRegistry.BuildScript import BuildScript
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
@@ -115,8 +117,8 @@ def get_targets_softcodes(filetargets, aliases):
 
 def include_autorequests(config_path, contents, archive_lookup):
     request_build_element = get_build_element_plugins_dict()[("request", "request")]
-    with open(os.path.join(config_path, "filelist.json"), 'r') as F:
-        filelist = json.load(F)
+    with JSONHandler(os.path.join(config_path, "filelist.json"), f"Error reading 'filelist.json'") as stream:
+        filelist = stream
     out = {}
     
     for filetype in contents:
@@ -156,8 +158,8 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
     alias_path = os.path.join(os.path.split(filepath)[0], "ALIASES.json")
     if os.path.isfile(alias_path):
         try:
-            with open(alias_path, 'r') as F:
-                aliases = json.load(F, object_hook=alias_decoder)
+            with JSONHandler(alias_path, "Error reading 'ALIASES.json'", object_hook=alias_decoder) as stream:
+                aliases = stream
         except Exception as e:
             raise Exception(translate("Indexing", "Could not read ALIASES.json, error was \"{error_msg}\".").format(error_msg=e.__str__()))
     else:

@@ -3,7 +3,9 @@ import os
 import shutil
 
 from PyQt5 import QtCore
+
 from src.Utils.Path import splitpath
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
@@ -132,8 +134,8 @@ class CymisInstaller:
         
     @classmethod
     def init_from_script(cls, filepath, log):
-        with open(filepath, 'r') as F:
-            cymis = json.load(F)
+        with JSONHandler(filepath, f"Error Reading '{filepath}'") as stream:
+            cymis = stream
         
         instance = cls()
         instance.version = cymis['Version']

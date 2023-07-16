@@ -9,6 +9,7 @@ from src.CoreOperations.ModBuildGraph.graphHash import hashFilepack
 from src.CoreOperations.ModInstallation.PipelineRunners import ArchivePipelineCollection
 from src.CoreOperations.ModInstallation.VariableParser import parse_mod_variables, scan_variables_for_softcodes
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict
+from src.Utils.JSONHandler import JSONHandler
 from src.Utils.MBE import mbetable_to_dict, dict_to_mbetable
 from libs.dscstools import DSCSTools
 
@@ -149,8 +150,8 @@ class BuildGraphRunner(QtCore.QObject):
                 
         # Create the cache folder if it doesn't exist
         os.makedirs(self.ops.paths.patch_cache_loc, exist_ok=True)
-        with open(self.ops.paths.patch_cache_index_loc, 'r') as F:
-            cache_index = json.load(F)
+        with JSONHandler(self.ops.paths.patch_cache_index_loc, f"Error reading '{self.ops.paths.patch_cache_index_loc}") as stream:
+            cache_index = stream
             
         # Now prepare the process the build graph
         # Init some variables to count the number of packs in the build graph,
@@ -246,8 +247,8 @@ class ResourceBootstrapper(QtCore.QObject):
         try:
             self.log.emit(translate("ModInstall", "{curr_step_msg} Checking required resources...").format(curr_step_msg=self.pre_message))
             
-            with open(os.path.join(self.ops.paths.config_loc, "filelist.json")) as F:
-                resource_archives = json.load(F)
+            with JSONHandler(os.path.join(self.ops.paths.config_loc, "filelist.json"), "Error reading 'filelist.json'") as stream:
+                resource_archives = stream
             
             required_resources = {}
             for archive_type, archives in self.build_graphs.items():

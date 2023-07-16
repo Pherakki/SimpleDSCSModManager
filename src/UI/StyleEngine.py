@@ -4,6 +4,8 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.Utils.JSONHandler import JSONHandler
+
 translate = QtCore.QCoreApplication.translate
 
 class PaletteColour:
@@ -406,8 +408,8 @@ class StyleEngine:
         filename, ext = os.path.splitext(file)
         if os.path.isfile(filepath) and ext.lstrip(os.extsep) == "json":
             try:
-                with open(filepath, 'r') as F:
-                    style_def = json.load(F)
+                with JSONHandler(filepath, f"Error reading '{file}'") as stream:
+                    style_def = stream
                 name = filename
                 self.styles[name] = PaletteMap.from_dict(style_def)
             except Exception as e:

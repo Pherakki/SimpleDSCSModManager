@@ -4,6 +4,7 @@ import os
 from PyQt5 import QtCore, QtWidgets
 
 from src.UI.CustomWidgets import OnlyOneProfileNotification
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
@@ -21,8 +22,8 @@ class ProfileManager:
         
         mod_categories_file = os.path.join(paths.config_loc, "modcategories.json")
         try:
-            with open(mod_categories_file, 'r', encoding="utf-8") as F:
-                self.mod_categories = set(json.load(F))
+            with JSONHandler(mod_categories_file, "Error loading 'modcategories.json'") as stream:
+                self.mod_categories = set(stream)
         except:
             self.ui.log(translate("ProfileManager", "Failed to load mod categories from {filepath}").format(filepath=mod_categories_file))
             self.mod_categories = set()
@@ -77,19 +78,18 @@ class ProfileManager:
             return
         filepath = self.profile_path(current_text)
         if os.path.exists(filepath):
-            with open(filepath, 'r', encoding="utf-8") as F:
-                try:
-                    current_profile = json.load(F)
-                except Exception as e:
-                    self.ui.log
-                    (
-                        translate
-                        (
-                            "ProfileManager", 
-                            "The following error occured when loading the profile {profile_name}: {error}"
-                        ).format(profile_name=current_text, error=e)
-                    )
-                    current_profile = {}
+            try:
+                with JSONHandler(filepath, f"Error reading '{current_text}'") as stream:
+                    current_profile = stream
+            except Exception as e:
+                self.ui.log
+                (
+                    translate(
+                        "ProfileManager",
+                        "The following error occured when loading the profile {profile_name}: {error}"
+                    ).format(profile_name=current_text, error=e)
+                )
+                current_profile = {}
             actives = {}
             for path, value in current_profile.items():
                 if path in self.modpath_to_id:

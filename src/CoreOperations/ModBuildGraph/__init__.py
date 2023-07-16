@@ -11,6 +11,7 @@ from src.CoreOperations.PluginLoaders.FiletypesPluginLoader import get_targettab
 from src.CoreOperations.PluginLoaders.ArchivesPluginLoader import get_archivetype_plugins_dict
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict, get_filetype_to_filepack_plugins_map
 from src.Utils.Path import calc_has_dir_changed_info
+from src.Utils.JSONHandler import JSONHandler
 
 
 translate = QtCore.QCoreApplication.translate
@@ -40,8 +41,8 @@ def make_interned_buildstep(dct):
         return dct
 
 def get_interned_mod_index(path):
-    with open(os.path.join(path, "INDEX.json"), 'r') as F:
-        return json.load(F, object_hook=make_interned_buildstep)
+    with JSONHandler(os.path.join(path, "INDEX.json"), "Error reading 'INDEX.json'", object_hook=make_interned_buildstep) as stream:
+        return stream
 
 def trim_dead_nodes(build_pipeline, rules):
     debug_n_thrown = 0

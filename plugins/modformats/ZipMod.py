@@ -1,3 +1,4 @@
+import json
 import os
 import zipfile
 
@@ -9,7 +10,7 @@ class ZipMod(ModFile):
         super().__init__(path)
         with zipfile.ZipFile(path, 'r') as F:
             with F.open("METADATA.json", 'r') as fJ:
-                self.init_metadata(fJ)
+                self.init_metadata(json.load(fJ))
             try:
                 with F.open("DESCRIPTION.html", 'r', encoding="utf8") as fJ:
                     self.init_description(fJ)

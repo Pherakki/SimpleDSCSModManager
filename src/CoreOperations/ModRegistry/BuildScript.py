@@ -7,6 +7,7 @@ import re
 from PyQt5 import QtCore
 
 from src.Utils.Path import splitpath, check_path_is_safe
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
@@ -122,8 +123,8 @@ class BuildScript:
         
     @classmethod
     def from_json(cls, json_file, modfiles_dir):
-        with open(json_file, 'r') as F:
-            data = json.load(F)
+        with JSONHandler(json_file, f"Error reading '{json_file}'") as stream:
+            data = stream
         
         instance = cls()
         if type(data) != dict:

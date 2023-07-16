@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets
 from src.CoreOperations import CoreOperations
 from src.UI.Design import uiMainWidget
 from src.UI.StyleEngine import StyleEngine
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
@@ -89,11 +90,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def loadLanguageOptions(self):
         out = {}
         if os.path.isdir(self.ops.paths.localisations_loc):
-            if os.path.isfile(self.ops.paths.localisations_names_loc):
-
-                with open(self.ops.paths.localisations_names_loc, 'r', encoding="utf8") as F:
-                    names = json.load(F)
-            else:
+            try:
+                with JSONHandler(self.ops.paths.localisations_names_loc, f"Error reading '{self.ops.paths.localisations_names_loc}'") as stream:
+                    names = stream
+            except:
                 self.ui.log(translate("UI::Localisation", "Language names file \"{filepath}\" was not found. Using default language names.").format(filepath=self.ops.paths.localisations_names_loc))
                 names = {}
                     

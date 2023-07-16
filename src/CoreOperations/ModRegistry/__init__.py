@@ -11,14 +11,16 @@ from src.CoreOperations.PluginLoaders.ModFormatsPluginLoader import get_modforma
 from src.CoreOperations.PluginLoaders.ModInstallersPluginLoader import get_modinstallers_plugins
 from src.Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancelled,\
                                  InstallerWizardParsingError, SpecificInstallerWizardParsingError
+from src.Utils.JSONHandler import JSONHandler
+
 
 translate = QtCore.QCoreApplication.translate
 
 
 def get_mod_version(path):
     metadata_path = os.path.join(path, 'METADATA.json')
-    with open(metadata_path, 'r', encoding="utf-8") as F:
-        metadata = json.load(F)
+    with JSONHandler(metadata_path, "Error reading 'METADATA.json'") as stream:
+        metadata = stream
 
     version = metadata.get("FormatVersion", 1)
     highest_version = max(mod_format_versions.keys())

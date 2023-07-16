@@ -5,6 +5,7 @@ import os
 import sys
 
 from src.Utils.Path import splitpath
+from src.Utils.JSONHandler import JSONHandler
 
 
 def load_sorted_plugins_in(directory, predicate):
@@ -40,9 +41,8 @@ def load_plugins_from(directory, file, predicate):
 def get_plugin_sort_order(directory):
     priority_file = os.path.join(directory, "_priorities.json")
     if os.path.exists(priority_file):
-        with open(priority_file, 'r') as F:
-            order = json.load(F)
-        return order
+        with JSONHandler(priority_file, "Error reading '_priorities.json'") as order:
+            return order
     else:
         return []
 
