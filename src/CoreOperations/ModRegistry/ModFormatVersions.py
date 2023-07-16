@@ -1,4 +1,3 @@
-import json
 import os
 
 from PyQt5 import QtCore
@@ -7,6 +6,7 @@ from src.Utils.Path import splitpath, check_path_is_safe
 from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
+
 
 class ModFormatVersion1:
     version = 1
@@ -91,7 +91,8 @@ class ModFormatVersion1:
     @staticmethod
     def get_filepath(filepath, archive):
         return filepath
-    
+
+
 class ModFormatVersion2(ModFormatVersion1):
     version = 2
     default_mdb1s = {'DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP',
@@ -153,6 +154,7 @@ class ModFormatVersion2(ModFormatVersion1):
     #             assert type(targets) == list, f"'Targets' for file {file} was not a list."
     #             out[file].extend(targets)
     #     return out
-    
+
+
 mod_format_versions = {1: ModFormatVersion1,
                        2: ModFormatVersion2}

@@ -9,6 +9,7 @@ from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
+
 class SoftcodeCategoryDefinition:
     __slots__ = ("name", "min", "max", "span", "src", "value_lambda", "methods", "subcategory_defs")
     
@@ -51,6 +52,7 @@ class SoftcodeCategoryDefinition:
             else:
                 raise Exception(f"Unknown formatting argument \'{value}\'.")
         return func_def_dict["return"].format(*arglist)
+
 
 class SoftcodeCategory:
     __slots__ = ("key_gaps", "definition", "keys")
@@ -101,7 +103,8 @@ class SoftcodeCategory:
     
     def get_data_as_serialisable(self):
         return {key_name: key.get_data_as_serialisable() for key_name, key in self.keys.items()}
-    
+
+
 class SoftcodeKey:
     chunk_delimiter = "|"
     kv_delimiter = "::"
@@ -143,7 +146,8 @@ class SoftcodeKey:
         if len(self.subcategories):
             res.append({cat_name: cat.get_data_as_serialisable() for cat_name, cat in self.subcategories.items()})
         return res
-        
+
+
 class SoftcodeManager(SoftcodeKey):
     __slots__ = ("category_defs", "paths")
     
@@ -211,28 +215,34 @@ class SoftcodeManager(SoftcodeKey):
                     json.dump(subcat.get_data_as_serialisable(), F, separators=(',', ':'))
 
 
-    
 def wrap_strings(values):
     return ("\"{var}\"" for var in values)
+
 
 def splat(values):
     return ",".join(values)
 
+
 def splat_strings(values):
     return ",".join(wrap_strings(values))
+
 
 def as_list(values):
     return f"[{','.join(values)}]"
 
+
 def as_list_strings(values):
     return f"[{','.join(wrap_strings(values))}]"
+
 
 def as_braced_list(values):
     return f"{{{','.join(values)}}}"
 
+
 def as_braced_list_strings(values):
     return f"{{{','.join(wrap_strings(values))}}}"
-    
+
+
 class SoftcodeListVariableCategoryDefinition:
     methods = {
             "splat": splat, 
@@ -250,7 +260,8 @@ class SoftcodeListVariableCategoryDefinition:
     @staticmethod
     def value_lambda(values):
         return f"[{','.join(wrap_strings(values))}]"
-    
+
+
 class SoftcodeListVariableCategory:
     __slots__ = ("keys",)
     definition = SoftcodeListVariableCategoryDefinition
@@ -266,6 +277,7 @@ class SoftcodeListVariableCategory:
             
     def add_variable(self, name):
         self.keys[name] = SoftcodeListVariable()
+
 
 class SoftcodeListVariable:
     __slots__ = ("value", "opcodes", "is_default")

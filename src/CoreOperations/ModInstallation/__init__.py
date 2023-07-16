@@ -1,5 +1,5 @@
-import json
 import os
+import sys
 import shutil
 
 from PyQt5 import QtCore
@@ -15,13 +15,15 @@ from libs.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate
 
+
 def generate_step_message(cur_items, cur_total):
     return translate("ModInstall", "[Step {ratio}]").format(ratio=f"{cur_items}/{cur_total}")
-   
+
+
 def generate_prefixed_message(cur_items, cur_total, msg):
     return f">> {generate_step_message(cur_items, cur_total)} {msg}"
-    
-import sys
+
+
 def format_exception(exception):
     return type(exception)(f"Error on line {sys.exc_info()[-1].tb_lineno} in file {__file__}:" + f" {exception}")
 
@@ -215,6 +217,7 @@ class BuildGraphRunner(QtCore.QObject):
     def sendUpdateLog(self, msg):
         self.updateLog.emit(generate_prefixed_message(self.substep, self.nsteps, msg))
 
+
 class ResourceBootstrapper(QtCore.QObject):
     log = QtCore.pyqtSignal(str)
     updateLog = QtCore.pyqtSignal(str)
@@ -368,6 +371,7 @@ class BuildGraphExecutor(QtCore.QObject):
                 self.finished.emit()
         except Exception as e:
             self.raise_exception.emit(e)
+
 
 # 1) Skip sort if data isn't in the build graph
 # 2) Enumerate the sorts
@@ -624,6 +628,7 @@ class DataSorter(QtCore.QObject):
         name = self.name_getter(item_id[0], build_item_name, 1)[1]
         return (int(item_sort_id), name.encode('utf8'))
     
+
 class ArchiveBuilder(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     clean_up = QtCore.pyqtSignal()
@@ -778,5 +783,3 @@ class ModInstaller(QtCore.QObject):
             self.thread.start()
         except Exception as e:
             self.raise_exception.emit(e)
-        
-        

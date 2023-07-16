@@ -2,7 +2,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import copy
 from datetime import datetime
-import os
 
 from .CustomWidgets import ClickEmitComboBox, DragDropTreeView, LinkItem
 

@@ -1,15 +1,15 @@
 import copy
 import itertools
-import json
 import os
 import re
 
 from PyQt5 import QtCore
 
-from src.Utils.Path import splitpath, check_path_is_safe
+from src.Utils.Path import check_path_is_safe
 from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
+
 
 class RegexVariable:
     __slots__ = ("pattern",)
@@ -31,6 +31,7 @@ class RegexVariable:
                 if match:
                     yield match[0]
         
+
 class RangeVariable:
     __slots__ = ("start", "stop", "step")
     
@@ -47,14 +48,15 @@ class RangeVariable:
         for i in range(self.start, self.stop, self.step):
             yield (i,)
         
-        
 
 variable_types = {"Range": RangeVariable,
                   "Regex": RegexVariable}
 
+
 def check_path(path):
     if os.path.pardir in os.path.realpath(path):
         raise ValueError(translate("ModRegistry::BuildScript", "Parent directory token {0} is not allowed in paths: \'{1}\'").format(os.path.pardir, path))
+
 
 class BuildScriptStep:
     __slots__ = ("src_file", "rules", "rule_args")
@@ -80,6 +82,7 @@ class BuildScriptStep:
             raise ValueError(translate("ModRegistry::BuildScript", "\'Rules\' for Mod File \'{0}\' of Target File \'{1}\' is not a string, list, or dict: {2}").format(src_file, target, type(rules)))
         self.rule_args = rule_args
         
+
 class BuildScriptPipeline:
     __slots__ = ("original_target_key", "buildsteps")
     
@@ -87,6 +90,7 @@ class BuildScriptPipeline:
         self.original_target_key = original_target_key
         self.buildsteps = buildsteps
         
+
 class BuildScript:
     def __init__(self):
         self.target_dict = {}

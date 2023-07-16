@@ -1,5 +1,3 @@
-import array
-import json
 import os
 import sys
 
@@ -16,6 +14,7 @@ from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
+
 class BuildStep:
     __slots__ = ('mod', 'src', 'rule', 'rule_args', 'softcodes')
     
@@ -26,6 +25,7 @@ class BuildStep:
         self.rule_args = rule_args
         self.softcodes = softcodes
         
+
 def make_interned_buildstep(dct):
     if 'mod' in dct:
         softcodes = dct.get('softcodes', {})
@@ -40,9 +40,11 @@ def make_interned_buildstep(dct):
     else:
         return dct
 
+
 def get_interned_mod_index(path):
     with JSONHandler(os.path.join(path, "INDEX.json"), "Error reading 'INDEX.json'", object_hook=make_interned_buildstep) as stream:
         return stream
+
 
 def trim_dead_nodes(build_pipeline, rules):
     debug_n_thrown = 0
@@ -83,6 +85,7 @@ def trim_dead_nodes(build_pipeline, rules):
     debug_n_thrown += n_discarded
     
     return list(steps)
+
 
 def categorise_build_targets(build_graphs, ops, log, updateLog):
     filetypes = get_targettable_filetypes()

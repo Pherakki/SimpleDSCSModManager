@@ -1,5 +1,4 @@
 import hashlib
-import json
 import os
 import sys
 
@@ -13,6 +12,7 @@ from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
+
 class IndexFileException(Exception):
     def __init__(self, base_msg, modfile_name):
         super().__init__(self)
@@ -21,9 +21,11 @@ class IndexFileException(Exception):
         
     def __str__(self):
         return f"{self.modfile_name}: {self.base_msg}"
-    
+
+
 def make_buildgraph_path(filepath):
     return os.path.join(*splitpath(filepath)[4:])
+
 
 def index_mod_contents(modpath, filetypes):
     last_edit_time = 0
@@ -58,19 +60,22 @@ def index_mod_contents(modpath, filetypes):
             
     return retval, last_edit_time, paths_hash.hexdigest()
 
+
 def register_softcode(softcode_list, all_softcodes, aliased_match, aliases, offset):
     match = find_softcode_alias(aliased_match, aliases)
     if match not in softcode_list:
         softcode_list[match] = []
     softcode_list[match].append([offset, len(aliased_match) + 2]) # + 2 For [ and ]
     all_softcodes.add(match)
-    
+
+
 def find_softcode_alias(match, aliases):
     for alias, identity in aliases.items():
         if match[:len(alias)] == alias:
             return identity + match[len(alias):]
     return match
-    
+
+
 def index_mod_softcodes(modpath, filetypes, mod_contents_index, aliases):
     softcodable_filetypes = sorted(list(set([be.get_identifier() for filetype in filetypes for be in filetype.get_build_elements() if getattr(be, "enable_softcodes", False)])))
     softcodes = {}
@@ -96,7 +101,8 @@ def index_mod_softcodes(modpath, filetypes, mod_contents_index, aliases):
                     line = F.readline()
             softcodes[file] = file_softcodes
     return softcodes, all_softcodes
-         
+
+
 def get_targets_softcodes(filetargets, aliases):
     target_softcodes = {}
     all_softcodes = set()
@@ -114,6 +120,7 @@ def get_targets_softcodes(filetargets, aliases):
             if not len(target_softcodes[target]):
                 del target_softcodes[target]
     return target_softcodes, all_softcodes
+
 
 def include_autorequests(config_path, contents, archive_lookup):
     request_build_element = get_build_element_plugins_dict()[("request", "request")]
@@ -153,7 +160,8 @@ def alias_decoder(obj):
         return obj
     else:
         assert 0, "ALIASES.json must be a dict of strings."
-    
+
+
 def build_index(config_path, filepath, filetypes, archive_getter, archive_from_path_getter, targets_getter, rules_getter, filepath_getter):
     alias_path = os.path.join(os.path.split(filepath)[0], "ALIASES.json")
     if os.path.isfile(alias_path):
@@ -170,7 +178,6 @@ def build_index(config_path, filepath, filetypes, archive_getter, archive_from_p
         try:
             buildscript = BuildScript.from_json(buildscript_path, filepath)
         except Exception as e:
-            raise e
             raise Exception(translate("Indexing", "Could not read BUILD.json, error was \"{error_msg}\".").format(error_msg=e.__str__()))
     else:
         buildscript = None

@@ -13,6 +13,7 @@ translate = QtCore.QCoreApplication.translate
 
 patchers = get_patcher_plugins_dict()
 
+
 class PipelineRunner(QtCore.QRunnable):
     __slots__ = ("softcodes", "target", "filepack", "path_prefix", "paths", "cache_index", "archive_postaction", "signals")
     
@@ -111,6 +112,7 @@ class PipelineCollection(QtCore.QObject):
                 self.threadpool.start(job)
         except Exception as e:
             self.handleException(e)
+
 
 class ArchivePipelineCollection(QtCore.QObject):
     __slots__ = ("archive", "ops", "ui", "softcodes", "threadpool", "pre_message", "cache_index")

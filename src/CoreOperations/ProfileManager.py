@@ -111,7 +111,6 @@ class ProfileManager:
         with open(filepath, 'w', encoding="utf-8") as F:
             json.dump(self.profile_from_active_mods(), F, indent=4)
 
-        
     def delete_profile(self):
         if self.profile_selector.count() == 1:
             notification = OnlyOneProfileNotification()
@@ -126,8 +125,7 @@ class ProfileManager:
     def get_active_mods(self):
         activation_states = self.mods_display.get_mod_activation_states()
         return [self.mods[int(idx)] for idx, state in activation_states.items() if state == 2]
-        
-    
+
     def profile_from_active_mods(self):
         activation_states = self.mods_display.get_mod_activation_states()
         return {self.mods[int(idx)].path: state for idx, state in activation_states.items()}

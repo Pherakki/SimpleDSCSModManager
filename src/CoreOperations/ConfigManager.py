@@ -15,7 +15,6 @@ class ConfigManager:
                  "paths",
                  "ui")
     
-    
     def __init__(self, ui):
         self.init = False
         self.ui = ui
@@ -26,8 +25,7 @@ class ConfigManager:
         self.__block_pref = 0
         self.__first_time_launch = False
         self.paths = None
-        
-        
+
     def get_style_pref(self):
         return self.__style_pref
     

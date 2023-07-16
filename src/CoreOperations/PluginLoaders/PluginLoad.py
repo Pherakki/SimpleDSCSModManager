@@ -1,6 +1,5 @@
 import importlib
 import inspect
-import json
 import os
 import sys
 
@@ -14,6 +13,7 @@ def load_sorted_plugins_in(directory, predicate):
     
     return sort_plugins(filetype_plugins, plugin_order)
 
+
 def load_plugins_in(directory, predicate):
     results = []
     for file in os.listdir(directory):
@@ -26,6 +26,7 @@ def load_plugins_in(directory, predicate):
         classes_in_module = [m[0] for m in inspect.getmembers(module, predicate) if m[1].__module__ == module.__name__]
         results.extend([getattr(module, class_) for class_ in classes_in_module])
     return results
+
 
 def load_plugins_from(directory, file, predicate):
     file, ext = os.path.splitext(file)
@@ -45,6 +46,7 @@ def get_plugin_sort_order(directory):
             return order
     else:
         return []
+
 
 def sort_plugins(members, ordering):
     member_names = [member.__name__ for member in members]

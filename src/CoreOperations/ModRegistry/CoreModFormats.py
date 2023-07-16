@@ -1,5 +1,4 @@
 import os
-import json
 import shutil
 
 from src.Utils.JSONHandler import JSONHandler
@@ -38,6 +37,7 @@ class ModFile:
         
     def get_filelist(self):
         raise NotImplementedError
+
 
 class LooseMod(ModFile):
     def __init__(self, path):
