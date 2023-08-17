@@ -401,6 +401,19 @@ class DataSorter(QtCore.QObject):
         self.sort_digimarket(5)
         self.finished.emit()
     
+    def safe_remove_mbe(self, local_path):
+        path = os.path.join(self.ops.paths.patch_build_loc, *local_path)
+        if not os.path.exists(path):
+            return
+        stem, ext = os.path.splitext(path)
+        if ext != ".mbe":
+            self.raise_exception.emit(ValueError("Attempted to clean up MBE '{path}', but it was not an MBE".format(path=path)))
+        files = os.listdir(path)
+        if not all(os.path.splitext(f)[1] == ".csv" for f in files):
+            self.raise_exception.emit(ValueError("Attempted to clean up MBE '{path}', but it did not only contain CSVs".format(path=path)))
+        shutil.rmtree(path)
+        
+    
     ########################
     # FIELD GUIDE SORTING
     ########################
@@ -410,8 +423,10 @@ class DataSorter(QtCore.QObject):
             cache_loc = self.ops.paths.patch_cache_loc
             if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "digimon_common_para.mbe")): 
                 # Get the required data
-                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", ["data", "digimon_common_para.mbe"], "digimon.csv")
-                _, build_charname = self.get_resource_table("DSDB", ["text", "charname.mbe"], "Sheet1.csv")
+                digimon_para_path = ["data", "digimon_common_para.mbe"]
+                charname_path = ["text", "charname.mbe"]
+                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", digimon_para_path, "digimon.csv")
+                _, build_charname = self.get_resource_table("DSDB", charname_path, "Sheet1.csv")
 
                 # Now do the sorting
                 to_sort = []
@@ -438,6 +453,8 @@ class DataSorter(QtCore.QObject):
                 mbe_filepack.pack(build_table, cache_table_decomp)
                 DSCSTools.dobozCompress(cache_table_decomp, cache_table)
                 os.remove(cache_table_decomp)
+                self.safe_remove_mbe(digimon_para_path)
+                self.safe_remove_mbe(charname_path)
                 self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Field Guide... sort complete.").format(curr_step_message=self.pre_message, step_no=step_no, max_steps=self.max_steps))
             else:
                 self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Field Guide... no edits required.").format(curr_step_message=self.pre_message, step_no=step_no, max_steps=self.max_steps))
@@ -462,6 +479,7 @@ class DataSorter(QtCore.QObject):
             shutil.copytree(resource_file, build_file)
         else:
             DSCSTools.extractMDB1File(os.path.join(self.ops.paths.game_resources_loc, f"{archive}.steam.mvgl"), build_loc, "/".join(table_path))
+            mbe_filepack.unpack(build_file, working_loc)
         
         os.rmdir(working_loc)
         
@@ -502,7 +520,8 @@ class DataSorter(QtCore.QObject):
                 cache_loc = self.ops.paths.patch_cache_loc
                 if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", table)): 
                     # Get the required data
-                    hdr, build_voice_data = self.get_resource_table("DSDBP", ["data", table], "voice.csv")
+                    voice_path = ["data", table]
+                    hdr, build_voice_data = self.get_resource_table("DSDBP", voice_path, "voice.csv")
     
                     build_voice_data = {key: value for key, value in sorted(build_voice_data.items(), key=lambda x: x[0][0])}
 
@@ -510,12 +529,13 @@ class DataSorter(QtCore.QObject):
                     build_table = os.path.join(self.ops.paths.patch_build_loc, "data", table)
                     dict_to_mbetable(os.path.join(build_table, "voice.csv"), hdr, build_voice_data)
                     os.remove(cache_table)
-                    
+                        
                     mbe_filepack = get_filepack_plugins_dict()["MBE"]
                     cache_table_decomp = cache_table + ".decomp"
                     mbe_filepack.pack(build_table, cache_table_decomp)
                     DSCSTools.dobozCompress(cache_table_decomp, cache_table)
                     os.remove(cache_table_decomp)
+                    self.safe_remove_mbe(voice_path)
                     self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Battle Voices ({game_name})... sort complete.").format(game_name=game_name, step_no=step_no+step_add, max_steps=self.max_steps))
                 else:
                     self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Battle Voices ({game_name})... no edits required.").format(game_name=game_name, step_no=step_no+step_add, max_steps=self.max_steps))
@@ -532,8 +552,10 @@ class DataSorter(QtCore.QObject):
             cache_loc = self.ops.paths.patch_cache_loc
             if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "item_para.mbe")): 
                 # Get the required data
-                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", ["data", "item_para.mbe"], "table.csv")
-                _, build_charname = self.get_resource_table("DSDB", ["text", "item_name.mbe"], "Sheet1.csv")
+                item_path = ["data", "item_para.mbe"]
+                item_name_path = ["text", "item_name.mbe"]
+                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", item_path, "table.csv")
+                _, build_charname = self.get_resource_table("DSDB", item_name_path, "Sheet1.csv")
 
                 # Now do the sorting
                 to_sort = []
@@ -561,6 +583,8 @@ class DataSorter(QtCore.QObject):
                 mbe_filepack.pack(build_table, cache_table_decomp)
                 DSCSTools.dobozCompress(cache_table_decomp, cache_table)
                 os.remove(cache_table_decomp)
+                self.safe_remove_mbe(item_path)
+                self.safe_remove_mbe(item_name_path)
                 self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Items... sort complete.").format(step_no=step_no, max_steps=self.max_steps))
             else:
                 self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Items... no edits required.").format(step_no=step_no, max_steps=self.max_steps))
@@ -582,14 +606,15 @@ class DataSorter(QtCore.QObject):
             cache_loc = self.ops.paths.patch_cache_loc
             if os.path.exists(cache_table := os.path.join(cache_loc, "DSDBP", "data", "digimon_market_para.mbe")): 
                 # Get the required data
-                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", ["data", "digimon_market_para.mbe"], "table.csv")
-                _, build_charname = self.get_resource_table("DSDB", ["text", "charname.mbe"], "Sheet1.csv")
+                market_path = ["data", "digimon_market_para.mbe"]
+                charname_path = ["text", "charname.mbe"]
+                hdr, build_common_para_digimon = self.get_resource_table("DSDBP", market_path, "table.csv")
+                _, build_charname = self.get_resource_table("DSDB", charname_path, "Sheet1.csv")
 
                 # Now do the sorting
                 to_sort = []
                 for key, val in build_common_para_digimon.items():
                     to_sort.append(key)
-                        
                 to_sort = sorted(to_sort, key=lambda x: self.sortmode_compress_keygen_digimarket(x, 
                                                                                       build_common_para_digimon,
                                                                                       build_charname))
@@ -611,6 +636,8 @@ class DataSorter(QtCore.QObject):
                 mbe_filepack.pack(build_table, cache_table_decomp)
                 DSCSTools.dobozCompress(cache_table_decomp, cache_table)
                 os.remove(cache_table_decomp)
+                self.safe_remove_mbe(market_path)
+                self.safe_remove_mbe(charname_path)
                 self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Digimon Market... sort complete.").format(step_no=step_no, max_steps=self.max_steps))
             else:
                 self.updateLog.emit(translate("ModInstall", ">> [Step {step_no}/{max_steps}] Sorting Digimon Market... no edits required.").format(step_no=step_no, max_steps=self.max_steps))
