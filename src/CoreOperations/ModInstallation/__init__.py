@@ -647,7 +647,8 @@ class DataSorter(QtCore.QObject):
     def sortmode_compress_keygen_digimarket(self, item_id, build_item_para, build_item_name):
         # Remember that item_id is a tuple, despite having one element
         item_sort_id = build_item_para[item_id][1]
-        name = self.name_getter(item_id[0], build_item_name, 1)[1]
+        digimon_id   = build_item_para[item_id][0]
+        name = self.name_getter(digimon_id, build_item_name, 1)[1]
         return (int(item_sort_id), name.encode('utf8'))
     
 class ArchiveBuilder(QtCore.QObject):
