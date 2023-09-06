@@ -5,7 +5,10 @@ import sys
 
 from PyQt5 import QtCore
 
+from src.Utils.JSONHandler import JSONHandler
+
 translate = QtCore.QCoreApplication.translate
+
 
 class SoftcodeCategoryDefinition:
     __slots__ = ("name", "min", "max", "span", "src", "value_lambda", "methods", "subcategory_defs")
@@ -49,6 +52,7 @@ class SoftcodeCategoryDefinition:
             else:
                 raise Exception(f"Unknown formatting argument \'{value}\'.")
         return func_def_dict["return"].format(*arglist)
+
 
 class SoftcodeCategory:
     __slots__ = ("key_gaps", "definition", "keys")
@@ -99,7 +103,8 @@ class SoftcodeCategory:
     
     def get_data_as_serialisable(self):
         return {key_name: key.get_data_as_serialisable() for key_name, key in self.keys.items()}
-    
+
+
 class SoftcodeKey:
     chunk_delimiter = "|"
     kv_delimiter = "::"
@@ -141,7 +146,8 @@ class SoftcodeKey:
         if len(self.subcategories):
             res.append({cat_name: cat.get_data_as_serialisable() for cat_name, cat in self.subcategories.items()})
         return res
-        
+
+
 class SoftcodeManager(SoftcodeKey):
     __slots__ = ("category_defs", "paths")
     
@@ -168,8 +174,10 @@ class SoftcodeManager(SoftcodeKey):
         
     def load_subcategory_from_json(self, main_filename):
         try:
-            with open(os.path.join(self.paths.softcodes_loc, main_filename), 'r', encoding="utf8") as F:
-                dct = json.load(F)
+            with JSONHandler(os.path.join(self.paths.softcodes_loc, f"Error reading '{main_filename}'")) as stream:
+                dct = stream
+        except json.decoder.JSONDecodeError as e:
+            print('error', e)
         except Exception as e:
             raise Exception(f"Attempted to read Softcode definition \'{main_filename}\', encountered error: {e}") from e
         category_name = os.path.splitext(main_filename)[0]
@@ -177,12 +185,13 @@ class SoftcodeManager(SoftcodeKey):
         
         
         cache_loc = os.path.join(self.paths.softcode_cache_loc, main_filename)
-        if os.path.exists(cache_loc):
-            try:
-                with open(cache_loc, 'r', encoding="utf8") as F:
-                    dct["codes"] = json.load(F)
-            except Exception as e:
-                raise Exception(f"Attempted to read cached Softcode definitions \'{main_filename}\', encountered error: {e}") from e
+        try:
+            with JSONHandler(cache_loc, f"Error reading '{main_filename}'") as data:
+                dct["codes"] = data
+        except json.decoder.JSONDecodeError as e:
+            print('error', e)
+        except Exception as e:
+            raise Exception(f"Attempted to read cached Softcode definitions \'{main_filename}\', encountered error: {e}") from e
         
         self.add_subcategory(category_def, dct["codes"])
         
@@ -206,28 +215,34 @@ class SoftcodeManager(SoftcodeKey):
                     json.dump(subcat.get_data_as_serialisable(), F, separators=(',', ':'))
 
 
-    
 def wrap_strings(values):
     return ("\"{var}\"" for var in values)
+
 
 def splat(values):
     return ",".join(values)
 
+
 def splat_strings(values):
     return ",".join(wrap_strings(values))
+
 
 def as_list(values):
     return f"[{','.join(values)}]"
 
+
 def as_list_strings(values):
     return f"[{','.join(wrap_strings(values))}]"
+
 
 def as_braced_list(values):
     return f"{{{','.join(values)}}}"
 
+
 def as_braced_list_strings(values):
     return f"{{{','.join(wrap_strings(values))}}}"
-    
+
+
 class SoftcodeListVariableCategoryDefinition:
     methods = {
             "splat": splat, 
@@ -245,7 +260,8 @@ class SoftcodeListVariableCategoryDefinition:
     @staticmethod
     def value_lambda(values):
         return f"[{','.join(wrap_strings(values))}]"
-    
+
+
 class SoftcodeListVariableCategory:
     __slots__ = ("keys",)
     definition = SoftcodeListVariableCategoryDefinition
@@ -261,6 +277,7 @@ class SoftcodeListVariableCategory:
             
     def add_variable(self, name):
         self.keys[name] = SoftcodeListVariable()
+
 
 class SoftcodeListVariable:
     __slots__ = ("value", "opcodes", "is_default")

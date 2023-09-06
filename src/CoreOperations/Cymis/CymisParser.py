@@ -1,11 +1,13 @@
-import json
 import os
 import shutil
 
 from PyQt5 import QtCore
+
 from src.Utils.Path import splitpath
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
+
 
 #####################
 # DEFINE FLAG TYPES #
@@ -19,6 +21,7 @@ class HiddenFlag:
     def get_flag_status(self):
         return {self.name: self.value}
         
+
 class Flag:
     def __init__(self, options):
         self.name = options['Name']
@@ -29,6 +32,7 @@ class Flag:
     def get_flag_status(self):
         return {self.name: self.value}
     
+
 class ChooseOne:
     def __init__(self, options):
         self.type = options['Type']
@@ -47,6 +51,7 @@ class ChooseOne:
 
 wizard_flags = {class_.__name__: class_ for class_ in [HiddenFlag, Flag, ChooseOne]}
 
+
 ############################
 # DEFINE BOOLEAN OPERATORS #
 ############################
@@ -61,6 +66,7 @@ def and_operator(arguments, operator_list, flag_list):
             parsed_flags.append(flag_list[item])
     return all(parsed_flags)
 
+
 def or_operator(arguments, operator_list, flag_list):
     parsed_flags = []
     for item in arguments:
@@ -71,6 +77,7 @@ def or_operator(arguments, operator_list, flag_list):
         else:
             parsed_flags.append(flag_list[item])
     return any(parsed_flags)
+
 
 def not_operator(arguments, operator_list, flag_list):
     to_flip = None
@@ -84,9 +91,11 @@ def not_operator(arguments, operator_list, flag_list):
         
     return not(to_flip)
 
-boolean_operators = {'and': and_operator, 
+
+boolean_operators = {'and': and_operator,
                      'or': or_operator, 
                      'not': not_operator}
+
 
 #############################
 # DEFINE INSTALLATION RULES #
@@ -105,7 +114,9 @@ def copy_rule(path_prefix, rule, source, destination):
         else:
             assert 0, translate("ModWizards::CYMIS::Logging", "{filepath} is neither a file nor a directory.").format(filepath=source)
 
+
 installation_rules = {'copy': copy_rule}
+
 
 ################
 # SAFETY UTILS #
@@ -114,8 +125,10 @@ def validate_path(path):
     path_directories = splitpath(path)
     assert not(any([check_if_only_periods(item) for item in path_directories])), translate("ModWizards::CYMIS::Logging", "Paths may not contain relative references.")
 
+
 def check_if_only_periods(string):
     return all(char == '.' for char in string) and len(string) > 1
+
 
 ##########################
 # DEFINE CYMIS INSTALLER #
@@ -127,13 +140,13 @@ class CymisInstaller:
         self.wizard_pages = []
         self.installation_steps = []
         self.version = None
-        self.enable_debug=None
+        self.enable_debug = None
         self.log = None
         
     @classmethod
     def init_from_script(cls, filepath, log):
-        with open(filepath, 'r') as F:
-            cymis = json.load(F)
+        with JSONHandler(filepath, f"Error Reading '{filepath}'") as stream:
+            cymis = stream
         
         instance = cls()
         instance.version = cymis['Version']
@@ -160,6 +173,7 @@ class CymisInstaller:
             if installer_step.check_should_execute():
                 installer_step.execute_step()
             
+
 class CymisInstallerPage:
     def __init__(self, page, log=None):
         self.title = page.get("Title", translate("ModWizards::CYMIS::FallbackUI", "No Title"))
@@ -179,6 +193,7 @@ class CymisInstallerPage:
             retval.update(flag_status)
         return retval
     
+
 class CymisInstallationStep:
     def __init__(self, path_prefix, step_info, flag_table, log):            
         execution_condition = step_info.get("if")
@@ -199,6 +214,7 @@ class CymisInstallationStep:
         elif type(execution_condition) == dict:
             assert len(execution_condition) == 1, f"More than one boolean operator in dictionary: {execution_condition}."
             operator_name, operator_arguments = list(execution_condition.items())[0]
+
             def check():
                 result = boolean_operators[operator_name](operator_arguments, boolean_operators, flag_table)
                 if log is not None:

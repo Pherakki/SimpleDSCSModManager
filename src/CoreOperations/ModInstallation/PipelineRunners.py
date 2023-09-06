@@ -7,10 +7,12 @@ from PyQt5 import QtCore
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict
 from src.CoreOperations.PluginLoaders.PatchersPluginLoader import get_patcher_plugins_dict
 from src.Utils.Signals import StandardRunnableSignals
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
 patchers = get_patcher_plugins_dict()
+
 
 class PipelineRunner(QtCore.QRunnable):
     __slots__ = ("softcodes", "target", "filepack", "path_prefix", "paths", "cache_index", "archive_postaction", "signals")
@@ -111,6 +113,7 @@ class PipelineCollection(QtCore.QObject):
         except Exception as e:
             self.handleException(e)
 
+
 class ArchivePipelineCollection(QtCore.QObject):
     __slots__ = ("archive", "ops", "ui", "softcodes", "threadpool", "pre_message", "cache_index")
     
@@ -171,8 +174,8 @@ class ArchivePipelineCollection(QtCore.QObject):
             self.raise_exception.emit(e)
             
     def finalise_build(self):
-        with open(self.ops.paths.patch_cache_index_loc, 'r') as F:
-            total_cache = json.load(F)
+        with JSONHandler(self.ops.paths.patch_cache_index_loc, f"Error reading '{self.ops.paths.patch_cache_index_loc}'") as stream:
+            total_cache = stream
         for file, hashval in self.cache_index.items():
             total_cache[os.path.join(self.archive.get_prefix(), file)] = hashval
         with open(self.ops.paths.patch_cache_index_loc, 'w') as F:

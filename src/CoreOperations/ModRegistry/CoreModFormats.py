@@ -1,6 +1,7 @@
 import os
-import json
 import shutil
+
+from src.Utils.JSONHandler import JSONHandler
 
 
 class ModFile:
@@ -13,8 +14,7 @@ class ModFile:
         self.category = "-"
         self.description = ""
         
-    def init_metadata(self, iostream):
-        data = json.load(iostream)
+    def init_metadata(self, data):
         self.name = data.get('Name', self.filename)
         self.author = data.get('Author', "-")
         self.version = data.get('Version', "-")
@@ -38,13 +38,14 @@ class ModFile:
     def get_filelist(self):
         raise NotImplementedError
 
+
 class LooseMod(ModFile):
     def __init__(self, path):
         super().__init__(path)
         metadata_path = os.path.join(path, 'METADATA.json')
-        if os.path.exists(metadata_path):
-            with open(metadata_path, 'r', encoding="utf-8") as F:
-                self.init_metadata(F)
+        with JSONHandler(metadata_path, "Error reading JSON file 'METADATA.json'") as stream:
+            self.init_metadata(stream)
+
         desc_path = os.path.join(path, 'DESCRIPTION.html')
         if os.path.exists(desc_path):
             with open(desc_path, 'r', encoding="utf8") as fJ:

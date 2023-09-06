@@ -4,7 +4,10 @@ import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from src.Utils.JSONHandler import JSONHandler
+
 translate = QtCore.QCoreApplication.translate
+
 
 class PaletteColour:
     __slots__ = ("c", "mirror_inactive")
@@ -47,7 +50,8 @@ class PaletteColour:
             "c": [self.c.red(), self.c.green(), self.c.blue()],
             "mirror_inactive": self.mirror_inactive
         }
-    
+
+
 class SubPalette:
     __slots__ = ("window", "base", "alt_base", "button", 
                  "bright_text", "text", "window_text", "button_text",
@@ -56,6 +60,7 @@ class SubPalette:
                  "tooltip_base", "tooltip_text",
                  "light", "midlight", "mid", "dark", "shadow",
                  "unified_text")
+
     def __init__(self):
         self.window           = PaletteColour()
         self.base             = PaletteColour()
@@ -108,7 +113,8 @@ class SubPalette:
                 else getattr(self, key)
                 
                 for key in self.__slots__}
-      
+
+
 class PaletteMap:
     __slots__ = ("active", "inactive", "disabled")
     def __init__(self):
@@ -131,6 +137,7 @@ class PaletteMap:
     
     def to_dict(self):
         return {key: getattr(self, key).to_dict() for key in self.__slots__}
+
 
 class StyleEngine:
     """
@@ -158,7 +165,6 @@ class StyleEngine:
                             .format(initial_style=initial_style, default_theme=default_theme))
             self.set_style(default_theme)
 
-        
     @property
     def light_style(self):
         pmap = PaletteMap()
@@ -406,8 +412,8 @@ class StyleEngine:
         filename, ext = os.path.splitext(file)
         if os.path.isfile(filepath) and ext.lstrip(os.extsep) == "json":
             try:
-                with open(filepath, 'r') as F:
-                    style_def = json.load(F)
+                with JSONHandler(filepath, f"Error reading '{file}'") as stream:
+                    style_def = stream
                 name = filename
                 self.styles[name] = PaletteMap.from_dict(style_def)
             except Exception as e:
@@ -415,7 +421,6 @@ class StyleEngine:
                                    "WARNING: Failed to load style file '{name}.json'. Error is: {error_msg}.")
                          .format(name=filename, error_msg=e))
             
-        
     def save_style(self, name):
         filepath = os.path.join(self.__paths.themes_loc, os.extsep.join((name, "json")))
         with open(filepath, 'w') as F:

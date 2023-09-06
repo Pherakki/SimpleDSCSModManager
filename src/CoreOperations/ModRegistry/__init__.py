@@ -11,13 +11,16 @@ from src.CoreOperations.PluginLoaders.ModFormatsPluginLoader import get_modforma
 from src.CoreOperations.PluginLoaders.ModInstallersPluginLoader import get_modinstallers_plugins
 from src.Utils.Exceptions import UnrecognisedModFormatError, ModInstallWizardCancelled,\
                                  InstallerWizardParsingError, SpecificInstallerWizardParsingError
+from src.Utils.JSONHandler import JSONHandler
+
 
 translate = QtCore.QCoreApplication.translate
 
+
 def get_mod_version(path):
     metadata_path = os.path.join(path, 'METADATA.json')
-    with open(metadata_path, 'r', encoding="utf-8") as F:
-        metadata = json.load(F)
+    with JSONHandler(metadata_path, "Error reading 'METADATA.json'") as stream:
+        metadata = stream
 
     version = metadata.get("FormatVersion", 1)
     highest_version = max(mod_format_versions.keys())
@@ -36,6 +39,7 @@ def check_mod_type(path):
             return modformat(path)
     return False
 
+
 def check_installer_type(path, messageLog):
     """
     Figures out which of the supported mod formats the input file/folder is in, if any.
@@ -51,14 +55,14 @@ def check_installer_type(path, messageLog):
                     raise InstallerWizardParsingError(e.__str__()) from e
     return False
     
+
 class ModRegistry:
     def __init__(self, ui, paths, profile_manager, raise_exception):
         self.ui = ui
         self.paths = paths
         self.profile_manager = profile_manager
         self.raise_exception = raise_exception
-        
-    
+
     def index_mod(self, modpath):
         mod_format_version = mod_format_versions[get_mod_version(modpath)]
         index = build_index(self.paths.config_loc,
@@ -111,7 +115,6 @@ class ModRegistry:
             shutil.rmtree(os.path.join(self.paths.mods_loc, mod_name))
             self.ui.log(translate("ModRegistry", "The following error occured when trying to register {mod_name}: {error}").format(mod_name=mod_name, error=e))
     
-        
     def unregister_mod(self, index):
         mod_name = os.path.split(self.profile_manager.mods[index].path)[1]
         try:
@@ -174,7 +177,6 @@ class ModRegistry:
             self.thread.start()
         except Exception as e:
             self.ui.log(translate("ModRegistry", "The following error occured when trying to re-register {mod_name}: {error}").format(mod_name=mod_name, error=e))
-
 
     def detect_mods(self, ignore_debugs=True):
         """Check for qualifying mods in the registered mods folder."""

@@ -1,10 +1,10 @@
 import importlib
 import inspect
-import json
 import os
 import sys
 
 from src.Utils.Path import splitpath
+from src.Utils.JSONHandler import JSONHandler
 
 
 def load_sorted_plugins_in(directory, predicate):
@@ -12,6 +12,7 @@ def load_sorted_plugins_in(directory, predicate):
     plugin_order = get_plugin_sort_order(directory)
     
     return sort_plugins(filetype_plugins, plugin_order)
+
 
 def load_plugins_in(directory, predicate):
     results = []
@@ -25,6 +26,7 @@ def load_plugins_in(directory, predicate):
         classes_in_module = [m[0] for m in inspect.getmembers(module, predicate) if m[1].__module__ == module.__name__]
         results.extend([getattr(module, class_) for class_ in classes_in_module])
     return results
+
 
 def load_plugins_from(directory, file, predicate):
     file, ext = os.path.splitext(file)
@@ -40,11 +42,11 @@ def load_plugins_from(directory, file, predicate):
 def get_plugin_sort_order(directory):
     priority_file = os.path.join(directory, "_priorities.json")
     if os.path.exists(priority_file):
-        with open(priority_file, 'r') as F:
-            order = json.load(F)
-        return order
+        with JSONHandler(priority_file, "Error reading '_priorities.json'") as order:
+            return order
     else:
         return []
+
 
 def sort_plugins(members, ordering):
     member_names = [member.__name__ for member in members]

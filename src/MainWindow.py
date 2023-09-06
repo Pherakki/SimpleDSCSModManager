@@ -1,4 +1,3 @@
-import json
 import os
 
 from PyQt5 import QtCore
@@ -8,6 +7,7 @@ from PyQt5 import QtWidgets
 from src.CoreOperations import CoreOperations
 from src.UI.Design import uiMainWidget
 from src.UI.StyleEngine import StyleEngine
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
 
@@ -52,7 +52,6 @@ class MainWindow(QtWidgets.QMainWindow):
             event.accept()
             #self.__app.quit()
             
-        
     @QtCore.pyqtSlot(str)
     def changeLanguage(self, qm_filename):
         if qm_filename:
@@ -90,11 +89,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def loadLanguageOptions(self):
         out = {}
         if os.path.isdir(self.ops.paths.localisations_loc):
-            if os.path.isfile(self.ops.paths.localisations_names_loc):
-
-                with open(self.ops.paths.localisations_names_loc, 'r', encoding="utf8") as F:
-                    names = json.load(F)
-            else:
+            try:
+                with JSONHandler(self.ops.paths.localisations_names_loc, f"Error reading '{self.ops.paths.localisations_names_loc}'") as stream:
+                    names = stream
+            except:
                 self.ui.log(translate("UI::Localisation", "Language names file \"{filepath}\" was not found. Using default language names.").format(filepath=self.ops.paths.localisations_names_loc))
                 names = {}
                     
@@ -115,7 +113,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init_ui(self):
         self.window = QtWidgets.QWidget() 
         try:
-            self.icon = QtGui.QIcon(os.path.join("img", 'icon_256.png'))
+            self.icon = QtGui.QIcon(os.path.join('data', 'img', 'icon_256.png'))
             self.setWindowIcon(self.icon)
         except:
             pass
@@ -127,7 +125,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ops = CoreOperations(self)
         self.ops.mod_registry.update_mods()
         
-        
     def __set_language(self):
         lang = self.ops.config_manager.get_lang_pref()
         if lang is None:
@@ -136,9 +133,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.log(translate("MainWindow", "Translation file for {language} was not found.").format(language=lang))
             lang = "en-US"
         self.changeLanguage(lang + ".qm")
-        
-        
-            
 
     def __init_ui_hooks(self):
         self.ui.hook_menu(self.ops)
@@ -184,7 +178,6 @@ class MainWindow(QtWidgets.QMainWindow):
         try:     self.raise_exception.disconnect() 
         except:  pass
         finally: self.raise_exception.connect(func)
-        
         
     @QtCore.pyqtSlot(Exception)
     def log_exception(self, exception):

@@ -1,5 +1,5 @@
-import json
 import os
+import sys
 import shutil
 
 from PyQt5 import QtCore
@@ -9,18 +9,21 @@ from src.CoreOperations.ModBuildGraph.graphHash import hashFilepack
 from src.CoreOperations.ModInstallation.PipelineRunners import ArchivePipelineCollection
 from src.CoreOperations.ModInstallation.VariableParser import parse_mod_variables, scan_variables_for_softcodes
 from src.CoreOperations.PluginLoaders.FilePacksPluginLoader import get_filepack_plugins_dict
+from src.Utils.JSONHandler import JSONHandler
 from src.Utils.MBE import mbetable_to_dict, dict_to_mbetable
 from libs.dscstools import DSCSTools
 
 translate = QtCore.QCoreApplication.translate
 
+
 def generate_step_message(cur_items, cur_total):
     return translate("ModInstall", "[Step {ratio}]").format(ratio=f"{cur_items}/{cur_total}")
-   
+
+
 def generate_prefixed_message(cur_items, cur_total, msg):
     return f">> {generate_step_message(cur_items, cur_total)} {msg}"
-    
-import sys
+
+
 def format_exception(exception):
     return type(exception)(f"Error on line {sys.exc_info()[-1].tb_lineno} in file {__file__}:" + f" {exception}")
 
@@ -149,8 +152,8 @@ class BuildGraphRunner(QtCore.QObject):
                 
         # Create the cache folder if it doesn't exist
         os.makedirs(self.ops.paths.patch_cache_loc, exist_ok=True)
-        with open(self.ops.paths.patch_cache_index_loc, 'r') as F:
-            cache_index = json.load(F)
+        with JSONHandler(self.ops.paths.patch_cache_index_loc, f"Error reading '{self.ops.paths.patch_cache_index_loc}") as stream:
+            cache_index = stream
             
         # Now prepare the process the build graph
         # Init some variables to count the number of packs in the build graph,
@@ -214,6 +217,7 @@ class BuildGraphRunner(QtCore.QObject):
     def sendUpdateLog(self, msg):
         self.updateLog.emit(generate_prefixed_message(self.substep, self.nsteps, msg))
 
+
 class ResourceBootstrapper(QtCore.QObject):
     log = QtCore.pyqtSignal(str)
     updateLog = QtCore.pyqtSignal(str)
@@ -246,8 +250,8 @@ class ResourceBootstrapper(QtCore.QObject):
         try:
             self.log.emit(translate("ModInstall", "{curr_step_msg} Checking required resources...").format(curr_step_msg=self.pre_message))
             
-            with open(os.path.join(self.ops.paths.config_loc, "filelist.json")) as F:
-                resource_archives = json.load(F)
+            with JSONHandler(os.path.join(self.ops.paths.config_loc, "filelist.json"), "Error reading 'filelist.json'") as stream:
+                resource_archives = stream
             
             required_resources = {}
             for archive_type, archives in self.build_graphs.items():
@@ -367,6 +371,7 @@ class BuildGraphExecutor(QtCore.QObject):
                 self.finished.emit()
         except Exception as e:
             self.raise_exception.emit(e)
+
 
 # 1) Skip sort if data isn't in the build graph
 # 2) Enumerate the sorts
@@ -651,6 +656,7 @@ class DataSorter(QtCore.QObject):
         name = self.name_getter(digimon_id, build_item_name, 1)[1]
         return (int(item_sort_id), name.encode('utf8'))
     
+
 class ArchiveBuilder(QtCore.QObject):
     finished = QtCore.pyqtSignal()
     clean_up = QtCore.pyqtSignal()
@@ -805,5 +811,3 @@ class ModInstaller(QtCore.QObject):
             self.thread.start()
         except Exception as e:
             self.raise_exception.emit(e)
-        
-        

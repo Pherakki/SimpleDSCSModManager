@@ -1,6 +1,8 @@
 import json
 import os
 
+from src.Utils.JSONHandler import JSONHandler
+
 
 class ConfigManager:
     __slots__ = ("init", 
@@ -13,7 +15,6 @@ class ConfigManager:
                  "paths",
                  "ui")
     
-    
     def __init__(self, ui):
         self.init = False
         self.ui = ui
@@ -24,8 +25,7 @@ class ConfigManager:
         self.__block_pref = 0
         self.__first_time_launch = False
         self.paths = None
-        
-        
+
     def get_style_pref(self):
         return self.__style_pref
     
@@ -89,8 +89,7 @@ class ConfigManager:
             self.__first_time_launch = False
             
     def read_config(self):
-        with open(os.path.join(self.paths.config_loc, "config.json"), 'r') as F:
-            config_data = json.load(F)
+        with JSONHandler(os.path.join(self.paths.config_loc, "config.json"), "Error reading 'config.json'") as config_data:
             self.__game_loc          = config_data.get("game_loc")
             self.__lang_pref         = config_data.get("language")
             self.__style_pref        = config_data.get("style")

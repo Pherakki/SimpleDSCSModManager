@@ -1,11 +1,12 @@
-import json
 import os
 
 from PyQt5 import QtCore
 
 from src.Utils.Path import splitpath, check_path_is_safe
+from src.Utils.JSONHandler import JSONHandler
 
 translate = QtCore.QCoreApplication.translate
+
 
 class ModFormatVersion1:
     version = 1
@@ -19,8 +20,8 @@ class ModFormatVersion1:
         for filetype in contents:
             for filepath in contents[filetype]:
                 out[filepath] = ("MDB1", "DSDBP")
-        with open(os.path.split(modpath)[0] + os.sep + "METADATA.json", 'r') as F:
-            metadata = json.load(F)
+        with JSONHandler(os.path.split(modpath)[0] + os.sep + "METADATA.json", "Error reading 'METADATA.json'") as stream:
+            metadata = stream
         if "Archives" in metadata:
             for file, archive in metadata["Archives"].items():
                 assert type(archive) == str, translate("ModMetadataParsing", "'Archive' for file {file} was not a string: {archive}.").format(file=file, archive=archive)
@@ -36,8 +37,8 @@ class ModFormatVersion1:
     def get_targets(modpath, contents, archives):
         modpath_rel = os.path.join(*splitpath(modpath)[-3:])
         out = {}
-        with open(os.path.split(modpath)[0] + os.sep + "METADATA.json", 'r') as F:
-            metadata = json.load(F)
+        with JSONHandler(os.path.split(modpath)[0] + os.sep + "METADATA.json", "Error reading 'METADATA.json'") as stream:
+            metadata = stream
         already_handled_files = set()
         if "Targets" in metadata:
             for file, targets in metadata["Targets"].items():
@@ -79,8 +80,8 @@ class ModFormatVersion1:
     @staticmethod    
     def get_rules(modpath, contents):
         out = {}
-        with open(os.path.split(modpath)[0] + os.sep + "METADATA.json", 'r') as F:
-            metadata = json.load(F)
+        with JSONHandler(os.path.split(modpath)[0] + os.sep + "METADATA.json", "Error reading 'METADATA.json'") as stream:
+            metadata = stream
         if "Rules" in metadata:
             for file, rule in metadata["Rules"].items():
                 assert type(rule) == str, translate("ModMetadataParsing", "'Rule' for file {file} was not a string.").format(file=file)
@@ -90,7 +91,8 @@ class ModFormatVersion1:
     @staticmethod
     def get_filepath(filepath, archive):
         return filepath
-    
+
+
 class ModFormatVersion2(ModFormatVersion1):
     version = 2
     default_mdb1s = {'DSDB', 'DSDBA', 'DSDBS', 'DSDBSP', 'DSDBP',
@@ -100,9 +102,8 @@ class ModFormatVersion2(ModFormatVersion1):
     @staticmethod
     def get_archives( modpath, contents):
         out = {}
-
-        with open(os.path.split(modpath)[0] + os.sep + "METADATA.json", 'r') as F:
-            metadata = json.load(F)
+        with JSONHandler(os.path.split(modpath)[0] + os.sep + "METADATA.json", "Error reading 'METADATA.json'") as stream:
+            metadata = stream
             
         mod_MDB1s = set(metadata.get("MDB1", []))
         mod_AFS2s = set(metadata.get("AFS2", []))
@@ -153,6 +154,7 @@ class ModFormatVersion2(ModFormatVersion1):
     #             assert type(targets) == list, f"'Targets' for file {file} was not a list."
     #             out[file].extend(targets)
     #     return out
-    
+
+
 mod_format_versions = {1: ModFormatVersion1,
                        2: ModFormatVersion2}

@@ -1,8 +1,8 @@
 import json
-import os
 
 from src.Utils.Settings import default_encoding
 from src.Utils.Softcodes import replace_softcodes
+
 
 class MdlEdit:
     ops = ["editNPC"]
